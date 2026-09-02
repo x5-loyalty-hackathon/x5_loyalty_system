@@ -39,7 +39,7 @@ Proof of concept персонального игрового слоя повер
 После публикации репозитория на GitHub:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/x5-loyalty-hackathon/x5_loyalty_system.git
 cd x5_loyalty_system
 git switch -c feat/<short-task-name>
 ```

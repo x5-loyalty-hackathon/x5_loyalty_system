@@ -4,6 +4,10 @@
 ограничения участники подтверждают вместе; включить их можно в интерфейсе GitHub
 после публикации.
 
+Текущее размещение:
+[`x5-loyalty-hackathon/x5_loyalty_system`](https://github.com/x5-loyalty-hackathon/x5_loyalty_system),
+видимость — private.
+
 ## Рекомендуемый старт
 
 1. Создать **private** repository, пока команда не проверила правила публикации

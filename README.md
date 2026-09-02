@@ -29,6 +29,12 @@ Proof of concept персонального игрового слоя повер
   дальше;
 - [Исследование существующего X5 Клуба](docs/research/x5-loyalty-current-state.md)
   — факты, выводы и вопросы для брейншторма;
+- [Синтез конкурентного исследования](docs/research/benchmarks/competitive-synthesis.md)
+  — что работает, где ломается причинность и как фильтровать идеи;
+- [Матрица российских и международных кейсов](docs/research/benchmarks/competitive-case-matrix.md)
+  — быстрый обзор ЦА, механик, результатов и качества evidence;
+- [План и методика исследования](docs/research/benchmarks/research-plan.md) —
+  вопросы, единый шаблон и уровни E1–E4;
 - [Вопросы для kickoff](docs/kickoff-questions.md) — список для командного
   обсуждения;
 - [Журнал решений](docs/decision-log.md) — источник принятых продуктовых и

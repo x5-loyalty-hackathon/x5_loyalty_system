@@ -3,11 +3,13 @@
 Proof of concept персонального игрового слоя поверх программы лояльности X5 для
 недельного хакатона ИТМО по кейсу X5 Tech.
 
-Проект находится на стадии discovery. Сегмент, игровые механики, модели,
-архитектура и роли участников пока не выбраны. Принятыми считаются только
-решения, явно зафиксированные в [журнале решений](docs/decision-log.md).
-Файлы для совместной работы задают лишь стартовые и обратимые настройки GitHub;
-команда может изменить их первым же pull request.
+Проект перешёл от discovery к реализации recipe-first PoC. После покупки
+recommender предлагает персональные рецепты, позволяет выбрать для недостающих
+ингредиентов markdown/full-price товары в достижимом радиусе и передать список
+в доставку либо сохранить к следующему визиту. Следующий чек обновляет личную
+кухню Домового. Текущие решения зафиксированы в
+[ADR-001](docs/decisions/001-recipe-first-poc.md), а технический контракт — в
+[design doc](docs/technical-design.md).
 
 ## Что должно войти в PoC
 
@@ -39,10 +41,67 @@ Proof of concept персонального игрового слоя повер
   обсуждения;
 - [Журнал решений](docs/decision-log.md) — источник принятых продуктовых и
   инженерных решений;
+- [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
+  компактное описание согласованной концепции;
+- [Technical design](docs/technical-design.md) — API, границы модели и safety;
+- [План реализации](docs/implementation-plan.md) — владельцы и два дедлайна;
+- [Обязательный MVP и test gates](docs/mvp-scope-and-test-plan.md) — что входит
+  в Day 1, финал и automated checks;
 - [Как внести изменение](CONTRIBUTING.md) — ветки, коммиты и pull request;
 - [Настройка GitHub](docs/github-setup.md) — рекомендуемые параметры репозитория.
 
-## Быстрый старт для участника
+## Быстрый старт backend
+
+Требуется Python 3.11+.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+python -m pytest
+uvicorn app.main:app --reload
+```
+
+Те же тесты автоматически запускаются в GitHub Actions на push и pull request;
+CI проверяет минимальную поддерживаемую Python 3.11 и Python 3.14.
+
+Swagger UI: `http://127.0.0.1:8000/docs`.
+
+Контракт можно проверить и без HTTP-сервера:
+
+```bash
+python -m app.demo
+```
+
+Пример вызова:
+
+```bash
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/recommendation_request.json \
+  http://127.0.0.1:8000/api/v1/recommendations
+```
+
+Receipt/progress и referral можно воспроизвести после запуска API:
+
+```bash
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/receipt_event.json \
+  http://127.0.0.1:8000/api/v1/events/receipts
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/referral_request.json \
+  http://127.0.0.1:8000/api/v1/referrals/evaluate
+```
+
+Сервис пока использует детерминированный mock recommender и process-local
+in-memory state. Модель подключается через `RecommendationEngine.rank()` без
+изменения HTTP-контракта. Состояние сбрасывается при перезапуске процесса — это
+ограничение PoC, а не production design.
+
+## Git workflow для участника
 
 После публикации репозитория на GitHub:
 
@@ -61,8 +120,6 @@ git push -u origin HEAD
 ```
 
 Затем откройте pull request в `main` и назначьте одного участника на review.
-Пока стек не выбран, универсальной команды запуска нет; она появится здесь после
-первого архитектурного решения.
 
 ## Принципы работы с результатами
 

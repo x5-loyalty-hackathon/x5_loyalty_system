@@ -1,6 +1,6 @@
 # Текущее состояние
 
-Последнее обновление: 2026-09-02.
+Последнее обновление: 2026-09-03.
 
 ## Сейчас
 
@@ -18,22 +18,35 @@
 - Зафиксирована нулевая гипотеза discovery: ещё одна игра, коллекция или аватар
   сами по себе не гарантируют incremental uplift. Это рамка проверки, а не
   принятое продуктовое решение.
-- Продуктовый сегмент, связка механик, стек, модели, архитектура и роли пока не
-  выбраны.
-- Реализации и измеренных результатов пока нет.
+- Команда выбрала recipe-first PoC: рекомендации после чека, ingredient-level
+  markdown/full-price выбор, доставка или следующий визит и личная кухня
+  Домового без gambling/public leaderboard.
+- Первый сегмент — домохозяйства, регулярно покупающие ингредиенты для готовки.
+- Роли распределены на `ML/Recsys & Evaluation`, `Product/UX & Frontend` и
+  `Backend/Integration/Safety`.
+- Зафиксированы [ADR-001](decisions/001-recipe-first-poc.md),
+  [technical design](technical-design.md) и
+  [план до двух дедлайнов](implementation-plan.md).
+- В рабочей ветке реализованы backend-инкременты B1–B3: versioned
+  recommendation contract, deterministic mock, post-model safety, idempotent
+  receipt/progress state, private rank, referral reward и rule-based
+  precision-first antifraud. Это ещё не означает готовность общего PoC:
+  frontend, model adapter, evaluation, simulation и pilot evidence принадлежат
+  следующим integration gates.
+- Backend regression gate: 23 теста проходят локально. Fraud weights и XP
+  являются demo-константами и требуют командного/product review.
 
 ## Следующий командный шаг
 
-На kickoff сначала сравнить 2–4 гипотезы через единый canvas из
-`competitive-synthesis.md`, затем выбрать один сквозной пользовательский
-сценарий и зафиксировать минимум следующие решения:
+До промежуточной сдачи 04.09.2026 10:00:
 
-1. целевой сегмент и изменяемое поведение;
-2. 2–3 связанные механики и пользовательский путь из 3–4 экранов;
-3. основная метрика, guardrails и допущения экономики;
-4. схема синтетических данных и baseline персонализации;
-5. антифрод-сценарии и действие после превышения порога;
-6. стек, контракты компонентов и владельцы первых вертикальных задач.
+1. проверить backend contract и три example requests;
+2. подключить frontend к mock JSON;
+3. получить первые outputs ML/Recsys owner минимум на пяти профилях;
+4. собрать четыре экрана и промежуточную презентацию;
+5. подготовить обязательное Markdown-описание и компактные product artifacts;
+6. проверить доступ к репозиторию без авторизации.
 
-После kickoff заменить этот список недельным планом с владельцами, сроками и
-проверяемыми интеграционными результатами на каждый день.
+После сдачи mock заменяется model adapter, frontend соединяется с API и
+добавляется единый end-to-end fixture. Затем обязательные evidence gates:
+evaluation, simulation, экономика и pilot plan.

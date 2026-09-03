@@ -10,7 +10,7 @@
 | Продуктовые материалы (3/3) | [product-03-ai-product-contribution.md](product-03-ai-product-contribution.md) | готово |
 | Презентация — промежуточная версия | [presentation-outline.md](presentation-outline.md) | текст слайдов готов, файл презентации собирает Product/UX owner |
 | Репозиторий | `github.com/x5-loyalty-hackathon/x5_loyalty_system` | **требуется открыть доступ и влить ветки в `main`** |
-| Дополнительные материалы | `docs/research/**`, `examples/*.json` | опционально, можно приложить как есть |
+| Дополнительные материалы | [Умершие гипотезы](additional/dead-hypotheses/README.md) | готово: 4 гипотезы и выводы для итогового решения |
 
 ## Открытые задачи перед загрузкой
 

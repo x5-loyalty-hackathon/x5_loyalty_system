@@ -18,6 +18,14 @@ dev = [
   "httpx>=0.27,<1",
   "pytest>=8,<10",
 ]
+# Only used by the offline recsys/calibration/fit_from_kaggle.py script,
+# which is not on any runtime/test import path — the core recsys package
+# (profiles/recipes/inventory/model/evaluation/simulation/economics) has no
+# dependency beyond `dev` above.
+ml = [
+  "pandas>=2.2,<3",
+  "scikit-learn>=1.5,<2",
+]
 
 [tool.pytest.ini_options]
 addopts = "-q"
@@ -25,4 +33,4 @@ pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.setuptools.packages.find]
-include = ["app*"]
+include = ["app*", "recsys*"]

@@ -44,5 +44,11 @@ artifacts/
 outputs/
 data/generated/
 
+# Locally-downloaded datasets (e.g. Kaggle CSVs for
+# recsys/calibration/fit_from_kaggle.py) — never committed, per
+# CONTRIBUTING.md's "no large generated datasets" rule and Kaggle's own
+# redistribution terms.
+data/
+
 # Notebooks
 .ipynb_checkpoints/

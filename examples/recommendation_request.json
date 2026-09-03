@@ -1,0 +1,128 @@
+{
+  "user": {
+    "user_id": "user_demo_001",
+    "radius_km": 3.0,
+    "excluded_categories": [],
+    "excluded_ingredient_ids": [],
+    "home_ingredient_ids": ["flour"],
+    "saved_recipe_ids": ["cottage_cheese_bake"],
+    "history_categories": ["dairy", "vegetable", "meat"],
+    "preferred_brands": ["Зелёная линия"]
+  },
+  "current_receipt": {
+    "receipt_id": "receipt_demo_001",
+    "purchased_at": "2026-09-03T16:20:00+03:00",
+    "store_id": "store_17",
+    "items": [
+      {
+        "sku_id": "milk_01",
+        "name": "Молоко",
+        "category": "dairy",
+        "ingredient_ids": ["milk"],
+        "brand": "Зелёная линия",
+        "quantity": 1,
+        "unit_price": 99.9
+      },
+      {
+        "sku_id": "tomato_01",
+        "name": "Томаты",
+        "category": "vegetable",
+        "ingredient_ids": ["tomato"],
+        "quantity": 1,
+        "unit_price": 159.9
+      },
+      {
+        "sku_id": "cottage_cheese_01",
+        "name": "Творог",
+        "category": "dairy",
+        "ingredient_ids": ["cottage_cheese"],
+        "quantity": 1,
+        "unit_price": 129.9
+      }
+    ]
+  },
+  "purchase_history": [],
+  "recipe_catalog": [
+    {
+      "recipe_id": "vegetable_omelette",
+      "title": "Овощной омлет",
+      "verified": true,
+      "preparation_minutes": 20,
+      "ingredients": [
+        {"ingredient_id": "milk", "name": "Молоко", "category": "dairy", "required": true},
+        {"ingredient_id": "tomato", "name": "Томаты", "category": "vegetable", "required": true},
+        {"ingredient_id": "egg", "name": "Яйца", "category": "egg", "required": true}
+      ]
+    },
+    {
+      "recipe_id": "cottage_cheese_bake",
+      "title": "Творожная запеканка",
+      "verified": true,
+      "preparation_minutes": 45,
+      "ingredients": [
+        {"ingredient_id": "cottage_cheese", "name": "Творог", "category": "dairy", "required": true},
+        {"ingredient_id": "flour", "name": "Мука", "category": "pantry", "required": true},
+        {"ingredient_id": "egg", "name": "Яйца", "category": "egg", "required": true}
+      ]
+    },
+    {
+      "recipe_id": "chicken_and_vegetables",
+      "title": "Курица с овощами",
+      "verified": true,
+      "preparation_minutes": 30,
+      "ingredients": [
+        {"ingredient_id": "chicken", "name": "Курица", "category": "meat", "required": true},
+        {"ingredient_id": "zucchini", "name": "Кабачок", "category": "vegetable", "required": true}
+      ]
+    }
+  ],
+  "inventory_snapshot": [
+    {
+      "sku_id": "egg_01",
+      "name": "Яйца C1",
+      "category": "egg",
+      "ingredient_ids": ["egg"],
+      "store_id": "store_17",
+      "distance_km": 0.8,
+      "price": 109.9,
+      "original_price": 109.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 8,
+      "fulfillment_options": ["delivery", "next_visit"]
+    },
+    {
+      "sku_id": "chicken_01",
+      "name": "Филе куриное",
+      "category": "meat",
+      "ingredient_ids": ["chicken"],
+      "store_id": "store_21",
+      "distance_km": 1.4,
+      "price": 249.9,
+      "original_price": 399.9,
+      "is_markdown": true,
+      "safety_eligible": true,
+      "expires_at": "2026-09-05T22:00:00+03:00",
+      "available_quantity": 2,
+      "fulfillment_options": ["delivery", "next_visit"]
+    },
+    {
+      "sku_id": "zucchini_01",
+      "name": "Кабачок",
+      "category": "vegetable",
+      "ingredient_ids": ["zucchini"],
+      "store_id": "store_21",
+      "distance_km": 1.4,
+      "price": 79.9,
+      "original_price": 139.9,
+      "is_markdown": true,
+      "safety_eligible": true,
+      "expires_at": "2026-09-05T22:00:00+03:00",
+      "available_quantity": 3,
+      "fulfillment_options": ["delivery", "next_visit"]
+    }
+  ],
+  "requested_mode": null,
+  "now": "2026-09-03T18:00:00+03:00",
+  "limit": 3
+}

@@ -125,6 +125,26 @@ device/payment направляются в review, а не блокируютс�
 4. Команда вместе принимает только продуктовые константы, primary metric и
    экономические assumptions; технический owner не фиксирует их единолично.
 
+### Обязательный review перед merge
+
+Эти вопросы нельзя незаметно решить силами backend owner:
+
+1. Достаточно ли `current/repeat/explore` как «выбора игровой механики» для
+   формального требования кейса? Если нет, ML/Product определяют отдельный
+   selector между механиками, backend только фиксирует его схему и reason codes.
+2. Какие XP/level constants показывать в demo? Сейчас числа нужны только для
+   работающего progress flow и помечены как demo defaults.
+3. Что является подтверждением `recipe_completed` в пилоте? В PoC это trusted
+   synthetic event; production-клиент не должен сам начислять себе XP.
+4. Как определяется cohort для private position/percentile? Сейчас это все
+   пользователи process-local synthetic state, без публичного списка.
+5. Принимаются ли demo fraud thresholds или на защите показываем только правила
+   и объясняем, что реальные пороги требуют labeled pilot data?
+
+Положительный review фиксируется в PR/decision log. Отрицательный ответ меняет
+соответствующий контракт отдельным PR, а не задним числом объявляется уже
+принятым решением.
+
 ## 5. Test pyramid
 
 ```text

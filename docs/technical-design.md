@@ -110,6 +110,11 @@ Backend затем:
    `model_score DESC`;
 7. возвращает warnings и число отфильтрованных кандидатов.
 
+`RecommendationEngine` отвечает за персональную relevance eligibility и не
+должен отдавать заведомо нерелевантные кандидаты. Конкретный model threshold
+выбирает ML/Recsys owner по evaluation; backend не подменяет его произвольным
+числом. Safety и availability всё равно применяются после модели.
+
 ## 6. HTTP API v1
 
 ### `GET /health`

@@ -44,6 +44,9 @@ recommender предлагает персональные рецепты, поз
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
   компактное описание согласованной концепции;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
+- [ML/Recsys & Evaluation](docs/research/recsys/ml-recsys-overview.md) —
+  продуктовая гипотеза, схема recommender, ограничения и критерии проверки
+  контура синтетических данных/модели/оценки/экономики;
 - [План реализации](docs/implementation-plan.md) — владельцы и два дедлайна;
 - [Обязательный MVP и test gates](docs/mvp-scope-and-test-plan.md) — что входит
   в Day 1, финал и automated checks;
@@ -96,10 +99,32 @@ curl -sS \
   http://127.0.0.1:8000/api/v1/referrals/evaluate
 ```
 
-Сервис пока использует детерминированный mock recommender и process-local
-in-memory state. Модель подключается через `RecommendationEngine.rank()` без
-изменения HTTP-контракта. Состояние сбрасывается при перезапуске процесса — это
-ограничение PoC, а не production design.
+Сервис по умолчанию использует детерминированный mock recommender и
+process-local in-memory state; state сбрасывается при перезапуске процесса —
+это ограничение PoC, а не production design. Обученный ML-адаптер
+подключается без изменения HTTP-контракта через `RecommendationEngine.rank()`
+и переменную окружения:
+
+```bash
+RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
+```
+
+## Быстрый старт ML/Recsys
+
+Требует тот же `.venv`, что и backend, плюс необязательные extras только для
+офлайн-калибровки на реальных данных (`pip install -e '.[ml]'` — не нужно
+для запуска модели/оценки/симуляции).
+
+```bash
+python -m pytest tests/test_recsys_*.py       # 42 теста контура
+python -m recsys.generate_examples            # 10 профилей через реальный API
+python -m recsys.evaluation                   # hit rate own vs shuffled-history
+python -m recsys.simulation                   # funnel на 1k/10k пользователях
+python -m recsys.economics                    # ΔCM_user по трём сценариям
+```
+
+Гипотеза, схема recommender, ограничения и критерии проверки —
+[docs/research/recsys/ml-recsys-overview.md](docs/research/recsys/ml-recsys-overview.md).
 
 ## Git workflow для участника
 

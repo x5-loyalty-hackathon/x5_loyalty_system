@@ -1,0 +1,149 @@
+# Дизайн recommender: признаки, ranking, reason codes
+
+> Реализация: [`recsys/model.py`](../../../recsys/model.py),
+> [`recsys/_logistic.py`](../../../recsys/_logistic.py),
+> [`recsys/reason_codes.py`](../../../recsys/reason_codes.py). Контракт (вход
+> и выход, safety, HTTP API) уже описан в
+> [technical-design.md](../../technical-design.md) — этот документ не
+> повторяет его, а объясняет, что происходит внутри
+> `MLRecommendationEngine.rank()`.
+
+## 1. Признаки
+
+`recsys.model.compute_features(request, recipe)` считает восемь признаков из
+полей, которые реально есть в `RecommendationRequest` (никогда — из
+синтетического ярлыка архетипа, который существует только на этапе
+генерации данных, не в реальном API):
+
+| Признак | Смысл | Источник |
+|---|---|---|
+| `coverage` | доля ингредиентов рецепта, уже купленных сегодня | `current_receipt` |
+| `history_affinity` | доля категорий рецепта, знакомых по истории | `purchase_history` + `user.history_categories` |
+| `ingredient_affinity` | доля **конкретных** ингредиентов рецепта, уже покупавшихся | `purchase_history` (ingredient-level, не только категория) |
+| `is_saved` | рецепт в сохранённых | `user.saved_recipe_ids` |
+| `novelty` | 1 − взвешенная комбинация `ingredient_affinity`/`history_affinity` | производный |
+| `time_fit` | мягкий штраф за рецепты дольше 30 минут | `recipe.preparation_minutes` |
+| `missing_ratio` | доля недостающих ингредиентов | `current_receipt` + `user.home_ingredient_ids` |
+| `missing_cost_norm` | оценка стоимости докупки (по средним ценам каталога) | `recsys.catalog.BASE_PRICE_RUB` |
+| `markdown_supply_signal` | доля недостающих ингредиентов, у которых в радиусе есть markdown-товар | `inventory_snapshot` |
+
+`ingredient_affinity` — намеренное усиление по сравнению с
+`DeterministicMockEngine`, который учитывает совпадение только на уровне
+категории (7 категорий). При всего 7 категориях shuffled- и own-история дают
+почти одинаковый category-level сигнал просто потому, что у большинства
+архетипов пересекаются core-категории — ingredient-level (32 ингредиента)
+даёт заметно более специфичный, более чувствительный к конкретной истории
+сигнал (см. [evaluation-and-metrics.md](evaluation-and-metrics.md) о том, как
+это повлияло на own-vs-shuffled тест).
+
+## 2. Ranking: recipe_score
+
+Реализует формулу, уже согласованную в
+[rescue-domovoi-concept.md §7](../persona_vxofi/rescue-domovoi-concept.md#7-recommender-system):
+
+```text
+recipe_score = relevance
+             + current-basket coverage
+             + repeat/discovery fit
+             + time/budget fit
+             − missing_count penalty
+             − missing_cost penalty
+             − constraint violations
+```
+
+Вместо того чтобы вручную подбирать веса каждого слагаемого,
+`recsys/_logistic.py` реализует небольшую логистическую регрессию (без
+numpy/sklearn — обычный batch gradient descent на списках Python), которая
+**обучается** на implicit-метках, полученных из тех же архетипов, что
+генерируют синтетическую популяцию (`recsys.profiles.ARCHETYPES`):
+
+```text
+для (профиль, рецепт):
+  label = 1, если:
+    missing_count ≤ tolerance архетипа (+1, если рецепт markdown-friendly
+                                          и архетип markdown-affine)
+    И recipe.preparation_minutes совместим с time_limit архетипа
+    И (rецепт сохранён ИЛИ высокое current-coverage
+        ИЛИ (низкий combined_affinity И discovery_acceptance архетипа) ИЛИ
+        высокий combined_affinity)
+  иначе label = 0
+```
+
+Это честный bootstrap, а не подгонка под реальную обратную связь
+пользователей: модель учится обобщать явное, читаемое правило в непрерывном
+пространстве признаков вместо того, чтобы вручную фиксировать веса. Обучение
+происходит один раз при создании `MLRecommendationEngine()` (~1.2 сек на 300
+синтетических профилей × 6 случайных рецептов), не на каждый запрос.
+
+Фактически выученные веса (обучение с seed=999, 300 профилей):
+
+| Признак | Вес |
+|---|---:|
+| `coverage` | +1.20 |
+| `history_affinity` | +1.07 |
+| `ingredient_affinity` | +0.80 |
+| `time_fit` | +1.25 |
+| `markdown_supply_signal` | +0.40 |
+| `novelty` | −0.49 |
+| `missing_ratio` | −0.91 |
+| `missing_cost_norm` | −1.45 |
+| `is_saved` | +0.002 |
+
+Знаки соответствуют ожиданиям (coverage/affinity/time_fit положительные,
+missing-штрафы отрицательные). `is_saved` вышел почти нулевым — честное
+наблюдение, не скрытая проблема: сохранённые рецепты в генераторе всегда
+выбираются из core-категорий архетипа, поэтому `is_saved` сильно
+коррелирует с `history_affinity`/`ingredient_affinity`, и регрессия
+перераспределила вес на них. Это не ломает продуктовое поведение — режим
+`repeat` всё равно присваивается детерминированно (по факту нахождения в
+`saved_recipe_ids`), а не через вес классификатора — но стоит иметь в виду
+при дальнейшей настройке признаков.
+
+## 3. Mode и reason codes
+
+Режим (`current` / `repeat` / `explore`) присваивается тем же приоритетным
+правилом, что и в `DeterministicMockEngine` (сохранён рецепт → `repeat`;
+пересечение с сегодняшним чеком → `current`; иначе → `explore`) — сознательно
+не переопределено в одностороннем порядке, так как выбор игровой механики
+подтверждается командой, а не фиксируется единолично ML-контуром
+([mvp-scope-and-test-plan.md §4](../../mvp-scope-and-test-plan.md)).
+
+`recsys/reason_codes.py` — реестр из 12 кодов (расширяет 5 уже
+использовавшихся в моке), каждый с русским текстом для UI/документации.
+Коды остаются короткими флагами (`current_receipt_overlap`,
+`markdown_supply_likely`, …), а не готовыми предложениями с числами —
+конкретные числа (`missing_count` и т.д.) уже есть отдельным полем в ответе
+API (`RecipeRecommendation.missing_count`), поэтому дублировать их внутри
+строки кода означало бы два источника истины.
+
+## 4. Пример вывода на 10 профилях
+
+`recsys/generate_examples.py` прогоняет 10 профилей (по 2–3 на каждый из
+четырёх архетипов) через **настоящий** `app.service.RecommendationService` +
+`app.safety.SafetyPolicy` (импортированы как есть, не переопределены) с
+`MLRecommendationEngine`. Результат — `recsys/examples/sample_recommendations.json`
+(не хранит ничего, кроме синтетических данных). Один пример
+(`synthetic_value_0015`, архетип `value`, радиус 3.5 км):
+
+```json
+{
+  "mode": "explore",
+  "recipe_id": "vegetable_omelette",
+  "model_score": 0.5335,
+  "missing_count": 4,
+  "reason_codes": ["personalized_discovery", "high_discovery_acceptance"],
+  "ingredients": [
+    {"name": "Куриное филе", "source": "full_price"},
+    {"name": "Болгарский перец", "source": "markdown"},
+    {"name": "Лук", "source": "full_price"},
+    {"name": "Кабачок", "source": "full_price"}
+  ]
+}
+```
+
+а рядом для того же профиля — `current`-рекомендация с missing_count=2 и
+`markdown_supply_likely` в причинах: разные профили и разные рецепты для
+одного и того же профиля получают заметно разные mode/missing_count/reason
+codes, что и требовалось ("5–10 профилей с разными рекомендациями") —
+подробная методика оценки этого разнообразия в
+[evaluation-and-metrics.md](evaluation-and-metrics.md).

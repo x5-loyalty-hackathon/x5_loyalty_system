@@ -1,18 +1,19 @@
 # Technical design: recipe-first X5 Domovoi PoC
 
-- **Статус:** accepted for implementation, 2026-09-03.
+- **Статус:** B1–B3 implemented in working branch, team review required,
+  2026-09-03.
 - **Decision source:** [ADR-001](decisions/001-recipe-first-poc.md).
 - **Product source:** [current concept](research/persona_vxofi/rescue-domovoi-concept.md).
 - **Scope:** backend/integration/safety contract; frontend и ML могут
   разрабатываться параллельно.
 
-## 1. Цель первого инкремента
+## 1. Цель backend-контура
 
 Дать frontend стабильный HTTP/JSON-контракт, который уже работает на
 детерминированном mock recommender. ML-участник затем заменяет только реализацию
 `RecommendationEngine.rank(request)`, сохраняя вход и выход.
 
-Первый инкремент должен доказать техническую связность:
+Контур должен доказать техническую связность:
 
 ```text
 synthetic profile + receipt + recipes + inventory
@@ -39,7 +40,7 @@ synthetic profile + receipt + recipes + inventory
 - production-интеграция с каталогом, кассой или доставкой;
 - обучение ML-модели внутри backend;
 - production database и authentication;
-- полноценный antifraud/referral engine;
+- production antifraud/referral engine;
 - LLM-generated recipes или food-safety instructions;
 - реальные платежи, бронь, reward и push;
 - промышленная нагрузка.
@@ -160,15 +161,17 @@ Output:
 - backend не делает health/family/lifestyle inference;
 - commercial metadata отсутствует в model/API contract organic ranking.
 
-### Event safety — следующий инкремент
+### Event safety
 
 - idempotency по `receipt_id`;
 - все чеки дня схлопываются в один purchase day;
-- duplicate/return/referral collision → `pending/review`;
+- duplicate receipt не меняет state повторно;
+- receipt replay другим пользователем отклоняется;
+- неоднозначный referral collision → `pending_review`;
 - жалоба/stock mismatch не считается fraud автоматически;
 - личный прогресс не отнимается по спорному событию без reconciliation.
 
-## 8. Planned state/event contract
+## 8. Реализованный state/event contract
 
 ```text
 recommendation_created
@@ -180,13 +183,26 @@ recommendation_created
 → personal_progress_updated
 ```
 
-Следующий backend-инкремент добавит:
+HTTP endpoints:
 
 - `POST /api/v1/events/receipts`;
-- in-memory repository для demo state;
-- idempotent progress update;
-- personal stats: recipes, markdown savings, rescue item count;
-- referral evaluation и precision-first rule score.
+- `GET /api/v1/progress/{user_id}`;
+- `POST /api/v1/referrals/evaluate`.
+
+Process-local in-memory repository атомарно хранит владельца `receipt_id`, уникальные
+purchase dates, recipe completions, фактическую markdown-экономию, rescue item
+count и уже вознаграждённый referral. Повторный receipt id не меняет state;
+несколько чеков в один день дают только один purchase-day increment.
+
+Progress response содержит только собственную позицию, размер synthetic cohort
+и percentile. Endpoint публичного leaderboard отсутствует; ФИО и адреса не
+входят в схемы.
+
+Referral reward выдаётся один раз после первого verified purchase day invitee.
+Это virtual progress с `monetary_value=0`. Self-referral и повторная атрибуция
+отклоняются. Совпадение device/payment hash имеет demo score `0.75/0.80` и
+уходит в `pending_review`; hard-block threshold равен `0.95`. Это прозрачные
+PoC-константы, не обученные и не принятые как production thresholds.
 
 ## 9. Error and fallback behavior
 
@@ -202,7 +218,7 @@ recommendation_created
 
 ## 10. Testing
 
-Unit/API tests первого инкремента:
+Unit/API tests backend-контура:
 
 - health endpoint;
 - текущий чек закрывает ингредиент;
@@ -214,6 +230,13 @@ Unit/API tests первого инкремента:
 - меньше missing items ранжируются выше;
 - reason codes и no-reservation warning присутствуют;
 - ответ соответствует versioned schema.
+- receipt update идемпотентен;
+- cross-user replay отклоняется, future timestamp уходит в review;
+- один день покупки начисляется один раз;
+- avatar XP/level и private rank обновляются детерминированно;
+- referral требует verified purchase, награждается один раз;
+- параллельные duplicate receipt/referral не обходят idempotency;
+- self-referral блокируется, device/payment collision уходит в review.
 
 Model/eval tests принадлежат ML/Recsys owner:
 
@@ -233,11 +256,13 @@ Model/eval tests принадлежат ML/Recsys owner:
 | Safety/antifraud policy | Backend/Integration/Safety | Product/UX owner |
 | Product/metric/economic changes | команда | команда |
 
-## 12. Definition of Done первого инкремента
+## 12. Definition of Done backend-инкремента
 
 - `python -m pytest` проходит;
 - `uvicorn app.main:app --reload` запускает API;
 - example request возвращает три или меньше рекомендаций;
 - unsafe fixture не попадает в ответ;
+- receipt/referral не меняют state дважды;
+- личный rank не раскрывает список других пользователей;
 - frontend может работать только по опубликованной схеме;
 - README и промежуточные материалы не заявляют незавершённое как результат.

@@ -4,6 +4,8 @@
 - **Промежуточный дедлайн:** 04.09.2026 10:00.
 - **Финальный дедлайн:** 07.09.2026 10:00.
 - **Решение:** [ADR-001](decisions/001-recipe-first-poc.md).
+- **Scope и test gates:**
+  [обязательный MVP](mvp-scope-and-test-plan.md).
 
 ## Роли
 
@@ -38,6 +40,10 @@ economic changes подтверждаются втроём.
 5. Добавить example request и API tests.
 6. Обновить README и передать contract обоим участникам.
 
+Фактический статус в рабочей ветке: шаги 1–6 и B2/B3 receipt/progress/referral
+реализованы раньше графика; regression gate — 23 passed. До review это не
+считается общей командной версией.
+
 ### Integration checkpoint
 
 Frontend не ждёт модель: использует example JSON. ML owner не поднимает свой
@@ -56,10 +62,11 @@ HTTP-сервис: реализует adapter/function по Python contract ли
 
 1. Собрать feedback и до 13:00 подтвердить scope freeze.
 2. Заменить mock на model adapter.
-3. Добавить receipt event, idempotent progress и personal stats.
-4. Реализовать referral reward contract и precision-first antifraud.
-5. Соединить frontend с API.
-6. Зафиксировать один воспроизводимый end-to-end demo.
+3. Провести review receipt/progress/referral contract и согласовать только
+   продуктовые константы, не переписывая стабильный flow без причины.
+4. Соединить frontend с API.
+5. Зафиксировать один воспроизводимый end-to-end demo.
+6. Добавить contract/e2e test для интеграции модели и frontend fixture.
 
 ## 05.09 — functional completeness
 

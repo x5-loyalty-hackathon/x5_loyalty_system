@@ -27,20 +27,26 @@
 - Зафиксированы [ADR-001](decisions/001-recipe-first-poc.md),
   [technical design](technical-design.md) и
   [план до двух дедлайнов](implementation-plan.md).
-- Реализуется первый backend-инкремент: versioned recommendation contract,
-  deterministic mock и post-model safety policy. Измеренных результатов ещё
-  нет.
+- В рабочей ветке реализованы backend-инкременты B1–B3: versioned
+  recommendation contract, deterministic mock, post-model safety, idempotent
+  receipt/progress state, private rank, referral reward и rule-based
+  precision-first antifraud. Это ещё не означает готовность общего PoC:
+  frontend, model adapter, evaluation, simulation и pilot evidence принадлежат
+  следующим integration gates.
+- Backend regression gate: 23 теста проходят локально. Fraud weights и XP
+  являются demo-константами и требуют командного/product review.
 
 ## Следующий командный шаг
 
 До промежуточной сдачи 04.09.2026 10:00:
 
-1. проверить backend contract и example request;
+1. проверить backend contract и три example requests;
 2. подключить frontend к mock JSON;
 3. получить первые outputs ML/Recsys owner минимум на пяти профилях;
 4. собрать четыре экрана и промежуточную презентацию;
 5. подготовить обязательное Markdown-описание и компактные product artifacts;
 6. проверить доступ к репозиторию без авторизации.
 
-После сдачи mock заменяется model adapter, затем добавляются receipt/progress,
-personal stats, referral и precision-first antifraud.
+После сдачи mock заменяется model adapter, frontend соединяется с API и
+добавляется единый end-to-end fixture. Затем обязательные evidence gates:
+evaluation, simulation, экономика и pilot plan.

@@ -45,6 +45,8 @@ recommender предлагает персональные рецепты, поз
   компактное описание согласованной концепции;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
 - [План реализации](docs/implementation-plan.md) — владельцы и два дедлайна;
+- [Обязательный MVP и test gates](docs/mvp-scope-and-test-plan.md) — что входит
+  в Day 1, финал и automated checks;
 - [Как внести изменение](CONTRIBUTING.md) — ветки, коммиты и pull request;
 - [Настройка GitHub](docs/github-setup.md) — рекомендуемые параметры репозитория.
 
@@ -59,6 +61,9 @@ python -m pip install -e '.[dev]'
 python -m pytest
 uvicorn app.main:app --reload
 ```
+
+Те же тесты автоматически запускаются в GitHub Actions на push и pull request;
+CI проверяет минимальную поддерживаемую Python 3.11 и Python 3.14.
 
 Swagger UI: `http://127.0.0.1:8000/docs`.
 
@@ -77,8 +82,24 @@ curl -sS \
   http://127.0.0.1:8000/api/v1/recommendations
 ```
 
-Сервис пока использует детерминированный mock recommender. Модель подключается
-через `RecommendationEngine.rank()` без изменения HTTP-контракта.
+Receipt/progress и referral можно воспроизвести после запуска API:
+
+```bash
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/receipt_event.json \
+  http://127.0.0.1:8000/api/v1/events/receipts
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/referral_request.json \
+  http://127.0.0.1:8000/api/v1/referrals/evaluate
+```
+
+Сервис пока использует детерминированный mock recommender и process-local
+in-memory state. Модель подключается через `RecommendationEngine.rank()` без
+изменения HTTP-контракта. Состояние сбрасывается при перезапуске процесса — это
+ограничение PoC, а не production design.
 
 ## Git workflow для участника
 

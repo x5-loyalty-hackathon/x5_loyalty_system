@@ -37,6 +37,21 @@ class SafetyStatus(StrEnum):
     ADJUSTED = "adjusted"
 
 
+class ReceiptEventStatus(StrEnum):
+    VERIFIED = "verified"
+    DUPLICATE = "duplicate"
+    PENDING_REVIEW = "pending_review"
+    REJECTED = "rejected"
+
+
+class ReferralStatus(StrEnum):
+    APPROVED = "approved"
+    DUPLICATE = "duplicate"
+    NOT_QUALIFIED = "not_qualified"
+    PENDING_REVIEW = "pending_review"
+    REJECTED = "rejected"
+
+
 class UserProfile(ApiModel):
     user_id: str = Field(min_length=1)
     radius_km: float = Field(default=3.0, gt=0, le=100)
@@ -56,6 +71,19 @@ class ReceiptItem(ApiModel):
     brand: str | None = None
     quantity: float = Field(default=1, gt=0)
     unit_price: float = Field(ge=0)
+    is_markdown: bool = False
+    original_unit_price: float | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def validate_receipt_markdown(self) -> ReceiptItem:
+        if self.is_markdown and self.original_unit_price is None:
+            raise ValueError("markdown receipt item requires original_unit_price")
+        if (
+            self.original_unit_price is not None
+            and self.unit_price > self.original_unit_price
+        ):
+            raise ValueError("unit_price cannot exceed original_unit_price")
+        return self
 
 
 class Receipt(ApiModel):
@@ -179,3 +207,72 @@ class RecommendationResponse(ApiModel):
 class HealthResponse(ApiModel):
     status: str
     contract_version: str = CONTRACT_VERSION
+
+
+class PrivateRank(ApiModel):
+    position: int = Field(ge=1)
+    cohort_size: int = Field(ge=1)
+    percentile: float = Field(ge=0, le=100)
+
+
+class ProgressSnapshot(ApiModel):
+    user_id: str
+    verified_receipts: int = Field(ge=0)
+    purchase_days: int = Field(ge=0)
+    recipes_completed: int = Field(ge=0)
+    markdown_savings: float = Field(ge=0)
+    rescue_items: float = Field(ge=0)
+    referral_rewards: int = Field(ge=0)
+    avatar_xp: int = Field(ge=0)
+    avatar_level: int = Field(ge=1)
+    xp_to_next_level: int = Field(ge=1)
+    private_rank: PrivateRank
+
+
+class ReceiptProgressRequest(ApiModel):
+    user_id: str = Field(min_length=1)
+    receipt: Receipt
+    recipe_id: str | None = None
+    recipe_completed: bool = False
+    now: datetime
+
+    @model_validator(mode="after")
+    def validate_recipe_completion(self) -> ReceiptProgressRequest:
+        if self.recipe_completed and self.recipe_id is None:
+            raise ValueError("recipe_completed requires recipe_id")
+        return self
+
+
+class ReceiptProgressResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    status: ReceiptEventStatus
+    fraud_score: float = Field(ge=0, le=1)
+    reason_codes: list[str]
+    progress: ProgressSnapshot
+
+
+class ReferralEvaluationRequest(ApiModel):
+    inviter_user_id: str = Field(min_length=1)
+    invitee_user_id: str = Field(min_length=1)
+    invite_code: str = Field(min_length=6, max_length=64)
+    inviter_device_hash: str | None = None
+    invitee_device_hash: str | None = None
+    inviter_payment_hash: str | None = None
+    invitee_payment_hash: str | None = None
+
+
+class ReferralReward(ApiModel):
+    reward_type: str = "virtual_progress"
+    inviter_xp: int = Field(default=10, ge=0)
+    invitee_xp: int = Field(default=10, ge=0)
+    monetary_value: float = Field(default=0, ge=0)
+
+
+class ReferralEvaluationResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    status: ReferralStatus
+    fraud_score: float = Field(ge=0, le=1)
+    reason_codes: list[str]
+    reward: ReferralReward
+    inviter_progress: ProgressSnapshot
+    invitee_progress: ProgressSnapshot

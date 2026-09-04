@@ -242,6 +242,28 @@ def test_safe_ready_route_survives_unavailable_cook() -> None:
     ]
 
 
+def test_explicit_store_choice_applies_to_cook_and_ready_routes() -> None:
+    payload = meal_recommendation_payload(prefer_ready=True)
+    payload["shopping_context"]["selected_store_id"] = "store_work"
+    ready = next(
+        item
+        for item in payload["inventory_snapshot"]
+        if item["sku_id"] == "ready_omelette_01"
+    )
+    ready["store_id"] = "store_work"
+    ready["distance_km"] = 0.4
+
+    response = client.post("/api/v1/meal-recommendations", json=payload)
+
+    assert response.status_code == 200, response.text
+    meal = recommendation_by_id(response.json(), "vegetable_omelette")
+    assert meal["available_routes"] == ["ready"]
+    assert meal["cook_variant"] is None
+    assert {
+        option["store_id"] for option in meal["ready_variant"]["product_options"]
+    } == {"store_work"}
+
+
 def test_unverified_recipe_cannot_survive_through_ready_only_route(
     monkeypatch,
 ) -> None:

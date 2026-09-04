@@ -18,6 +18,7 @@
 | ADR-001 | 2026-09-03 | accepted | Recipe-first PoC: markdown/full-price внутри рецепта, доставка или следующий визит, Домовой без gambling/public rank | Команда | [ADR-001](decisions/001-recipe-first-poc.md) |
 | ADR-002 | 2026-09-04 | accepted | Одна персональная рекомендация приёма пищи с вариантами `cook` и `ready`; разнообразные поведенческие персоны для offline-eval | `vxofi`, межконтурный review команды | [ADR-002](decisions/002-personal-meal-contract.md) |
 | ADR-003 | 2026-09-04 | accepted | `current/repeat/explore` — стратегии челленджа; один default и до двух релевантных альтернатив без неявной полной корзины | `vxofi`, межконтурный review команды | [ADR-003](decisions/003-challenge-mode-selection.md) |
+| ADR-004 | 2026-09-04 | accepted | Книга рецептов замыкает `save → repeat`; cook-корзина собирается в одной явно выбранной или объяснимо рекомендованной точке относительно `home/work/current/custom` | Команда; реализация `vxofi` | [ADR-004](decisions/004-recipe-book-and-shopping-context.md) |
 
 Для нового существенного решения скопируйте
 [шаблон](decisions/000-template.md) в эту папку, присвойте следующий номер и

@@ -15,13 +15,15 @@ from app.contracts import (
     MealRoute,
     PrivateRank,
     ProgressSnapshot,
+    RankCohort,
     Receipt,
+    SavedRecipeStatus,
 )
 
 
 XP_PER_PURCHASE_DAY = 10
 XP_PER_RECIPE = 20
-XP_PER_REFERRAL_REWARD = 10
+XP_PER_REFERRAL_REWARD = 20
 XP_PER_LEVEL = 50
 BUSINESS_TIMEZONE = ZoneInfo("Europe/Moscow")
 
@@ -29,6 +31,7 @@ BUSINESS_TIMEZONE = ZoneInfo("Europe/Moscow")
 @dataclass
 class UserProgressRecord:
     user_id: str
+    rank_cohort: RankCohort = RankCohort.COOKING_HOUSEHOLDS
     verified_receipts: int = 0
     purchase_dates: set[date] = field(default_factory=set)
     meals_completed: int = 0
@@ -92,6 +95,12 @@ class MealPlanCompletionOutcome:
     plan: MealPlanSnapshot | None
 
 
+@dataclass(frozen=True)
+class SavedRecipeOutcome:
+    status: SavedRecipeStatus
+    saved_recipe_ids: tuple[str, ...]
+
+
 class InMemoryStateRepository:
     """Demo-only state. Replace with a persistent adapter without changing APIs."""
 
@@ -101,6 +110,7 @@ class InMemoryStateRepository:
         self._receipt_owners: dict[str, str] = {}
         self._referral_inviter_by_invitee: dict[str, str] = {}
         self._meal_plans: dict[str, MealPlanRecord] = {}
+        self._saved_recipe_ids_by_user: dict[str, set[str]] = {}
 
     def reset(self) -> None:
         with self._lock:
@@ -108,6 +118,26 @@ class InMemoryStateRepository:
             self._receipt_owners.clear()
             self._referral_inviter_by_invitee.clear()
             self._meal_plans.clear()
+            self._saved_recipe_ids_by_user.clear()
+
+    def save_recipe(self, *, user_id: str, recipe_id: str) -> SavedRecipeOutcome:
+        """Idempotently add a recipe to the demo recipe book; awards no XP."""
+        with self._lock:
+            saved = self._saved_recipe_ids_by_user.setdefault(user_id, set())
+            status = (
+                SavedRecipeStatus.DUPLICATE
+                if recipe_id in saved
+                else SavedRecipeStatus.CREATED
+            )
+            saved.add(recipe_id)
+            return SavedRecipeOutcome(
+                status=status,
+                saved_recipe_ids=tuple(sorted(saved)),
+            )
+
+    def saved_recipe_ids(self, user_id: str) -> tuple[str, ...]:
+        with self._lock:
+            return tuple(sorted(self._saved_recipe_ids_by_user.get(user_id, set())))
 
     def save_meal_plan(self, request: MealPlanSaveRequest) -> MealPlanSaveOutcome:
         with self._lock:
@@ -155,6 +185,7 @@ class InMemoryStateRepository:
         receipt: Receipt,
         recipe_completed: bool,
         meal_plan_id: str | None = None,
+        rank_cohort: RankCohort = RankCohort.COOKING_HOUSEHOLDS,
     ) -> ReceiptRecordOutcome:
         """Atomically claim and record a receipt for idempotent processing."""
         with self._lock:
@@ -166,6 +197,11 @@ class InMemoryStateRepository:
                 )
 
             record = self._get_or_create(user_id)
+            if record.verified_receipts == 0:
+                # In production this cohort comes from a trusted segmentation
+                # job, not from a public client. The event field is synthetic
+                # PoC plumbing so unlike populations are not ranked together.
+                record.rank_cohort = rank_cohort
             self._receipt_owners[receipt.receipt_id] = user_id
             record.verified_receipts += 1
             purchase_date = receipt.purchased_at.astimezone(BUSINESS_TIMEZONE).date()
@@ -343,6 +379,11 @@ class InMemoryStateRepository:
             if record is None:
                 record = UserProgressRecord(user_id=user_id)
             cohort = list(self._users.values())
+            cohort = [
+                other
+                for other in cohort
+                if other.rank_cohort == record.rank_cohort
+            ]
             if is_ephemeral:
                 cohort.append(record)
             position = 1 + sum(
@@ -369,6 +410,7 @@ class InMemoryStateRepository:
                 avatar_level=level,
                 xp_to_next_level=xp_to_next_level,
                 private_rank=PrivateRank(
+                    cohort=record.rank_cohort,
                     position=position,
                     cohort_size=cohort_size,
                     percentile=percentile,

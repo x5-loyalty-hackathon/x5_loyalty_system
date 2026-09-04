@@ -330,6 +330,10 @@ ignore | open | save | add_to_plan | buy
 path, но его response schema осознанно обновлена до `1.1` по ADR-003. Это не
 byte-compatible ответ `1.0`: добавлены `challenge_selection`, признак
 обязательности ингредиента и новый публичный словарь объяснений.
+Последующий API `1.2` по
+[ADR-004](004-recipe-book-and-shopping-context.md) добавил книгу рецептов,
+anchor-relative shopping context и single-store basket без смены URL
+recommendation endpoints.
 Meal-контракт реализован отдельными endpoint'ами:
 
 - `POST /api/v1/meal-recommendations` — `cook/ready` варианты;

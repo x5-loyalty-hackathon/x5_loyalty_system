@@ -24,16 +24,18 @@
 - Новый рецепт может содержать продукты без точного аналога в истории.
 - Markdown выбирается только внутри ингредиентов рецепта.
 - Out-of-recipe cross-sell отсутствует.
-- Радиус вместо одного домашнего магазина.
+- Явно выбранный `home/work/current/custom` контекст и одна точка сбора вместо
+  жёстко заданного домашнего магазина; пеший demo-радиус — 750 м.
 - Отдельной брони rescue SKU нет.
 - Нет дополнительной денежной награды.
 - Gambling-like слой и public leaderboard исключены.
 - Recipe feed доступен ежедневно; push не ежедневный.
 - Личная статистика: рецепты, фактическая экономия, rescue items и развитие дома.
 
-Не зафиксированы командой и остаются demo-настройками: `10 XP` за новый день
-покупки, `20 XP` за завершённый рецепт, `10 XP` за referral и `50 XP` на
-уровень. Их можно менять после продуктового согласования, не меняя API flow.
+Зафиксированная demo-схема: `10 XP` за новый день покупки, `20 XP` за
+завершённое блюдо, `20 XP` каждому участнику успешного referral и `50 XP` на
+уровень. Это виртуальный прогресс с денежной стоимостью `0`; числа не являются
+расчётом реальной экономики наград.
 
 ## 2. Definition of Day 1
 
@@ -64,8 +66,10 @@ Day 1 не обязан быть финальным продуктом. К пр�
 | 3–4 связанных экрана | after-receipt → recipe → plan → personal kitchen | Product/UX | happy-path UI smoke |
 | Персональный AI challenge | model ranks recipe/mode from synthetic history | ML/Recsys | relevance ≥70% |
 | Выбор механики с объяснением | один default `current/repeat/explore`, до двух релевантных альтернатив и отдельные mode reason codes | ML + Backend | contract invariants + selector eval |
+| Сохранение и повтор | recipe book замыкает `save → repeat` без начисления XP | Backend | idempotency + next-request repeat test |
+| Одна точка сбора | anchor `home/work/current/custom`, 750 м, auto/manual single-store basket | Backend | coverage/tiebreak/radius/split-store tests |
 | Прогресс аватара | verified receipt updates bounded XP/level | Backend | idempotency tests |
-| Место в рейтинге | private position/percentile without public identities | Backend | rank tests, no leaderboard endpoint |
+| Место в рейтинге | private position/percentile внутри cooking/ready cohort без public identities | Backend | cohort isolation + no leaderboard endpoint |
 | Referral reward | virtual progress, monetary value `0`, one reward/invitee | Backend | qualification/idempotency/fraud tests |
 | Антифрод чеков | duplicate owner, cross-user replay, future event, same-day collapse | Backend/Safety | threshold and state tests |
 | Антифрод referrals | self/duplicate attribution, device/payment collision | Backend/Safety | precision-first tests |
@@ -108,6 +112,9 @@ device/payment направляются в review, а не блокируютс�
 
 ### B4
 
+- книга рецептов и server-side `repeat` state;
+- anchor-relative shopping context и single-store cook basket;
+- cooking/ready cohort isolation для private rank;
 - model adapter integration;
 - frontend integration smoke;
 - deterministic demo scenario;
@@ -133,8 +140,8 @@ device/payment направляются в review, а не блокируютс�
    Решено в ADR-003: это стратегии персонального челленджа, selector возвращает
    один default и объяснимые альтернативы. ML/Product ещё должны подтвердить
    финальные сигналы и пороги selector через eval.
-2. Какие XP/level constants показывать в demo? Сейчас числа нужны только для
-   работающего progress flow и помечены как demo defaults.
+2. ~~Какие XP/level constants показывать в demo?~~ Принято: 10 за purchase
+   day, 20 за meal, 20 каждому за referral, 50 на уровень.
 3. Что является подтверждением `recipe_completed` в пилоте? В PoC это trusted
    synthetic event; production-клиент не должен сам начислять себе XP.
 4. Как определяется cohort для private position/percentile? Сейчас это все

@@ -43,4 +43,23 @@ def test_published_examples_form_one_end_to_end_demo() -> None:
     assert referral.status_code == 200, referral.text
     assert referral.json()["status"] == "approved"
     assert referral.json()["reward"]["monetary_value"] == 0
-    assert referral.json()["invitee_progress"]["avatar_xp"] == 40
+    assert referral.json()["invitee_progress"]["avatar_xp"] == 50
+
+
+def test_published_save_example_closes_the_repeat_loop() -> None:
+    saved = client.post(
+        "/api/v1/saved-recipes",
+        json=load_example("saved_recipe_request.json"),
+    )
+    assert saved.status_code == 200, saved.text
+    assert saved.json()["status"] == "created"
+
+    payload = load_example("meal_recommendation_request.json")
+    payload["requested_mode"] = "repeat"
+    repeated = client.post("/api/v1/meal-recommendations", json=payload)
+
+    assert repeated.status_code == 200, repeated.text
+    assert repeated.json()["recommendations"][0]["meal_id"] == (
+        "vegetable_omelette"
+    )
+    assert repeated.json()["recommendations"][0]["mode"] == "repeat"

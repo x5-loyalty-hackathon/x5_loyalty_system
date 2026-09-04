@@ -40,9 +40,20 @@
   meal plan и разное подтверждение завершения двух route. Это ещё не означает
   готовность общего PoC: frontend и pilot evidence принадлежат следующим
   integration gates.
+- В API 1.2 замкнут пользовательский цикл `save → repeat`: отдельная
+  process-local книга рецептов влияет на следующую рекомендацию без ручного
+  эха состояния со стороны frontend. Cook-корзина теперь относится ровно к
+  одной точке, выбранной пользователем или рекомендованной по покрытию,
+  привычности и расстоянию. Контекст может быть `home`, `work`, текущим или
+  произвольным сохранённым местом; demo-дефолт — 750 м без передачи адреса.
+- Private rank разделён на `cooking_households` и `ready_heavy`; route одного
+  заказа не используется как сегмент.
+- Q13 перенесён из рабочего списка вопросов в отдельный
+  [одностраничный draft пилота](pilot-plan.md) и включён в план реализации.
 - Общий regression gate проходит локально на полном test suite без фиксации
-  хрупкого числа тестов в документации. Fraud weights, XP и порог
-  ready-affinity являются demo-константами и требуют командного/product review.
+  хрупкого числа тестов в документации. XP-схема подтверждена командой как
+  demo-константа; fraud weights и порог ready-affinity всё ещё требуют
+  product/model review.
 - В общей истории репозитория реализован runnable ML/Recsys smoke-контур поверх
   неизменного backend-контракта: `recsys.model.MLRecommendationEngine`
   (синтетически обучаемый адаптер `RecommendationEngine`, переключаемый через
@@ -67,7 +78,7 @@
 1. **Product/UX & Frontend:** добавить в ветку реальный frontend-код и провести
    один 4-screen happy path по актуальному meal API. Минимум: рекомендация →
    выбор route → сохранение плана → synthetic-чек → личный прогресс.
-2. **ML/Recsys + Product/UX:** реализовать и проверить принятый в ADR-003 выбор
+2. **ML/Recsys + Product/UX:** проверить принятый в ADR-003 и уже реализованный выбор
    типа челленджа: один default `current/repeat/explore`, отдельное объяснение и
    только релевантные альтернативы. `cook/ready` остаётся другим уровнем —
    способом закрыть потребность в еде, а не игровой механикой.
@@ -83,12 +94,12 @@
 
 ### P1 — обязательные evidence и сдача
 
-5. **Backend/Integration/Safety:** оформить meal-контракт отдельным reviewable
-   изменением, передать frontend examples и сохранить зелёным автоматический
-   smoke обоих route. Не добавлять новый backend scope до появления UI.
-6. **Product + review команды:** подготовить одностраничный pilot plan:
-   test/control, primary metric, margin guardrail, сегментация cook/ready,
-   длительность и критерий остановки.
+5. **Backend/Integration/Safety:** передать frontend API 1.2, examples и
+   `save → repeat` / single-store fixtures; сохранить зелёным автоматический
+   smoke обоих route. Следующий новый backend scope — только после UI integration.
+6. **Product + review команды:** проверить и зафиналить
+   [одностраничный pilot plan](pilot-plan.md): test/control, primary metric,
+   margin guardrail, раздельный анализ cooking/ready, длительность и stop rules.
 7. **Команда:** записать 30–60-секундное резервное видео полного сценария и
    сверить финальные утверждения в слайдах с фактическими eval/simulation
    outputs.

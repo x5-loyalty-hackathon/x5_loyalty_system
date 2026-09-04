@@ -1,13 +1,19 @@
 {
   "user": {
     "user_id": "user_demo_001",
-    "radius_km": 3.0,
+    "radius_km": 0.75,
     "excluded_categories": [],
     "excluded_ingredient_ids": [],
     "home_ingredient_ids": ["flour"],
     "saved_recipe_ids": ["cottage_cheese_bake"],
     "history_categories": ["dairy", "vegetable", "meat"],
     "preferred_brands": ["Зелёная линия"]
+  },
+  "shopping_context": {
+    "anchor_type": "work",
+    "anchor_id": "office-place-opaque-id",
+    "radius_km": 0.75,
+    "preferred_store_ids": ["store_17"]
   },
   "current_receipt": {
     "receipt_id": "receipt_demo_001",
@@ -83,7 +89,7 @@
       "category": "egg",
       "ingredient_ids": ["egg"],
       "store_id": "store_17",
-      "distance_km": 0.8,
+      "distance_km": 0.5,
       "price": 109.9,
       "original_price": 109.9,
       "is_markdown": false,
@@ -97,7 +103,7 @@
       "category": "meat",
       "ingredient_ids": ["chicken"],
       "store_id": "store_21",
-      "distance_km": 1.4,
+      "distance_km": 0.6,
       "price": 249.9,
       "original_price": 399.9,
       "is_markdown": true,
@@ -112,7 +118,7 @@
       "category": "vegetable",
       "ingredient_ids": ["zucchini"],
       "store_id": "store_21",
-      "distance_km": 1.4,
+      "distance_km": 0.6,
       "price": 79.9,
       "original_price": 139.9,
       "is_markdown": true,

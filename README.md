@@ -6,12 +6,14 @@ Proof of concept персонального игрового слоя повер
 Проект перешёл от discovery к реализации meal-first PoC. После покупки
 recommender предлагает персональный приём пищи с вариантами `приготовить` и
 `взять готовое`. Для рецепта можно выбрать markdown/full-price ингредиенты в
-достижимом радиусе и передать список в доставку либо сохранить к следующему
-визиту. Подтверждённый чек и отдельное подтверждение готовки обновляют личную
+одной точке рядом с текущим местом, домом или работой и передать список в
+доставку либо сохранить к следующему визиту. Сам рецепт сохраняется в книгу и
+становится вариантом `repeat`. Подтверждённый чек и подтверждение готовки обновляют личную
 кухню Домового. Продуктовые и контрактные решения зафиксированы в
 [ADR-001](docs/decisions/001-recipe-first-poc.md),
-[ADR-002](docs/decisions/002-personal-meal-contract.md) и
-[ADR-003](docs/decisions/003-challenge-mode-selection.md); актуальная схема API
+[ADR-002](docs/decisions/002-personal-meal-contract.md),
+[ADR-003](docs/decisions/003-challenge-mode-selection.md) и
+[ADR-004](docs/decisions/004-recipe-book-and-shopping-context.md); актуальная схема API
 описана в [design doc](docs/technical-design.md).
 
 ## Что должно войти в PoC
@@ -48,6 +50,10 @@ recommender предлагает персональный приём пищи с
   единая meal-рекомендация, планы, события и LLM-персоны;
 - [Выбор типа челленджа](docs/decisions/003-challenge-mode-selection.md) — один
   default `current/repeat/explore`, объяснимые альтернативы и full-basket opt-in;
+- [Книга рецептов и точка сбора](docs/decisions/004-recipe-book-and-shopping-context.md)
+  — `save → repeat`, home/work/current/custom и одна cook-точка;
+- [Одностраничный план пилота](docs/pilot-plan.md) — test/control, покупочные
+  дни, маржинальный guardrail и правила остановки;
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
   компактное описание согласованной концепции;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
@@ -99,6 +105,11 @@ curl -sS \
   -H 'Content-Type: application/json' \
   --data @examples/meal_recommendation_request.json \
   http://127.0.0.1:8000/api/v1/meal-recommendations
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/saved_recipe_request.json \
+  http://127.0.0.1:8000/api/v1/saved-recipes
 
 curl -sS \
   -H 'Content-Type: application/json' \

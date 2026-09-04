@@ -47,7 +47,7 @@ def test_health_exposes_contract_version() -> None:
     assert response.status_code == 200
     assert response.json() == {
         "status": "ok",
-        "contract_version": "1.1",
+        "contract_version": "1.2",
         "recommendation_engine": "mock",
         "model_fallback": False,
     }
@@ -56,7 +56,7 @@ def test_health_exposes_contract_version() -> None:
 def test_example_returns_current_repeat_and_explore_modes() -> None:
     body = post_recommendation(deepcopy(EXAMPLE_REQUEST))
 
-    assert body["contract_version"] == "1.1"
+    assert body["contract_version"] == "1.2"
     assert [item["missing_count"] for item in body["recommendations"]] == [1, 1, 2]
     assert {item["mode"] for item in body["recommendations"]} == {
         "current",
@@ -183,8 +183,8 @@ def test_full_price_is_used_when_markdown_is_expired() -> None:
             "name": "Филе куриное",
             "category": "meat",
             "ingredient_ids": ["chicken"],
-            "store_id": "store_17",
-            "distance_km": 0.8,
+            "store_id": "store_21",
+            "distance_km": 0.6,
             "price": 399.9,
             "original_price": 399.9,
             "is_markdown": False,
@@ -204,7 +204,7 @@ def test_full_price_is_used_when_markdown_is_expired() -> None:
 
 def test_recipe_is_filtered_when_required_product_is_outside_radius() -> None:
     payload = deepcopy(EXAMPLE_REQUEST)
-    payload["user"]["radius_km"] = 1.0
+    payload["shopping_context"]["radius_km"] = 0.5
 
     body = post_recommendation(payload)
 
@@ -217,7 +217,7 @@ def test_recipe_is_filtered_when_required_product_is_outside_radius() -> None:
 
 def test_all_safety_filtered_candidates_return_only_a_generic_warning() -> None:
     payload = deepcopy(EXAMPLE_REQUEST)
-    payload["user"]["radius_km"] = 1.0
+    payload["shopping_context"]["radius_km"] = 0.5
     payload["recipe_catalog"] = [
         recipe
         for recipe in payload["recipe_catalog"]

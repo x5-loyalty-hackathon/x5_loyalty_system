@@ -59,9 +59,23 @@ ROUTE_REASON_TEXT: dict[str, str] = {
     "only_ready_route_available": "Сейчас доступен только вариант готового блюда.",
 }
 
+STORE_REASON_TEXT: dict[str, str] = {
+    "explicit_store_choice": "Точка выбрана пользователем.",
+    "maximum_ingredient_coverage": (
+        "В этой точке доступно больше всего недостающих ингредиентов."
+    ),
+    "preferred_store_for_anchor": (
+        "При равном покрытии выбрана привычная точка для этого места."
+    ),
+    "nearest_store_tiebreak": (
+        "При равном покрытии выбрана ближайшая точка."
+    ),
+}
+
 CHALLENGE_REASON_CODES = frozenset(CHALLENGE_REASON_TEXT)
 RECIPE_REASON_CODES = frozenset(RECIPE_REASON_TEXT)
 ROUTE_REASON_CODES = frozenset(ROUTE_REASON_TEXT)
+STORE_REASON_CODES = frozenset(STORE_REASON_TEXT)
 
 
 def public_reason_text(code: str) -> str | None:
@@ -70,4 +84,5 @@ def public_reason_text(code: str) -> str | None:
         CHALLENGE_REASON_TEXT.get(code)
         or RECIPE_REASON_TEXT.get(code)
         or ROUTE_REASON_TEXT.get(code)
+        or STORE_REASON_TEXT.get(code)
     )

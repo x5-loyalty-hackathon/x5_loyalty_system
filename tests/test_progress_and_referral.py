@@ -74,7 +74,7 @@ def qualify_invitee(user_id: str = "invitee-1") -> None:
 def test_verified_receipt_updates_bounded_progress_and_savings() -> None:
     body = post_receipt(receipt_event(recipe_completed=True))
 
-    assert body["contract_version"] == "1.1"
+    assert body["contract_version"] == "1.2"
     assert body["status"] == "verified"
     assert body["reason_codes"] == ["receipt_verified"]
     assert body["fraud_score"] == 0
@@ -92,6 +92,7 @@ def test_verified_receipt_updates_bounded_progress_and_savings() -> None:
         "avatar_level": 1,
         "xp_to_next_level": 20,
         "private_rank": {
+            "cohort": "cooking_households",
             "position": 1,
             "cohort_size": 1,
             "percentile": 100.0,
@@ -210,12 +211,53 @@ def test_private_rank_is_returned_without_public_leaderboard() -> None:
 
     assert low.status_code == high.status_code == 200
     assert low.json()["private_rank"] == {
+        "cohort": "cooking_households",
         "position": 2,
         "cohort_size": 2,
         "percentile": 50.0,
     }
     assert high.json()["private_rank"]["position"] == 1
     assert leaderboard.status_code == 404
+
+
+def test_private_rank_never_compares_cooking_and_ready_heavy_users() -> None:
+    post_receipt(receipt_event(user_id="cook", receipt_id="receipt-cook"))
+    ready_payload = receipt_event(
+        user_id="ready",
+        receipt_id="receipt-ready",
+        recipe_completed=True,
+    )
+    ready_payload["rank_cohort"] = "ready_heavy"
+    post_receipt(ready_payload)
+
+    cook_rank = client.get("/api/v1/progress/cook").json()["private_rank"]
+    ready_rank = client.get("/api/v1/progress/ready").json()["private_rank"]
+
+    assert cook_rank == {
+        "cohort": "cooking_households",
+        "position": 1,
+        "cohort_size": 1,
+        "percentile": 100.0,
+    }
+    assert ready_rank == {
+        "cohort": "ready_heavy",
+        "position": 1,
+        "cohort_size": 1,
+        "percentile": 100.0,
+    }
+
+
+def test_later_receipt_cannot_switch_an_established_rank_cohort() -> None:
+    first = receipt_event(user_id="stable", receipt_id="stable-first")
+    first["rank_cohort"] = "ready_heavy"
+    post_receipt(first)
+    second = receipt_event(user_id="stable", receipt_id="stable-second")
+    second["rank_cohort"] = "cooking_households"
+    post_receipt(second)
+
+    rank = client.get("/api/v1/progress/stable").json()["private_rank"]
+
+    assert rank["cohort"] == "ready_heavy"
 
 
 def test_referral_waits_for_verified_invitee_purchase() -> None:
@@ -236,18 +278,18 @@ def test_qualified_referral_awards_virtual_progress_once() -> None:
     assert first["status"] == "approved"
     assert first["reward"] == {
         "reward_type": "virtual_progress",
-        "inviter_xp": 10,
-        "invitee_xp": 10,
+        "inviter_xp": 20,
+        "invitee_xp": 20,
         "monetary_value": 0.0,
     }
-    assert first["inviter_progress"]["avatar_xp"] == 10
-    assert first["invitee_progress"]["avatar_xp"] == 20
+    assert first["inviter_progress"]["avatar_xp"] == 20
+    assert first["invitee_progress"]["avatar_xp"] == 30
 
     assert duplicate["status"] == "duplicate"
     assert duplicate["reward"]["inviter_xp"] == 0
     assert duplicate["reward"]["invitee_xp"] == 0
-    assert duplicate["inviter_progress"]["avatar_xp"] == 10
-    assert duplicate["invitee_progress"]["avatar_xp"] == 20
+    assert duplicate["inviter_progress"]["avatar_xp"] == 20
+    assert duplicate["invitee_progress"]["avatar_xp"] == 30
 
 
 def test_concurrent_referral_awards_progress_once() -> None:
@@ -262,8 +304,8 @@ def test_concurrent_referral_awards_progress_once() -> None:
     statuses = [response.status.value for response in responses]
     assert statuses.count("approved") == 1
     assert statuses.count("duplicate") == 7
-    assert client.get("/api/v1/progress/inviter-1").json()["avatar_xp"] == 10
-    assert client.get("/api/v1/progress/invitee-1").json()["avatar_xp"] == 20
+    assert client.get("/api/v1/progress/inviter-1").json()["avatar_xp"] == 20
+    assert client.get("/api/v1/progress/invitee-1").json()["avatar_xp"] == 30
 
 
 def test_second_inviter_cannot_claim_an_attributed_invitee() -> None:

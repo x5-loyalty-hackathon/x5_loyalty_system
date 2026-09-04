@@ -9,10 +9,11 @@ from app.explanations import (
     PUBLIC_WARNING_VALUES,
     RECIPE_REASON_CODES,
     ROUTE_REASON_CODES,
+    STORE_REASON_CODES,
 )
 
 
-CONTRACT_VERSION = "1.1"
+CONTRACT_VERSION = "1.2"
 
 
 class ApiModel(BaseModel):
@@ -28,6 +29,18 @@ class RecommendationMode(StrEnum):
 class MealRoute(StrEnum):
     COOK = "cook"
     READY = "ready"
+
+
+class ShoppingAnchorType(StrEnum):
+    CURRENT_LOCATION = "current_location"
+    HOME = "home"
+    WORK = "work"
+    CUSTOM = "custom"
+
+
+class RankCohort(StrEnum):
+    COOKING_HOUSEHOLDS = "cooking_households"
+    READY_HEAVY = "ready_heavy"
 
 
 class MealPlanStatus(StrEnum):
@@ -48,6 +61,11 @@ class MealPlanCompletionStatus(StrEnum):
     NOT_READY = "not_ready"
     DUPLICATE = "duplicate"
     REJECTED = "rejected"
+
+
+class SavedRecipeStatus(StrEnum):
+    CREATED = "created"
+    DUPLICATE = "duplicate"
 
 
 class FulfillmentOption(StrEnum):
@@ -85,7 +103,9 @@ class ReferralStatus(StrEnum):
 
 class UserProfile(ApiModel):
     user_id: str = Field(min_length=1)
-    radius_km: float = Field(default=3.0, gt=0, le=100)
+    # Legacy fallback for clients without shopping_context. New clients should
+    # send an anchor-relative walking radius in RecommendationRequest.
+    radius_km: float = Field(default=0.75, gt=0, le=100)
     excluded_categories: set[str] = Field(default_factory=set)
     excluded_ingredient_ids: set[str] = Field(default_factory=set)
     home_ingredient_ids: set[str] = Field(default_factory=set)
@@ -93,6 +113,28 @@ class UserProfile(ApiModel):
     history_categories: list[str] = Field(default_factory=list)
     preferred_brands: list[str] = Field(default_factory=list)
     preferred_meal_route: MealRoute | None = None
+
+
+class ShoppingContext(ApiModel):
+    """Opaque, privacy-safe origin used to interpret inventory distances.
+
+    The API deliberately accepts no address or coordinates. ``anchor_id`` can
+    refer to a client-side saved place such as home or work; every
+    ``InventoryProduct.distance_km`` in the request must already be calculated
+    relative to this anchor.
+    """
+
+    anchor_type: ShoppingAnchorType = ShoppingAnchorType.CURRENT_LOCATION
+    anchor_id: str | None = Field(default=None, min_length=1)
+    radius_km: float = Field(default=0.75, gt=0, le=20)
+    selected_store_id: str | None = Field(default=None, min_length=1)
+    preferred_store_ids: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_store_preferences(self) -> ShoppingContext:
+        if len(self.preferred_store_ids) != len(set(self.preferred_store_ids)):
+            raise ValueError("preferred_store_ids must be unique")
+        return self
 
 
 class ReceiptItem(ApiModel):
@@ -185,6 +227,7 @@ class InventoryProduct(ApiModel):
 
 class RecommendationRequest(ApiModel):
     user: UserProfile
+    shopping_context: ShoppingContext | None = None
     current_receipt: Receipt
     purchase_history: list[Receipt] = Field(default_factory=list)
     recipe_catalog: list[Recipe] = Field(min_length=1)
@@ -239,6 +282,48 @@ class IngredientRecommendation(ApiModel):
     product_options: list[ProductOption] = Field(default_factory=list)
 
 
+class BasketStoreOption(ApiModel):
+    store_id: str = Field(min_length=1)
+    distance_km: float = Field(ge=0)
+    covered_required_ingredients: int = Field(ge=0)
+    total_required_ingredients: int = Field(ge=1)
+    complete: bool
+    preferred_for_anchor: bool = False
+
+    @model_validator(mode="after")
+    def validate_coverage(self) -> BasketStoreOption:
+        if self.covered_required_ingredients > self.total_required_ingredients:
+            raise ValueError("store coverage cannot exceed required ingredients")
+        if self.complete != (
+            self.covered_required_ingredients == self.total_required_ingredients
+        ):
+            raise ValueError("complete must match store ingredient coverage")
+        return self
+
+
+class BasketStoreSelection(ApiModel):
+    anchor_type: ShoppingAnchorType
+    anchor_id: str | None = None
+    radius_km: float = Field(gt=0, le=20)
+    selected_store_id: str = Field(min_length=1)
+    reason_codes: list[str] = Field(min_length=1)
+    options: list[BasketStoreOption] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_selection(self) -> BasketStoreSelection:
+        if len(self.reason_codes) != len(set(self.reason_codes)):
+            raise ValueError("store reason codes must be unique")
+        unknown = set(self.reason_codes) - STORE_REASON_CODES
+        if unknown:
+            raise ValueError(f"unknown store reason codes: {sorted(unknown)}")
+        option_ids = [option.store_id for option in self.options]
+        if len(option_ids) != len(set(option_ids)):
+            raise ValueError("store options must be unique")
+        if self.selected_store_id not in option_ids:
+            raise ValueError("selected store must be present in options")
+        return self
+
+
 class RecipeRecommendation(ApiModel):
     recipe_id: str
     title: str
@@ -247,6 +332,7 @@ class RecipeRecommendation(ApiModel):
     missing_count: int = Field(ge=0)
     reason_codes: list[str] = Field(min_length=1)
     ingredients: list[IngredientRecommendation]
+    store_selection: BasketStoreSelection | None = None
     fulfillment_options: set[FulfillmentOption]
     safety_status: SafetyStatus
     warnings: list[str] = Field(default_factory=list)
@@ -261,6 +347,12 @@ class RecipeRecommendation(ApiModel):
         unknown_warnings = set(self.warnings) - PUBLIC_WARNING_VALUES
         if unknown_warnings:
             raise ValueError(f"unknown public warnings: {sorted(unknown_warnings)}")
+        if (
+            self.missing_count > 0
+            and self.store_selection is None
+            and "safe_ready_option_available" not in self.reason_codes
+        ):
+            raise ValueError("recommendation with missing products requires a store")
         return self
 
 
@@ -346,6 +438,7 @@ class CookVariant(ApiModel):
     preparation_minutes: int | None = Field(default=None, gt=0, le=1440)
     missing_count: int = Field(ge=0)
     ingredients: list[IngredientRecommendation]
+    store_selection: BasketStoreSelection | None = None
     fulfillment_options: set[FulfillmentOption]
     warnings: list[str] = Field(default_factory=list)
 
@@ -438,7 +531,29 @@ class HealthResponse(ApiModel):
     model_fallback: bool
 
 
+class SavedRecipeSaveRequest(ApiModel):
+    user_id: str = Field(min_length=1)
+    recipe_id: str = Field(min_length=1)
+
+
+class SavedRecipeCollection(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    user_id: str
+    saved_recipe_ids: list[str]
+
+    @model_validator(mode="after")
+    def validate_unique_recipes(self) -> SavedRecipeCollection:
+        if self.saved_recipe_ids != sorted(set(self.saved_recipe_ids)):
+            raise ValueError("saved_recipe_ids must be sorted and unique")
+        return self
+
+
+class SavedRecipeSaveResponse(SavedRecipeCollection):
+    status: SavedRecipeStatus
+
+
 class PrivateRank(ApiModel):
+    cohort: RankCohort
     position: int = Field(ge=1)
     cohort_size: int = Field(ge=1)
     percentile: float = Field(ge=0, le=100)
@@ -516,6 +631,7 @@ class MealPlanCompletionResponse(ApiModel):
 
 class ReceiptProgressRequest(ApiModel):
     user_id: str = Field(min_length=1)
+    rank_cohort: RankCohort = RankCohort.COOKING_HOUSEHOLDS
     receipt: Receipt
     meal_plan_id: str | None = Field(default=None, min_length=1)
     recipe_id: str | None = None
@@ -550,8 +666,8 @@ class ReferralEvaluationRequest(ApiModel):
 
 class ReferralReward(ApiModel):
     reward_type: str = "virtual_progress"
-    inviter_xp: int = Field(default=10, ge=0)
-    invitee_xp: int = Field(default=10, ge=0)
+    inviter_xp: int = Field(default=20, ge=0)
+    invitee_xp: int = Field(default=20, ge=0)
     monetary_value: float = Field(default=0, ge=0)
 
 

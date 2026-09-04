@@ -1,8 +1,14 @@
 {
   "user": {
     "user_id": "user_meal_demo_001",
-    "radius_km": 3.0,
+    "radius_km": 0.75,
     "preferred_meal_route": "ready"
+  },
+  "shopping_context": {
+    "anchor_type": "work",
+    "anchor_id": "office-place-opaque-id",
+    "radius_km": 0.75,
+    "preferred_store_ids": ["store_17"]
   },
   "current_receipt": {
     "receipt_id": "receipt_meal_demo_001",

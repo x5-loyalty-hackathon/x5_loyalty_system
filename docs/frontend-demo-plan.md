@@ -3,7 +3,8 @@
 - **Статус:** рабочий план ветки `feat/mobile-demo`, синхронизирован с
   meal-контрактом 04.09.2026.
 - **Owner:** Product/UX & Frontend.
-- **Контракт:** [ADR-003](decisions/003-challenge-mode-selection.md),
+- **Контракт API 1.2:** [ADR-003](decisions/003-challenge-mode-selection.md),
+  [ADR-004](decisions/004-recipe-book-and-shopping-context.md),
   [technical design](technical-design.md), схемы в `app/contracts.py`.
 
 Цель — сделать четыре связанных экрана, которые открываются на iPhone через
@@ -30,6 +31,8 @@ Mac: FastAPI + recommender + in-memory state
   заполнения всех трёх;
 - рекомендованный способ `Приготовить` или `Без готовки` и короткое объяснение;
 - количество недостающих ингредиентов;
+- выбранный контекст покупки (`Дом`, `Работа`, `Рядом` или сохранённое место),
+  без обязательной передачи текущей геолокации;
 - кнопку выбора рецепта.
 
 Этот экран будет получать данные через:
@@ -54,6 +57,7 @@ POST /api/v1/meal-recommendations
   `уценка`, `обычная цена`;
 - для `Без готовки` — подходящее тому же блюду готовое предложение;
 - предупреждение, что уценённый товар не забронирован;
+- кнопку `Сохранить рецепт`, вызывающую `POST /api/v1/saved-recipes` без XP;
 - кнопку `Добавить в план`.
 
 Отдельный запрос здесь не нужен: экран использует `cook_variant` и
@@ -65,7 +69,9 @@ route не прошёл safety/availability, пустой переключате
 Что показать:
 
 - выбранные недостающие товары либо выбранное готовое блюдо;
-- магазин и расстояние;
+- одну выбранную точку и расстояние от активного `shopping_context`;
+- возможность выбрать другую точку из `store_selection.options`; варианты с
+  `complete=false` нельзя оформлять как полную корзину;
 - итоговую экономию;
 - выбор `Доставка` или `Следующий визит`;
 - кнопку `Сохранить план`, отправляющую `POST /api/v1/meal-plans`;
@@ -117,6 +123,7 @@ happy path:
 → выбрать «Овощной омлет»
 → увидеть рекомендованный route и объяснение
 → при наличии переключиться между «Приготовить» и «Без готовки»
+→ сохранить рецепт и увидеть его в режиме «Повторить» при следующем запросе
 → сохранить выбранный продукт и следующий визит
 → подтвердить новый synthetic-чек
 → увидеть завершённое блюдо, кухню и обновлённый прогресс
@@ -259,6 +266,8 @@ export const API_BASE_URL = "http://192.168.1.20:8000";
 ```text
 getHealth()
 getMealRecommendations(payload)
+saveRecipe(payload)
+getSavedRecipes(userId)
 saveMealPlan(payload)
 submitReceipt(payload)
 completeCookPlan(planId, payload)
@@ -323,6 +332,14 @@ recommendations[i].cook_variant.ingredients[j].source
 recommendations[i].cook_variant.ingredients[j].product_options
 ```
 
+Все эти `product_options` относятся к
+`recommendations[i].cook_variant.store_selection.selected_store_id`.
+`store_selection.reason_codes` объясняет автоматический выбор, а `options`
+показывает coverage альтернатив. Для выбора дома или работы измени
+`shopping_context.anchor_type/anchor_id`; для ручного выбора магазина повтори
+запрос с `shopping_context.selected_store_id`. `distance_km` уже рассчитан
+относительно выбранного anchor, frontend не должен считать его от адреса.
+
 Для route `ready` готовые товары находятся здесь:
 
 ```text
@@ -340,6 +357,12 @@ backend safety-гейтом.
 Кнопка `Добавить в план` переводит пользователя на следующий экран с
 `meal_id`, выбранным route и товарами. До сохранения route можно переключить;
 после сохранения текущий PoC его не меняет.
+
+Кнопка `Сохранить рецепт` — независимое действие: отправь
+`examples/saved_recipe_request.json` в `POST /api/v1/saved-recipes`. Ответ
+`created` или `duplicate` считается успехом. При следующем вызове рекомендаций
+backend сам добавит этот recipe ID к профилю и сможет вернуть режим `repeat`;
+за клик XP не начисляется.
 
 ## Шаг 11. Сохранить план, отправить чек и показать прогресс
 
@@ -367,6 +390,8 @@ backend safety-гейтом.
 `meals_completed`, `recipes_completed`, `ready_meals_completed`,
 `markdown_savings`, `rescue_items`, `purchase_days` и `private_rank` с полями
 `position`, `cohort_size`, `percentile`.
+Поле `private_rank.cohort` нужно показывать понятной подписью либо не показывать:
+оно гарантирует, что cooking households не сравниваются с ready-heavy.
 
 Возможные значения `status`: `verified`, `duplicate`, `pending_review`,
 `rejected`. Для демо нужен только первый, остальные пригодятся на экране

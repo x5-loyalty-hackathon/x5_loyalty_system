@@ -18,10 +18,14 @@ from app.contracts import (
     ReceiptProgressResponse,
     ReferralEvaluationRequest,
     ReferralEvaluationResponse,
+    SavedRecipeCollection,
+    SavedRecipeSaveRequest,
+    SavedRecipeSaveResponse,
 )
 from app.fraud import ReceiptFraudPolicy, ReferralFraudPolicy
 from app.meal_plan import MealPlanService
 from app.progress import ProgressService
+from app.recipe_book import RecipeBookService
 from app.recommender import DeterministicMockEngine, RecommendationEngine
 from app.referral import ReferralService
 from app.safety import SafetyPolicy
@@ -76,16 +80,18 @@ app.add_middleware(
 recommendation_engine, recommendation_engine_name, model_fallback = (
     _build_recommendation_engine()
 )
+state_repository = InMemoryStateRepository()
 recommendation_service = RecommendationService(
     engine=recommendation_engine,
     safety_policy=SafetyPolicy(),
+    saved_recipe_provider=state_repository,
 )
-state_repository = InMemoryStateRepository()
 progress_service = ProgressService(
     repository=state_repository,
     fraud_policy=ReceiptFraudPolicy(),
 )
 meal_plan_service = MealPlanService(repository=state_repository)
+recipe_book_service = RecipeBookService(repository=state_repository)
 referral_service = ReferralService(
     repository=state_repository,
     fraud_policy=ReferralFraudPolicy(),
@@ -119,6 +125,22 @@ def create_meal_recommendations(
     request: RecommendationRequest,
 ) -> MealRecommendationResponse:
     return recommendation_service.recommend_meals(request)
+
+
+@app.post(
+    "/api/v1/saved-recipes",
+    response_model=SavedRecipeSaveResponse,
+)
+def save_recipe(request: SavedRecipeSaveRequest) -> SavedRecipeSaveResponse:
+    return recipe_book_service.save(request)
+
+
+@app.get(
+    "/api/v1/saved-recipes/{user_id}",
+    response_model=SavedRecipeCollection,
+)
+def list_saved_recipes(user_id: str) -> SavedRecipeCollection:
+    return recipe_book_service.list(user_id)
 
 
 @app.post(

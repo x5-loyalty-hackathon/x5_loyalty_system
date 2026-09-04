@@ -43,6 +43,7 @@ class ProgressService:
             receipt=request.receipt,
             recipe_completed=request.recipe_completed,
             meal_plan_id=request.meal_plan_id,
+            rank_cohort=request.rank_cohort,
         )
         if not outcome.recorded:
             late_decision = self._fraud_policy.evaluate(

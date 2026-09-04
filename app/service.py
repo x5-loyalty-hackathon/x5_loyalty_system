@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import logging
+from typing import Protocol
 
 from app.contracts import (
+    BasketStoreOption,
+    BasketStoreSelection,
     ChallengeSelection,
     CookVariant,
     FulfillmentOption,
@@ -23,6 +26,7 @@ from app.contracts import (
     RecommendationRequest,
     RecommendationResponse,
     SafetyStatus,
+    ShoppingContext,
 )
 from app.recommender import RecommendationEngine
 from app.safety import SafetyPolicy
@@ -41,17 +45,24 @@ MODE_ORDER = (
 )
 
 
+class SavedRecipeProvider(Protocol):
+    def saved_recipe_ids(self, user_id: str) -> tuple[str, ...]: ...
+
+
 class RecommendationService:
     def __init__(
         self,
         *,
         engine: RecommendationEngine,
         safety_policy: SafetyPolicy,
+        saved_recipe_provider: SavedRecipeProvider | None = None,
     ) -> None:
         self._engine = engine
         self._safety_policy = safety_policy
+        self._saved_recipe_provider = saved_recipe_provider
 
     def recommend(self, request: RecommendationRequest) -> RecommendationResponse:
+        request = self._prepare_request(request)
         ranked_recipes, filtered_candidates = self._rank_recipes(request)
         recipes = {recipe.recipe_id: recipe for recipe in request.recipe_catalog}
         assembled_recommendations: list[RecipeRecommendation] = []
@@ -94,6 +105,7 @@ class RecommendationService:
         self,
         request: RecommendationRequest,
     ) -> MealRecommendationResponse:
+        request = self._prepare_request(request)
         ranked_recipes, filtered_candidates = self._rank_recipes(request)
         recipes = {recipe.recipe_id: recipe for recipe in request.recipe_catalog}
         selection_candidates: list[RecipeRecommendation] = []
@@ -178,6 +190,7 @@ class RecommendationService:
                             preparation_minutes=recipe.preparation_minutes,
                             missing_count=cook_recommendation.missing_count,
                             ingredients=cook_recommendation.ingredients,
+                            store_selection=cook_recommendation.store_selection,
                             fulfillment_options=(
                                 cook_recommendation.fulfillment_options
                             ),
@@ -207,6 +220,34 @@ class RecommendationService:
                 filtered_candidates=filtered_candidates,
             ),
         )
+
+    def _prepare_request(
+        self,
+        request: RecommendationRequest,
+    ) -> RecommendationRequest:
+        """Apply server-owned recipe-book state and the active anchor radius.
+
+        Clients may still send ``user.saved_recipe_ids`` for backward
+        compatibility. Server state is unioned with it so saving a recipe via
+        the recipe-book endpoint affects the very next recommendation call.
+        """
+        saved_recipe_ids = set(request.user.saved_recipe_ids)
+        if self._saved_recipe_provider is not None:
+            saved_recipe_ids.update(
+                self._saved_recipe_provider.saved_recipe_ids(request.user.user_id)
+            )
+        radius_km = (
+            request.shopping_context.radius_km
+            if request.shopping_context is not None
+            else request.user.radius_km
+        )
+        user = request.user.model_copy(
+            update={
+                "saved_recipe_ids": saved_recipe_ids,
+                "radius_km": radius_km,
+            }
+        )
+        return request.model_copy(update={"user": user})
 
     def _rank_recipes(
         self,
@@ -479,6 +520,43 @@ class RecommendationService:
         if not recipe.verified:
             return None, "recipe_not_verified"
         receipt_ingredient_ids = self._receipt_ingredient_ids(request)
+        product_options_by_ingredient: dict[str, list[InventoryProduct]] = {}
+        required_missing: list[RecipeIngredient] = []
+
+        # Resolve safety before selecting a store. The selector only sees
+        # products that passed hard policy and the active anchor radius.
+        for ingredient in recipe.ingredients:
+            if (
+                ingredient.ingredient_id in request.user.excluded_ingredient_ids
+                or ingredient.category in request.user.excluded_categories
+            ):
+                return None, f"ingredient_excluded:{ingredient.ingredient_id}"
+            if (
+                ingredient.ingredient_id in receipt_ingredient_ids
+                or ingredient.ingredient_id in request.user.home_ingredient_ids
+            ):
+                continue
+            valid_products = self._valid_products(
+                request=request,
+                ingredient=ingredient,
+            )
+            product_options_by_ingredient[ingredient.ingredient_id] = valid_products
+            if ingredient.required:
+                required_missing.append(ingredient)
+                if not valid_products:
+                    return None, f"no_safe_product:{ingredient.ingredient_id}"
+
+        store_selection = self._select_basket_store(
+            request=request,
+            required_missing=required_missing,
+            product_options_by_ingredient=product_options_by_ingredient,
+        )
+        selected_store_id = (
+            store_selection.selected_store_id if store_selection is not None else None
+        )
+        if required_missing and store_selection is None:
+            return None, "no_single_store_candidate"
+
         ingredients: list[IngredientRecommendation] = []
         missing_count = 0
         has_markdown = False
@@ -486,14 +564,7 @@ class RecommendationService:
             FulfillmentOption.DELIVERY,
             FulfillmentOption.NEXT_VISIT,
         }
-
         for ingredient in recipe.ingredients:
-            if (
-                ingredient.ingredient_id in request.user.excluded_ingredient_ids
-                or ingredient.category in request.user.excluded_categories
-            ):
-                return None, f"ingredient_excluded:{ingredient.ingredient_id}"
-
             if ingredient.ingredient_id in receipt_ingredient_ids:
                 ingredients.append(
                     IngredientRecommendation(
@@ -518,12 +589,15 @@ class RecommendationService:
                 )
                 continue
 
-            valid_products = self._valid_products(
-                request=request,
-                ingredient=ingredient,
-            )
+            valid_products = [
+                product
+                for product in product_options_by_ingredient.get(
+                    ingredient.ingredient_id, []
+                )
+                if product.store_id == selected_store_id
+            ]
             if not valid_products and ingredient.required:
-                return None, f"no_safe_product:{ingredient.ingredient_id}"
+                return None, f"selected_store_missing:{ingredient.ingredient_id}"
             if not valid_products:
                 ingredients.append(
                     IngredientRecommendation(
@@ -573,6 +647,7 @@ class RecommendationService:
                     missing_count=missing_count,
                 ),
                 ingredients=ingredients,
+                store_selection=store_selection,
                 fulfillment_options=common_fulfillment,
                 safety_status=(
                     SafetyStatus.ADJUSTED if warnings else SafetyStatus.APPROVED
@@ -580,6 +655,106 @@ class RecommendationService:
                 warnings=warnings,
             ),
             None,
+        )
+
+    @staticmethod
+    def _shopping_context(request: RecommendationRequest) -> ShoppingContext:
+        if request.shopping_context is not None:
+            return request.shopping_context
+        return ShoppingContext(radius_km=request.user.radius_km)
+
+    def _select_basket_store(
+        self,
+        *,
+        request: RecommendationRequest,
+        required_missing: list[RecipeIngredient],
+        product_options_by_ingredient: dict[str, list[InventoryProduct]],
+    ) -> BasketStoreSelection | None:
+        if not required_missing:
+            return None
+
+        context = self._shopping_context(request)
+        required_ids = {item.ingredient_id for item in required_missing}
+        coverage_by_store: dict[str, set[str]] = {}
+        distance_by_store: dict[str, float] = {}
+        for ingredient_id in required_ids:
+            for product in product_options_by_ingredient.get(ingredient_id, []):
+                coverage_by_store.setdefault(product.store_id, set()).add(
+                    ingredient_id
+                )
+                # A store is one physical point. If a synthetic/provider
+                # snapshot contains inconsistent distances for its products,
+                # expose the conservative value instead of understating the
+                # walk for part of the basket.
+                distance_by_store[product.store_id] = max(
+                    distance_by_store.get(product.store_id, product.distance_km),
+                    product.distance_km,
+                )
+        if not coverage_by_store:
+            return None
+
+        preferred_store_ids = set(context.preferred_store_ids)
+
+        def store_key(store_id: str) -> tuple[int, bool, float, str]:
+            return (
+                -len(coverage_by_store[store_id]),
+                store_id not in preferred_store_ids,
+                distance_by_store[store_id],
+                store_id,
+            )
+
+        ordered_store_ids = sorted(coverage_by_store, key=store_key)
+        if context.selected_store_id is not None:
+            if context.selected_store_id not in coverage_by_store:
+                return None
+            selected_store_id = context.selected_store_id
+            ordered_store_ids.remove(selected_store_id)
+            ordered_store_ids.insert(0, selected_store_id)
+            reason_codes = ["explicit_store_choice"]
+        else:
+            selected_store_id = ordered_store_ids[0]
+            reason_codes = ["maximum_ingredient_coverage"]
+            best_coverage = len(coverage_by_store[selected_store_id])
+            tied_by_coverage = [
+                store_id
+                for store_id in ordered_store_ids
+                if len(coverage_by_store[store_id]) == best_coverage
+            ]
+            if len(tied_by_coverage) > 1:
+                preferred_tied = [
+                    store_id
+                    for store_id in tied_by_coverage
+                    if store_id in preferred_store_ids
+                ]
+                if preferred_tied:
+                    reason_codes.append("preferred_store_for_anchor")
+                if len(preferred_tied or tied_by_coverage) > 1:
+                    reason_codes.append("nearest_store_tiebreak")
+
+        total_required = len(required_ids)
+        options = [
+            BasketStoreOption(
+                store_id=store_id,
+                distance_km=distance_by_store[store_id],
+                covered_required_ingredients=len(coverage_by_store[store_id]),
+                total_required_ingredients=total_required,
+                complete=len(coverage_by_store[store_id]) == total_required,
+                preferred_for_anchor=store_id in preferred_store_ids,
+            )
+            for store_id in ordered_store_ids
+        ]
+        selected_option = next(
+            option for option in options if option.store_id == selected_store_id
+        )
+        if not selected_option.complete:
+            return None
+        return BasketStoreSelection(
+            anchor_type=context.anchor_type,
+            anchor_id=context.anchor_id,
+            radius_km=context.radius_km,
+            selected_store_id=selected_store_id,
+            reason_codes=reason_codes,
+            options=options,
         )
 
     @staticmethod
@@ -730,7 +905,17 @@ class RecommendationService:
         meal_intent_id: str,
     ) -> list[InventoryProduct]:
         valid: list[InventoryProduct] = []
+        selected_store_id = (
+            request.shopping_context.selected_store_id
+            if request.shopping_context is not None
+            else None
+        )
         for product in request.inventory_snapshot:
+            if (
+                selected_store_id is not None
+                and product.store_id != selected_store_id
+            ):
+                continue
             decision = self._safety_policy.evaluate_ready_product(
                 product=product,
                 meal_intent_id=meal_intent_id,

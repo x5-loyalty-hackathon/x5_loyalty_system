@@ -7,6 +7,27 @@
 - **Scope и test gates:**
   [обязательный MVP](mvp-scope-and-test-plan.md).
 
+## Контекст плана после Day 1
+
+План включает не только код. Q13 — одностраничный план реального пилота —
+является обязательным артефактом финальной сдачи и частью критического пути:
+без него рабочий PoC не отвечает на вопрос, как отличить рост покупочных дней
+от простого retention в игре. Актуальный draft: [pilot-plan.md](pilot-plan.md).
+
+Текущий backend-приоритет после промежуточной сдачи:
+
+1. закрыть `save → repeat` через process-local книгу рецептов;
+2. собирать cook-корзину в одной точке относительно явно выбранного контекста
+   `home/work/current/custom`, с пешим demo-радиусом 750 м;
+3. не смешивать готовящие и ready-heavy когорты в личной позиции;
+4. передать API 1.2 и примеры frontend-владельцу;
+5. после появления UI прогнать живой four-screen smoke;
+6. параллельно довести draft пилота, eval и simulation до честных финальных
+   материалов.
+
+Пункты 1–3 реализует Backend/Integration/Safety. Они не меняют ML-порог
+релевантности, параметры экономики или дизайн экранов.
+
 ## Роли
 
 | Роль | Владелец | Основной результат |
@@ -40,8 +61,9 @@ economic changes подтверждаются втроём.
 5. Добавить example request и API tests.
 6. Обновить README и передать contract обоим участникам.
 
-Фактический статус в рабочей ветке: шаги 1–6 и B2/B3 receipt/progress/referral
-реализованы раньше графика; regression gate — 23 passed. До review это не
+Фактический статус в рабочей ветке: шаги 1–6, B2/B3
+receipt/progress/referral, meal routes, challenge selector и пункты 1–3 выше
+реализованы; число тестов намеренно не фиксируется в плане. До review это не
 считается общей командной версией.
 
 ### Integration checkpoint
@@ -86,7 +108,7 @@ HTTP-сервис: реализует adapter/function по Python contract ли
 - evaluation на 30–50 профилях;
 - simulation scenarios и economics sensitivity;
 - screenshots/video fallback демонстрации;
-- одностраничный pilot plan;
+- review и финализация [одностраничного pilot plan](pilot-plan.md);
 - итоговое описание проекта;
 - около трёх компактных product artifacts;
 - финальные слайды с реальным вкладом участников;
@@ -110,7 +132,7 @@ schema + example
 → receipt/progress state
 → integrated demo
 → eval + simulation
-→ final artifacts
+→ pilot contract + final artifacts
 ```
 
 ## Не делать до промежуточной сдачи

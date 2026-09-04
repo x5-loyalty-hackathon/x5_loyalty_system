@@ -115,15 +115,19 @@ Backend затем:
 
 1. находит рецепт в переданном каталоге;
 2. вычисляет покрытие текущим чеком и явными `home_ingredient_ids`;
-3. фильтрует inventory по safety/radius/availability;
-4. прикладывает markdown и full-price options только к ингредиентам рецепта;
-5. исключает recipe candidate с обязательным недоступным ингредиентом;
-6. определяет допустимость каждого безопасного рецепта для
+3. фильтрует inventory по safety/radius/availability относительно явно
+   выбранного `home/work/current/custom` anchor;
+4. выбирает одну точку сбора по coverage → привычности → расстоянию либо
+   принимает явный выбор пользователя;
+5. прикладывает markdown и full-price options только к ингредиентам рецепта и
+   только из выбранной точки;
+6. исключает recipe candidate с обязательным недоступным ингредиентом;
+7. определяет допустимость каждого безопасного рецепта для
    `current/repeat/explore`;
-7. сортирует кандидатов каждой стратегии по `missing_count ASC`, затем
+8. сортирует кандидатов каждой стратегии по `missing_count ASC`, затем
    `model_score DESC`;
-8. выбирает default mode и до двух уникальных альтернатив;
-9. возвращает публичные availability warnings и число отфильтрованных model
+9. выбирает default mode и до двух уникальных альтернатив;
+10. возвращает публичные availability warnings и число отфильтрованных model
    candidates; конкретные внутренние причины фильтрации пишет только в log.
 
 `RecommendationEngine` отвечает за персональную relevance eligibility и не
@@ -141,7 +145,10 @@ Backend затем:
 
 Input:
 
-- `user`: radius, явные исключения, сохранённые рецепты и observed affinities;
+- `user`: legacy radius, явные исключения, сохранённые рецепты и observed
+  affinities;
+- `shopping_context`: тип выбранного места, непрозрачный ID, пеший радиус
+  (demo default 750 м), привычные точки и необязательный ручной выбор магазина;
 - `current_receipt`: последний подтверждённый чек;
 - `purchase_history`: опциональная синтетическая история для model layer;
 - `recipe_catalog`: небольшой проверенный каталог;
@@ -156,6 +163,8 @@ Output:
   mode и без повторения recipe;
 - mode, score, missing count и reason codes;
 - состояние каждого ингредиента;
+- `store_selection`: одна точка cook-корзины, объяснение выбора и варианты с
+  явным признаком полного покрытия;
 - безопасные markdown/full-price варианты и fulfillment capabilities;
 - warning об отсутствии брони;
 - число model candidates, исключённых safety/availability.
@@ -177,6 +186,17 @@ Meal-level обёртка над recipe flow с тем же `challenge_selection
 codes выбора route. `ready` появляется только при явном проверенном mapping
 `meal_intent_id → prepared SKU` после safety/availability фильтрации.
 
+### `POST /api/v1/saved-recipes`
+
+Идемпотентно добавляет рецепт в process-local книгу пользователя. Сохранение
+не начисляет XP. На следующем recommendation-вызове backend объединяет эту
+книгу с legacy `user.saved_recipe_ids`, замыкая `save → repeat`.
+
+### `GET /api/v1/saved-recipes/{user_id}`
+
+Возвращает отсортированный список сохранённых recipe IDs. Production storage,
+удаление и синхронизация между устройствами находятся вне PoC.
+
 ### `POST /api/v1/meal-plans`
 
 Сохраняет выбранный `cook` либо `ready` route, список выбранных SKU и способ
@@ -196,7 +216,10 @@ codes выбора route. `ready` появляется только при яв�
 - `safety_eligible=false` всегда исключает SKU;
 - `expires_at <= now` исключает SKU;
 - `available_quantity <= 0` исключает SKU;
-- товар вне `user.radius_km` исключается;
+- товар вне `shopping_context.radius_km` исключается; если новый контекст не
+  передан, используется legacy `user.radius_km`;
+- адреса и координаты backend не принимает: расстояния inventory уже
+  рассчитаны источником относительно непрозрачного anchor;
 - user-excluded category/ingredient исключается;
 - markdown допускается только для утверждённых rescue-категорий;
 - food safety не выводится LLM и не изменяется model score;
@@ -208,6 +231,8 @@ codes выбора route. `ready` появляется только при яв�
 - markdown помечен как незабронированный best-effort option;
 - full-price fallback явно отличается от markdown;
 - out-of-recipe SKU не возвращаются;
+- cook-вариант не смешивает SKU нескольких магазинов; явно выбранная неполная
+  точка не подменяется скрытым split-store fallback;
 - backend не делает health/family/lifestyle inference;
 - commercial metadata отсутствует в model/API contract organic ranking.
 - готовый SKU должен иметь явный `meal_intent_id`; LLM не создаёт соответствие
@@ -231,6 +256,7 @@ codes выбора route. `ready` появляется только при яв�
 
 ```text
 meal_recommendation_created
+→ optional recipe_saved → repeat_eligible
 → meal_plan_saved(cook | ready)
 → fulfillment_selected(delivery | next_visit)
 → receipt_received
@@ -244,13 +270,15 @@ meal_recommendation_created
 HTTP endpoints:
 
 - `POST /api/v1/meal-recommendations`;
+- `POST /api/v1/saved-recipes`;
+- `GET /api/v1/saved-recipes/{user_id}`;
 - `POST /api/v1/meal-plans`;
 - `POST /api/v1/meal-plans/{plan_id}/complete-cook`;
 - `POST /api/v1/events/receipts`;
 - `GET /api/v1/progress/{user_id}`;
 - `POST /api/v1/referrals/evaluate`.
 
-Process-local in-memory repository атомарно хранит meal plans, владельца
+Process-local in-memory repository атомарно хранит recipe book, meal plans, владельца
 `receipt_id`, уникальные purchase dates, cook/ready completions, фактическую
 markdown-экономию, rescue item count и уже вознаграждённый referral. Повторный
 receipt id или завершённый `plan_id` не меняет progress; несколько чеков в один
@@ -259,11 +287,13 @@ receipt id или завершённый `plan_id` не меняет progress; �
 naive datetime отклоняется схемой с HTTP 422.
 
 Progress response содержит только собственную позицию, размер synthetic cohort
-и percentile. Endpoint публичного leaderboard отсутствует; ФИО и адреса не
-входят в схемы.
+и percentile. Cooking households и ready-heavy пользователи сравниваются в
+разных когортах; единичный выбор route не меняет сегмент. Endpoint публичного
+leaderboard отсутствует; ФИО и адреса не входят в схемы.
 
 Referral reward выдаётся один раз после первого verified purchase day invitee.
-Это virtual progress с `monetary_value=0`. Self-referral и повторная атрибуция
+Оба участника получают по `20 XP`; это virtual progress с `monetary_value=0`.
+Self-referral и повторная атрибуция
 отклоняются. Совпадение device/payment hash имеет demo score `0.75/0.80` и
 уходит в `pending_review`; hard-block threshold равен `0.95`. Это прозрачные
 PoC-константы, не обученные и не принятые как production thresholds.

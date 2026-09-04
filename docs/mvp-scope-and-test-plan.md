@@ -63,7 +63,7 @@ Day 1 не обязан быть финальным продуктом. К пр�
 |---|---|---|---|
 | 3–4 связанных экрана | after-receipt → recipe → plan → personal kitchen | Product/UX | happy-path UI smoke |
 | Персональный AI challenge | model ranks recipe/mode from synthetic history | ML/Recsys | relevance ≥70% |
-| Выбор механики с объяснением | `current/repeat/explore` + reason codes | ML + Backend | schema + own/shuffled eval |
+| Выбор механики с объяснением | один default `current/repeat/explore`, до двух релевантных альтернатив и отдельные mode reason codes | ML + Backend | contract invariants + selector eval |
 | Прогресс аватара | verified receipt updates bounded XP/level | Backend | idempotency tests |
 | Место в рейтинге | private position/percentile without public identities | Backend | rank tests, no leaderboard endpoint |
 | Referral reward | virtual progress, monetary value `0`, one reward/invitee | Backend | qualification/idempotency/fraud tests |
@@ -129,9 +129,10 @@ device/payment направляются в review, а не блокируютс�
 
 Эти вопросы нельзя незаметно решить силами backend owner:
 
-1. Достаточно ли `current/repeat/explore` как «выбора игровой механики» для
-   формального требования кейса? Если нет, ML/Product определяют отдельный
-   selector между механиками, backend только фиксирует его схему и reason codes.
+1. ~~Достаточно ли `current/repeat/explore` как «выбора игровой механики»?~~
+   Решено в ADR-003: это стратегии персонального челленджа, selector возвращает
+   один default и объяснимые альтернативы. ML/Product ещё должны подтвердить
+   финальные сигналы и пороги selector через eval.
 2. Какие XP/level constants показывать в demo? Сейчас числа нужны только для
    работающего progress flow и помечены как demo defaults.
 3. Что является подтверждением `recipe_completed` в пилоте? В PoC это trusted

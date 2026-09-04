@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import random
 from pathlib import Path
+from typing import Any
 
 from app.contracts import RecommendationRequest
 from app.safety import SafetyPolicy
@@ -32,6 +33,33 @@ OUTPUT_PATH = Path(__file__).parent / "examples" / "sample_recommendations.json"
 # archetype appears at least twice so all four show up in the sample.
 ARCHETYPE_COUNTS: dict[str, int] = {"routine": 3, "value": 3, "explorer": 2, "time_limited": 2}
 SEED = 4242
+UNORDERED_RESPONSE_FIELDS = {
+    "available_routes",
+    "contained_categories",
+    "fulfillment_options",
+    "ingredient_ids",
+}
+
+
+def _stable_json_value(
+    value: Any,
+    *,
+    field_name: str | None = None,
+) -> Any:
+    """Canonicalize schema sets after JSON conversion without reordering ranks."""
+    if isinstance(value, dict):
+        return {
+            key: _stable_json_value(item, field_name=key)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        normalized = [
+            _stable_json_value(item, field_name=field_name) for item in value
+        ]
+        if field_name in UNORDERED_RESPONSE_FIELDS:
+            return sorted(normalized)
+        return normalized
+    return value
 
 
 def _sample_profiles(seed: int = SEED):
@@ -83,7 +111,9 @@ def generate_examples(seed: int = SEED) -> list[dict]:
                 "home_ingredients": sorted(profile.user.home_ingredient_ids),
                 "saved_recipes": sorted(profile.user.saved_recipe_ids),
                 "history_receipt_count": len(profile.purchase_history),
-                "response": json.loads(response.model_dump_json()),
+                "response": _stable_json_value(
+                    json.loads(response.model_dump_json())
+                ),
             }
         )
     return records

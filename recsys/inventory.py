@@ -125,7 +125,9 @@ def generate_inventory(
     out-of-radius, no option at all) so the safety policy is genuinely
     exercised rather than always trivially passing.
     """
-    ids = list(ingredient_ids) if ingredient_ids is not None else list(INGREDIENTS)
+    # Callers often pass a set. Sorting makes seeded generation stable across
+    # processes with different PYTHONHASHSEED values.
+    ids = sorted(ingredient_ids) if ingredient_ids is not None else sorted(INGREDIENTS)
     nearby_stores = [home_store_id, f"{home_store_id}_annex", "store_hub_1"]
     products: list[InventoryProduct] = []
     index = 0

@@ -42,6 +42,7 @@ class ProgressService:
             user_id=request.user_id,
             receipt=request.receipt,
             recipe_completed=request.recipe_completed,
+            meal_plan_id=request.meal_plan_id,
         )
         if not outcome.recorded:
             late_decision = self._fraud_policy.evaluate(
@@ -58,12 +59,14 @@ class ProgressService:
         reason_codes = list(decision.reason_codes)
         if not outcome.is_new_purchase_day:
             reason_codes.append("same_day_receipt_collapsed")
+        reason_codes.extend(outcome.meal_plan_reason_codes)
 
         return ReceiptProgressResponse(
             status=ReceiptEventStatus.VERIFIED,
             fraud_score=decision.score,
             reason_codes=reason_codes,
             progress=self._repository.snapshot(request.user_id),
+            meal_plan=outcome.meal_plan,
         )
 
     def get_progress(self, user_id: str) -> ProgressSnapshot:

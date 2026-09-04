@@ -3,13 +3,16 @@
 Proof of concept персонального игрового слоя поверх программы лояльности X5 для
 недельного хакатона ИТМО по кейсу X5 Tech.
 
-Проект перешёл от discovery к реализации recipe-first PoC. После покупки
-recommender предлагает персональные рецепты, позволяет выбрать для недостающих
-ингредиентов markdown/full-price товары в достижимом радиусе и передать список
-в доставку либо сохранить к следующему визиту. Следующий чек обновляет личную
-кухню Домового. Текущие решения зафиксированы в
-[ADR-001](docs/decisions/001-recipe-first-poc.md), а технический контракт — в
-[design doc](docs/technical-design.md).
+Проект перешёл от discovery к реализации meal-first PoC. После покупки
+recommender предлагает персональный приём пищи с вариантами `приготовить` и
+`взять готовое`. Для рецепта можно выбрать markdown/full-price ингредиенты в
+достижимом радиусе и передать список в доставку либо сохранить к следующему
+визиту. Подтверждённый чек и отдельное подтверждение готовки обновляют личную
+кухню Домового. Продуктовые и контрактные решения зафиксированы в
+[ADR-001](docs/decisions/001-recipe-first-poc.md),
+[ADR-002](docs/decisions/002-personal-meal-contract.md) и
+[ADR-003](docs/decisions/003-challenge-mode-selection.md); актуальная схема API
+описана в [design doc](docs/technical-design.md).
 
 ## Что должно войти в PoC
 
@@ -41,6 +44,10 @@ recommender предлагает персональные рецепты, поз
   обсуждения;
 - [Журнал решений](docs/decision-log.md) — источник принятых продуктовых и
   инженерных решений;
+- [Контракт `cook / ready`](docs/decisions/002-personal-meal-contract.md) —
+  единая meal-рекомендация, планы, события и LLM-персоны;
+- [Выбор типа челленджа](docs/decisions/003-challenge-mode-selection.md) — один
+  default `current/repeat/explore`, объяснимые альтернативы и full-basket opt-in;
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
   компактное описание согласованной концепции;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
@@ -85,6 +92,25 @@ curl -sS \
   http://127.0.0.1:8000/api/v1/recommendations
 ```
 
+Рабочий flow с альтернативой готового блюда:
+
+```bash
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/meal_recommendation_request.json \
+  http://127.0.0.1:8000/api/v1/meal-recommendations
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/meal_plan_request.json \
+  http://127.0.0.1:8000/api/v1/meal-plans
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/ready_receipt_event.json \
+  http://127.0.0.1:8000/api/v1/events/receipts
+```
+
 Receipt/progress и referral можно воспроизвести после запуска API:
 
 ```bash
@@ -101,9 +127,10 @@ curl -sS \
 
 Сервис по умолчанию использует детерминированный mock recommender и
 process-local in-memory state; state сбрасывается при перезапуске процесса —
-это ограничение PoC, а не production design. Обученный ML-адаптер
-подключается без изменения HTTP-контракта через `RecommendationEngine.rank()`
-и переменную окружения:
+это ограничение PoC, а не production design. Синтетический ML/Recsys
+smoke-адаптер подключается без изменения HTTP-контракта через
+`RecommendationEngine.rank()` и переменную окружения. Он проверяет интеграцию
+и не должен выдаваться за финальную модель или измеренный uplift:
 
 ```bash
 RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
@@ -116,7 +143,7 @@ RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
 для запуска модели/оценки/симуляции).
 
 ```bash
-python -m pytest tests/test_recsys_*.py       # 42 теста контура
+python -m pytest tests/test_recsys_*.py       # тесты контура
 python -m recsys.generate_examples            # 10 профилей через реальный API
 python -m recsys.evaluation                   # hit rate own vs shuffled-history
 python -m recsys.simulation                   # funnel на 1k/10k пользователях

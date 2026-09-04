@@ -3,12 +3,18 @@ unmodified app.service.RecommendationService + app.safety.SafetyPolicy —
 the actual "profiles with different recommendations" deliverable, exercised
 as a test rather than only as a one-off script."""
 
+import json
+from pathlib import Path
+
 from app.contracts import RecommendationRequest, RecommendationResponse
 from app.safety import SafetyPolicy
 from app.service import RecommendationService
 from recsys.generate_examples import generate_examples
 from recsys.inventory import generate_inventory
 from recsys.recipes import RECIPES
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_generate_examples_produces_ten_profiles_with_real_service_output() -> None:
@@ -18,6 +24,18 @@ def test_generate_examples_produces_ten_profiles_with_real_service_output() -> N
     for record in records:
         response = RecommendationResponse.model_validate(record["response"])
         assert response.user_id == record["user_id"]
+
+
+def test_committed_sample_artifact_matches_current_response_contract() -> None:
+    records = json.loads(
+        (ROOT / "recsys/examples/sample_recommendations.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert len(records) == 10
+    assert records == generate_examples()
+    for record in records:
+        RecommendationResponse.model_validate(record["response"])
 
 
 def test_recommendations_genuinely_differ_across_profiles() -> None:
@@ -56,7 +74,7 @@ def test_full_pipeline_via_recommendation_service_directly(ml_engine) -> None:
     response = service.recommend(request)
 
     assert isinstance(response, RecommendationResponse)
-    assert response.contract_version == "1.0"
+    assert response.contract_version == "1.1"
     assert len(response.recommendations) <= 3
     for rec in response.recommendations:
         assert rec.missing_count >= 0

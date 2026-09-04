@@ -25,6 +25,7 @@ class DeterministicMockEngine:
         receipt_ingredients = {
             ingredient_id
             for item in request.current_receipt.items
+            if not item.is_prepared_food
             for ingredient_id in item.ingredient_ids
         }
         history_categories = set(request.user.history_categories)

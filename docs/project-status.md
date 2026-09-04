@@ -1,6 +1,6 @@
 # Текущее состояние
 
-Последнее обновление: 2026-09-03.
+Последнее обновление: 2026-09-04.
 
 ## Сейчас
 
@@ -18,47 +18,77 @@
 - Зафиксирована нулевая гипотеза discovery: ещё одна игра, коллекция или аватар
   сами по себе не гарантируют incremental uplift. Это рамка проверки, а не
   принятое продуктовое решение.
-- Команда выбрала recipe-first PoC: рекомендации после чека, ingredient-level
+- Команда выбрала meal-first PoC: рекомендации после чека, ingredient-level
   markdown/full-price выбор, доставка или следующий визит и личная кухня
-  Домового без gambling/public leaderboard.
+  Домового без gambling/public leaderboard. В той же карточке блюда доступна
+  персональная под-опция `Приготовить / Без готовки`; отдельный экран и
+  независимая рекламная выдача готовой еды не создаются.
 - Первый сегмент — домохозяйства, регулярно покупающие ингредиенты для готовки.
+  Ready-heavy пользователи рассматриваются как отдельный анализируемый сегмент,
+  а не смешиваются с ним в одной средней метрике.
 - Роли распределены на `ML/Recsys & Evaluation`, `Product/UX & Frontend` и
   `Backend/Integration/Safety`.
 - Зафиксированы [ADR-001](decisions/001-recipe-first-poc.md),
+  [ADR-002](decisions/002-personal-meal-contract.md),
   [technical design](technical-design.md) и
   [план до двух дедлайнов](implementation-plan.md).
-- В рабочей ветке реализованы backend-инкременты B1–B3: versioned
+- В рабочей ветке реализованы backend-инкременты B1–B3 и meal-контракт:
+  versioned
   recommendation contract, deterministic mock, post-model safety, idempotent
   receipt/progress state, private rank, referral reward и rule-based
-  precision-first antifraud. Это ещё не означает готовность общего PoC:
-  frontend и pilot evidence принадлежат следующим integration gates.
-- Backend regression gate: 23 теста проходят локально. Fraud weights и XP
-  являются demo-константами и требуют командного/product review.
-- В ветке `experiment/recsys-eval` реализован ML/Recsys-контур поверх
+  precision-first antifraud, а также `cook / ready` рекомендации, сохранение
+  meal plan и разное подтверждение завершения двух route. Это ещё не означает
+  готовность общего PoC: frontend и pilot evidence принадлежат следующим
+  integration gates.
+- Общий regression gate проходит локально на полном test suite без фиксации
+  хрупкого числа тестов в документации. Fraud weights, XP и порог
+  ready-affinity являются demo-константами и требуют командного/product review.
+- В общей истории репозитория реализован runnable ML/Recsys smoke-контур поверх
   неизменного backend-контракта: `recsys.model.MLRecommendationEngine`
-  (обучаемый, explainable адаптер `RecommendationEngine`, переключаемый через
-  `RECOMMENDATION_ENGINE=model`), синтетические профили на четырёх
-  архетипах, 24 проверенных рецепта, evaluation (own vs shuffled-history),
-  симуляция на 1–10k и экономика. Формальная гипотеза, ограничения и
-  критерии проверки — [docs/research/recsys/ml-recsys-overview.md](research/recsys/ml-recsys-overview.md).
-  Own-history hit rate ≥70% формально пройден на 10/50/300 профилях; полный
-  тестовый набор (backend + recsys) — 65 тестов зелёные. Экономические и
-  funnel-ставки — demo-константы, требуют командного/business review, как и
-  fraud/XP выше.
+  (синтетически обучаемый адаптер `RecommendationEngine`, переключаемый через
+  `RECOMMENDATION_ENGINE=model`), генераторы профилей, evaluation runner,
+  симуляция на 1–10k и экономика. Он нужен, чтобы не блокировать API и smoke,
+  но не считается финальной моделью или финальным evidence: профили, labels,
+  oracle и funnel rates пока заданы связанными синтетическими правилами.
+- Текущие outputs (`100%` hit rate и для own, и для shuffled history; нулевой
+  frequency uplift в base simulation) не интерпретируются как измеренный
+  продуктовый результат. Они лишь подтверждают исполнимость пайплайна. Финальные
+  методика, профили и результаты остаются deliverable владельца ML/Recsys &
+  Evaluation.
+- Ветка `feat/mobile-demo` синхронизирована 04.09: в ней пока есть только план
+  мобильного демо, без frontend-кода. План приведён к актуальному
+  `meal-recommendations → meal-plans → receipt/complete-cook → progress`
+  контракту.
 
-## Следующий командный шаг
+## Следующий командный шаг к MVP
 
-До промежуточной сдачи 04.09.2026 10:00:
+### P0 — блокирует целостный demo
 
-1. проверить backend contract и три example requests;
-2. подключить frontend к mock JSON;
-3. ~~получить первые outputs ML/Recsys owner минимум на пяти профилях~~ —
-   готово в `experiment/recsys-eval` (10 профилей через реальный
-   `RecommendationService`), ожидает review и merge;
-4. собрать четыре экрана и промежуточную презентацию;
-5. подготовить обязательное Markdown-описание и компактные product artifacts;
-6. проверить доступ к репозиторию без авторизации.
+1. **Product/UX & Frontend:** добавить в ветку реальный frontend-код и провести
+   один 4-screen happy path по актуальному meal API. Минимум: рекомендация →
+   выбор route → сохранение плана → synthetic-чек → личный прогресс.
+2. **ML/Recsys + Product/UX:** реализовать и проверить принятый в ADR-003 выбор
+   типа челленджа: один default `current/repeat/explore`, отдельное объяснение и
+   только релевантные альтернативы. `cook/ready` остаётся другим уровнем —
+   способом закрыть потребность в еде, а не игровой механикой.
+3. **ML/Recsys & Evaluation:** поверх smoke-scaffold предоставить финальные
+   профили, модель/правила и eval, в котором качество считается на 30–50
+   профилях и сравнивается с matched/generic baseline. Отдельно показать
+   результаты по cooking-heavy, time-limited, hybrid и ready-heavy персонам,
+   если ready-route входит в финальный pitch.
+4. **ML/Recsys + Product:** заменить demo funnel rates на явно согласованный
+   набор сценарных допущений и связать выводы с primary metric кейса. До этого
+   simulation/economics можно показывать только как работающий калькулятор, а
+   не как ожидаемый uplift.
 
-После сдачи mock заменяется model adapter, frontend соединяется с API и
-добавляется единый end-to-end fixture. Затем обязательные evidence gates:
-evaluation, simulation, экономика и pilot plan.
+### P1 — обязательные evidence и сдача
+
+5. **Backend/Integration/Safety:** оформить meal-контракт отдельным reviewable
+   изменением, передать frontend examples и сохранить зелёным автоматический
+   smoke обоих route. Не добавлять новый backend scope до появления UI.
+6. **Product + review команды:** подготовить одностраничный pilot plan:
+   test/control, primary metric, margin guardrail, сегментация cook/ready,
+   длительность и критерий остановки.
+7. **Команда:** записать 30–60-секундное резервное видео полного сценария и
+   сверить финальные утверждения в слайдах с фактическими eval/simulation
+   outputs.

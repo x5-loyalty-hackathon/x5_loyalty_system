@@ -26,9 +26,58 @@ class SafetyPolicy:
         user: UserProfile,
         now: datetime,
     ) -> ProductSafetyDecision:
+        common_decision = self._evaluate_common_product(
+            product=product,
+            user=user,
+            now=now,
+        )
+        if not common_decision.approved:
+            return common_decision
+        if product.is_prepared_food:
+            return ProductSafetyDecision(False, "prepared_food_not_raw_ingredient")
         if ingredient.ingredient_id in user.excluded_ingredient_ids:
             return ProductSafetyDecision(False, "ingredient_excluded_by_user")
-        if ingredient.category in user.excluded_categories:
+        if not self._matches(product, ingredient):
+            return ProductSafetyDecision(False, "ingredient_mismatch")
+        if product.is_markdown and product.category not in RESCUE_CATEGORIES:
+            return ProductSafetyDecision(False, "markdown_category_not_allowed")
+        return ProductSafetyDecision(True)
+
+    def evaluate_ready_product(
+        self,
+        *,
+        product: InventoryProduct,
+        meal_intent_id: str,
+        user: UserProfile,
+        now: datetime,
+    ) -> ProductSafetyDecision:
+        common_decision = self._evaluate_common_product(
+            product=product,
+            user=user,
+            now=now,
+        )
+        if not common_decision.approved:
+            return common_decision
+        if not product.is_prepared_food:
+            return ProductSafetyDecision(False, "not_prepared_food")
+        if meal_intent_id not in product.meal_intent_ids:
+            return ProductSafetyDecision(False, "meal_intent_mismatch")
+        if product.contained_categories & user.excluded_categories:
+            return ProductSafetyDecision(False, "category_excluded_by_user")
+        if product.ingredient_ids & user.excluded_ingredient_ids:
+            return ProductSafetyDecision(False, "ingredient_excluded_by_user")
+        if product.is_markdown and product.category not in RESCUE_CATEGORIES:
+            return ProductSafetyDecision(False, "markdown_category_not_allowed")
+        return ProductSafetyDecision(True)
+
+    @staticmethod
+    def _evaluate_common_product(
+        *,
+        product: InventoryProduct,
+        user: UserProfile,
+        now: datetime,
+    ) -> ProductSafetyDecision:
+        if product.category in user.excluded_categories:
             return ProductSafetyDecision(False, "category_excluded_by_user")
         if product.available_quantity <= 0:
             return ProductSafetyDecision(False, "out_of_stock")
@@ -40,10 +89,6 @@ class SafetyPolicy:
             return ProductSafetyDecision(False, "expired")
         if not product.fulfillment_options:
             return ProductSafetyDecision(False, "no_fulfillment_option")
-        if not self._matches(product, ingredient):
-            return ProductSafetyDecision(False, "ingredient_mismatch")
-        if product.is_markdown and product.category not in RESCUE_CATEGORIES:
-            return ProductSafetyDecision(False, "markdown_category_not_allowed")
         return ProductSafetyDecision(True)
 
     @staticmethod

@@ -74,7 +74,7 @@ def qualify_invitee(user_id: str = "invitee-1") -> None:
 def test_verified_receipt_updates_bounded_progress_and_savings() -> None:
     body = post_receipt(receipt_event(recipe_completed=True))
 
-    assert body["contract_version"] == "1.0"
+    assert body["contract_version"] == "1.1"
     assert body["status"] == "verified"
     assert body["reason_codes"] == ["receipt_verified"]
     assert body["fraud_score"] == 0
@@ -82,7 +82,9 @@ def test_verified_receipt_updates_bounded_progress_and_savings() -> None:
         "user_id": "user-1",
         "verified_receipts": 1,
         "purchase_days": 1,
+        "meals_completed": 1,
         "recipes_completed": 1,
+        "ready_meals_completed": 0,
         "markdown_savings": 100.0,
         "rescue_items": 2.0,
         "referral_rewards": 0,
@@ -134,6 +136,39 @@ def test_extra_receipt_same_day_does_not_add_purchase_day_xp() -> None:
     assert second["progress"]["verified_receipts"] == 2
     assert second["progress"]["purchase_days"] == 1
     assert second["progress"]["avatar_xp"] == 10
+
+
+def test_same_moscow_day_with_different_offsets_is_collapsed() -> None:
+    first = post_receipt(
+        receipt_event(
+            receipt_id="offset-1",
+            purchased_at="2026-09-04T00:30:00+03:00",
+            now="2026-09-04T00:35:00+03:00",
+        )
+    )
+    second = post_receipt(
+        receipt_event(
+            receipt_id="offset-2",
+            purchased_at="2026-09-03T22:00:00Z",
+            now="2026-09-03T22:05:00Z",
+        )
+    )
+
+    assert first["progress"]["purchase_days"] == 1
+    assert second["progress"]["purchase_days"] == 1
+    assert second["progress"]["avatar_xp"] == 10
+    assert "same_day_receipt_collapsed" in second["reason_codes"]
+
+
+def test_naive_receipt_timestamps_are_rejected_instead_of_crashing() -> None:
+    payload = receipt_event(
+        purchased_at="2026-09-03T12:00:00",
+        now="2026-09-03T12:05:00",
+    )
+
+    response = client.post("/api/v1/events/receipts", json=payload)
+
+    assert response.status_code == 422
 
 
 def test_cross_user_receipt_replay_is_rejected() -> None:

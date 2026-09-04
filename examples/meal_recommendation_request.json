@@ -1,0 +1,96 @@
+{
+  "user": {
+    "user_id": "user_meal_demo_001",
+    "radius_km": 3.0,
+    "preferred_meal_route": "ready"
+  },
+  "current_receipt": {
+    "receipt_id": "receipt_meal_demo_001",
+    "purchased_at": "2026-09-04T12:00:00+03:00",
+    "store_id": "store_17",
+    "items": [
+      {
+        "sku_id": "milk_01",
+        "name": "Молоко",
+        "category": "dairy",
+        "ingredient_ids": ["milk"],
+        "quantity": 1,
+        "unit_price": 99.9
+      },
+      {
+        "sku_id": "tomato_01",
+        "name": "Томаты",
+        "category": "vegetable",
+        "ingredient_ids": ["tomato"],
+        "quantity": 1,
+        "unit_price": 159.9
+      }
+    ]
+  },
+  "purchase_history": [],
+  "recipe_catalog": [
+    {
+      "recipe_id": "vegetable_omelette",
+      "meal_intent_id": "omelette",
+      "title": "Овощной омлет",
+      "verified": true,
+      "preparation_minutes": 20,
+      "ingredients": [
+        {
+          "ingredient_id": "milk",
+          "name": "Молоко",
+          "category": "dairy",
+          "required": true
+        },
+        {
+          "ingredient_id": "tomato",
+          "name": "Томаты",
+          "category": "vegetable",
+          "required": true
+        },
+        {
+          "ingredient_id": "egg",
+          "name": "Яйца",
+          "category": "egg",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "inventory_snapshot": [
+    {
+      "sku_id": "egg_01",
+      "name": "Яйца C1",
+      "category": "egg",
+      "ingredient_ids": ["egg"],
+      "store_id": "store_17",
+      "distance_km": 0.5,
+      "price": 119.9,
+      "original_price": 119.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 10,
+      "fulfillment_options": ["delivery", "next_visit"]
+    },
+    {
+      "sku_id": "ready_omelette_01",
+      "name": "Омлет с овощами готовый",
+      "category": "prepared_food",
+      "ingredient_ids": ["egg", "milk", "tomato"],
+      "meal_intent_ids": ["omelette"],
+      "contained_categories": ["dairy", "egg", "vegetable"],
+      "is_prepared_food": true,
+      "store_id": "store_17",
+      "distance_km": 0.7,
+      "price": 249.9,
+      "original_price": 249.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "expires_at": "2026-09-04T20:00:00+03:00",
+      "available_quantity": 3,
+      "fulfillment_options": ["delivery", "next_visit"]
+    }
+  ],
+  "now": "2026-09-04T12:05:00+03:00",
+  "limit": 3
+}

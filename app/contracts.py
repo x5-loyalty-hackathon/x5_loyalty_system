@@ -1,12 +1,18 @@
 from __future__ import annotations
 
-from datetime import datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
+
+from app.explanations import (
+    CHALLENGE_REASON_CODES,
+    PUBLIC_WARNING_VALUES,
+    RECIPE_REASON_CODES,
+    ROUTE_REASON_CODES,
+)
 
 
-CONTRACT_VERSION = "1.0"
+CONTRACT_VERSION = "1.1"
 
 
 class ApiModel(BaseModel):
@@ -17,6 +23,31 @@ class RecommendationMode(StrEnum):
     CURRENT = "current"
     REPEAT = "repeat"
     EXPLORE = "explore"
+
+
+class MealRoute(StrEnum):
+    COOK = "cook"
+    READY = "ready"
+
+
+class MealPlanStatus(StrEnum):
+    SAVED = "saved"
+    COLLECTED = "collected"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+
+
+class MealPlanSaveStatus(StrEnum):
+    CREATED = "created"
+    DUPLICATE = "duplicate"
+    REJECTED = "rejected"
+
+
+class MealPlanCompletionStatus(StrEnum):
+    COMPLETED = "completed"
+    NOT_READY = "not_ready"
+    DUPLICATE = "duplicate"
+    REJECTED = "rejected"
 
 
 class FulfillmentOption(StrEnum):
@@ -61,6 +92,7 @@ class UserProfile(ApiModel):
     saved_recipe_ids: set[str] = Field(default_factory=set)
     history_categories: list[str] = Field(default_factory=list)
     preferred_brands: list[str] = Field(default_factory=list)
+    preferred_meal_route: MealRoute | None = None
 
 
 class ReceiptItem(ApiModel):
@@ -72,6 +104,7 @@ class ReceiptItem(ApiModel):
     quantity: float = Field(default=1, gt=0)
     unit_price: float = Field(ge=0)
     is_markdown: bool = False
+    is_prepared_food: bool = False
     original_unit_price: float | None = Field(default=None, ge=0)
 
     @model_validator(mode="after")
@@ -88,7 +121,7 @@ class ReceiptItem(ApiModel):
 
 class Receipt(ApiModel):
     receipt_id: str = Field(min_length=1)
-    purchased_at: datetime
+    purchased_at: AwareDatetime
     store_id: str = Field(min_length=1)
     items: list[ReceiptItem] = Field(min_length=1)
 
@@ -108,6 +141,7 @@ class Recipe(ApiModel):
     ingredients: list[RecipeIngredient] = Field(min_length=1)
     verified: bool = True
     preparation_minutes: int | None = Field(default=None, gt=0, le=1440)
+    meal_intent_id: str | None = Field(default=None, min_length=1)
 
 
 class InventoryProduct(ApiModel):
@@ -121,8 +155,11 @@ class InventoryProduct(ApiModel):
     original_price: float | None = Field(default=None, ge=0)
     brand: str | None = None
     is_markdown: bool = False
+    is_prepared_food: bool = False
+    meal_intent_ids: set[str] = Field(default_factory=set)
+    contained_categories: set[str] = Field(default_factory=set)
     safety_eligible: bool = True
-    expires_at: datetime | None = None
+    expires_at: AwareDatetime | None = None
     available_quantity: int = Field(default=1, ge=0)
     fulfillment_options: set[FulfillmentOption] = Field(
         default_factory=lambda: {
@@ -139,6 +176,10 @@ class InventoryProduct(ApiModel):
             and self.price > self.original_price
         ):
             raise ValueError("markdown price cannot exceed original price")
+        if self.is_prepared_food and not self.meal_intent_ids:
+            raise ValueError("prepared food requires at least one meal_intent_id")
+        if self.is_prepared_food and not self.contained_categories:
+            raise ValueError("prepared food requires contained_categories")
         return self
 
 
@@ -149,8 +190,18 @@ class RecommendationRequest(ApiModel):
     recipe_catalog: list[Recipe] = Field(min_length=1)
     inventory_snapshot: list[InventoryProduct] = Field(default_factory=list)
     requested_mode: RecommendationMode | None = None
-    now: datetime
+    now: AwareDatetime
     limit: int = Field(default=3, ge=1, le=10)
+
+    @model_validator(mode="after")
+    def validate_unique_catalog_keys(self) -> RecommendationRequest:
+        recipe_ids = [recipe.recipe_id for recipe in self.recipe_catalog]
+        if len(recipe_ids) != len(set(recipe_ids)):
+            raise ValueError("recipe_catalog recipe_id values must be unique")
+        sku_ids = [product.sku_id for product in self.inventory_snapshot]
+        if len(sku_ids) != len(set(sku_ids)):
+            raise ValueError("inventory_snapshot sku_id values must be unique")
+        return self
 
 
 class ModelRecommendation(ApiModel):
@@ -170,14 +221,20 @@ class ProductOption(ApiModel):
     original_price: float | None
     brand: str | None
     source: IngredientSource
-    expires_at: datetime | None
+    expires_at: AwareDatetime | None
     fulfillment_options: set[FulfillmentOption]
+
+
+class PreparedProductOption(ProductOption):
+    ingredient_ids: set[str]
+    contained_categories: set[str] = Field(min_length=1)
 
 
 class IngredientRecommendation(ApiModel):
     ingredient_id: str
     name: str
     category: str
+    required: bool = True
     source: IngredientSource
     product_options: list[ProductOption] = Field(default_factory=list)
 
@@ -188,25 +245,197 @@ class RecipeRecommendation(ApiModel):
     mode: RecommendationMode
     model_score: float
     missing_count: int = Field(ge=0)
-    reason_codes: list[str]
+    reason_codes: list[str] = Field(min_length=1)
     ingredients: list[IngredientRecommendation]
     fulfillment_options: set[FulfillmentOption]
     safety_status: SafetyStatus
     warnings: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_public_reason_codes(self) -> RecipeRecommendation:
+        if len(self.reason_codes) != len(set(self.reason_codes)):
+            raise ValueError("public recipe reason codes must be unique")
+        unknown = set(self.reason_codes) - RECIPE_REASON_CODES
+        if unknown:
+            raise ValueError(f"unknown public recipe reason codes: {sorted(unknown)}")
+        unknown_warnings = set(self.warnings) - PUBLIC_WARNING_VALUES
+        if unknown_warnings:
+            raise ValueError(f"unknown public warnings: {sorted(unknown_warnings)}")
+        return self
+
+
+class ChallengeSelection(ApiModel):
+    default_mode: RecommendationMode | None = None
+    available_modes: list[RecommendationMode] = Field(default_factory=list)
+    mode_reason_codes: dict[RecommendationMode, list[str]] = Field(
+        default_factory=dict
+    )
+    explicit_choice_required: list[RecommendationMode] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_mode_selection(self) -> ChallengeSelection:
+        if len(self.available_modes) != len(set(self.available_modes)):
+            raise ValueError("available_modes must be unique")
+        if len(self.explicit_choice_required) != len(
+            set(self.explicit_choice_required)
+        ):
+            raise ValueError("explicit_choice_required must be unique")
+        reason_modes = set(self.mode_reason_codes)
+        available_modes = set(self.available_modes)
+        if reason_modes != available_modes:
+            raise ValueError(
+                "mode_reason_codes must contain exactly the available modes"
+            )
+        if not set(self.explicit_choice_required) <= available_modes:
+            raise ValueError(
+                "explicit_choice_required must be a subset of available_modes"
+            )
+        if self.default_mode is not None:
+            if self.default_mode not in available_modes:
+                raise ValueError("default_mode must be available")
+            if self.default_mode in set(self.explicit_choice_required):
+                raise ValueError("default_mode cannot require explicit choice")
+        unknown = {
+            code
+            for codes in self.mode_reason_codes.values()
+            for code in codes
+            if code not in CHALLENGE_REASON_CODES
+        }
+        if unknown:
+            raise ValueError(f"unknown public challenge reason codes: {sorted(unknown)}")
+        if any(not codes for codes in self.mode_reason_codes.values()):
+            raise ValueError("each available mode requires a reason code")
+        if any(
+            len(codes) != len(set(codes))
+            for codes in self.mode_reason_codes.values()
+        ):
+            raise ValueError("public challenge reason codes must be unique per mode")
+        return self
 
 
 class RecommendationResponse(ApiModel):
     contract_version: str = CONTRACT_VERSION
     user_id: str
     receipt_id: str
+    challenge_selection: ChallengeSelection
     recommendations: list[RecipeRecommendation]
     filtered_candidates: int = Field(ge=0)
     warnings: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_selection_matches_recommendations(self) -> RecommendationResponse:
+        recipe_ids = [item.recipe_id for item in self.recommendations]
+        if len(recipe_ids) != len(set(recipe_ids)):
+            raise ValueError("recommendations must contain unique recipe_id values")
+        modes = {item.mode for item in self.recommendations}
+        if modes != set(self.challenge_selection.available_modes):
+            raise ValueError("available_modes must match recommendation modes")
+        if self.challenge_selection.default_mode is not None:
+            if not self.recommendations:
+                raise ValueError("default_mode requires a recommendation")
+            if self.recommendations[0].mode != self.challenge_selection.default_mode:
+                raise ValueError("the default recommendation must be first")
+        unknown_warnings = set(self.warnings) - PUBLIC_WARNING_VALUES
+        if unknown_warnings:
+            raise ValueError(f"unknown public warnings: {sorted(unknown_warnings)}")
+        return self
+
+
+class CookVariant(ApiModel):
+    recipe_id: str = Field(min_length=1)
+    preparation_minutes: int | None = Field(default=None, gt=0, le=1440)
+    missing_count: int = Field(ge=0)
+    ingredients: list[IngredientRecommendation]
+    fulfillment_options: set[FulfillmentOption]
+    warnings: list[str] = Field(default_factory=list)
+
+
+class ReadyVariant(ApiModel):
+    meal_intent_id: str = Field(min_length=1)
+    product_options: list[PreparedProductOption] = Field(min_length=1)
+    fulfillment_options: set[FulfillmentOption] = Field(min_length=1)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class MealRecommendation(ApiModel):
+    meal_id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    mode: RecommendationMode
+    model_score: float = Field(ge=0, le=1)
+    default_route: MealRoute
+    available_routes: set[MealRoute] = Field(min_length=1)
+    reason_codes: list[str] = Field(min_length=1)
+    route_reason_codes: list[str] = Field(min_length=1)
+    cook_variant: CookVariant | None = None
+    ready_variant: ReadyVariant | None = None
+    safety_status: SafetyStatus
+    warnings: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_routes(self) -> MealRecommendation:
+        if self.default_route not in self.available_routes:
+            raise ValueError("default_route must be available")
+        if MealRoute.COOK in self.available_routes and self.cook_variant is None:
+            raise ValueError("cook route requires cook_variant")
+        if MealRoute.READY in self.available_routes and self.ready_variant is None:
+            raise ValueError("ready route requires ready_variant")
+        if self.cook_variant is not None and MealRoute.COOK not in self.available_routes:
+            raise ValueError("cook_variant requires cook route")
+        if self.ready_variant is not None and MealRoute.READY not in self.available_routes:
+            raise ValueError("ready_variant requires ready route")
+        recipe_unknown = set(self.reason_codes) - RECIPE_REASON_CODES
+        if recipe_unknown:
+            raise ValueError(
+                f"unknown public recipe reason codes: {sorted(recipe_unknown)}"
+            )
+        if len(self.reason_codes) != len(set(self.reason_codes)):
+            raise ValueError("public recipe reason codes must be unique")
+        if len(self.route_reason_codes) != len(set(self.route_reason_codes)):
+            raise ValueError("public route reason codes must be unique")
+        unknown = set(self.route_reason_codes) - ROUTE_REASON_CODES
+        if unknown:
+            raise ValueError(f"unknown public route reason codes: {sorted(unknown)}")
+        unknown_warnings = set(self.warnings) - PUBLIC_WARNING_VALUES
+        if unknown_warnings:
+            raise ValueError(f"unknown public warnings: {sorted(unknown_warnings)}")
+        return self
+
+
+class MealRecommendationResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    user_id: str
+    receipt_id: str
+    challenge_selection: ChallengeSelection
+    recommendations: list[MealRecommendation]
+    filtered_candidates: int = Field(ge=0)
+    warnings: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_selection_matches_recommendations(
+        self,
+    ) -> MealRecommendationResponse:
+        meal_ids = [item.meal_id for item in self.recommendations]
+        if len(meal_ids) != len(set(meal_ids)):
+            raise ValueError("recommendations must contain unique meal_id values")
+        modes = {item.mode for item in self.recommendations}
+        if modes != set(self.challenge_selection.available_modes):
+            raise ValueError("available_modes must match recommendation modes")
+        if self.challenge_selection.default_mode is not None:
+            if not self.recommendations:
+                raise ValueError("default_mode requires a recommendation")
+            if self.recommendations[0].mode != self.challenge_selection.default_mode:
+                raise ValueError("the default recommendation must be first")
+        unknown_warnings = set(self.warnings) - PUBLIC_WARNING_VALUES
+        if unknown_warnings:
+            raise ValueError(f"unknown public warnings: {sorted(unknown_warnings)}")
+        return self
 
 
 class HealthResponse(ApiModel):
     status: str
     contract_version: str = CONTRACT_VERSION
+    recommendation_engine: str
+    model_fallback: bool
 
 
 class PrivateRank(ApiModel):
@@ -219,7 +448,9 @@ class ProgressSnapshot(ApiModel):
     user_id: str
     verified_receipts: int = Field(ge=0)
     purchase_days: int = Field(ge=0)
+    meals_completed: int = Field(ge=0)
     recipes_completed: int = Field(ge=0)
+    ready_meals_completed: int = Field(ge=0)
     markdown_savings: float = Field(ge=0)
     rescue_items: float = Field(ge=0)
     referral_rewards: int = Field(ge=0)
@@ -229,12 +460,67 @@ class ProgressSnapshot(ApiModel):
     private_rank: PrivateRank
 
 
+class MealPlanSaveRequest(ApiModel):
+    plan_id: str = Field(min_length=1)
+    user_id: str = Field(min_length=1)
+    meal_id: str = Field(min_length=1)
+    selected_route: MealRoute
+    selected_recipe_id: str | None = Field(default=None, min_length=1)
+    selected_product_ids: set[str] = Field(default_factory=set)
+    fulfillment: FulfillmentOption
+    created_at: AwareDatetime
+
+    @model_validator(mode="after")
+    def validate_selected_route(self) -> MealPlanSaveRequest:
+        if self.selected_route == MealRoute.COOK and self.selected_recipe_id is None:
+            raise ValueError("cook route requires selected_recipe_id")
+        if self.selected_route == MealRoute.READY and not self.selected_product_ids:
+            raise ValueError("ready route requires selected_product_ids")
+        return self
+
+
+class MealPlanSnapshot(ApiModel):
+    plan_id: str
+    user_id: str
+    meal_id: str
+    selected_route: MealRoute
+    status: MealPlanStatus
+    selected_recipe_id: str | None
+    selected_product_ids: list[str]
+    collected_product_ids: list[str]
+    fulfillment: FulfillmentOption
+    created_at: AwareDatetime
+    completed_at: AwareDatetime | None = None
+    completion_evidence: str | None = None
+
+
+class MealPlanSaveResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    status: MealPlanSaveStatus
+    reason_codes: list[str]
+    plan: MealPlanSnapshot | None = None
+
+
+class CookingConfirmationRequest(ApiModel):
+    user_id: str = Field(min_length=1)
+    now: AwareDatetime
+
+
+class MealPlanCompletionResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    status: MealPlanCompletionStatus
+    reason_codes: list[str]
+    plan: MealPlanSnapshot | None = None
+    progress: ProgressSnapshot
+
+
 class ReceiptProgressRequest(ApiModel):
     user_id: str = Field(min_length=1)
     receipt: Receipt
+    meal_plan_id: str | None = Field(default=None, min_length=1)
     recipe_id: str | None = None
     recipe_completed: bool = False
-    now: datetime
+    now: AwareDatetime
 
     @model_validator(mode="after")
     def validate_recipe_completion(self) -> ReceiptProgressRequest:
@@ -249,6 +535,7 @@ class ReceiptProgressResponse(ApiModel):
     fraud_score: float = Field(ge=0, le=1)
     reason_codes: list[str]
     progress: ProgressSnapshot
+    meal_plan: MealPlanSnapshot | None = None
 
 
 class ReferralEvaluationRequest(ApiModel):

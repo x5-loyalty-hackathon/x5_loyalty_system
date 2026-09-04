@@ -1,0 +1,21 @@
+{
+  "user_id": "user_meal_demo_001",
+  "meal_plan_id": "meal_plan_demo_001",
+  "receipt": {
+    "receipt_id": "receipt_meal_demo_002",
+    "purchased_at": "2026-09-04T18:00:00+03:00",
+    "store_id": "store_17",
+    "items": [
+      {
+        "sku_id": "ready_omelette_01",
+        "name": "Омлет с овощами готовый",
+        "category": "prepared_food",
+        "ingredient_ids": ["egg", "milk", "tomato"],
+        "quantity": 1,
+        "unit_price": 249.9,
+        "is_prepared_food": true
+      }
+    ]
+  },
+  "now": "2026-09-04T18:05:00+03:00"
+}

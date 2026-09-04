@@ -1,8 +1,10 @@
-# Technical design: recipe-first X5 Domovoi PoC
+# Technical design: meal-first X5 Domovoi PoC
 
-- **Статус:** B1–B3 implemented in working branch, team review required,
-  2026-09-03.
+- **Статус:** API contract `1.1`, challenge selector, recipe, meal-plan и
+  `cook/ready` backend flow реализованы в
+  рабочей ветке; межконтурный review требуется, 2026-09-04.
 - **Decision source:** [ADR-001](decisions/001-recipe-first-poc.md).
+- **Meal extension:** [ADR-002](decisions/002-personal-meal-contract.md).
 - **Product source:** [current concept](research/persona_vxofi/rescue-domovoi-concept.md).
 - **Scope:** backend/integration/safety contract; frontend и ML могут
   разрабатываться параллельно.
@@ -85,7 +87,7 @@ class RecommendationEngine(Protocol):
     ) -> list[ModelRecommendation]: ...
 ```
 
-`ModelRecommendation` содержит только решение model layer:
+`ModelRecommendation` содержит внутренний результат model layer:
 
 ```json
 {
@@ -93,11 +95,21 @@ class RecommendationEngine(Protocol):
   "mode": "explore",
   "score": 0.82,
   "reason_codes": [
-    "quick_dinner_affinity",
-    "discovery_acceptance_high"
+    "quick_recipe",
+    "personalized_discovery"
   ]
 }
 ```
+
+В текущем smoke-adapter поле `mode` остаётся legacy hint для совместимости
+параллельной разработки. Начиная с HTTP contract `1.1`, оно не является
+финальным типом челленджа: один рецепт может быть допустим для нескольких
+стратегий. Внешний mode назначает challenge selector после safety. Целевой
+внутренний контракт модели описан в
+[ADR-003](decisions/003-challenge-mode-selection.md#7-граница-с-mlrecsys).
+Внутренние model reason codes также не копируются напрямую в HTTP-ответ:
+публичные объяснения пересчитываются по фактически собранному и прошедшему
+safety офферу через реестр `app/explanations.py`.
 
 Backend затем:
 
@@ -106,9 +118,13 @@ Backend затем:
 3. фильтрует inventory по safety/radius/availability;
 4. прикладывает markdown и full-price options только к ингредиентам рецепта;
 5. исключает recipe candidate с обязательным недоступным ингредиентом;
-6. сортирует оставшиеся кандидаты по `missing_count ASC`, затем
+6. определяет допустимость каждого безопасного рецепта для
+   `current/repeat/explore`;
+7. сортирует кандидатов каждой стратегии по `missing_count ASC`, затем
    `model_score DESC`;
-7. возвращает warnings и число отфильтрованных кандидатов.
+8. выбирает default mode и до двух уникальных альтернатив;
+9. возвращает публичные availability warnings и число отфильтрованных model
+   candidates; конкретные внутренние причины фильтрации пишет только в log.
 
 `RecommendationEngine` отвечает за персональную relevance eligibility и не
 должен отдавать заведомо нерелевантные кандидаты. Конкретный model threshold
@@ -134,7 +150,10 @@ Input:
 
 Output:
 
-- до трёх безопасных рекомендаций;
+- `challenge_selection`: default mode, доступные режимы, причины выбора и
+  режимы, требующие явного opt-in;
+- в начальной выдаче — до трёх безопасных рекомендаций, не более одной на
+  mode и без повторения recipe;
 - mode, score, missing count и reason codes;
 - состояние каждого ингредиента;
 - безопасные markdown/full-price варианты и fulfillment capabilities;
@@ -143,6 +162,32 @@ Output:
 
 Схемы в коде являются source of truth. Пример запроса находится в
 `examples/recommendation_request.json`.
+
+При `requested_mode=null` API выбирает основной челлендж и возвращает только
+уникальные mode-альтернативы. При явном `requested_mode` может быть возвращено
+до `limit` рецептов одного режима. `explore` означает новизну, поэтому может
+использовать текущий чек; полная новая корзина без `receipt/home` ингредиентов
+не становится default без явного выбора. Полные правила и инварианты —
+[ADR-003](decisions/003-challenge-mode-selection.md).
+
+### `POST /api/v1/meal-recommendations`
+
+Meal-level обёртка над recipe flow с тем же `challenge_selection`. Для блюда
+возвращает `default_route`, доступные `cook/ready` варианты и отдельные reason
+codes выбора route. `ready` появляется только при явном проверенном mapping
+`meal_intent_id → prepared SKU` после safety/availability фильтрации.
+
+### `POST /api/v1/meal-plans`
+
+Сохраняет выбранный `cook` либо `ready` route, список выбранных SKU и способ
+получения. Повтор `plan_id` идемпотентен, а попытка использовать чужой plan id
+отклоняется.
+
+### `POST /api/v1/meal-plans/{plan_id}/complete-cook`
+
+Отдельное подтверждение пользователя «приготовлено». Для плана с недостающими
+товарами доступно только после их появления в подтверждённых чеках. `ready`
+нельзя завершить этим endpoint: для него нужен совпавший подтверждённый чек.
 
 ## 7. Safety policy
 
@@ -165,6 +210,12 @@ Output:
 - out-of-recipe SKU не возвращаются;
 - backend не делает health/family/lifestyle inference;
 - commercial metadata отсутствует в model/API contract organic ranking.
+- готовый SKU должен иметь явный `meal_intent_id`; LLM не создаёт соответствие
+  блюд на лету;
+- ограничения пользователя проверяются также по `contained_categories`
+  готового блюда, а не только по общей категории `prepared_food`;
+- отсутствие безопасного ready-варианта не скрывает cook-вариант;
+- пользовательский route имеет приоритет над demo-selector.
 
 ### Event safety
 
@@ -179,25 +230,33 @@ Output:
 ## 8. Реализованный state/event contract
 
 ```text
-recommendation_created
-→ recipe_saved
+meal_recommendation_created
+→ meal_plan_saved(cook | ready)
 → fulfillment_selected(delivery | next_visit)
 → receipt_received
 → receipt_verified | pending_review
-→ ingredients_matched
+→ cook: ingredients_matched → cooking_confirmed
+  ready: prepared_meal_matched
+→ meal_plan_completed
 → personal_progress_updated
 ```
 
 HTTP endpoints:
 
+- `POST /api/v1/meal-recommendations`;
+- `POST /api/v1/meal-plans`;
+- `POST /api/v1/meal-plans/{plan_id}/complete-cook`;
 - `POST /api/v1/events/receipts`;
 - `GET /api/v1/progress/{user_id}`;
 - `POST /api/v1/referrals/evaluate`.
 
-Process-local in-memory repository атомарно хранит владельца `receipt_id`, уникальные
-purchase dates, recipe completions, фактическую markdown-экономию, rescue item
-count и уже вознаграждённый referral. Повторный receipt id не меняет state;
-несколько чеков в один день дают только один purchase-day increment.
+Process-local in-memory repository атомарно хранит meal plans, владельца
+`receipt_id`, уникальные purchase dates, cook/ready completions, фактическую
+markdown-экономию, rescue item count и уже вознаграждённый referral. Повторный
+receipt id или завершённый `plan_id` не меняет progress; несколько чеков в один
+московский календарный день дают только один purchase-day increment независимо
+от исходного UTC offset. Все входные timestamps обязаны содержать timezone;
+naive datetime отклоняется схемой с HTTP 422.
 
 Progress response содержит только собственную позицию, размер synthetic cohort
 и percentile. Endpoint публичного leaderboard отсутствует; ФИО и адреса не
@@ -214,12 +273,16 @@ PoC-константы, не обученные и не принятые как 
 | Ситуация | Поведение |
 |---|---|
 | markdown SKU отсутствует/unsafe | удалить option, попробовать full-price |
-| нет full-price аналога | ingredient `unavailable`; recipe candidate исключить |
-| все рецепты исключены | вернуть `recommendations=[]` и explainable warnings |
-| model вернул неизвестный `recipe_id` | исключить candidate и записать warning |
-| model недоступен | переключиться на deterministic mock только в demo mode |
+| нет full-price аналога | cook ingredient `unavailable`; recipe endpoint исключает candidate, meal endpoint независимо проверяет ready |
+| все кандидаты после safety исключены | вернуть `recommendations=[]` и один общий public warning без recipe/SKU ID |
+| model вернул неизвестный `recipe_id` | исключить candidate, увеличить `filtered_candidates`, детали записать только в log |
+| model недоступен | переключиться на deterministic mock в demo mode, записать ошибку и показать fallback в `/health` |
 | delivery недоступна | оставить `next_visit` |
 | availability изменилась | стандартное уведомление; денежной компенсации нет |
+| ready SKU не прошёл safety | удалить ready-вариант, сохранить cook-вариант |
+| cook собрать нельзя, но ready безопасен | вернуть ready-only рекомендацию |
+| ready SKU не найден в чеке | сохранить plan без завершения и начисления XP |
+| manual completion для ready | отклонить; нужен подтверждённый чек |
 
 ## 10. Testing
 
@@ -235,9 +298,15 @@ Unit/API tests backend-контура:
 - меньше missing items ранжируются выше;
 - reason codes и no-reservation warning присутствуют;
 - ответ соответствует versioned schema.
+- meal recommendation возвращает согласованные `default_route` и variants;
+- unsafe ready SKU не скрывает cook-вариант;
+- ready plan завершается только совпавшим verified receipt;
+- cook plan требует collection и отдельное cooking confirmation;
+- один meal plan не начисляет XP повторно;
 - receipt update идемпотентен;
 - cross-user replay отклоняется, future timestamp уходит в review;
 - один день покупки начисляется один раз;
+- разные UTC offset одного московского дня схлопываются, naive time отклоняется;
 - avatar XP/level и private rank обновляются детерминированно;
 - referral требует verified purchase, награждается один раз;
 - параллельные duplicate receipt/referral не обходят idempotency;

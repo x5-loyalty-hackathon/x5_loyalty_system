@@ -64,6 +64,7 @@ def _receipt_ingredient_ids(request: RecommendationRequest) -> set[str]:
     return {
         ingredient_id
         for item in request.current_receipt.items
+        if not item.is_prepared_food
         for ingredient_id in item.ingredient_ids
     }
 
@@ -83,6 +84,7 @@ def _history_ingredient_ids(request: RecommendationRequest) -> set[str]:
         ingredient_id
         for receipt in request.purchase_history
         for item in receipt.items
+        if not item.is_prepared_food
         for ingredient_id in item.ingredient_ids
     }
 
@@ -101,6 +103,7 @@ def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str
         for product in request.inventory_snapshot:
             if (
                 product.is_markdown
+                and not product.is_prepared_food
                 and ingredient_id in product.ingredient_ids
                 and product.distance_km <= request.user.radius_km
             ):

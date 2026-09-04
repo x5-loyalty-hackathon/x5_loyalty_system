@@ -101,20 +101,26 @@ missing-штрафы отрицательные). `is_saved` вышел почт
 
 ## 3. Mode и reason codes
 
-Режим (`current` / `repeat` / `explore`) присваивается тем же приоритетным
-правилом, что и в `DeterministicMockEngine` (сохранён рецепт → `repeat`;
-пересечение с сегодняшним чеком → `current`; иначе → `explore`) — сознательно
-не переопределено в одностороннем порядке, так как выбор игровой механики
-подтверждается командой, а не фиксируется единолично ML-контуром
-([mvp-scope-and-test-plan.md §4](../../mvp-scope-and-test-plan.md)).
+С 04.09 командой принят [ADR-003](../../decisions/003-challenge-mode-selection.md):
+`current / repeat / explore` — стратегии челленджа, а не взаимоисключающие
+свойства рецепта. Новый рецепт может одновременно подходить для `current`
+(использует сегодняшний чек) и `explore` (ещё не знаком пользователю), а
+сохранённый — для `current` и `repeat`.
 
-`recsys/reason_codes.py` — реестр из 12 кодов (расширяет 5 уже
-использовавшихся в моке), каждый с русским текстом для UI/документации.
-Коды остаются короткими флагами (`current_receipt_overlap`,
-`markdown_supply_likely`, …), а не готовыми предложениями с числами —
-конкретные числа (`missing_count` и т.д.) уже есть отдельным полем в ответе
-API (`RecipeRecommendation.missing_count`), поэтому дублировать их внутри
-строки кода означало бы два источника истины.
+Текущий `MLRecommendationEngine` всё ещё присваивает один mode старым
+приоритетным правилом. В HTTP API `1.1` это поле считается legacy hint:
+`RecommendationService` получает recipe relevance, после safety самостоятельно
+строит допустимые mode-пулы, выбирает default и не более одного представителя
+каждой стратегии. Это временная граница smoke-контура, а не целевой model
+contract. Финальная модель должна выдавать независимый recipe relevance либо
+score для каждой пары `(recipe, mode)`.
+
+Model adapter может вычислять внутренние feature codes, но они не являются
+готовыми утверждениями для UI. `RecommendationService` после safety заново
+выводит только проверяемые публичные причины (фактическое пересечение с чеком,
+число докупок, реально доступную уценку и т.п.). Их исполняемый реестр и
+русский смысл находятся в `app/explanations.py`; неизвестный код никогда не
+отображается пользователю как сырой идентификатор.
 
 ## 4. Пример вывода на 10 профилях
 
@@ -123,26 +129,28 @@ API (`RecipeRecommendation.missing_count`), поэтому дублироват�
 `app.safety.SafetyPolicy` (импортированы как есть, не переопределены) с
 `MLRecommendationEngine`. Результат — `recsys/examples/sample_recommendations.json`
 (не хранит ничего, кроме синтетических данных). Один пример
-(`synthetic_value_0015`, архетип `value`, радиус 3.5 км):
+(`synthetic_routine_0004`, архетип `routine`, радиус 2.5 км):
 
 ```json
 {
-  "mode": "explore",
-  "recipe_id": "vegetable_omelette",
-  "model_score": 0.5335,
-  "missing_count": 4,
-  "reason_codes": ["personalized_discovery", "high_discovery_acceptance"],
+  "mode": "current",
+  "recipe_id": "cheese_omelette",
+  "model_score": 0.9698,
+  "missing_count": 1,
+  "reason_codes": [
+    "current_receipt_overlap",
+    "safe_markdown_option_available"
+  ],
   "ingredients": [
-    {"name": "Куриное филе", "source": "full_price"},
-    {"name": "Болгарский перец", "source": "markdown"},
-    {"name": "Лук", "source": "full_price"},
-    {"name": "Кабачок", "source": "full_price"}
+    {"name": "Яйца", "source": "receipt"},
+    {"name": "Молоко", "source": "markdown"},
+    {"name": "Сыр", "source": "receipt"}
   ]
 }
 ```
 
-а рядом для того же профиля — `current`-рекомендация с missing_count=2 и
-`markdown_supply_likely` в причинах: разные профили и разные рецепты для
+а рядом для того же профиля — `explore`-рекомендация с missing_count=2:
+разные профили и разные рецепты для
 одного и того же профиля получают заметно разные mode/missing_count/reason
 codes, что и требовалось ("5–10 профилей с разными рекомендациями") —
 подробная методика оценки этого разнообразия в

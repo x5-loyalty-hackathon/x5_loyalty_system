@@ -31,10 +31,20 @@
   recommendation contract, deterministic mock, post-model safety, idempotent
   receipt/progress state, private rank, referral reward и rule-based
   precision-first antifraud. Это ещё не означает готовность общего PoC:
-  frontend, model adapter, evaluation, simulation и pilot evidence принадлежат
-  следующим integration gates.
+  frontend и pilot evidence принадлежат следующим integration gates.
 - Backend regression gate: 23 теста проходят локально. Fraud weights и XP
   являются demo-константами и требуют командного/product review.
+- В ветке `experiment/recsys-eval` реализован ML/Recsys-контур поверх
+  неизменного backend-контракта: `recsys.model.MLRecommendationEngine`
+  (обучаемый, explainable адаптер `RecommendationEngine`, переключаемый через
+  `RECOMMENDATION_ENGINE=model`), синтетические профили на четырёх
+  архетипах, 24 проверенных рецепта, evaluation (own vs shuffled-history),
+  симуляция на 1–10k и экономика. Формальная гипотеза, ограничения и
+  критерии проверки — [docs/research/recsys/ml-recsys-overview.md](research/recsys/ml-recsys-overview.md).
+  Own-history hit rate ≥70% формально пройден на 10/50/300 профилях; полный
+  тестовый набор (backend + recsys) — 65 тестов зелёные. Экономические и
+  funnel-ставки — demo-константы, требуют командного/business review, как и
+  fraud/XP выше.
 
 ## Следующий командный шаг
 
@@ -42,7 +52,9 @@
 
 1. проверить backend contract и три example requests;
 2. подключить frontend к mock JSON;
-3. получить первые outputs ML/Recsys owner минимум на пяти профилях;
+3. ~~получить первые outputs ML/Recsys owner минимум на пяти профилях~~ —
+   готово в `experiment/recsys-eval` (10 профилей через реальный
+   `RecommendationService`), ожидает review и merge;
 4. собрать четыре экрана и промежуточную презентацию;
 5. подготовить обязательное Markdown-описание и компактные product artifacts;
 6. проверить доступ к репозиторию без авторизации.

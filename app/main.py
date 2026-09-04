@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,11 +15,29 @@ from app.contracts import (
 )
 from app.fraud import ReceiptFraudPolicy, ReferralFraudPolicy
 from app.progress import ProgressService
-from app.recommender import DeterministicMockEngine
+from app.recommender import DeterministicMockEngine, RecommendationEngine
 from app.referral import ReferralService
 from app.safety import SafetyPolicy
 from app.service import RecommendationService
 from app.state import InMemoryStateRepository
+
+
+def _build_recommendation_engine() -> RecommendationEngine:
+    """Select the recommendation engine via `RECOMMENDATION_ENGINE` (default:
+    unchanged `mock` behavior). `model` opts into the ML/Recsys adapter
+    (`recsys.model.MLRecommendationEngine`); on import failure it falls back
+    to the deterministic mock, matching the documented fallback behavior in
+    docs/technical-design.md §9 ("model недоступен → переключиться на
+    deterministic mock только в demo mode")."""
+    engine_choice = os.environ.get("RECOMMENDATION_ENGINE", "mock").strip().lower()
+    if engine_choice == "model":
+        try:
+            from recsys.model import MLRecommendationEngine
+
+            return MLRecommendationEngine()
+        except Exception:  # pragma: no cover - defensive demo fallback
+            return DeterministicMockEngine()
+    return DeterministicMockEngine()
 
 
 app = FastAPI(
@@ -34,7 +54,7 @@ app.add_middleware(
 )
 
 recommendation_service = RecommendationService(
-    engine=DeterministicMockEngine(),
+    engine=_build_recommendation_engine(),
     safety_policy=SafetyPolicy(),
 )
 state_repository = InMemoryStateRepository()

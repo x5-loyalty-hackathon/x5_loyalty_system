@@ -111,7 +111,6 @@ def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str
 
 def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str, float]:
     receipt_ids = _receipt_ingredient_ids(request)
-    home_ids = request.user.home_ingredient_ids
     history_categories = _history_categories(request)
     history_ingredient_ids = _history_ingredient_ids(request)
 
@@ -120,7 +119,7 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
     total = max(len(recipe.ingredients), 1)
 
     current_hits = len(ingredient_ids & receipt_ids)
-    covered_ids = receipt_ids | home_ids
+    covered_ids = receipt_ids
     missing_ids = ingredient_ids - covered_ids
     history_hits = len(categories & history_categories)
     ingredient_history_hits = len(ingredient_ids & history_ingredient_ids)
@@ -168,8 +167,31 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
     }
 
 
-def _feature_vector(features: dict[str, float]) -> list[float]:
-    return [features[name] for name in FEATURE_NAMES]
+#: Features that describe how much work a recipe is, rather than how much the
+#: user would like it. ``app.service.RankingPolicy`` already orders on exactly
+#: this quantity, so a model that also encodes it is duplicating the pipeline's
+#: own work — measured at r = -0.71 between ``model_score`` and missing count
+#: (see ``docs/benchmark-report.md``).
+EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
+    {"missing_ratio", "missing_cost_norm"}
+)
+
+
+def _feature_vector(
+    features: dict[str, float], *, include_effort: bool = True
+) -> list[float]:
+    """Feature row, optionally with the effort features zeroed.
+
+    Zeroing rather than dropping keeps the vector length equal to
+    ``FEATURE_NAMES`` so both variants share one classifier shape and one set
+    of weight indices — the two models stay directly comparable.
+    """
+    return [
+        features[name]
+        if include_effort or name not in EFFORT_FEATURE_NAMES
+        else 0.0
+        for name in FEATURE_NAMES
+    ]
 
 
 def _label_for_pair(
@@ -207,7 +229,13 @@ def _label_for_pair(
     return 1.0 if features["_combined_affinity"] >= HIGH_HISTORY_AFFINITY else 0.0
 
 
-def _train_classifier(*, seed: int, n_profiles: int, recipe_catalog: list[Recipe]) -> LogisticRegression:
+def _train_classifier(
+    *,
+    seed: int,
+    n_profiles: int,
+    recipe_catalog: list[Recipe],
+    include_effort: bool = True,
+) -> LogisticRegression:
     from recsys.inventory import generate_inventory  # local import: no import-time cycle
 
     rng = random.Random(seed)
@@ -233,7 +261,7 @@ def _train_classifier(*, seed: int, n_profiles: int, recipe_catalog: list[Recipe
         sampled_recipes = rng.sample(recipe_catalog, k=min(6, len(recipe_catalog)))
         for recipe in sampled_recipes:
             features = compute_features(request, recipe)
-            X.append(_feature_vector(features))
+            X.append(_feature_vector(features, include_effort=include_effort))
             y.append(_label_for_pair(rng, features=features, archetype_name=profile.archetype, recipe=recipe))
     model = LogisticRegression(n_features=len(FEATURE_NAMES))
     model.fit(X, y, epochs=250)
@@ -249,14 +277,23 @@ class MLRecommendationEngine:
         recipe_catalog: list[Recipe] | None = None,
         seed: int = 999,
         training_profiles: int = 300,
+        include_effort_features: bool = True,
     ) -> None:
+        """``include_effort_features=False`` trains a preference-only ranker.
+
+        Use it with a ranking policy that supplies the effort term itself
+        (``app.service.BLENDED``), so effort is accounted for once instead of
+        twice. The default keeps the shipped behaviour.
+        """
         from recsys.recipes import RECIPES  # local import avoids a hard import-time cycle
 
         self._recipe_catalog_for_training = list(recipe_catalog or RECIPES)
+        self._include_effort = include_effort_features
         self._classifier = _train_classifier(
             seed=seed,
             n_profiles=training_profiles,
             recipe_catalog=self._recipe_catalog_for_training,
+            include_effort=include_effort_features,
         )
 
     def rank(self, request: RecommendationRequest) -> list[ModelRecommendation]:
@@ -268,7 +305,9 @@ class MLRecommendationEngine:
             if not recipe.verified:
                 continue
             features = compute_features(request, recipe)
-            score = self._classifier.predict_proba(_feature_vector(features))
+            score = self._classifier.predict_proba(
+                _feature_vector(features, include_effort=self._include_effort)
+            )
             score = max(0.0, min(1.0, score))
 
             if recipe.recipe_id in request.user.saved_recipe_ids:
@@ -323,8 +362,6 @@ class MLRecommendationEngine:
             codes.append("markdown_supply_likely")
         if request.user.preferred_brands and features["coverage"] > 0:
             codes.append("brand_affinity_match")
-        if any(i.ingredient_id in request.user.home_ingredient_ids for i in recipe.ingredients):
-            codes.append("home_ingredient_reuse")
         avg_total = _avg_receipt_total(request)
         if avg_total > 0 and features["_missing_cost"] <= 0.5 * avg_total:
             codes.append("usual_price_band")

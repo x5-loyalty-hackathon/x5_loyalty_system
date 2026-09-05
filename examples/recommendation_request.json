@@ -4,7 +4,6 @@
     "radius_km": 3.0,
     "excluded_categories": [],
     "excluded_ingredient_ids": [],
-    "home_ingredient_ids": ["flour"],
     "saved_recipe_ids": ["cottage_cheese_bake"],
     "history_categories": ["dairy", "vegetable", "meat"],
     "preferred_brands": ["Зелёная линия"]
@@ -119,6 +118,20 @@
       "safety_eligible": true,
       "expires_at": "2026-09-05T22:00:00+03:00",
       "available_quantity": 3,
+      "fulfillment_options": ["delivery", "next_visit"]
+    },
+    {
+      "sku_id": "flour_01",
+      "name": "Мука",
+      "category": "pantry",
+      "ingredient_ids": ["flour"],
+      "store_id": "store_17",
+      "distance_km": 0.8,
+      "price": 65.0,
+      "original_price": 65.0,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 8,
       "fulfillment_options": ["delivery", "next_visit"]
     }
   ],

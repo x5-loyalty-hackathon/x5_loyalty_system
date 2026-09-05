@@ -23,7 +23,7 @@
 | `is_saved` | рецепт в сохранённых | `user.saved_recipe_ids` |
 | `novelty` | 1 − взвешенная комбинация `ingredient_affinity`/`history_affinity` | производный |
 | `time_fit` | мягкий штраф за рецепты дольше 30 минут | `recipe.preparation_minutes` |
-| `missing_ratio` | доля недостающих ингредиентов | `current_receipt` + `user.home_ingredient_ids` |
+| `missing_ratio` | доля недостающих ингредиентов | `current_receipt` |
 | `missing_cost_norm` | оценка стоимости докупки (по средним ценам каталога) | `recsys.catalog.BASE_PRICE_RUB` |
 | `markdown_supply_signal` | доля недостающих ингредиентов, у которых в радиусе есть markdown-товар | `inventory_snapshot` |
 

@@ -1,5 +1,9 @@
 """Synthetic per-request store inventory generator.
 
+Prices come from ``recsys.catalog.BASE_PRICE_RUB``, which is calibrated against
+a real X5 price distribution but still modelled per item, so every product this
+generates is marked ``price_is_estimate``.
+
 ``InventoryProduct.distance_km`` is already user-relative in the contract
 (``app/contracts.py``), so inventory is generated per request/profile rather
 than as one global catalog with coordinates — distances are sampled around
@@ -20,6 +24,7 @@ from datetime import datetime, timedelta
 from app.contracts import FulfillmentOption, InventoryProduct
 from app.safety import RESCUE_CATEGORIES
 from recsys.catalog import BASE_PRICE_RUB, BRANDS, INGREDIENTS, ingredient_category, ingredient_name
+from recsys.sku_mapping import synthetic_sku_id
 
 # Probabilities are illustrative demo constants (see
 # docs/research/recsys/economics-and-simulation.md), not measured X5 supply
@@ -57,7 +62,7 @@ def _full_price_product(
     base_price = BASE_PRICE_RUB[ingredient_id]
     price = round(base_price * rng.uniform(0.95, 1.2), 2)
     return InventoryProduct(
-        sku_id=f"{ingredient_id}_fp_{index}",
+        sku_id=synthetic_sku_id(ingredient_id, "fp", index),
         name=ingredient_name(ingredient_id),
         category=ingredient_category(ingredient_id),
         ingredient_ids={ingredient_id},
@@ -71,6 +76,7 @@ def _full_price_product(
         expires_at=None,
         available_quantity=0 if rng.random() < P_OUT_OF_STOCK else rng.randint(1, 25),
         fulfillment_options=_fulfillment_options(rng),
+        price_is_estimate=True,
     )
 
 
@@ -91,7 +97,7 @@ def _markdown_product(
     else:
         expires_at = now + timedelta(hours=rng.uniform(6, 72))
     return InventoryProduct(
-        sku_id=f"{ingredient_id}_md_{index}",
+        sku_id=synthetic_sku_id(ingredient_id, "md", index),
         name=ingredient_name(ingredient_id),
         category=ingredient_category(ingredient_id),
         ingredient_ids={ingredient_id},
@@ -105,6 +111,7 @@ def _markdown_product(
         expires_at=expires_at,
         available_quantity=0 if rng.random() < P_OUT_OF_STOCK else rng.randint(1, 6),
         fulfillment_options=_fulfillment_options(rng),
+        price_is_estimate=True,
     )
 
 

@@ -47,7 +47,7 @@ def test_example_returns_current_repeat_and_explore_modes() -> None:
     body = post_recommendation(deepcopy(EXAMPLE_REQUEST))
 
     assert body["contract_version"] == "1.0"
-    assert [item["missing_count"] for item in body["recommendations"]] == [1, 1, 2]
+    assert [item["missing_count"] for item in body["recommendations"]] == [1, 2, 2]
     assert {item["mode"] for item in body["recommendations"]} == {
         "current",
         "repeat",

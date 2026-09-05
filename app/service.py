@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.contracts import (
     FulfillmentOption,
     IngredientRecommendation,
@@ -7,6 +9,7 @@ from app.contracts import (
     InventoryProduct,
     ModelRecommendation,
     ProductOption,
+    ReadyMealOption,
     Recipe,
     RecipeIngredient,
     RecipeRecommendation,
@@ -22,6 +25,59 @@ NO_RESERVATION_WARNING = (
     "Markdown availability is best-effort: the item is not reserved."
 )
 
+#: Missing-ingredient count at which a recipe is treated as maximally effortful
+#: when a policy needs to put effort on a 0..1 scale.
+MAX_EFFORT_MISSING_COUNT = 8
+
+
+@dataclass(frozen=True)
+class RankingPolicy:
+    """How assembled candidates are ordered before the response is truncated.
+
+    This is a product decision that was previously implicit in one ``sort``
+    call, and it turned out to dominate the model entirely: ordering by
+    ``missing_count`` first makes ``model_score`` a tiebreaker, so a trained
+    ranker and a random one return the same top-3 for most users (measured in
+    ``docs/benchmark-report.md``). Making the policy an object means the choice
+    can be stated, compared between arms and defended, instead of being a line
+    nobody re-reads.
+
+    ``model_weight`` is the share of the blended score that comes from the
+    recommender; the rest comes from how little the user has to buy.
+    """
+
+    name: str
+    model_weight: float = 0.0
+    #: When True, order strictly by missing_count and use the score only to
+    #: break ties. This is the behaviour the service shipped with.
+    effort_first: bool = True
+
+    def sort_key(self, item: RecipeRecommendation) -> tuple:
+        if self.effort_first:
+            return (item.missing_count, -item.model_score, item.recipe_id)
+        effort_score = 1.0 - min(item.missing_count, MAX_EFFORT_MISSING_COUNT) / (
+            MAX_EFFORT_MISSING_COUNT
+        )
+        blended = (
+            self.model_weight * item.model_score
+            + (1.0 - self.model_weight) * effort_score
+        )
+        return (-round(blended, 6), item.missing_count, item.recipe_id)
+
+
+#: Ship-as-is: easiest-to-cook first, relevance only as a tiebreaker.
+EFFORT_FIRST = RankingPolicy(name="effort_first", model_weight=0.0, effort_first=True)
+
+#: Equal say to relevance and effort.
+BLENDED = RankingPolicy(name="blended", model_weight=0.5, effort_first=False)
+
+#: Relevance dominates; effort still breaks ties.
+RELEVANCE_FIRST = RankingPolicy(
+    name="relevance_first", model_weight=0.9, effort_first=False
+)
+
+DEFAULT_RANKING_POLICY = EFFORT_FIRST
+
 
 class RecommendationService:
     def __init__(
@@ -29,9 +85,11 @@ class RecommendationService:
         *,
         engine: RecommendationEngine,
         safety_policy: SafetyPolicy,
+        ranking_policy: RankingPolicy = DEFAULT_RANKING_POLICY,
     ) -> None:
         self._engine = engine
         self._safety_policy = safety_policy
+        self._ranking_policy = ranking_policy
 
     def recommend(self, request: RecommendationRequest) -> RecommendationResponse:
         recipes = {recipe.recipe_id: recipe for recipe in request.recipe_catalog}
@@ -77,9 +135,7 @@ class RecommendationService:
                 continue
             recommendations.append(assembled)
 
-        recommendations.sort(
-            key=lambda item: (item.missing_count, -item.model_score, item.recipe_id)
-        )
+        recommendations.sort(key=self._ranking_policy.sort_key)
 
         return RecommendationResponse(
             user_id=request.user.user_id,
@@ -129,17 +185,6 @@ class RecommendationService:
                 )
                 continue
 
-            if ingredient.ingredient_id in request.user.home_ingredient_ids:
-                ingredients.append(
-                    IngredientRecommendation(
-                        ingredient_id=ingredient.ingredient_id,
-                        name=ingredient.name,
-                        category=ingredient.category,
-                        source=IngredientSource.HOME,
-                    )
-                )
-                continue
-
             valid_products = self._valid_products(
                 request=request,
                 ingredient=ingredient,
@@ -179,6 +224,9 @@ class RecommendationService:
             )
 
         warnings = [NO_RESERVATION_WARNING] if has_markdown else []
+        ready_meal_options = self._ready_meal_options(
+            recipe_id=recipe.recipe_id, request=request
+        )
         return (
             RecipeRecommendation(
                 recipe_id=recipe.recipe_id,
@@ -193,8 +241,37 @@ class RecommendationService:
                     SafetyStatus.ADJUSTED if warnings else SafetyStatus.APPROVED
                 ),
                 warnings=warnings,
+                ready_meal_alternative=ready_meal_options[0] if ready_meal_options else None,
+                ready_meal_option_count=len(ready_meal_options),
             ),
             None,
+        )
+
+    @staticmethod
+    def _ready_meal_options(
+        *,
+        recipe_id: str,
+        request: RecommendationRequest,
+    ) -> list[ReadyMealOption]:
+        """Prepared counterparts for one recipe, cheapest first.
+
+        Options without a price sort last rather than being dropped: a known
+        counterpart with an unknown price is still worth showing, it just
+        cannot lead the "or buy it ready for N ₽" offer.
+        """
+        options = [
+            option
+            for option in request.ready_meal_options
+            if recipe_id in option.recipe_ids
+        ]
+        return sorted(
+            options,
+            key=lambda option: (
+                option.price is None,
+                option.price if option.price is not None else 0.0,
+                option.chain,
+                option.plu,
+            ),
         )
 
     def _valid_products(
@@ -242,4 +319,5 @@ class RecommendationService:
             ),
             expires_at=product.expires_at,
             fulfillment_options=product.fulfillment_options,
+            price_is_estimate=product.price_is_estimate,
         )

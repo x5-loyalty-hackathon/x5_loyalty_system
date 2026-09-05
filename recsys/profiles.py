@@ -129,6 +129,9 @@ ARCHETYPES: dict[str, ArchetypeParams] = {
 assert abs(sum(a.population_share for a in ARCHETYPES.values()) - 1.0) < 1e-9
 
 
+ArchetypeTable = dict[str, ArchetypeParams]
+
+
 @dataclass
 class SyntheticProfile:
     archetype: str
@@ -138,10 +141,13 @@ class SyntheticProfile:
     now: datetime = DEFAULT_NOW
 
 
-def sample_archetype(rng: random.Random) -> ArchetypeParams:
-    names = list(ARCHETYPES)
-    weights = [ARCHETYPES[n].population_share for n in names]
-    return ARCHETYPES[rng.choices(names, weights=weights, k=1)[0]]
+def sample_archetype(
+    rng: random.Random, archetypes: ArchetypeTable | None = None
+) -> ArchetypeParams:
+    table = archetypes if archetypes is not None else ARCHETYPES
+    names = list(table)
+    weights = [table[n].population_share for n in names]
+    return table[rng.choices(names, weights=weights, k=1)[0]]
 
 
 def _weighted_category(rng: random.Random, params: ArchetypeParams) -> str:
@@ -233,14 +239,6 @@ def _generate_receipt(
     )
 
 
-def _sample_home_ingredients(rng: random.Random) -> set[str]:
-    pool = INGREDIENTS_BY_CATEGORY["pantry"] + INGREDIENTS_BY_CATEGORY["grain"]
-    count = rng.choice([0, 1, 1, 2, 2, 3])
-    if count == 0 or not pool:
-        return set()
-    return set(rng.sample(list(pool), k=min(count, len(pool))))
-
-
 def _sample_saved_recipes(rng: random.Random, params: ArchetypeParams) -> set[str]:
     if rng.random() > params.repeat_probability:
         return set()
@@ -255,8 +253,21 @@ def _sample_saved_recipes(rng: random.Random, params: ArchetypeParams) -> set[st
     return set(rng.sample(matching, k=min(count, len(matching))))
 
 
-def generate_profile(rng: random.Random, index: int, now: datetime = DEFAULT_NOW) -> SyntheticProfile:
-    params = sample_archetype(rng)
+def generate_profile(
+    rng: random.Random,
+    index: int,
+    now: datetime = DEFAULT_NOW,
+    *,
+    archetypes: ArchetypeTable | None = None,
+) -> SyntheticProfile:
+    """Sample one profile.
+
+    ``archetypes`` lets a caller run the same generator inside a different
+    behavioural world (``recsys.regimes``) without redefining the generator.
+    Defaults to the module-level ``ARCHETYPES``, so existing callers are
+    unaffected.
+    """
+    params = sample_archetype(rng, archetypes)
     user_id = f"synthetic_{params.name}_{index:04d}"
     store_id = f"store_{10 + (index % 12)}"
 
@@ -306,7 +317,6 @@ def generate_profile(rng: random.Random, index: int, now: datetime = DEFAULT_NOW
         radius_km=round(rng.uniform(*params.radius_km_range), 1),
         excluded_categories=excluded_categories,
         excluded_ingredient_ids=excluded_ingredient_ids,
-        home_ingredient_ids=_sample_home_ingredients(rng),
         saved_recipe_ids=_sample_saved_recipes(rng, params),
         history_categories=sorted(set(history_categories)),
         preferred_brands=preferred_brands,
@@ -326,10 +336,11 @@ def generate_population(
     *,
     seed: int = 42,
     now: datetime = DEFAULT_NOW,
+    archetypes: ArchetypeTable | None = None,
 ) -> list[SyntheticProfile]:
     """Sample N profiles from the archetype mixture. Deterministic given seed."""
     rng = random.Random(seed)
-    return [generate_profile(rng, i, now=now) for i in range(n)]
+    return [generate_profile(rng, i, now=now, archetypes=archetypes) for i in range(n)]
 
 
 def generate_balanced_sample(

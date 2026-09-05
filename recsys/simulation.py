@@ -189,10 +189,13 @@ def simulate_user(
     return result
 
 
-def sample_archetype(rng: random.Random) -> ArchetypeParams:
-    names = list(ARCHETYPES)
-    weights = [ARCHETYPES[n].population_share for n in names]
-    return ARCHETYPES[rng.choices(names, weights=weights, k=1)[0]]
+def sample_archetype(
+    rng: random.Random, archetypes: dict[str, ArchetypeParams] | None = None
+) -> ArchetypeParams:
+    table = archetypes if archetypes is not None else ARCHETYPES
+    names = list(table)
+    weights = [table[n].population_share for n in names]
+    return table[rng.choices(names, weights=weights, k=1)[0]]
 
 
 def run_simulation(

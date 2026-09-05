@@ -17,6 +17,27 @@ bootstrapped from. The own-vs-shuffled *gap* is not self-referential in the
 same way: it tests whether swapping in the wrong history measurably hurts
 oracle-judged relevance, which is the actual claim this PoC needs to
 support. Neither number is evidence of real-user relevance.
+
+Scope note added after the September 2026 bench run
+---------------------------------------------------
+This module calls ``engine.rank()`` **directly**, so it measures the ranker in
+isolation. The product does not serve that ranking: ``app.service`` re-sorts
+the assembled candidates through ``RankingPolicy``, and the shipped
+``EFFORT_FIRST`` policy orders by ``missing_count`` with ``model_score`` as a
+tiebreaker only. A model can therefore score well here and reach the user
+barely distinguishable from a random ranker — which is what
+``docs/benchmark-report.md`` measured (38% win rate against a random control
+under the shipped policy, against 98% under a relevance-led one).
+
+Two consequences worth keeping in view when reading any number below:
+
+* ``hit_rate_own`` is an upper bound on what the pipeline delivers, not an
+  estimate of it. End-to-end behaviour is ``recsys.benchmark``.
+* ``oracle_relevant`` is close to a function of ``missing_count``: no recipe
+  with six or more missing ingredients is ever judged relevant, because
+  ``ArchetypeParams.max_missing_tolerance`` caps it. Held at fixed effort, the
+  trained model separates relevant from irrelevant at AUC 0.53 — see
+  ``recsys.diagnostics.stratified_signal``.
 """
 
 from __future__ import annotations
@@ -91,7 +112,6 @@ def _shuffled_user(own: UserProfile, partner: UserProfile) -> UserProfile:
         radius_km=own.radius_km,
         excluded_categories=own.excluded_categories,
         excluded_ingredient_ids=own.excluded_ingredient_ids,
-        home_ingredient_ids=partner.home_ingredient_ids,
         saved_recipe_ids=partner.saved_recipe_ids,
         history_categories=partner.history_categories,
         preferred_brands=partner.preferred_brands,

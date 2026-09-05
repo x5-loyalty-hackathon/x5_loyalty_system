@@ -34,7 +34,7 @@
 | Нет денежной награды | реферальная награда в `app/referral.py` — виртуальный прогресс с `monetary_value=0` |
 | Частота считается по уникальным дням | `app/state.py` схлопывает все чеки одного дня в один purchase day |
 | Precision важнее recall | `app/fraud.py`: неоднозначные device/payment-совпадения уходят в `pending_review`, hard-block только на явном пороге |
-| Ограничения задаёт пользователь явно | в схеме запроса есть явные исключения и `home_ingredient_ids`; backend не делает health/family/lifestyle inference |
+| Ограничения задаёт пользователь явно | в схеме запроса есть явные исключения; backend не делает health/family/lifestyle inference |
 | Food safety не генерируется LLM | инструкции берутся из проверенного каталога; safety-правила детерминированы и покрыты тестами |
 | Коммерция не влияет на organic rank | commercial metadata отсутствует в model/API контракте |
 

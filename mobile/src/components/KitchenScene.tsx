@@ -1,17 +1,9 @@
-import { Image, Pressable, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
 import type { KitchenProduct } from '../data/demo';
 import { color } from '../theme/tokens';
-
-/**
- * Спрайты продуктов. Пока пусто: до появления арта слот показывает
- * заглушку в стиле разметки из дизайн-бандла. Чтобы подключить картинку,
- * достаточно добавить сюда `ingredient_id: require('...')` — остальной
- * код менять не нужно.
- */
-const PRODUCT_ART: Record<string, ImageSourcePropType> = {};
 
 const BAND_HEIGHT = 286;
 /** Арт: 117×62 клетки по 4 точки, со сдвигом влево как в макете. */
@@ -32,23 +24,14 @@ export function KitchenScene({
     <View style={styles.band}>
       <Image source={require('../../assets/kitchen/kitchen-band.png')} style={styles.art} />
 
-      {placed.map(({ product, slot }) => {
-        const rect = slotRect(slot);
-        const art = PRODUCT_ART[product.id];
-        return (
-          <View key={slot.id} style={[styles.slot, rect]} pointerEvents="none">
-            {art ? (
-              <Image source={art} style={styles.sprite} resizeMode="contain" />
-            ) : (
-              <View style={styles.stub}>
-                <Text style={styles.stubText} numberOfLines={1}>
-                  {product.name}
-                </Text>
-              </View>
-            )}
-          </View>
-        );
-      })}
+      {placed.map(({ sprite, slot }) => (
+        <Image
+          key={slot.id}
+          source={sprite.source}
+          style={[styles.sprite, slotRect(slot)]}
+          resizeMode="stretch"
+        />
+      ))}
 
       <LinearGradient colors={['rgba(244,231,205,0)', color.cream]} style={styles.fade} />
 
@@ -71,21 +54,8 @@ const styles = StyleSheet.create({
   band: { height: BAND_HEIGHT, backgroundColor: color.cream, overflow: 'hidden' },
   art: { position: 'absolute', ...ART },
 
-  slot: { position: 'absolute', alignItems: 'center', justifyContent: 'center' },
-  sprite: { width: '100%', height: '100%' },
-  /** Заглушка повторяет разметку слотов из дизайн-бандла: пунктир и заливка. */
-  stub: {
-    flex: 1,
-    alignSelf: 'stretch',
-    borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: 'rgba(74,46,28,0.75)',
-    backgroundColor: 'rgba(176,106,69,0.16)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 2,
-  },
-  stubText: { color: color.brown, fontSize: 7, fontWeight: '700' },
+  /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */
+  sprite: { position: 'absolute' },
 
   fade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 46 },
   speech: {

@@ -49,7 +49,14 @@ data/generated/
 # recsys/calibration/fit_from_kaggle.py) — never committed, per
 # CONTRIBUTING.md's "no large generated datasets" rule and Kaggle's own
 # redistribution terms.
-data/
+#
+# Anchored with a leading slash. Without it the pattern matched at every
+# level and silently swallowed recsys/data/, whose small committed JSON
+# references recsys imports at runtime — ML tests failed on a fresh clone.
+/data/
+
+# Raw collector output: a 29 MB SQLite plus ~24 MB of raw API dumps.
+x5_ready_food_collector/data/
 
 # Notebooks
 .ipynb_checkpoints/

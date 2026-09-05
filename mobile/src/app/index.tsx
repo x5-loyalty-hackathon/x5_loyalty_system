@@ -1,25 +1,28 @@
-import { useEffect } from 'react';
-import {
-  ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View,
-} from 'react-native';
+import { useState } from 'react';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
-import { useDemo } from '../state/DemoContext';
+import { PhotoStub } from '../components/PhotoStub';
+import { kitchenProducts, type KitchenProduct } from '../data/demo';
 import { color } from '../theme/tokens';
+
+type Filter = 'all' | 'soon';
+
+const TONE: Record<KitchenProduct['tone'], string> = {
+  good: color.green,
+  soon: color.orange,
+  today: color.red,
+};
 
 export default function KitchenScreen() {
   const router = useRouter();
-  const { progress, progressStatus, progressError, loadProgress, receiptStatus } = useDemo();
+  const [filter, setFilter] = useState<Filter>('all');
 
-  useEffect(() => {
-    if (progressStatus === 'idle') void loadProgress();
-  }, [loadProgress, progressStatus]);
-
-  const xpShare = progress
-    ? progress.avatar_xp / Math.max(1, progress.avatar_xp + progress.xp_to_next_level)
-    : 0;
+  const soonCount = kitchenProducts.filter((item) => item.tone !== 'good').length;
+  const products =
+    filter === 'soon' ? kitchenProducts.filter((item) => item.tone !== 'good') : kitchenProducts;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -37,9 +40,7 @@ export default function KitchenScreen() {
             />
             <View style={styles.speech}>
               <Text style={styles.speechText}>
-                {receiptStatus
-                  ? 'Чек пришёл — я разложил продукты и записал рецепт в книгу.'
-                  : 'Молоко надо выпить сегодня. Сварим что-нибудь?'}
+                Молоко надо выпить сегодня. Сварим что-нибудь?
               </Text>
             </View>
             <Pressable accessibilityLabel="Меню" style={styles.menu}>
@@ -53,60 +54,38 @@ export default function KitchenScreen() {
           </View>
 
           <View style={styles.sheet}>
-            {progressStatus === 'loading' || progressStatus === 'idle' ? (
-              <View style={styles.center}>
-                <ActivityIndicator color={color.red} />
-                <Text style={styles.centerText}>Домовой считает прогресс…</Text>
+            <View style={styles.sectionTitleRow}>
+              <Text style={styles.title}>Что есть на кухне</Text>
+              <Text style={styles.count}>по чекам · {kitchenProducts.length}</Text>
+            </View>
+
+            <View style={styles.filters}>
+              <FilterChip
+                label="Все"
+                selected={filter === 'all'}
+                onPress={() => setFilter('all')}
+              />
+              <FilterChip
+                label={`Скоро испортится · ${soonCount}`}
+                selected={filter === 'soon'}
+                onPress={() => setFilter('soon')}
+              />
+            </View>
+
+            <View style={styles.grid}>
+              {products.map((product) => (
+                <KitchenCard key={product.id} product={product} />
+              ))}
+            </View>
+
+            <View style={styles.hint}>
+              <View style={styles.hintMark}>
+                <Text style={styles.hintMarkText}>×2</Text>
               </View>
-            ) : progressStatus === 'error' || !progress ? (
-              <View style={styles.center}>
-                <Text style={styles.centerTitle}>Кухня не отвечает</Text>
-                <Text style={styles.centerText}>{progressError}</Text>
-                <Pressable style={styles.retry} onPress={loadProgress}>
-                  <Text style={styles.retryText}>Повторить</Text>
-                </Pressable>
-              </View>
-            ) : (
-              <>
-                <View style={styles.sectionTitleRow}>
-                  <Text style={styles.title}>Кухня Домового</Text>
-                  <Text style={styles.count}>уровень {progress.avatar_level}</Text>
-                </View>
-
-                <View style={styles.xpCard}>
-                  <View style={styles.xpRow}>
-                    <Text style={styles.xpValue}>{progress.avatar_xp} XP</Text>
-                    <Text style={styles.xpHint}>
-                      до уровня {progress.avatar_level + 1} — {progress.xp_to_next_level}
-                    </Text>
-                  </View>
-                  <View style={styles.xpTrack}>
-                    <View style={[styles.xpFill, { width: `${Math.round(xpShare * 100)}%` }]} />
-                  </View>
-                </View>
-
-                <View style={styles.grid}>
-                  <Stat value={String(progress.recipes_completed)} label="рецептов приготовлено" />
-                  <Stat
-                    value={`${Math.round(progress.markdown_savings)} ₽`}
-                    label="фактическая экономия"
-                    tone={color.green}
-                  />
-                  <Stat value={String(Math.round(progress.rescue_items))} label="куплено из подбора" />
-                  <Stat value={String(progress.purchase_days)} label="дней с покупками" />
-                </View>
-
-                <View style={styles.hint}>
-                  <View style={styles.hintMark}>
-                    <Text style={styles.hintMarkText}>#{progress.private_rank.position}</Text>
-                  </View>
-                  <Text style={styles.hintText}>
-                    Ваше место среди {progress.private_rank.cohort_size} участников.
-                    Список других покупателей не показывается.
-                  </Text>
-                </View>
-              </>
-            )}
+              <Text style={styles.hintText}>
+                Из этих продуктов Домовой собрал 2 рецепта без докупок
+              </Text>
+            </View>
           </View>
         </ScrollView>
 
@@ -122,11 +101,26 @@ export default function KitchenScreen() {
   );
 }
 
-function Stat({ value, label, tone }: { value: string; label: string; tone?: string }) {
+function FilterChip({
+  label, selected, onPress,
+}: { label: string; selected: boolean; onPress: () => void }) {
   return (
-    <View style={styles.stat}>
-      <Text style={[styles.statValue, tone ? { color: tone } : null]}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
+    <Pressable style={[styles.filter, selected && styles.filterSelected]} onPress={onPress}>
+      <Text style={[styles.filterText, selected && styles.filterTextSelected]}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function KitchenCard({ product }: { product: KitchenProduct }) {
+  return (
+    <View style={styles.card}>
+      <PhotoStub style={styles.cardPhoto} />
+      <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
+      <Text style={styles.cardQty}>{product.quantity}</Text>
+      <View style={styles.pill}>
+        <View style={[styles.pillDot, { backgroundColor: TONE[product.tone] }]} />
+        <Text style={styles.pillText}>{product.expires}</Text>
+      </View>
     </View>
   );
 }
@@ -154,7 +148,7 @@ const styles = StyleSheet.create({
 
   sheet: {
     marginTop: -18, paddingHorizontal: 16, paddingTop: 18, backgroundColor: color.bg,
-    borderTopLeftRadius: 22, borderTopRightRadius: 22, minHeight: 380,
+    borderTopLeftRadius: 22, borderTopRightRadius: 22, minHeight: 420,
   },
   sectionTitleRow: {
     flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12,
@@ -162,34 +156,40 @@ const styles = StyleSheet.create({
   title: { color: color.ink, fontSize: 22, fontWeight: '700' },
   count: { color: color.muted, fontSize: 13, fontWeight: '600' },
 
-  xpCard: { backgroundColor: color.white, borderRadius: 18, padding: 14, marginBottom: 12 },
-  xpRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  xpValue: { color: color.ink, fontSize: 20, fontWeight: '700' },
-  xpHint: { color: color.muted, fontSize: 12 },
-  xpTrack: { height: 8, borderRadius: 4, backgroundColor: color.bg, marginTop: 10, overflow: 'hidden' },
-  xpFill: { height: 8, borderRadius: 4, backgroundColor: color.red },
+  filters: { flexDirection: 'row', gap: 8, marginBottom: 14 },
+  filter: {
+    paddingHorizontal: 14, paddingVertical: 9, borderRadius: 18, backgroundColor: color.white,
+    minHeight: 36, justifyContent: 'center',
+  },
+  filterSelected: { backgroundColor: color.ink },
+  filterText: { color: color.ink, fontSize: 13, fontWeight: '600' },
+  filterTextSelected: { color: color.white },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  stat: { width: '48%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16, padding: 14 },
-  statValue: { color: color.ink, fontSize: 22, fontWeight: '700', marginBottom: 4 },
-  statLabel: { color: color.muted, fontSize: 11.5, lineHeight: 15 },
+  card: {
+    width: '31%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16,
+    padding: 8, paddingBottom: 12,
+  },
+  cardPhoto: { height: 78, borderRadius: 12, marginBottom: 8 },
+  cardName: { color: color.ink, fontSize: 12, lineHeight: 15, fontWeight: '600', marginBottom: 3 },
+  cardQty: { color: color.muted, fontSize: 11, marginBottom: 7 },
+  pill: {
+    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 4,
+    paddingHorizontal: 7, paddingVertical: 4, borderRadius: 9, backgroundColor: color.bg,
+  },
+  pillDot: { width: 6, height: 6, borderRadius: 3 },
+  pillText: { color: color.body, fontSize: 10.5, fontWeight: '600' },
 
   hint: {
-    marginTop: 12, padding: 14, backgroundColor: color.white, borderRadius: 18,
+    marginTop: 16, padding: 14, backgroundColor: color.white, borderRadius: 18,
     flexDirection: 'row', alignItems: 'center', gap: 12,
   },
   hintMark: {
-    minWidth: 44, height: 38, paddingHorizontal: 8, borderRadius: 12,
-    backgroundColor: color.greenSoft, alignItems: 'center', justifyContent: 'center',
+    width: 38, height: 38, borderRadius: 12, backgroundColor: color.greenSoft,
+    alignItems: 'center', justifyContent: 'center',
   },
-  hintMarkText: { color: color.green, fontSize: 14, fontWeight: '700' },
+  hintMarkText: { color: color.green, fontSize: 15, fontWeight: '700' },
   hintText: { flex: 1, color: color.body, fontSize: 12.5, lineHeight: 17.5 },
-
-  center: { alignItems: 'center', justifyContent: 'center', paddingVertical: 60, gap: 10 },
-  centerTitle: { color: color.ink, fontSize: 17, fontWeight: '700' },
-  centerText: { color: color.muted, fontSize: 13, textAlign: 'center' },
-  retry: { marginTop: 6, paddingHorizontal: 22, paddingVertical: 12, borderRadius: 14, backgroundColor: color.red },
-  retryText: { color: color.white, fontWeight: '700' },
 
   ctaWrap: { position: 'absolute', left: 0, right: 0, bottom: 74, paddingHorizontal: 16, paddingBottom: 12 },
   cta: {

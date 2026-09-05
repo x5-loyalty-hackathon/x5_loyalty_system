@@ -3,11 +3,11 @@ import { useRouter } from 'expo-router';
 import { color } from '../theme/tokens';
 
 type NavKey = 'kitchen' | 'recipes' | 'catalog' | 'profile';
-const items: Array<{ key: NavKey; label: string; glyph: string; route?: '/' | '/recipes' | '/products' }> = [
+const items: Array<{ key: NavKey; label: string; glyph: string; route?: '/' | '/recipes' | '/products' | '/profile' }> = [
   { key: 'kitchen', label: 'Кухня', glyph: '■', route: '/' },
   { key: 'recipes', label: 'Рецепты', glyph: '▤', route: '/recipes' },
   { key: 'catalog', label: 'Каталог', glyph: '▦', route: '/products' },
-  { key: 'profile', label: 'Профиль', glyph: '●' },
+  { key: 'profile', label: 'Профиль', glyph: '●', route: '/profile' },
 ];
 
 export function BottomNav({ active }: { active: NavKey }) {

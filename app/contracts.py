@@ -26,6 +26,11 @@ class FulfillmentOption(StrEnum):
 
 class IngredientSource(StrEnum):
     RECEIPT = "receipt"
+    #: Believed to be at home from purchase history, not observed today. Kept
+    #: distinct from RECEIPT on purpose: telling someone they have eggs when
+    #: they do not strands them mid-recipe, so the response must never present
+    #: a guess as an observation.
+    PANTRY_LIKELY = "pantry_likely"
     MARKDOWN = "markdown"
     FULL_PRICE = "full_price"
     UNAVAILABLE = "unavailable"
@@ -215,6 +220,9 @@ class IngredientRecommendation(ApiModel):
     category: str
     source: IngredientSource
     product_options: list[ProductOption] = Field(default_factory=list)
+    #: Set only for ``PANTRY_LIKELY``: how sure we are it is still at home.
+    #: Present so a client can hedge the wording instead of asserting.
+    pantry_probability: float | None = Field(default=None, ge=0.0, le=1.0)
 
 
 class RecipeRecommendation(ApiModel):

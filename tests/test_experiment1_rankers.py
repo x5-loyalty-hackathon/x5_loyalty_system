@@ -11,7 +11,10 @@ import random
 import pytest
 
 from app.contracts import ModelRecommendation, RecommendationRequest
-from recsys.catboost_model import CatBoostRecommendationEngine
+from recsys.catboost_model import (
+    GRADIENT_BOOSTER_AVAILABLE,
+    CatBoostRecommendationEngine,
+)
 from recsys.coverage_heuristic_engine import CoverageHeuristicEngine
 from recsys.inventory import generate_inventory
 from recsys.model import FEATURE_NAMES, MLRecommendationEngine, _feature_vector, compute_features
@@ -20,6 +23,15 @@ from recsys.profiles import generate_population
 from recsys.recipes import RECIPES
 
 SEED = 20260905
+
+#: Both boosters live in optional extras, so a plain `.[dev]` install (what CI
+#: does) has neither. Skipped rather than failed, and skipped per-test rather
+#: than per-module: the coverage/oracle/logreg rankers in this file need no
+#: booster and must keep running where one is absent.
+needs_booster = pytest.mark.skipif(
+    not GRADIENT_BOOSTER_AVAILABLE,
+    reason="no gradient booster installed (pip install -e '.[ml]' or '.[experiment1]')",
+)
 
 
 def _sample_request(seed: int = SEED, index: int = 0) -> tuple:
@@ -51,12 +63,14 @@ def request_fixture():
 
 @pytest.fixture(scope="module")
 def all_engines():
-    return {
+    engines = {
         "coverage": CoverageHeuristicEngine(),
         "ml": MLRecommendationEngine(training_profiles=40),
-        "catboost": CatBoostRecommendationEngine(training_profiles=40),
         "oracle": OracleRankingEngine(),
     }
+    if GRADIENT_BOOSTER_AVAILABLE:
+        engines["catboost"] = CatBoostRecommendationEngine(training_profiles=40)
+    return engines
 
 
 class TestProtocolCompliance:
@@ -119,6 +133,7 @@ class TestDeterminism:
         b = MLRecommendationEngine(seed=555, training_profiles=40).rank(request)
         assert [(r.recipe_id, r.score) for r in a] == [(r.recipe_id, r.score) for r in b]
 
+    @needs_booster
     def test_catboost_engine_is_deterministic_given_the_same_seed(self, request_fixture) -> None:
         _, request = request_fixture
         a = CatBoostRecommendationEngine(seed=555, training_profiles=40).rank(request)
@@ -178,6 +193,7 @@ class TestFeatureVectorShape:
         assert len(vector) == len(FEATURE_NAMES)
         assert all(isinstance(v, float) for v in vector)
 
+    @needs_booster
     def test_catboost_and_ml_train_on_identical_row_shape(self) -> None:
         """Same X shape for both classifiers, per the experiment plan's
         requirement that only the classifier differs, not the data."""

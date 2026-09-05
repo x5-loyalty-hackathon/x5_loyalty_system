@@ -32,17 +32,44 @@ from recsys.model import (
 from recsys.pantry import DISABLED_PANTRY, PantryPolicy
 from recsys.profiles import generate_population
 
+# Three cases, not two. The fallback chain used to stop at scikit-learn and
+# let ImportError escape when neither library was installed, which made
+# *importing* this module fail — and pyproject states the opposite contract:
+# the core recsys package depends on nothing beyond `dev`. Both boosters live
+# in optional extras, so a plain `pip install -e '.[dev]'` (what CI does) has
+# neither, and a module-level explosion took the whole pytest collection down
+# with it rather than skipping one file.
+#
+# Importing must therefore always succeed. Missing the dependency is reported
+# as a backend of "unavailable" and only becomes an error when someone
+# actually asks for a booster.
 try:
     from catboost import CatBoostClassifier as _Booster
 
     GRADIENT_BOOSTER_BACKEND = "catboost"
 except ImportError:
-    from sklearn.ensemble import GradientBoostingClassifier as _Booster
+    try:
+        from sklearn.ensemble import GradientBoostingClassifier as _Booster
 
-    GRADIENT_BOOSTER_BACKEND = "sklearn_gbm_substitute"
+        GRADIENT_BOOSTER_BACKEND = "sklearn_gbm_substitute"
+    except ImportError:
+        _Booster = None
+        GRADIENT_BOOSTER_BACKEND = "unavailable"
+
+#: True when a gradient booster can actually be built. Callers that can do
+#: something sensible without one (a test that skips, a report that says which
+#: backend ran) should read this rather than catching ImportError themselves.
+GRADIENT_BOOSTER_AVAILABLE = GRADIENT_BOOSTER_BACKEND != "unavailable"
 
 
 def _make_booster(seed: int):
+    if _Booster is None:
+        raise RuntimeError(
+            "no gradient booster installed: this engine needs either "
+            "`pip install -e '.[experiment1]'` for CatBoost, or "
+            "`pip install -e '.[ml]'` for the scikit-learn substitute. "
+            "See GRADIENT_BOOSTER_BACKEND for which one is in use."
+        )
     if GRADIENT_BOOSTER_BACKEND == "catboost":
         return _Booster(
             iterations=200,

@@ -142,12 +142,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       const next = [...current];
       for (const product of basket) {
         const id = product.ingredientId ?? product.id;
-        const item = {
-          id,
-          name: product.name,
-          quantity: product.unit,
-          markdown: product.markdown,
-        };
+        const item = { id, name: product.name, quantity: product.unit };
         const at = next.findIndex((existing) => existing.id === id);
         if (at >= 0) next[at] = item;
         else next.push(item);

@@ -7,7 +7,7 @@
 ## 1. Кладовка пользователя
 
 ```text
-GET /api/v1/kitchen/{user_id} -> { items: [{ ingredient_id, name, quantity, is_markdown }] }
+GET /api/v1/kitchen/{user_id} -> { items: [{ ingredient_id, name, quantity }] }
 ```
 
 Что лежит дома по подтверждённым чекам. Сейчас фронтенд ведёт этот список сам:

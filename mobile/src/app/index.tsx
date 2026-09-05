@@ -139,11 +139,6 @@ function KitchenCard({ product }: { product: KitchenProduct }) {
       <PhotoStub style={styles.cardPhoto} />
       <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
       <Text style={styles.cardQty}>{product.quantity}</Text>
-      {product.markdown ? (
-        <View style={styles.pill}>
-          <Text style={styles.pillText}>уценка</Text>
-        </View>
-      ) : null}
     </View>
   );
 }
@@ -177,11 +172,6 @@ const styles = StyleSheet.create({
   cardPhoto: { height: 78, borderRadius: 12, marginBottom: 8 },
   cardName: { color: color.ink, fontSize: 12, lineHeight: 15, fontWeight: '600', marginBottom: 3 },
   cardQty: { color: color.muted, fontSize: 11, marginBottom: 7 },
-  pill: {
-    alignSelf: 'flex-start', paddingHorizontal: 7, paddingVertical: 4,
-    borderRadius: 9, backgroundColor: color.orange,
-  },
-  pillText: { color: color.white, fontSize: 10.5, fontWeight: '700' },
 
   step: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12,

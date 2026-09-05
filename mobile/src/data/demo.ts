@@ -114,14 +114,12 @@ export const demoRecipes: DemoRecipe[] = [
 
 /**
  * Продукт на кухне. Срока годности здесь нет намеренно: `ReceiptItem` его не
- * содержит, а выдумывать данные, которых нет в чеке, мы не будем. `markdown`
- * приходит из чека как `is_markdown`.
+ * содержит, а выдумывать данные, которых нет в чеке, мы не будем.
  */
 export interface KitchenProduct {
   id: string;
   name: string;
   quantity: string;
-  markdown?: boolean;
 }
 
 export const kitchenProducts: KitchenProduct[] = [
@@ -129,7 +127,7 @@ export const kitchenProducts: KitchenProduct[] = [
   { id: 'mince', name: 'Фарш индейки', quantity: '400 г' },
   { id: 'tomato', name: 'Помидоры', quantity: '500 г' },
   { id: 'cheese', name: 'Пармезан', quantity: '200 г' },
-  { id: 'milk', name: 'Молоко', quantity: '1 л', markdown: true },
+  { id: 'milk', name: 'Молоко', quantity: '1 л' },
   { id: 'bread', name: 'Хлеб', quantity: '400 г' },
 ];
 

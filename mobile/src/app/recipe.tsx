@@ -17,11 +17,16 @@ function missingLabel(count: number): string {
 export default function RecipeScreen() {
   const router = useRouter();
   const {
-    selectedRecipe, isIngredientAvailable, toggleIngredient, selectIngredient,
+    selectedRecipe, isIngredientAvailable, toggleIngredient, selectIngredient, startCooking,
   } = useDemo();
 
   const missing = selectedRecipe.ingredients.filter((item) => !isIngredientAvailable(item));
   const have = selectedRecipe.ingredients.length - missing.length;
+
+  const beginCooking = () => {
+    startCooking(selectedRecipe.id);
+    router.replace('/');
+  };
 
   const openProducts = (ingredient?: DemoIngredient) => {
     const target = ingredient ?? missing[0] ?? selectedRecipe.ingredients[0];
@@ -127,10 +132,22 @@ export default function RecipeScreen() {
         </ScrollView>
 
         <View style={styles.ctaWrap}>
-          <Pressable style={styles.cta} onPress={() => openProducts()}>
-            <Text style={styles.ctaText}>{missingLabel(missing.length)}</Text>
-            <Text style={styles.ctaArrow}>›</Text>
-          </Pressable>
+          {missing.length > 0 ? (
+            <>
+              <Pressable style={styles.cta} onPress={() => openProducts()}>
+                <Text style={styles.ctaText}>{missingLabel(missing.length)}</Text>
+                <Text style={styles.ctaArrow}>›</Text>
+              </Pressable>
+              <Pressable style={styles.ctaGhost} onPress={beginCooking}>
+                <Text style={styles.ctaGhostText}>Начать готовить без них</Text>
+              </Pressable>
+            </>
+          ) : (
+            <Pressable style={[styles.cta, styles.ctaCook]} onPress={beginCooking}>
+              <Text style={styles.ctaText}>Начать готовить</Text>
+              <Text style={styles.ctaArrow}>›</Text>
+            </Pressable>
+          )}
         </View>
         <BottomNav active="recipes" />
       </View>
@@ -217,6 +234,9 @@ const styles = StyleSheet.create({
     height: 56, borderRadius: 16, backgroundColor: color.red, flexDirection: 'row',
     alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20,
   },
+  ctaCook: { backgroundColor: color.green },
+  ctaGhost: { marginTop: 8, height: 44, alignItems: 'center', justifyContent: 'center' },
+  ctaGhostText: { color: color.body, fontSize: 14, fontWeight: '600' },
   ctaText: { color: color.white, fontSize: 16, fontWeight: '700' },
   ctaArrow: { color: color.white, fontSize: 16, fontWeight: '700', opacity: 0.75 },
 });

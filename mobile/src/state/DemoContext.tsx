@@ -1,7 +1,14 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { getProgress, getRecommendations, submitReceipt } from '../api/endpoints';
 import type { ProgressSnapshot, RecipeRecommendation } from '../api/types';
-import { demoRecipes, type CatalogProduct, type DemoIngredient, type DemoRecipe } from '../data/demo';
+import {
+  demoRecipes,
+  kitchenProducts,
+  type CatalogProduct,
+  type DemoIngredient,
+  type DemoRecipe,
+  type KitchenProduct,
+} from '../data/demo';
 
 type RecipesStatus = 'idle' | 'loading' | 'live' | 'mock';
 type AsyncStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -19,6 +26,17 @@ interface DemoValue {
   toggleIngredient: (ingredient: DemoIngredient) => void;
   basket: CatalogProduct[];
   addToBasket: (product: CatalogProduct) => void;
+
+  /** Продукты, лежащие на кухне. Уменьшаются, когда рецепт приготовлен. */
+  pantry: KitchenProduct[];
+  /** Рецепт, который готовят прямо сейчас. */
+  cookingRecipe: DemoRecipe | null;
+  startCooking: (recipeId: string) => void;
+  cancelCooking: () => void;
+  /** Отмечает рецепт приготовленным: списывает продукты и обновляет прогресс. */
+  finishCooking: () => Promise<string | null>;
+  cookingStatus: AsyncStatus;
+  cookingError: string | null;
 
   progress: ProgressSnapshot | null;
   progressStatus: AsyncStatus;
@@ -71,6 +89,10 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [selectedIngredientId, setSelectedIngredientId] = useState(demoRecipes[0].ingredients[0].id);
   const [ingredientOverrides, setIngredientOverrides] = useState<Record<string, boolean>>({});
   const [basket, setBasket] = useState<CatalogProduct[]>([]);
+  const [pantry, setPantry] = useState<KitchenProduct[]>(kitchenProducts);
+  const [cookingRecipeId, setCookingRecipeId] = useState<string | null>(null);
+  const [cookingStatus, setCookingStatus] = useState<AsyncStatus>('idle');
+  const [cookingError, setCookingError] = useState<string | null>(null);
   const [progress, setProgress] = useState<ProgressSnapshot | null>(null);
   const [progressStatus, setProgressStatus] = useState<AsyncStatus>('idle');
   const [progressError, setProgressError] = useState<string | null>(null);
@@ -129,6 +151,37 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     }
   }, [loadProgress, selectedRecipeId]);
 
+  const cookingRecipe = cookingRecipeId
+    ? recipes.find((recipe) => recipe.id === cookingRecipeId) ?? null
+    : null;
+
+  const finishCooking = useCallback(async () => {
+    if (!cookingRecipe) return null;
+    setCookingStatus('loading');
+    setCookingError(null);
+    try {
+      // Прогресс начисляется за приготовленный рецепт. Отдельного события в
+      // контракте v1 нет, поэтому используем receipt-событие с
+      // `recipe_completed: true` — нужный endpoint описан в docs/api-gaps.md.
+      const receipt = await submitReceipt(cookingRecipe.id);
+      setReceiptStatus(receipt.status);
+      setProgress(receipt.progress);
+      setProgressStatus('ready');
+
+      // Использованные продукты уходят с кухни.
+      const used = new Set(cookingRecipe.ingredients.map((item) => item.id));
+      setPantry((current) => current.filter((product) => !used.has(product.id)));
+
+      setCookingRecipeId(null);
+      setCookingStatus('ready');
+      return receipt.status as string;
+    } catch (error) {
+      setCookingError((error as Error).message);
+      setCookingStatus('error');
+      return null;
+    }
+  }, [cookingRecipe]);
+
   const value = useMemo<DemoValue>(() => ({
     recipes,
     recipesStatus,
@@ -150,6 +203,18 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     })),
     basket,
     addToBasket: (product: CatalogProduct) => setBasket((current) => [...current, product]),
+    pantry,
+    cookingRecipe,
+    startCooking: (recipeId: string) => {
+      setSelectedRecipeId(recipeId);
+      setCookingRecipeId(recipeId);
+      setCookingStatus('idle');
+      setCookingError(null);
+    },
+    cancelCooking: () => setCookingRecipeId(null),
+    finishCooking,
+    cookingStatus,
+    cookingError,
     progress,
     progressStatus,
     progressError,
@@ -159,7 +224,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     purchaseError,
     receiptStatus,
   }), [
-    basket, confirmPurchase, ingredientOverrides, loadProgress, loadRecipes, progress,
+    basket, confirmPurchase, cookingError, cookingRecipe, cookingStatus, finishCooking, pantry, ingredientOverrides, loadProgress, loadRecipes, progress,
     progressError, progressStatus, purchaseError, purchaseStatus, receiptStatus,
     recipes, recipesError, recipesStatus, selectedIngredient, selectedRecipe,
   ]);

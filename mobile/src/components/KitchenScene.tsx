@@ -5,24 +5,39 @@ import { slotRect } from '../data/kitchenSlots';
 import type { KitchenProduct } from '../data/demo';
 import { color } from '../theme/tokens';
 
+/** Высота полосы по умолчанию — как в макете экрана «после чека». */
 const BAND_HEIGHT = 286;
-/** Арт: 117×62 клетки по 4 точки, со сдвигом влево как в макете. */
-const ART = { left: -39, top: 0, width: 468, height: 248 };
+/**
+ * Арт комнаты: сетка 117×156 по 4 точки на клетку, сдвиг влево как в макете.
+ * Показываем столько, сколько влезает: лишнее обрезается по высоте полосы.
+ */
+const ART = { left: -39, top: 0, width: 468, height: 624 };
+
+const MASCOT = {
+  idle: require('../../assets/domovoi/mascot-spoon.png'),
+  cooking: require('../../assets/domovoi/mascot-cook.png'),
+};
 
 export function KitchenScene({
   products,
   speech,
+  pose = 'idle',
+  height = BAND_HEIGHT,
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
   speech: string;
+  /** Поза Домового: обычная или у плиты, когда готовим. */
+  pose?: keyof typeof MASCOT;
+  /** Сколько комнаты показать по высоте. */
+  height?: number;
   onMenuPress?: () => void;
 }) {
   const { placed } = placeProducts(products);
 
   return (
-    <View style={styles.band}>
-      <Image source={require('../../assets/kitchen/kitchen-band.png')} style={styles.art} />
+    <View style={[styles.band, { height }]}>
+      <Image source={require('../../assets/kitchen/kitchen-full.png')} style={styles.art} />
 
       {placed.map(({ sprite, slot }) => (
         <Image
@@ -41,18 +56,15 @@ export function KitchenScene({
       <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
         <Text style={styles.menuText}>≡</Text>
       </Pressable>
-      <Image
-        source={require('../../assets/domovoi/mascot-spoon.png')}
-        resizeMode="contain"
-        style={styles.mascot}
-      />
+      <Image source={MASCOT[pose]} resizeMode="contain" style={styles.mascot} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  band: { height: BAND_HEIGHT, backgroundColor: color.cream, overflow: 'hidden' },
+  band: { backgroundColor: color.cream, overflow: 'hidden' },
   art: { position: 'absolute', ...ART },
+  // Домовой стоит на полу: привязан к низу полосы, как в макете.
 
   /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */
   sprite: { position: 'absolute' },
@@ -69,5 +81,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
   },
   menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
-  mascot: { position: 'absolute', alignSelf: 'center', bottom: -24, width: 172, height: 190 },
+  /**
+   * Домовой стоит на одном месте независимо от того, сколько комнаты видно:
+   * ступни на уровне 310 точек от верха — там же, где в макете экрана.
+   */
+  mascot: { position: 'absolute', alignSelf: 'center', top: 120, width: 172, height: 190 },
 });

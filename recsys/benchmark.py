@@ -42,6 +42,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from app.contracts import (
+    IngredientSource,
     ModelRecommendation,
     Recipe,
     RecommendationMode,
@@ -56,11 +57,18 @@ from app.service import (
     RankingPolicy,
     RecommendationService,
 )
-from recsys.inventory import generate_inventory
+from recsys._seeds import stable_seed
+from recsys.inventory import (
+    DEFAULT_INVENTORY_ASSUMPTIONS,
+    InventoryAssumptions,
+    generate_inventory,
+)
+from recsys.pantry import DISABLED_PANTRY, PantryPolicy
 from recsys.profiles import ARCHETYPES, SyntheticProfile, generate_population
 from recsys.ready_food_pairs import ready_meal_options
 from recsys.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
+from recsys.true_pantry import true_pantry
 from recsys.response_models import (
     CONVERTING_ACTIONS,
     DEFAULT_RESPONDERS,
@@ -92,7 +100,7 @@ class RandomEngine:
         self._seed = seed
 
     def rank(self, request: RecommendationRequest) -> list[ModelRecommendation]:
-        rng = random.Random((self._seed, request.current_receipt.receipt_id).__hash__())
+        rng = random.Random(stable_seed(self._seed, request.current_receipt.receipt_id))
         ranked = [
             ModelRecommendation(
                 recipe_id=recipe.recipe_id,
@@ -119,6 +127,10 @@ class Arm:
     name: str
     engine: RecommendationEngine
     ranking_policy: RankingPolicy = EFFORT_FIRST
+    #: Whether the arm credits the shopper with stock inferred from history.
+    #: Off by default, like the shipped service: turning it on is a product
+    #: decision that has to earn its place here first.
+    pantry_policy: PantryPolicy = DISABLED_PANTRY
     #: A control arm is reported but excluded from robustness claims.
     is_control: bool = False
 
@@ -133,6 +145,11 @@ class CellOutcome:
     n_users: int
     n_cards: int
     counts: dict[str, int]
+    #: Cards the user committed to and could not finish, because the card
+    #: claimed an ingredient was already at home and it was not. Counted
+    #: separately from ``counts`` because the *decision* was still BUY — the
+    #: world refused afterwards.
+    failed_cooks: int = 0
 
     def action_rate(self, action: UserAction) -> float:
         return self.counts.get(action.value, 0) / self.n_cards if self.n_cards else 0.0
@@ -140,6 +157,11 @@ class CellOutcome:
     @property
     def cook_conversion_rate(self) -> float:
         """Cards the user actually cooked from. The primary metric.
+
+        Failed cooks are subtracted. Without that, inferring pantry stock is a
+        free win: it shrinks ``missing_count``, every simulator buys more, and
+        the *optimistic* policy scores best of all. A metric where assuming
+        more always wins measures the assumption, not the product.
 
         Deliberately excludes ``SUBSTITUTE``. A substitution happens when the
         ready meal beats the shopping basket, which is most likely exactly when
@@ -149,7 +171,13 @@ class CellOutcome:
         """
         if not self.n_cards:
             return 0.0
-        return self.counts.get(UserAction.BUY.value, 0) / self.n_cards
+        successful = self.counts.get(UserAction.BUY.value, 0) - self.failed_cooks
+        return max(successful, 0) / self.n_cards
+
+    @property
+    def failed_cook_rate(self) -> float:
+        """Share of cards that promised a dinner and did not deliver one."""
+        return self.failed_cooks / self.n_cards if self.n_cards else 0.0
 
     @property
     def substitute_rate(self) -> float:
@@ -177,6 +205,24 @@ class CellOutcome:
     @property
     def cards_per_user(self) -> float:
         return self.n_cards / self.n_users if self.n_users else 0.0
+
+    @property
+    def cooks_per_user(self) -> float:
+        """Cooked dinners per user, not per card.
+
+        The per-card rates are the right way to compare arms *inside* one
+        setting, because every arm there sees the same inventory and the same
+        number of cards. They are the wrong way to compare *across* supply
+        settings: scarcer shelves produce fewer cards, and the few that survive
+        are the easy ones, so the per-card rate goes up while people cook less.
+
+        Measured: at ``no_product_at_all`` 0.08 the bench shows 2.42 cards per
+        user at 0.084 conversion (0.203 dinners); at 0.35 it shows 1.42 cards at
+        0.111 (0.158 dinners). The rate improved, the outcome got worse. This
+        metric is the one that survives that comparison.
+        """
+        successful = self.counts.get(UserAction.BUY.value, 0) - self.failed_cooks
+        return max(successful, 0) / self.n_users if self.n_users else 0.0
 
 
 @dataclass(frozen=True)
@@ -266,6 +312,7 @@ class BenchmarkResult:
     n_regimes: int
     users_per_regime: int
     seed: int
+    inventory_assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS
     responder_names: tuple[str, ...] = field(default_factory=tuple)
 
     def cell(self, arm: str, regime: str, responder: str) -> CellOutcome | None:
@@ -303,9 +350,21 @@ class BenchmarkResult:
             deltas=tuple(deltas),
         )
 
-    def arm_means(self, metric: str = PRIMARY_METRIC) -> dict[str, float]:
+    def arm_means(
+        self, metric: str = PRIMARY_METRIC, *, independent_only: bool = True
+    ) -> dict[str, float]:
+        """Mean metric per arm.
+
+        Averages over the independent simulators only by default. Including
+        ``oracle_selfref`` would let a change to the oracle move every arm's
+        headline number, which happened once already: repairing the relevance
+        label shifted even the random control, because a quarter of its cells
+        were judged by the oracle.
+        """
         by_arm: dict[str, list[float]] = {}
         for cell in self.cells:
+            if independent_only and cell.responder not in INDEPENDENT_RESPONDER_NAMES:
+                continue
             by_arm.setdefault(cell.arm, []).append(getattr(cell, metric))
         return {arm: statistics.mean(values) for arm, values in by_arm.items()}
 
@@ -369,6 +428,8 @@ def run_benchmark(
     users_per_regime: int = DEFAULT_USERS_PER_REGIME,
     seed: int = DEFAULT_SEED,
     recipes: list[Recipe] | None = None,
+    inventory_assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
+    world_consumption_multiplier: float = 1.0,
 ) -> BenchmarkResult:
     """Run every arm through every world, judged by every simulator.
 
@@ -382,12 +443,14 @@ def run_benchmark(
             engine=arm.engine,
             safety_policy=SafetyPolicy(),
             ranking_policy=arm.ranking_policy,
+            pantry_policy=arm.pantry_policy,
         )
         for arm in arms
     }
 
     counters: dict[tuple[str, str, str], Counter[str]] = {}
     card_totals: dict[tuple[str, str, str], int] = {}
+    failures: dict[tuple[str, str, str], int] = {}
 
     for regime_index, regime in enumerate(regimes):
         profiles = generate_population(
@@ -406,19 +469,39 @@ def run_benchmark(
                 now=profile.now,
                 home_store_id=profile.current_receipt.store_id,
                 user_radius_km=profile.user.radius_km,
+                assumptions=inventory_assumptions,
             )
             for profile in profiles
         ]
 
+        # The world's own answer about every kitchen, computed once and shared
+        # by all arms so a claim can be checked rather than trusted.
+        truths = [
+            true_pantry(
+                _build_request(p, recipe_catalog, [], []),
+                consumption_multiplier=world_consumption_multiplier,
+            )
+            for p in profiles
+        ]
+
         for arm in arms:
             service = service_by_arm[arm.name]
-            for user_index, (profile, inventory) in enumerate(
-                zip(profiles, inventories, strict=True)
+            for user_index, (profile, inventory, truth) in enumerate(
+                zip(profiles, inventories, truths, strict=True)
             ):
                 request = _build_request(profile, recipe_catalog, inventory, meals)
                 response = service.recommend(request)
                 for card_index, card in enumerate(response.recommendations):
                     recipe = recipe_lookup[card.recipe_id]
+                    # Ingredients the card said were already at home, that the
+                    # world says are not. An arm without pantry inference never
+                    # makes such a claim and so can never fail this way.
+                    false_claims = [
+                        ingredient.ingredient_id
+                        for ingredient in card.ingredients
+                        if ingredient.source == IngredientSource.PANTRY_LIKELY
+                        and not truth.has(ingredient.ingredient_id)
+                    ]
                     features = extract_features(
                         card,
                         recipe,
@@ -429,13 +512,13 @@ def run_benchmark(
                         # must see the same coin flips for every arm, so a win
                         # cannot come from luckier randomness.
                         rng = random.Random(
-                            (
+                            stable_seed(
                                 seed,
                                 regime_index,
                                 user_index,
                                 card_index,
                                 responder.name,
-                            ).__hash__()
+                            )
                         )
                         action = responder.respond(
                             ResponseContext(
@@ -450,6 +533,8 @@ def run_benchmark(
                         key = (arm.name, regime.name, responder.name)
                         counters.setdefault(key, Counter())[action.value] += 1
                         card_totals[key] = card_totals.get(key, 0) + 1
+                        if action == UserAction.BUY and false_claims:
+                            failures[key] = failures.get(key, 0) + 1
 
     cells = tuple(
         CellOutcome(
@@ -459,6 +544,7 @@ def run_benchmark(
             n_users=users_per_regime,
             n_cards=card_totals[(arm_name, regime_name, responder_name)],
             counts=dict(counter),
+            failed_cooks=failures.get((arm_name, regime_name, responder_name), 0),
         )
         for (arm_name, regime_name, responder_name), counter in sorted(counters.items())
     )
@@ -468,7 +554,56 @@ def run_benchmark(
         n_regimes=len(regimes),
         users_per_regime=users_per_regime,
         seed=seed,
+        inventory_assumptions=inventory_assumptions,
         responder_names=tuple(r.name for r in responders),
+    )
+
+
+def pantry_arms() -> tuple[Arm, ...]:
+    """Same rankers, with and without inferred pantry stock.
+
+    The comparison the product decision needs: crediting the shopper with what
+    they probably already have shrinks the shopping list (measured 3.43 -> 2.60
+    items per card), but a wrong belief strands them mid-recipe. Whether the
+    trade is worth taking is what these arms measure.
+    """
+    from recsys.model import MLRecommendationEngine
+
+    ml = MLRecommendationEngine()
+    heuristic = DeterministicMockEngine()
+    return (
+        Arm(name="heuristic/effort", engine=heuristic, ranking_policy=EFFORT_FIRST),
+        Arm(
+            name="heuristic/effort+pantry",
+            engine=heuristic,
+            ranking_policy=EFFORT_FIRST,
+            pantry_policy=PantryPolicy.confident(),
+        ),
+        Arm(
+            name="heuristic/effort+pantry_opt",
+            engine=heuristic,
+            ranking_policy=EFFORT_FIRST,
+            pantry_policy=PantryPolicy.optimistic(),
+        ),
+        Arm(name="ml/effort", engine=ml, ranking_policy=EFFORT_FIRST),
+        Arm(
+            name="ml/effort+pantry",
+            engine=ml,
+            ranking_policy=EFFORT_FIRST,
+            pantry_policy=PantryPolicy.confident(),
+        ),
+        Arm(
+            name="random/effort",
+            engine=RandomEngine(),
+            ranking_policy=EFFORT_FIRST,
+            is_control=True,
+        ),
+        Arm(
+            name="random/relevance",
+            engine=RandomEngine(),
+            ranking_policy=RELEVANCE_FIRST,
+            is_control=True,
+        ),
     )
 
 

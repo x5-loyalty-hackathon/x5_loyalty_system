@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import random
 from collections.abc import Iterable
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from app.contracts import FulfillmentOption, InventoryProduct
@@ -38,8 +39,38 @@ P_MARKDOWN_OFFERED = 0.50
 P_MARKDOWN_ALREADY_EXPIRED = 0.10
 
 
-def _distance_km(rng: random.Random, user_radius_km: float) -> float:
-    if rng.random() < P_WITHIN_RADIUS:
+@dataclass(frozen=True)
+class InventoryAssumptions:
+    """Supply-side numbers we invented, gathered so they can be swept.
+
+    Every field is a guess pending X5 data. Bundling them lets
+    ``recsys.sensitivity`` ask the question that actually matters — *which of
+    our guesses would change the conclusion if we are wrong* — instead of the
+    team weighing all of them equally. Defaults reproduce the module constants,
+    so existing callers are unaffected.
+    """
+
+    no_product_at_all: float = P_NO_PRODUCT_AT_ALL
+    within_radius: float = P_WITHIN_RADIUS
+    safety_ineligible: float = P_SAFETY_INELIGIBLE
+    out_of_stock: float = P_OUT_OF_STOCK
+    markdown_offered: float = P_MARKDOWN_OFFERED
+    markdown_already_expired: float = P_MARKDOWN_ALREADY_EXPIRED
+    #: Scales every price in ``recsys.catalog.BASE_PRICE_RUB``. Those prices are
+    #: calibrated against 2018-2019 receipts with an observed 2.4x era factor;
+    #: this dial asks what happens if that factor is wrong.
+    price_level: float = 1.0
+
+
+DEFAULT_INVENTORY_ASSUMPTIONS = InventoryAssumptions()
+
+
+def _distance_km(
+    rng: random.Random,
+    user_radius_km: float,
+    assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
+) -> float:
+    if rng.random() < assumptions.within_radius:
         return round(rng.uniform(0.1, max(0.2, user_radius_km * 0.95)), 2)
     return round(user_radius_km + rng.uniform(0.3, 4.0), 2)
 
@@ -58,8 +89,9 @@ def _full_price_product(
     now: datetime,
     user_radius_km: float,
     index: int,
+    assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
 ) -> InventoryProduct:
-    base_price = BASE_PRICE_RUB[ingredient_id]
+    base_price = BASE_PRICE_RUB[ingredient_id] * assumptions.price_level
     price = round(base_price * rng.uniform(0.95, 1.2), 2)
     return InventoryProduct(
         sku_id=synthetic_sku_id(ingredient_id, "fp", index),
@@ -67,14 +99,16 @@ def _full_price_product(
         category=ingredient_category(ingredient_id),
         ingredient_ids={ingredient_id},
         store_id=store_id,
-        distance_km=_distance_km(rng, user_radius_km),
+        distance_km=_distance_km(rng, user_radius_km, assumptions),
         price=price,
         original_price=price,
         brand=rng.choice(BRANDS) if rng.random() < 0.7 else None,
         is_markdown=False,
-        safety_eligible=rng.random() >= P_SAFETY_INELIGIBLE,
+        safety_eligible=rng.random() >= assumptions.safety_ineligible,
         expires_at=None,
-        available_quantity=0 if rng.random() < P_OUT_OF_STOCK else rng.randint(1, 25),
+        available_quantity=(
+            0 if rng.random() < assumptions.out_of_stock else rng.randint(1, 25)
+        ),
         fulfillment_options=_fulfillment_options(rng),
         price_is_estimate=True,
     )
@@ -88,11 +122,12 @@ def _markdown_product(
     now: datetime,
     user_radius_km: float,
     index: int,
+    assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
 ) -> InventoryProduct:
-    base_price = BASE_PRICE_RUB[ingredient_id]
+    base_price = BASE_PRICE_RUB[ingredient_id] * assumptions.price_level
     original_price = round(base_price * rng.uniform(0.95, 1.2), 2)
     price = round(original_price * rng.uniform(0.45, 0.7), 2)
-    if rng.random() < P_MARKDOWN_ALREADY_EXPIRED:
+    if rng.random() < assumptions.markdown_already_expired:
         expires_at = now - timedelta(hours=rng.uniform(1, 12))
     else:
         expires_at = now + timedelta(hours=rng.uniform(6, 72))
@@ -102,14 +137,16 @@ def _markdown_product(
         category=ingredient_category(ingredient_id),
         ingredient_ids={ingredient_id},
         store_id=store_id,
-        distance_km=_distance_km(rng, user_radius_km),
+        distance_km=_distance_km(rng, user_radius_km, assumptions),
         price=price,
         original_price=original_price,
         brand=rng.choice(BRANDS) if rng.random() < 0.5 else None,
         is_markdown=True,
-        safety_eligible=rng.random() >= P_SAFETY_INELIGIBLE,
+        safety_eligible=rng.random() >= assumptions.safety_ineligible,
         expires_at=expires_at,
-        available_quantity=0 if rng.random() < P_OUT_OF_STOCK else rng.randint(1, 6),
+        available_quantity=(
+            0 if rng.random() < assumptions.out_of_stock else rng.randint(1, 6)
+        ),
         fulfillment_options=_fulfillment_options(rng),
         price_is_estimate=True,
     )
@@ -122,7 +159,8 @@ def generate_inventory(
     home_store_id: str,
     user_radius_km: float,
     ingredient_ids: Iterable[str] | None = None,
-    markdown_supply_rate: float = P_MARKDOWN_OFFERED,
+    markdown_supply_rate: float | None = None,
+    assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
 ) -> list[InventoryProduct]:
     """Build a synthetic inventory snapshot for one recommendation request.
 
@@ -132,12 +170,17 @@ def generate_inventory(
     out-of-radius, no option at all) so the safety policy is genuinely
     exercised rather than always trivially passing.
     """
+    markdown_rate = (
+        markdown_supply_rate
+        if markdown_supply_rate is not None
+        else assumptions.markdown_offered
+    )
     ids = list(ingredient_ids) if ingredient_ids is not None else list(INGREDIENTS)
     nearby_stores = [home_store_id, f"{home_store_id}_annex", "store_hub_1"]
     products: list[InventoryProduct] = []
     index = 0
     for ingredient_id in ids:
-        if rng.random() < P_NO_PRODUCT_AT_ALL:
+        if rng.random() < assumptions.no_product_at_all:
             continue
         store_id = rng.choice(nearby_stores)
         products.append(
@@ -148,13 +191,14 @@ def generate_inventory(
                 now=now,
                 user_radius_km=user_radius_km,
                 index=index,
+                assumptions=assumptions,
             )
         )
         index += 1
 
         if (
             ingredient_category(ingredient_id) in RESCUE_CATEGORIES
-            and rng.random() < markdown_supply_rate
+            and rng.random() < markdown_rate
         ):
             store_id = rng.choice(nearby_stores)
             products.append(
@@ -165,6 +209,7 @@ def generate_inventory(
                     now=now,
                     user_radius_km=user_radius_km,
                     index=index,
+                    assumptions=assumptions,
                 )
             )
             index += 1

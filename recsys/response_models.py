@@ -278,14 +278,23 @@ class EconomicResponder:
 
     name = "economic"
 
-    #: Rouble value the simulated user puts on an hour of cooking. Illustrative.
-    TIME_VALUE_RUB_PER_HOUR = 300.0
+    #: Rouble value the simulated user puts on an hour of cooking. Invented,
+    #: and one of the assumptions ``recsys.sensitivity`` sweeps: it sets how
+    #: readily this simulator prefers a ready meal over cooking.
+    DEFAULT_TIME_VALUE_RUB_PER_HOUR = 300.0
+
+    def __init__(self, time_value_rub_per_hour: float | None = None) -> None:
+        self.time_value_rub_per_hour = (
+            self.DEFAULT_TIME_VALUE_RUB_PER_HOUR
+            if time_value_rub_per_hour is None
+            else time_value_rub_per_hour
+        )
 
     def respond(self, ctx: ResponseContext) -> UserAction:
         f = ctx.features
         cook_cost = f.cook_cost_per_serving_rub
-        effort_cost = self.TIME_VALUE_RUB_PER_HOUR * f.prep_minutes / 60.0 / max(
-            f.servings, 1
+        effort_cost = (
+            self.time_value_rub_per_hour * f.prep_minutes / 60.0 / max(f.servings, 1)
         )
         total_cook = cook_cost + effort_cost
 

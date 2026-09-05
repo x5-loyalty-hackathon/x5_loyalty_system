@@ -14,6 +14,7 @@ from recsys.benchmark import (
     RandomEngine,
     default_arms,
     run_benchmark,
+    stable_seed,
     verdict,
 )
 from recsys.regimes import REGIMES
@@ -79,6 +80,19 @@ def test_the_ranking_policy_alone_changes_the_outcome() -> None:
     )
     comparison = result.compare("effort", "relevance")
     assert any(delta.delta != 0.0 for delta in comparison.deltas)
+
+
+def test_seeds_are_stable_across_processes() -> None:
+    """``hash()`` on strings is randomised per process; seeds must not be.
+
+    Two sweeps with identical arguments once disagreed because the responder
+    RNG was seeded from ``hash((seed, responder.name))``. Pinning the value
+    catches any return to a process-local hash — a same-process determinism
+    test cannot see that bug at all.
+    """
+    assert stable_seed("seed", "rule_based") == 2334935858
+    assert stable_seed(1, 2, 3) == stable_seed(1, 2, 3)
+    assert stable_seed("a", "b") != stable_seed("b", "a")
 
 
 def test_run_is_deterministic_given_a_seed() -> None:

@@ -17,6 +17,7 @@
 |---|---|---|---|---|---|
 | ADR-001 | 2026-09-03 | accepted | Recipe-first PoC: markdown/full-price внутри рецепта, доставка или следующий визит, Домовой без gambling/public rank | Команда | [ADR-001](decisions/001-recipe-first-poc.md) |
 | ADR-002 | 2026-09-05 | proposed | Политика ранжирования — явный объект; effort учитывается один раз. Прод-поведение не меняется, чинить предлагается метку, а не модель | — | [ADR-002](decisions/002-ranking-policy-and-effort-double-counting.md) |
+| ADR-003 | 2026-09-05 | proposed | Починена метка релевантности: прокси состояния из истории, переопределена history_affinity, снят гейт осуществимости. AUC внутри равного effort 0.53 → 0.82; метрика ADR-001 заменена на precision-лифт | — | [ADR-003](decisions/003-repair-the-relevance-label.md) |
 
 Для нового существенного решения скопируйте
 [шаблон](decisions/000-template.md) в эту папку, присвойте следующий номер и

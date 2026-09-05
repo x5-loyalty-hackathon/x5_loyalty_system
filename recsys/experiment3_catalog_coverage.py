@@ -80,9 +80,9 @@ from app.recommender import DeterministicMockEngine
 from app.safety import SafetyPolicy
 from app.service import RecommendationService
 from recsys.evaluation import oracle_relevant
-from recsys.inventory import generate_inventory
 from recsys.model import compute_features
-from recsys.profiles import SyntheticProfile, generate_population
+from recsys.panels import DEFICIT_LEVELS, experiment_panels
+from recsys.profiles import SyntheticProfile
 from recsys.recipes import RECIPES as CURRENT_RECIPES
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-3-catalog-coverage-report.md")
@@ -109,19 +109,8 @@ def stable_seed(*parts: object) -> int:
     return zlib.crc32(payload)
 
 
-@dataclass(frozen=True)
-class DeficitLevel:
-    label: str
-    no_product_at_all: float
-    out_of_stock: float
-
-
-#: See module docstring for where these numbers come from.
-DEFICIT_LEVELS: tuple[DeficitLevel, ...] = (
-    DeficitLevel("низкий", no_product_at_all=0.02, out_of_stock=0.02),
-    DeficitLevel("база", no_product_at_all=0.08, out_of_stock=0.10),
-    DeficitLevel("высокий", no_product_at_all=0.35, out_of_stock=0.35),
-)
+#: The deficit sweep is owned by ``recsys.panels`` — one definition, so three
+#: experiments cannot drift into three slightly different meanings of "high".
 
 
 def _user_index(user_id: str) -> int:
@@ -129,40 +118,34 @@ def _user_index(user_id: str) -> int:
     return int(user_id.rsplit("_", 1)[-1])
 
 
-def build_panel(
-    n: int = N_PROFILES, seed: int = DEFAULT_SEED
-) -> tuple[list[SyntheticProfile], list[SyntheticProfile]]:
-    """One deterministic panel, split by user_id parity *before* measurement.
+def build_panel() -> dict[str, dict[str, list[tuple[SyntheticProfile, list]]]]:
+    """``{split: {deficit level: [(profile, inventory), ...]}}`` from the panels.
 
-    Even index -> train (used to find gaps), odd -> held-out (used only to
-    confirm the fix). Splitting on the id already embedded by the generator
-    rather than on generation order makes the split legible from the id alone
-    and independent of any later reordering.
+    Replaces a local parity split over a locally generated population. Two
+    things change and both matter: the split is now the protocol's
+    (``train`` finds gaps, ``validation`` confirms, ``test`` is untouched), and
+    the deficit levels are real — the previous helper monkeypatched module
+    constants that ``generate_inventory`` no longer reads, so all three levels
+    ran at base scarcity with different seeds.
     """
-    profiles = generate_population(n, seed=seed)
-    train = [p for p in profiles if _user_index(p.user.user_id) % 2 == 0]
-    held_out = [p for p in profiles if _user_index(p.user.user_id) % 2 == 1]
-    return train, held_out
+    out: dict[str, dict[str, list[tuple[SyntheticProfile, list]]]] = {}
+    for split in ("train", "validation"):
+        out[split] = {
+            label: panel.pairs()
+            for label, panel in experiment_panels(split).items()
+        }
+    return out
 
 
-def _inventory_for(profile: SyntheticProfile, level: DeficitLevel) -> list:
-    """Inventory for one profile at one deficit level, deterministic given
-    (profile, level) regardless of iteration order (see ``stable_seed``)."""
-    rng = random.Random(stable_seed(profile.user.user_id, level.label))
-    saved_no_product = inventory_module.P_NO_PRODUCT_AT_ALL
-    saved_out_of_stock = inventory_module.P_OUT_OF_STOCK
-    inventory_module.P_NO_PRODUCT_AT_ALL = level.no_product_at_all
-    inventory_module.P_OUT_OF_STOCK = level.out_of_stock
-    try:
-        return generate_inventory(
-            rng,
-            now=profile.now,
-            home_store_id=profile.current_receipt.store_id,
-            user_radius_km=profile.user.radius_km,
-        )
-    finally:
-        inventory_module.P_NO_PRODUCT_AT_ALL = saved_no_product
-        inventory_module.P_OUT_OF_STOCK = saved_out_of_stock
+#: ``_inventory_for`` used to live here. It monkeypatched
+#: ``recsys.inventory``'s module constants — which does nothing, because
+#: ``DEFAULT_INVENTORY_ASSUMPTIONS`` is built once at import — *and* mixed the
+#: level label into the RNG seed. So the three "deficit levels" were three
+#: independent draws at base deficit: measured 108/107/111 products for
+#: low/base/high, where real scarcity at 0.35 removes roughly a third. The
+#: differing coverage numbers they produced looked like a deficit effect and
+#: were sampling noise. ``recsys.panels.Panel.with_inventory`` replaces it and
+#: keeps the seed fixed across levels, so only the thresholds move.
 
 
 def _build_request(
@@ -245,13 +228,11 @@ class BasketOutcome:
 
 
 def evaluate_panel(
-    profiles: list[SyntheticProfile],
+    pairs: list[tuple[SyntheticProfile, list]],
     recipe_catalog: list[Recipe],
-    level: DeficitLevel,
 ) -> list[BasketOutcome]:
     outcomes: list[BasketOutcome] = []
-    for profile in profiles:
-        inventory = _inventory_for(profile, level)
+    for profile, inventory in pairs:
         request = _build_request(profile, recipe_catalog, inventory)
 
         abstract_scores = [
@@ -436,8 +417,7 @@ class AttractivenessResult:
 
 
 def attractiveness_check(
-    profiles: list[SyntheticProfile],
-    level: DeficitLevel,
+    pairs: list[tuple[SyntheticProfile, list]],
     *,
     threshold: int = 2,
     constrained: bool = False,
@@ -460,8 +440,7 @@ def attractiveness_check(
     examples: list[tuple[str, str, int]] = []
     closer_counts: Counter[str] = Counter()
 
-    for profile in profiles:
-        inventory = _inventory_for(profile, level)
+    for profile, inventory in pairs:
         old_request = _build_request(profile, old_catalog(), inventory)
         new_request = _build_request(profile, new_catalog(), inventory)
 
@@ -590,12 +569,12 @@ def build_report(
     w("")
     w("| Дефицит | Без ограничений ≤0/≤1/≤2 | С ограничениями ≤0/≤1/≤2 |")
     w("|---|---|---|")
-    for level in DEFICIT_LEVELS:
-        outcomes = old_train[level.label]
+    for label in DEFICIT_LEVELS:
+        outcomes = old_train[label]
         a = coverage_shares(outcomes, constrained=False)
         c = coverage_shares(outcomes, constrained=True)
         w(
-            f"| {level.label} | {_pct(a[0])}/{_pct(a[1])}/{_pct(a[2])} | "
+            f"| {label} | {_pct(a[0])}/{_pct(a[1])}/{_pct(a[2])} | "
             f"{_pct(c[0])}/{_pct(c[1])}/{_pct(c[2])} |"
         )
     w("")
@@ -732,11 +711,11 @@ def build_report(
     w("")
     w("| Дефицит | Старый ≤0/≤1/≤2 | Новый ≤0/≤1/≤2 |")
     w("|---|---|---|")
-    for level in DEFICIT_LEVELS:
-        oa = coverage_shares(old_held[level.label], constrained=False)
-        na = coverage_shares(new_held[level.label], constrained=False)
+    for label in DEFICIT_LEVELS:
+        oa = coverage_shares(old_held[label], constrained=False)
+        na = coverage_shares(new_held[label], constrained=False)
         w(
-            f"| {level.label} | {_pct(oa[0])}/{_pct(oa[1])}/{_pct(oa[2])} | "
+            f"| {label} | {_pct(oa[0])}/{_pct(oa[1])}/{_pct(oa[2])} | "
             f"{_pct(na[0])}/{_pct(na[1])}/{_pct(na[2])} |"
         )
     w("")
@@ -744,11 +723,11 @@ def build_report(
     w("")
     w("| Дефицит | Старый ≤0/≤1/≤2 | Новый ≤0/≤1/≤2 |")
     w("|---|---|---|")
-    for level in DEFICIT_LEVELS:
-        oc = coverage_shares(old_held[level.label], constrained=True)
-        nc = coverage_shares(new_held[level.label], constrained=True)
+    for label in DEFICIT_LEVELS:
+        oc = coverage_shares(old_held[label], constrained=True)
+        nc = coverage_shares(new_held[label], constrained=True)
         w(
-            f"| {level.label} | {_pct(oc[0])}/{_pct(oc[1])}/{_pct(oc[2])} | "
+            f"| {label} | {_pct(oc[0])}/{_pct(oc[1])}/{_pct(oc[2])} | "
             f"{_pct(nc[0])}/{_pct(nc[1])}/{_pct(nc[2])} |"
         )
     w("")
@@ -950,41 +929,46 @@ def build_report(
 
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")
-    train, held_out = build_panel()
-    print(f"panel: {N_PROFILES} profiles -> train={len(train)}, held_out={len(held_out)}")
+    panels = build_panel()
+    train = panels["train"]
+    held_out = panels["validation"]
+    n_train = len(train["база"])
+    n_held = len(held_out["база"])
+    print(f"panel: train={n_train}, held-out(validation)={n_held}")
 
-    print("\n--- OLD catalog, train half, per deficit level ---")
+    print("\n--- OLD catalog, train split, per deficit level ---")
     old_train: dict[str, list[BasketOutcome]] = {}
-    for level in DEFICIT_LEVELS:
-        outcomes = evaluate_panel(train, old_catalog(), level)
-        old_train[level.label] = outcomes
+    for label, pairs in train.items():
+        outcomes = evaluate_panel(pairs, old_catalog())
+        old_train[label] = outcomes
         a = coverage_shares(outcomes, constrained=False)
         c = coverage_shares(outcomes, constrained=True)
-        print(f"  [{level.label}] abstract <=0/1/2: {a[0]:.0%}/{a[1]:.0%}/{a[2]:.0%}"
+        print(f"  [{label}] abstract <=0/1/2: {a[0]:.0%}/{a[1]:.0%}/{a[2]:.0%}"
               f"  constrained <=0/1/2: {c[0]:.0%}/{c[1]:.0%}/{c[2]:.0%}")
 
     diag = diagnose_gaps(old_train["база"], old_catalog(), threshold=2)
     print(f"\n--- gap diagnostics (train, база, abstract, threshold<=2) ---")
     print(f"uncovered: {diag['n_uncovered']} / {diag['n_uncovered'] + diag['n_covered']}")
 
-    print("\n--- OLD vs NEW catalog, held-out half, per deficit level ---")
+    print("\n--- OLD vs NEW catalog, held-out (validation), per deficit level ---")
     old_held: dict[str, list[BasketOutcome]] = {}
     new_held: dict[str, list[BasketOutcome]] = {}
-    for level in DEFICIT_LEVELS:
-        old_held[level.label] = evaluate_panel(held_out, old_catalog(), level)
-        new_held[level.label] = evaluate_panel(held_out, new_catalog(), level)
-        oa = coverage_shares(old_held[level.label], constrained=False)
-        na = coverage_shares(new_held[level.label], constrained=False)
-        oc = coverage_shares(old_held[level.label], constrained=True)
-        nc = coverage_shares(new_held[level.label], constrained=True)
-        print(f"  [{level.label}] abstract old {oa[2]:.0%} -> new {na[2]:.0%}"
+    for label, pairs in held_out.items():
+        old_held[label] = evaluate_panel(pairs, old_catalog())
+        new_held[label] = evaluate_panel(pairs, new_catalog())
+        oa = coverage_shares(old_held[label], constrained=False)
+        na = coverage_shares(new_held[label], constrained=False)
+        oc = coverage_shares(old_held[label], constrained=True)
+        nc = coverage_shares(new_held[label], constrained=True)
+        print(f"  [{label}] abstract old {oa[2]:.0%} -> new {na[2]:.0%}"
               f"   constrained old {oc[2]:.0%} -> new {nc[2]:.0%}")
 
     print("\n--- attractiveness check (held-out, база) ---")
+    base_pairs = held_out["база"]
     attract_results = [
-        attractiveness_check(held_out, next(l for l in DEFICIT_LEVELS if l.label == "база"), threshold=2, constrained=False),
-        attractiveness_check(held_out, next(l for l in DEFICIT_LEVELS if l.label == "база"), threshold=1, constrained=False),
-        attractiveness_check(held_out, next(l for l in DEFICIT_LEVELS if l.label == "база"), threshold=2, constrained=True),
+        attractiveness_check(base_pairs, threshold=2, constrained=False),
+        attractiveness_check(base_pairs, threshold=1, constrained=False),
+        attractiveness_check(base_pairs, threshold=2, constrained=True),
     ]
     for res in attract_results:
         print(f"  threshold<={res.threshold} constrained={res.constrained}: "
@@ -992,8 +976,8 @@ def main() -> int:
               f"share={res.share_relevant}")
 
     report = build_report(
-        n_train=len(train),
-        n_held_out=len(held_out),
+        n_train=n_train,
+        n_held_out=n_held,
         old_train=old_train,
         diag=diag,
         old_held=old_held,

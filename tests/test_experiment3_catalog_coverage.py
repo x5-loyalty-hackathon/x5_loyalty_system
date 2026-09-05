@@ -12,7 +12,6 @@ from recsys.catalog import BASE_PRICE_RUB, INGREDIENTS
 from recsys.experiment3_catalog_coverage import (
     DEFICIT_LEVELS,
     NEW_RECIPE_IDS,
-    _inventory_for,
     abstract_missing_count,
     build_panel,
     coverage_shares,
@@ -80,23 +79,38 @@ def test_stable_seed_is_deterministic_and_order_sensitive() -> None:
 
 
 def test_panel_split_is_deterministic_and_disjoint() -> None:
-    train1, held1 = build_panel(n=40)
-    train2, held2 = build_panel(n=40)
-    assert [p.user.user_id for p in train1] == [p.user.user_id for p in train2]
-    assert [p.user.user_id for p in held1] == [p.user.user_id for p in held2]
-    train_ids = {p.user.user_id for p in train1}
-    held_ids = {p.user.user_id for p in held1}
+    """The split is now the protocol's, not a local parity trick."""
+    first = build_panel()
+    second = build_panel()
+    train_ids = {p.user.user_id for p, _ in first["train"]["база"]}
+    held_ids = {p.user.user_id for p, _ in first["validation"]["база"]}
+    assert train_ids == {p.user.user_id for p, _ in second["train"]["база"]}
     assert not train_ids & held_ids
-    assert train_ids | held_ids == {p.user.user_id for p in train1 + held1}
+
+
+def test_deficit_levels_actually_change_the_shelf() -> None:
+    """The previous helper monkeypatched module constants generate_inventory no
+    longer reads, so low/base/high were three draws at base scarcity: measured
+    108/107/111 products. Real scarcity has to shrink the shelf."""
+    panels = build_panel()["train"]
+    counts = {
+        label: sum(len(inv) for _, inv in pairs) for label, pairs in panels.items()
+    }
+    assert counts["низкий"] > counts["база"] > counts["высокий"]
+
+
+def test_the_same_people_face_every_deficit_level() -> None:
+    """Otherwise a deficit comparison is not paired."""
+    panels = build_panel()["train"]
+    ids = [[p.user.user_id for p, _ in pairs] for pairs in panels.values()]
+    assert all(x == ids[0] for x in ids)
 
 
 def test_abstract_missing_count_ignores_inventory() -> None:
     """Two requests differing only in inventory_snapshot must score identically
     -- this is the defining property of the "without store constraints" metric."""
-    train, _ = build_panel(n=10)
-    profile = train[0]
+    profile, non_empty_inventory = build_panel()["train"]["база"][0]
     recipe = RECIPES_BY_ID["cottage_cheese_with_sour_cream"]
-    non_empty_inventory = _inventory_for(profile, DEFICIT_LEVELS[1])
     assert non_empty_inventory  # sanity: the fixture actually varies
     request_empty_inventory = RecommendationRequest(
         user=profile.user,
@@ -116,8 +130,7 @@ def test_abstract_missing_count_ignores_inventory() -> None:
 
 
 def test_constrained_missing_count_never_below_zero_and_none_means_unreachable() -> None:
-    train, _ = build_panel(n=20)
-    for profile in train[:5]:
+    for profile, _ in build_panel()["train"]["база"][:5]:
         request = RecommendationRequest(
             user=profile.user,
             current_receipt=profile.current_receipt,
@@ -144,8 +157,7 @@ def test_constrained_missing_count_never_below_zero_and_none_means_unreachable()
 
 
 def test_coverage_shares_are_monotonic_in_threshold() -> None:
-    train, _ = build_panel(n=30)
-    outcomes = evaluate_panel(train, list(RECIPES), DEFICIT_LEVELS[1])
+    outcomes = evaluate_panel(build_panel()["train"]["база"][:30], list(RECIPES))
     abstract = coverage_shares(outcomes, constrained=False)
     constrained = coverage_shares(outcomes, constrained=True)
     assert abstract[0] <= abstract[1] <= abstract[2]
@@ -153,13 +165,12 @@ def test_coverage_shares_are_monotonic_in_threshold() -> None:
 
 
 def test_deficit_levels_match_the_calibrated_sensitivity_values() -> None:
-    by_label = {level.label: level for level in DEFICIT_LEVELS}
-    assert by_label["низкий"].no_product_at_all == 0.02
-    assert by_label["база"].no_product_at_all == 0.08
-    assert by_label["высокий"].no_product_at_all == 0.35
-    assert by_label["низкий"].out_of_stock == 0.02
-    assert by_label["база"].out_of_stock == 0.10
-    assert by_label["высокий"].out_of_stock == 0.35
+    assert DEFICIT_LEVELS["низкий"].no_product_at_all == 0.02
+    assert DEFICIT_LEVELS["база"].no_product_at_all == 0.08
+    assert DEFICIT_LEVELS["высокий"].no_product_at_all == 0.35
+    assert DEFICIT_LEVELS["низкий"].out_of_stock == 0.02
+    assert DEFICIT_LEVELS["база"].out_of_stock == 0.10
+    assert DEFICIT_LEVELS["высокий"].out_of_stock == 0.35
 
 
 def test_common_fulfillment_default_matches_the_service() -> None:

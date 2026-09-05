@@ -73,40 +73,20 @@ from app.service import (
     RecommendationService,
 )
 from recsys.benchmark import Arm
+from recsys.catalog_freeze import baseline_catalog
 from recsys.evaluation import oracle_relevant
-from recsys.inventory import DEFAULT_INVENTORY_ASSUMPTIONS, InventoryAssumptions, generate_inventory
 from recsys.model import MLRecommendationEngine
-from recsys.profiles import SyntheticProfile, generate_population
+from recsys.paired_stats import PairedResult, paired_compare
+from recsys.panels import DEFICIT_LEVELS, experiment_panels
+from recsys.profiles import SyntheticProfile
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
-from recsys.regimes import REGIMES, Regime
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-2-service-logic-report.md")
 
-#: Same panel convention as recsys/benchmark.py and recsys/sensitivity.py:
-#: 9 of 27 regimes, seed 20260905. Kept at the full 80 users/regime from the
-#: plan — timed at well under a minute for the full 3-deficit x 9-regime x
-#: 4-arm x 80-user grid on this machine, so no reduction was needed.
-DEFAULT_REGIMES: tuple[Regime, ...] = REGIMES[:9]
-DEFAULT_USERS_PER_REGIME = 80
-DEFAULT_SEED = 20260905
 TOP_K = 3
 
 #: The baseline every comparison is measured against: the shipped policy.
 BASELINE_ARM = "effort_first"
-
-#: Low/base/high calibrated the same way as recsys/sensitivity.py's DIALS for
-#: these two knobs. "base" is ``DEFAULT_INVENTORY_ASSUMPTIONS`` itself, so it
-#: can never drift from the real default.
-DEFICIT_LEVELS: dict[str, InventoryAssumptions] = {
-    "low (полки полны)": replace(
-        DEFAULT_INVENTORY_ASSUMPTIONS, no_product_at_all=0.02, out_of_stock=0.02
-    ),
-    "base (наше допущение)": DEFAULT_INVENTORY_ASSUMPTIONS,
-    "high (частый дефицит)": replace(
-        DEFAULT_INVENTORY_ASSUMPTIONS, no_product_at_all=0.35, out_of_stock=0.35
-    ),
-}
 
 
 def build_arms(engine: MLRecommendationEngine) -> tuple[Arm, ...]:
@@ -183,6 +163,35 @@ class RegimeCell:
         return self.empty_users / self.n_users if self.n_users else 0.0
 
 
+@dataclass(frozen=True)
+class UserOutcome:
+    """What one arm did for one shopper.
+
+    The unit the panel migration unlocked. Every arm sees the same people on
+    the same shelves, so arms can be differenced per user instead of compared
+    as aggregates — which is both a stronger comparison and an honest one,
+    since the pairing physically exists in the data.
+    """
+
+    user_id: str
+    arm: str
+    deficit: str
+    n_cards: int
+    relevant_cards: int
+    zero_missing_cards: int
+    mean_missing: float
+    total_cost_rub: float
+    is_empty: bool
+
+    @property
+    def precision_at_k(self) -> float:
+        return self.relevant_cards / self.n_cards if self.n_cards else 0.0
+
+    @property
+    def has_hit(self) -> bool:
+        return self.relevant_cards > 0
+
+
 def _run_cell(
     *,
     service: RecommendationService,
@@ -192,7 +201,7 @@ def _run_cell(
     arm: str,
     regime_name: str,
     recipe_lookup: dict,
-) -> RegimeCell:
+) -> tuple[RegimeCell, list[UserOutcome]]:
     n_cards = 0
     relevant_cards = 0
     users_with_hit = 0
@@ -200,6 +209,7 @@ def _run_cell(
     missing_counts: list[int] = []
     costs: list[float] = []
     empty_users = 0
+    per_user: list[UserOutcome] = []
 
     for profile, inventory in zip(profiles, inventories, strict=True):
         request = RecommendationRequest(
@@ -216,18 +226,44 @@ def _run_cell(
         if not response.recommendations:
             empty_users += 1
         hit = False
+        user_cards = 0
+        user_relevant = 0
+        user_zero_missing = 0
+        user_missing: list[int] = []
+        user_cost = 0.0
         for card in response.recommendations:
             n_cards += 1
+            user_cards += 1
             recipe = recipe_lookup[card.recipe_id]
             if oracle_relevant(profile, recipe, request):
                 relevant_cards += 1
+                user_relevant += 1
                 hit = True
             if card.missing_count == 0:
                 zero_missing += 1
+                user_zero_missing += 1
             missing_counts.append(card.missing_count)
-            costs.append(_assembled_cost_rub(card))
+            user_missing.append(card.missing_count)
+            cost = _assembled_cost_rub(card)
+            costs.append(cost)
+            user_cost += cost
         if hit:
             users_with_hit += 1
+        per_user.append(
+            UserOutcome(
+                user_id=profile.user.user_id,
+                arm=arm,
+                deficit=deficit,
+                n_cards=user_cards,
+                relevant_cards=user_relevant,
+                zero_missing_cards=user_zero_missing,
+                mean_missing=(
+                    statistics.mean(user_missing) if user_missing else 0.0
+                ),
+                total_cost_rub=user_cost,
+                is_empty=not response.recommendations,
+            )
+        )
 
     return RegimeCell(
         deficit=deficit,
@@ -241,30 +277,29 @@ def _run_cell(
         missing_counts=tuple(missing_counts),
         missing_cost_rub=tuple(costs),
         empty_users=empty_users,
-    )
+    ), per_user
 
 
 def run_experiment(
     *,
-    regimes: tuple[Regime, ...] = DEFAULT_REGIMES,
-    users_per_regime: int = DEFAULT_USERS_PER_REGIME,
-    seed: int = DEFAULT_SEED,
-    deficit_levels: dict[str, InventoryAssumptions] = DEFICIT_LEVELS,
+    split: str = "train",
     progress: bool = False,
-) -> tuple[RegimeCell, ...]:
-    """Run all four arms through every (deficit level, regime, user).
+) -> tuple[tuple[RegimeCell, ...], list[UserOutcome]]:
+    """Run all four arms over one panel split, at every deficit level.
 
-    One ``MLRecommendationEngine()`` is trained once and shared by every arm
-    and every deficit level — model_score never changes; only the ranking
-    policy and the inventory scarcity dials do. Profiles are regenerated
-    (deterministically, same seed formula) once per deficit level so the
-    three deficit levels see the identical user population and only the
-    inventory differs, the same pairing discipline recsys.benchmark uses
-    across arms.
+    One ``MLRecommendationEngine()`` is trained once and shared by every arm —
+    ``model_score`` never changes, only what ``RankingPolicy`` does with it.
+
+    The population comes from ``recsys.panels`` rather than being regenerated
+    here. That is the whole migration: the users, their histories and their
+    shelves are materialised, hashed and checked, so a rerun provably sees the
+    same data and the deficit levels provably differ only in the shelf (same
+    profile hash, different inventory hash). ``split`` defaults to ``train``
+    because this experiment *selects* a policy, and selection happens on train.
     """
     engine = MLRecommendationEngine()
     arms = build_arms(engine)
-    recipe_lookup = {r.recipe_id: r for r in RECIPES}
+    recipe_lookup = {r.recipe_id: r for r in baseline_catalog()}
     services = {
         arm.name: RecommendationService(
             engine=arm.engine, safety_policy=SafetyPolicy(), ranking_policy=arm.ranking_policy
@@ -273,39 +308,60 @@ def run_experiment(
     }
 
     cells: list[RegimeCell] = []
-    for deficit_name, assumptions in deficit_levels.items():
-        for regime_index, regime in enumerate(regimes):
-            if progress:
-                print(f"  {deficit_name} / {regime.name}", flush=True)
-            profiles = generate_population(
-                users_per_regime,
-                seed=seed + regime_index,
-                archetypes=regime.archetypes(),
+    outcomes: list[UserOutcome] = []
+    for deficit_name, panel in experiment_panels(split).items():
+        if progress:
+            print(
+                f"  {deficit_name}: {len(panel.profiles)} users "
+                f"(profiles {panel.manifest.profiles_checksum}, "
+                f"inventory {panel.manifest.inventories_checksum})",
+                flush=True,
             )
-            inventory_rng = random.Random(seed + 100_000 + regime_index)
-            inventories = [
-                generate_inventory(
-                    inventory_rng,
-                    now=profile.now,
-                    home_store_id=profile.current_receipt.store_id,
-                    user_radius_km=profile.user.radius_km,
-                    assumptions=assumptions,
-                )
-                for profile in profiles
-            ]
-            for arm in arms:
-                cells.append(
-                    _run_cell(
-                        service=services[arm.name],
-                        profiles=profiles,
-                        inventories=inventories,
-                        deficit=deficit_name,
-                        arm=arm.name,
-                        regime_name=regime.name,
-                        recipe_lookup=recipe_lookup,
-                    )
-                )
-    return tuple(cells)
+        for arm in arms:
+            cell, per_user = _run_cell(
+                service=services[arm.name],
+                profiles=panel.profiles,
+                inventories=panel.inventories,
+                deficit=deficit_name,
+                arm=arm.name,
+                regime_name=f"{split}/{deficit_name}",
+                recipe_lookup=recipe_lookup,
+            )
+            cells.append(cell)
+            outcomes.extend(per_user)
+    return tuple(cells), outcomes
+
+
+def paired_precision(
+    outcomes: list[UserOutcome],
+    *,
+    deficit: str,
+    challenger: str,
+    baseline: str = BASELINE_ARM,
+) -> PairedResult:
+    """Challenger against baseline on precision@k, differenced per shopper.
+
+    This replaced a win-rate over (regime x arm) cells. The cell framing was
+    forced by nine small populations; on one panel the same person is served by
+    every arm, so the comparison can use the pairing that physically exists
+    instead of averaging it away. A share of cells was also never an effect
+    size — this reports the difference and an interval on it.
+    """
+
+    def by_user(arm: str) -> dict[str, float]:
+        return {
+            o.user_id: o.precision_at_k
+            for o in outcomes
+            if o.arm == arm and o.deficit == deficit and o.n_cards > 0
+        }
+
+    return paired_compare(
+        by_user(baseline),
+        by_user(challenger),
+        baseline=baseline,
+        challenger=challenger,
+        metric=f"precision@k ({deficit})",
+    )
 
 
 def pool(cells: tuple[RegimeCell, ...], *, deficit: str, arm: str) -> RegimeCell:
@@ -416,23 +472,41 @@ ARM_LABELS = {
 
 def build_report(
     cells: tuple[RegimeCell, ...],
+    outcomes: list[UserOutcome],
     *,
     runtime_s: float,
-    regimes: tuple[Regime, ...],
-    users_per_regime: int,
-    seed: int,
 ) -> str:
     out: list[str] = []
     w = out.append
+    n_users = len({o.user_id for o in outcomes})
 
     w("# Эксперимент 2: влияние сервисной логики")
     w("")
     w(
         f"Сгенерирован `python -m recsys.experiment2_service_logic`. Один "
         f"`MLRecommendationEngine()` (не переобучается между вариантами), "
-        f"{len(regimes)} миров × {users_per_regime} пользователей/мир × "
+        f"панель `development/train` — {n_users} пользователей × "
         f"{len(DEFICIT_LEVELS)} уровня дефицита × 4 варианта обработки, "
-        f"seed `{seed}`, {runtime_s:.0f} с."
+        f"{runtime_s:.0f} с."
+    )
+    w("")
+    w(
+        "Популяция берётся из `recsys.panels`, а не генерируется здесь: "
+        "профили, истории и выкладки материализованы и захешированы, поэтому "
+        "повторный прогон доказуемо видит те же данные, а уровни дефицита "
+        "доказуемо отличаются только полкой — один и тот же хеш профилей, "
+        "разные хеши инвентаря. Сплит `train`, потому что этот эксперимент "
+        "**выбирает** политику, а выбор делается на train "
+        "(`docs/research/recsys/evaluation-protocol.md` §3)."
+    )
+    w("")
+    w(
+        "Поведенческие миры (`recsys.regimes`) здесь намеренно не разворачиваются. "
+        "Эксперимент отвечает «какая рука лучше на нашей популяции»; «переживёт "
+        "ли это другого покупателя» — вопрос устойчивости, и им владеет "
+        "`recsys.sensitivity`. Разделение даёт одну большую правильно разбитую "
+        "популяцию вместо девяти маленьких неразбитых — и делает возможным "
+        "парное сравнение по пользователям."
     )
     w("")
     w(
@@ -448,10 +522,20 @@ def build_report(
     w("## 0. Методология")
     w("")
     w(
-        "- **Панель.** `recsys.profiles.generate_population` + "
-        "`recsys.inventory.generate_inventory`, `REGIMES[:9]`, "
-        f"{users_per_regime} пользователей/мир, seed `{seed}` — та же "
-        "конвенция, что в `recsys/benchmark.py`/`recsys/sensitivity.py`."
+        f"- **Панель.** `recsys.panels`, сплит `development/train`, "
+        f"{n_users} пользователей. Материализована, захеширована и проверяется "
+        "при загрузке; уровни дефицита получены через `Panel.with_inventory`, "
+        "который сохраняет seed инвентаря — те же случайные числа, другие "
+        "пороги, то есть парное сравнение по общим случайным числам, а не два "
+        "независимых розыгрыша."
+    )
+    w(
+        "- **Единица сравнения — пользователь, а не ячейка.** Каждую руку "
+        "видит один и тот же человек с той же корзиной и той же полкой, "
+        "поэтому руки вычитаются по-пользовательски, а доверительный интервал "
+        "строится бутстрепом по пользователям. Прежняя формулировка «доля "
+        "выигранных ячеек» была навязана девятью маленькими популяциями и, "
+        "кроме того, не является размером эффекта."
     )
     w(
         "- **Что меряется — на финальной выдаче, а не на сырых кандидатах.** "
@@ -639,7 +723,7 @@ def build_report(
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     started = time.time()
-    cells = run_experiment(progress=True)
+    cells, outcomes = run_experiment(progress=True)
     runtime = time.time() - started
 
     print()
@@ -657,13 +741,19 @@ def main() -> int:
                 f"empty={cell.empty_rate:.3f}"
             )
 
+    print()
+    print("парное сравнение по пользователям (train, база):")
+    for arm in ARM_ORDER:
+        if arm == BASELINE_ARM:
+            continue
+        result = paired_precision(outcomes, deficit="база", challenger=arm)
+        print(f"  {result.summary()}")
+
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     report = build_report(
         cells,
+        outcomes,
         runtime_s=runtime,
-        regimes=DEFAULT_REGIMES,
-        users_per_regime=DEFAULT_USERS_PER_REGIME,
-        seed=DEFAULT_SEED,
     )
     OUTPUT_PATH.write_text(report, encoding="utf-8", newline="\n")
     print(f"\n{OUTPUT_PATH}: {len(report.splitlines())} lines")

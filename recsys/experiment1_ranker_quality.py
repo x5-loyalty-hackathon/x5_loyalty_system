@@ -33,6 +33,7 @@ from app.contracts import Recipe, RecommendationRequest
 from app.safety import SafetyPolicy
 from app.service import EFFORT_FIRST, RecommendationService
 from recsys.benchmark import PRIMARY_METRIC, Arm, RandomEngine, run_benchmark
+from recsys.catalog_freeze import baseline_catalog
 from recsys.catboost_model import GRADIENT_BOOSTER_BACKEND, CatBoostRecommendationEngine
 from recsys.coverage_heuristic_engine import CoverageHeuristicEngine
 from recsys.diagnostics import Stratum, StratifiedSignal, auc, pearson
@@ -40,13 +41,11 @@ from recsys.evaluation import oracle_relevant
 from recsys.inventory import (
     DEFAULT_INVENTORY_ASSUMPTIONS,
     InventoryAssumptions,
-    generate_inventory,
 )
 from recsys.model import MLRecommendationEngine, compute_features, compute_user_stats
 from recsys.oracle_ranking_engine import OracleRankingEngine
 from recsys.pantry import DISABLED_PANTRY, available_ingredient_ids
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.panels import experiment_panels
 from recsys.regimes import REGIMES
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-1-ranker-quality-report.md")
@@ -159,10 +158,7 @@ def _is_feasible_today(
 def run_eval_ab(
     engines: dict[str, object],
     *,
-    regimes: tuple = REGIMES_USED,
-    users_per_regime: int = USERS_PER_REGIME,
-    seed: int = DEFAULT_SEED,
-    deficit_levels: tuple = DEFICIT_LEVELS,
+    split: str = "train",
     progress: bool = False,
 ) -> list[DeficitLevelResult]:
     """Eval A (want-to-cook) and Eval B (store availability) in one pass.
@@ -170,92 +166,87 @@ def run_eval_ab(
     ``inventory_snapshot`` never gates Eval A — ``oracle_relevant`` and
     ``compute_features`` here see only ``current_receipt``/``purchase_history``
     for the relevance judgment. It is used only for Eval B's separate
-    feasibility check and for the ``markdown_supply_signal`` feature, exactly
-    as ``recsys.model`` already does.
+    feasibility check.
+
+    The population comes from ``recsys.panels``: materialised, hashed and
+    verified on load, with the deficit levels sharing one profile set so the
+    sweep is paired by construction. ``split`` defaults to ``train`` — this
+    experiment picks a ranker, and picking happens on train.
     """
     service = RecommendationService(engine=RandomEngine(), safety_policy=SafetyPolicy())
-    recipe_catalog = list(RECIPES)
+    recipe_catalog = baseline_catalog()
     recipe_lookup = {r.recipe_id: r for r in recipe_catalog}
     results: list[DeficitLevelResult] = []
 
-    for deficit_label, assumptions in deficit_levels:
+    for deficit_label, panel in experiment_panels(split).items():
         if progress:
-            print(f"  Eval A/B: {deficit_label}", flush=True)
+            print(
+                f"  Eval A/B: {deficit_label} ({len(panel.profiles)} users, "
+                f"profiles {panel.manifest.profiles_checksum})",
+                flush=True,
+            )
         by_engine = {name: EngineAccumulator() for name in engines}
         base_relevance_sum = 0.0
         n_profiles = 0
 
-        for regime_index, regime in enumerate(regimes):
-            profiles = generate_population(
-                users_per_regime, seed=seed + regime_index, archetypes=regime.archetypes()
+        for profile, inventory in panel.pairs():
+            request = RecommendationRequest(
+                user=profile.user,
+                current_receipt=profile.current_receipt,
+                purchase_history=profile.purchase_history,
+                recipe_catalog=recipe_catalog,
+                inventory_snapshot=inventory,
+                now=profile.now,
+                limit=TOP_K,
             )
-            inventory_rng = random.Random(seed + 100_000 + regime_index)
+            n_profiles += 1
+            covered_ids = available_ingredient_ids(request, policy=DISABLED_PANTRY)
+            user_stats = compute_user_stats(request)
 
-            for profile in profiles:
-                inventory = generate_inventory(
-                    inventory_rng,
-                    now=profile.now,
-                    home_store_id=profile.current_receipt.store_id,
-                    user_radius_km=profile.user.radius_km,
-                    assumptions=assumptions,
-                )
-                request = RecommendationRequest(
-                    user=profile.user,
-                    current_receipt=profile.current_receipt,
-                    purchase_history=profile.purchase_history,
-                    recipe_catalog=recipe_catalog,
-                    inventory_snapshot=inventory,
-                    now=profile.now,
-                    limit=TOP_K,
-                )
-                n_profiles += 1
-                covered_ids = available_ingredient_ids(request, policy=DISABLED_PANTRY)
-                user_stats = compute_user_stats(request)
+            relevance_by_recipe: dict[str, bool] = {}
+            missing_count_by_recipe: dict[str, int] = {}
+            for recipe in recipe_catalog:
+                relevance_by_recipe[recipe.recipe_id] = oracle_relevant(profile, recipe, request)
+                features = compute_features(request, recipe, user_stats)
+                missing_count_by_recipe[recipe.recipe_id] = int(features["_missing_count"])
+            base_relevance_sum += sum(relevance_by_recipe.values()) / len(recipe_catalog)
 
-                relevance_by_recipe: dict[str, bool] = {}
-                missing_count_by_recipe: dict[str, int] = {}
-                for recipe in recipe_catalog:
-                    relevance_by_recipe[recipe.recipe_id] = oracle_relevant(profile, recipe, request)
-                    features = compute_features(request, recipe, user_stats)
-                    missing_count_by_recipe[recipe.recipe_id] = int(features["_missing_count"])
-                base_relevance_sum += sum(relevance_by_recipe.values()) / len(recipe_catalog)
+            ranked_by_engine = {name: engine.rank(request) for name, engine in engines.items()}
+            oracle_top3_ids = {r.recipe_id for r in ranked_by_engine["oracle"][:TOP_K]}
+            oracle_rank_position = {
+                r.recipe_id: i for i, r in enumerate(ranked_by_engine["oracle"])
+            }
 
-                ranked_by_engine = {name: engine.rank(request) for name, engine in engines.items()}
-                oracle_top3_ids = {r.recipe_id for r in ranked_by_engine["oracle"][:TOP_K]}
-                oracle_rank_position = {
-                    r.recipe_id: i for i, r in enumerate(ranked_by_engine["oracle"])
-                }
+            for name, ranked in ranked_by_engine.items():
+                acc = by_engine[name]
+                top_k = ranked[:TOP_K]
 
-                for name, ranked in ranked_by_engine.items():
-                    acc = by_engine[name]
-                    top_k = ranked[:TOP_K]
+                if top_k:
+                    acc.precision_hits.append(
+                        sum(relevance_by_recipe[r.recipe_id] for r in top_k) / len(top_k)
+                    )
+                for rec in top_k:
+                    acc.total_topk += 1
+                    if _is_feasible_today(
+                        service, request, recipe_lookup[rec.recipe_id], covered_ids
+                    ):
+                        acc.feasible_topk += 1
 
-                    if top_k:
-                        acc.precision_hits.append(
-                            sum(relevance_by_recipe[r.recipe_id] for r in top_k) / len(top_k)
-                        )
-                    for rec in top_k:
-                        acc.total_topk += 1
-                        if _is_feasible_today(
-                            service, request, recipe_lookup[rec.recipe_id], covered_ids
-                        ):
-                            acc.feasible_topk += 1
+                for rec in ranked:
+                    bucket = missing_count_by_recipe[rec.recipe_id]
+                    acc.stratum_scores[bucket].append(rec.score)
+                    acc.stratum_labels[bucket].append(relevance_by_recipe[rec.recipe_id])
 
-                    for rec in ranked:
-                        bucket = missing_count_by_recipe[rec.recipe_id]
-                        acc.stratum_scores[bucket].append(rec.score)
-                        acc.stratum_labels[bucket].append(relevance_by_recipe[rec.recipe_id])
-
-                    if name in ("ml", "catboost"):
-                        ranked_ids = [r.recipe_id for r in ranked]
-                        top3_ids = set(ranked_ids[:TOP_K])
-                        union = top3_ids | oracle_top3_ids
-                        acc.top3_jaccard_vs_oracle.append(
-                            len(top3_ids & oracle_top3_ids) / len(union) if union else 0.0
-                        )
-                        own_positions = list(range(len(ranked_ids)))
-                        oracle_positions = [oracle_rank_position[rid] for rid in ranked_ids]
-                        acc.spearman_vs_oracle.append(pearson(own_positions, oracle_positions))
+                if name in ("ml", "catboost"):
+                    ranked_ids = [r.recipe_id for r in ranked]
+                    top3_ids = set(ranked_ids[:TOP_K])
+                    union = top3_ids | oracle_top3_ids
+                    acc.top3_jaccard_vs_oracle.append(
+                        len(top3_ids & oracle_top3_ids) / len(union) if union else 0.0
+                    )
+                    own_positions = list(range(len(ranked_ids)))
+                    oracle_positions = [oracle_rank_position[rid] for rid in ranked_ids]
+                    acc.spearman_vs_oracle.append(pearson(own_positions, oracle_positions))
 
         results.append(
             DeficitLevelResult(
@@ -311,8 +302,7 @@ def build_report(
     c_results: dict[str, object],
     *,
     runtime_s: float,
-    users_per_regime: int,
-    n_regimes: int,
+    n_users: int,
     eval_c_users_per_regime: int,
     eval_c_n_regimes: int,
 ) -> str:
@@ -323,9 +313,9 @@ def build_report(
     w("")
     w(
         "Сгенерирован `python -m recsys.experiment1_ranker_quality`. "
-        f"Eval A/B: {n_regimes} миров × {users_per_regime} пользователей × "
+        f"Eval A/B: панель `development/train`, {n_users} пользователей × "
         f"{len(DEFICIT_LEVELS)} уровня дефицита = "
-        f"{n_regimes * users_per_regime * len(DEFICIT_LEVELS)} профилей, {runtime_s:.0f} с."
+        f"{n_users * len(DEFICIT_LEVELS)} наблюдений, {runtime_s:.0f} с."
     )
     w("")
     w(
@@ -482,7 +472,7 @@ def build_report(
         f"Прогон через полный `recsys.benchmark.run_benchmark` (политика "
         f"`EFFORT_FIRST`, как в проде) на уменьшенном масштабе — "
         f"{eval_c_n_regimes} миров × {eval_c_users_per_regime} пользователей, "
-        f"против A/B ({n_regimes} × {users_per_regime}) — потому что здесь "
+        f"против A/B ({n_users} пользователей панели) — потому что здесь "
         f"считается **вся** воронка (4 симулятора × 4 ранкера × миры), а не "
         f"один проход ранжирования. Только проверка направления согласованности "
         f"с (A)/(B), не самостоятельный результат."
@@ -555,7 +545,7 @@ def build_report(
     w(
         "- **Eval C заведомо меньше по масштабу**, чем A/B "
         f"({eval_c_n_regimes}×{eval_c_users_per_regime} против "
-        f"{n_regimes}×{users_per_regime}) — воронка там дороже "
+        f"{n_users} пользователей панели) — воронка там дороже "
         "(4 симулятора на каждую пару рука/мир/пользователь). Числа раздела C "
         "менее устойчивы, чем A/B, и заявлены только как sanity-check."
     )
@@ -578,6 +568,7 @@ def main() -> int:
 
     print("running Eval A/B...", flush=True)
     ab_results = run_eval_ab(engines, progress=True)
+    n_panel_users = len(experiment_panels("train")["база"].profiles)
 
     eval_c_regimes = REGIMES[:5]
     eval_c_users = 30
@@ -596,8 +587,7 @@ def main() -> int:
         ab_results,
         c_results,
         runtime_s=runtime,
-        users_per_regime=USERS_PER_REGIME,
-        n_regimes=len(REGIMES_USED),
+        n_users=n_panel_users,
         eval_c_users_per_regime=eval_c_users,
         eval_c_n_regimes=len(eval_c_regimes),
     )

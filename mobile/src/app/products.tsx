@@ -109,7 +109,7 @@ export default function ProductsScreen() {
             </Text>
           </Pressable>
         </View>
-        <BottomNav active="catalog" />
+        <BottomNav active="recipes" />
       </View>
     </SafeAreaView>
   );

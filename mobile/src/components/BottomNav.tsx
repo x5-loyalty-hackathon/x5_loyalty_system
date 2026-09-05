@@ -2,11 +2,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { color } from '../theme/tokens';
 
-type NavKey = 'kitchen' | 'recipes' | 'catalog' | 'profile';
-const items: Array<{ key: NavKey; label: string; glyph: string; route?: '/' | '/recipes' | '/products' | '/profile' }> = [
+type NavKey = 'kitchen' | 'recipes' | 'profile';
+// «Каталог» отдельной вкладкой не нужен: экран товаров — шаг внутри сценария
+// рецепта, туда попадают из недостающего ингредиента, а не из таб-бара.
+const items: Array<{ key: NavKey; label: string; glyph: string; route: '/' | '/recipes' | '/profile' }> = [
   { key: 'kitchen', label: 'Кухня', glyph: '■', route: '/' },
   { key: 'recipes', label: 'Рецепты', glyph: '▤', route: '/recipes' },
-  { key: 'catalog', label: 'Каталог', glyph: '▦', route: '/products' },
   { key: 'profile', label: 'Профиль', glyph: '●', route: '/profile' },
 ];
 
@@ -17,7 +18,7 @@ export function BottomNav({ active }: { active: NavKey }) {
       {items.map((item) => {
         const selected = item.key === active;
         return (
-          <Pressable key={item.key} onPress={() => item.route && router.replace(item.route)} style={styles.item}>
+          <Pressable key={item.key} onPress={() => router.replace(item.route)} style={styles.item}>
             <Text style={[styles.glyph, selected && styles.selected]}>{item.glyph}</Text>
             <Text style={[styles.label, selected && styles.selected]}>{item.label}</Text>
           </Pressable>

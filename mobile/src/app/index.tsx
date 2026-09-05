@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
@@ -27,13 +27,28 @@ export default function KitchenScreen() {
   const { pantry, cookingRecipe, finishCooking, cookingStatus, cookingError } = useDemo();
   const [filter, setFilter] = useState<Filter>('all');
   const [expanded, setExpanded] = useState(false);
-  // Сцена занимает всю сцену-контейнер, шторка лежит поверх её нижней части.
+  // Сцена занимает весь контейнер, шторка лежит поверх её нижней части.
   const [stageHeight, setStageHeight] = useState(0);
+  // Высотой шторки владеет экран: к ней привязан и лист, и Домовой, поэтому
+  // он едет вместе со шторкой и всегда стоит на её краю.
+  const sheetHeight = useRef(new Animated.Value(SHEET_COLLAPSED)).current;
+  const expandedHeight = Math.max(
+    SHEET_COLLAPSED + 1,
+    stageHeight - SCENE_VISIBLE_WHEN_EXPANDED,
+  );
 
   // Начали готовить — шаги нужны сразу, поэтому шторка раскрывается сама.
   useEffect(() => {
     if (cookingRecipe) setExpanded(true);
   }, [cookingRecipe]);
+
+  useEffect(() => {
+    Animated.spring(sheetHeight, {
+      toValue: expanded ? expandedHeight : SHEET_COLLAPSED,
+      useNativeDriver: false,
+      bounciness: 4,
+    }).start();
+  }, [expanded, expandedHeight, sheetHeight]);
 
   const soonCount = pantry.filter((item) => item.tone !== 'good').length;
   const products = filter === 'soon' ? pantry.filter((item) => item.tone !== 'good') : pantry;
@@ -53,6 +68,7 @@ export default function KitchenScreen() {
         >
         <KitchenScene
           height={stageHeight}
+          mascotBottom={sheetHeight}
           products={pantry}
           pose={cookingRecipe ? 'cooking' : 'idle'}
           speech={
@@ -64,8 +80,9 @@ export default function KitchenScreen() {
 
         <View style={styles.sheetWrap} pointerEvents="box-none">
           <KitchenSheet
+            height={sheetHeight}
             collapsedHeight={SHEET_COLLAPSED}
-            expandedHeight={Math.max(SHEET_COLLAPSED + 1, stageHeight - SCENE_VISIBLE_WHEN_EXPANDED)}
+            expandedHeight={expandedHeight}
             expanded={expanded}
             onChange={setExpanded}
           >

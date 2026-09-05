@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Animated, PanResponder, StyleSheet, View } from 'react-native';
 import { color } from '../theme/tokens';
 
@@ -11,28 +11,22 @@ import { color } from '../theme/tokens';
  * тянем, ради одной панели это лишняя нативная зависимость.
  */
 export function KitchenSheet({
+  height,
   collapsedHeight,
   expandedHeight,
   expanded,
   onChange,
   children,
 }: {
+  /** Высотой владеет экран: к ней привязан не только сам лист, но и Домовой. */
+  height: Animated.Value;
   collapsedHeight: number;
   expandedHeight: number;
   expanded: boolean;
   onChange: (expanded: boolean) => void;
   children: React.ReactNode;
 }) {
-  const height = useRef(new Animated.Value(expanded ? expandedHeight : collapsedHeight)).current;
   const start = useRef(expanded ? expandedHeight : collapsedHeight);
-
-  useEffect(() => {
-    Animated.spring(height, {
-      toValue: expanded ? expandedHeight : collapsedHeight,
-      useNativeDriver: false,
-      bounciness: 4,
-    }).start();
-  }, [collapsedHeight, expanded, expandedHeight, height]);
 
   const pan = useRef(
     PanResponder.create({

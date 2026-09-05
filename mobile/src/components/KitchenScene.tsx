@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
@@ -23,6 +23,7 @@ export function KitchenScene({
   speech,
   pose = 'idle',
   height = BAND_HEIGHT,
+  mascotBottom = 0,
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
@@ -31,6 +32,11 @@ export function KitchenScene({
   pose?: keyof typeof MASCOT;
   /** Сколько комнаты показать по высоте. */
   height?: number;
+  /**
+   * Отступ Домового от низа сцены. Обычно это высота шторки: тогда он стоит
+   * на её краю и остаётся на «полу» в любом её положении.
+   */
+  mascotBottom?: Animated.Value | number;
   onMenuPress?: () => void;
 }) {
   const { placed } = placeProducts(products);
@@ -56,7 +62,11 @@ export function KitchenScene({
       <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
         <Text style={styles.menuText}>≡</Text>
       </Pressable>
-      <Image source={MASCOT[pose]} resizeMode="contain" style={styles.mascot} />
+      <Animated.Image
+        source={MASCOT[pose]}
+        resizeMode="contain"
+        style={[styles.mascot, { bottom: mascotBottom }]}
+      />
     </View>
   );
 }
@@ -82,8 +92,11 @@ const styles = StyleSheet.create({
   },
   menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
   /**
-   * Домовой стоит на одном месте независимо от того, сколько комнаты видно:
-   * ступни на уровне 310 точек от верха — там же, где в макете экрана.
+   * Домовой ростом с печь, а не выше неё: 124 точки — это примерно две трети
+   * высоты кухонного гарнитура в масштабе сцены. Стоит по центру, привязан к
+   * низу видимой части комнаты.
    */
-  mascot: { position: 'absolute', alignSelf: 'center', top: 120, width: 172, height: 190 },
+  mascot: {
+    position: 'absolute', alignSelf: 'center', width: 124, height: 124, marginBottom: -6,
+  },
 });

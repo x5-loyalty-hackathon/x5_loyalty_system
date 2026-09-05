@@ -26,6 +26,14 @@ ml = [
   "pandas>=2.2,<3",
   "scikit-learn>=1.5,<2",
 ]
+# Only used by recsys/catboost_model.py (experiment 1's CatBoost challenger,
+# see docs/research/recsys/experiment-1-ranker-quality-report.md). That
+# module falls back to scikit-learn's GradientBoostingClassifier (the `ml`
+# extra above) when catboost is not installed, so nothing on the runtime or
+# test import path hard-requires it.
+experiment1 = [
+  "catboost>=1.2,<2",
+]
 
 [tool.pytest.ini_options]
 addopts = "-q"

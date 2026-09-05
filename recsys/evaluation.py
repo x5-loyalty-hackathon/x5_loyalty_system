@@ -63,12 +63,10 @@ def oracle_relevant(
     module docstring). Not a substitute for human/real-user judgment."""
     params = ARCHETYPES[profile.archetype]
     features = compute_features(request, recipe)
-    missing_count = int(features["_missing_count"])
-    tolerance = params.max_missing_tolerance
-    if features["markdown_supply_signal"] >= 0.5 and params.markdown_affinity >= 0.5:
-        tolerance += 1
-    if missing_count > tolerance:
-        return False
+    # No feasibility gate: see ``recsys.model._label_for_pair`` for why. Judging
+    # relevance by how much shopping a recipe needs made this oracle a
+    # near-synonym for ``missing_count`` and left nothing for a recommender to
+    # learn beyond what the ranking policy already applies.
     if (
         params.time_limit_minutes is not None
         and recipe.preparation_minutes is not None
@@ -136,6 +134,24 @@ class EvalResult:
     history_dependent_n: int
     hit_rate_own_history_dependent: float | None
     hit_rate_shuffled_history_dependent: float | None
+    # Share of the top-k that is relevant, and the share of the whole catalog
+    # that is relevant for the same profiles.
+    #
+    # ``hit_rate_own`` asks "is at least one of three relevant", which
+    # saturates once relevance is common: with a 43% base rate a *random*
+    # ranker scores 1-(1-0.43)^3 = 0.82 and clears the 70% ADR-001 bar without
+    # ranking anything. That was invisible while the relevance label gated on
+    # missing_count and almost nothing was relevant. Precision does not
+    # saturate, and the lift over ``base_relevance_rate`` is what a ranker has
+    # to earn.
+    precision_at_k_own: float = 0.0
+    precision_at_k_shuffled: float = 0.0
+    base_relevance_rate: float = 0.0
+
+    @property
+    def precision_lift(self) -> float:
+        """How much better than picking k recipes at random."""
+        return self.precision_at_k_own - self.base_relevance_rate
 
     @property
     def personalization_gap(self) -> float:
@@ -153,7 +169,12 @@ class EvalResult:
         hd_gap = "n/a" if self.history_dependent_gap is None else f"{self.history_dependent_gap:+.0%}"
         lines = [
             f"profiles: {self.n_profiles}, top_k: {self.top_k}",
-            f"hit_rate_own (all modes): {self.hit_rate_own:.0%} (target >= 70%)",
+            f"precision@{self.top_k} own: {self.precision_at_k_own:.0%} "
+            f"(base relevance {self.base_relevance_rate:.0%}, "
+            f"lift {self.precision_lift:+.0%})",
+            f"precision@{self.top_k} shuffled: {self.precision_at_k_shuffled:.0%}",
+            f"hit_rate_own (all modes): {self.hit_rate_own:.0%} "
+            f"(saturates when base relevance is high — see EvalResult)",
             f"hit_rate_shuffled (all modes): {self.hit_rate_shuffled:.0%}",
             f"personalization_gap (all modes): {self.personalization_gap:+.0%}",
             f"  -- repeat/explore only (n={self.history_dependent_n}): "
@@ -185,6 +206,9 @@ def run_evaluation(
 
     own_hits = 0
     shuffled_hits = 0
+    own_precision_sum = 0.0
+    shuffled_precision_sum = 0.0
+    base_relevance_sum = 0.0
     covered = 0
     mode_counter: Counter[str] = Counter()
     unique_recipes: set[str] = set()
@@ -211,8 +235,17 @@ def run_evaluation(
         own_recs: list[ModelRecommendation] = engine.rank(own_request)[:top_k]
         if own_recs:
             covered += 1
-        if any(oracle_relevant(profile, recipe_lookup[r.recipe_id], own_request) for r in own_recs):
+        own_relevant = [
+            oracle_relevant(profile, recipe_lookup[r.recipe_id], own_request)
+            for r in own_recs
+        ]
+        if any(own_relevant):
             own_hits += 1
+        if own_relevant:
+            own_precision_sum += sum(own_relevant) / len(own_relevant)
+        base_relevance_sum += sum(
+            oracle_relevant(profile, recipe, own_request) for recipe in recipe_catalog
+        ) / len(recipe_catalog)
         for r in own_recs:
             mode_counter[r.mode.value if hasattr(r.mode, "value") else str(r.mode)] += 1
             unique_recipes.add(r.recipe_id)
@@ -227,8 +260,14 @@ def run_evaluation(
             now=profile.now,
         )
         shuffled_recs: list[ModelRecommendation] = engine.rank(shuffled_request)[:top_k]
-        if any(oracle_relevant(profile, recipe_lookup[r.recipe_id], shuffled_request) for r in shuffled_recs):
+        shuffled_relevant = [
+            oracle_relevant(profile, recipe_lookup[r.recipe_id], shuffled_request)
+            for r in shuffled_recs
+        ]
+        if any(shuffled_relevant):
             shuffled_hits += 1
+        if shuffled_relevant:
+            shuffled_precision_sum += sum(shuffled_relevant) / len(shuffled_relevant)
         shuffled_hd_recs = [r for r in shuffled_recs if r.mode != RecommendationMode.CURRENT]
 
         # Only count this profile toward the history-dependent slice if
@@ -254,6 +293,9 @@ def run_evaluation(
         hit_rate_own_history_dependent=(hd_own_hits / hd_n) if hd_n else None,
         hit_rate_shuffled_history_dependent=(hd_shuffled_hits / hd_n) if hd_n else None,
         coverage=covered / n,
+        precision_at_k_own=own_precision_sum / n,
+        precision_at_k_shuffled=shuffled_precision_sum / n,
+        base_relevance_rate=base_relevance_sum / n,
         mode_distribution=dict(mode_counter),
         unique_recipes_recommended=len(unique_recipes),
         total_recipes_available=len(recipe_catalog),

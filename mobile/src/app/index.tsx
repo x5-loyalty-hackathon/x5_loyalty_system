@@ -68,7 +68,6 @@ export default function KitchenScreen() {
         >
         <KitchenScene
           height={stageHeight}
-          mascotBottom={sheetHeight}
           products={pantry}
           pose={cookingRecipe ? 'cooking' : 'idle'}
           // Во время готовки облачко не нужно: что происходит, видно по шагам,

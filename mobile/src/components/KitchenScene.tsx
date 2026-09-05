@@ -1,4 +1,4 @@
-import { Animated, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
@@ -22,33 +22,34 @@ const ART = { left: -39, top: 0, width: 468, height: 624 };
  *
  * Рост задан пропорцией к самой кухне: столешница поднята на 200 точек над
  * полом и должна приходиться Домовому примерно на бедро — это его кухня, он
- * за ней работает. Отсюда рост 333 точки. `foot` — нижнее прозрачное поле,
- * на него опускаем спрайт, чтобы ступни встали на край шторки.
+ * за ней работает. Отсюда рост 333 точки.
+ *
+ * `top` рассчитан так, чтобы ступни стояли на нарисованном полу (строка 117
+ * сетки). У поз разные прозрачные поля снизу, поэтому значение своё для
+ * каждой. Домовой стоит в комнате и не привязан к шторке: она проходит
+ * поверх него.
  */
 const MASCOT = {
   idle: {
     source: require('../../assets/domovoi/mascot-spoon.png'),
     width: 411,
     height: 456,
-    foot: 68,
+    top: 80,
   },
   cooking: {
     source: require('../../assets/domovoi/mascot-cook.png'),
     width: 458,
     height: 458,
-    foot: 88,
+    top: 98,
   },
 } as const;
 
-/** Насколько ступни уходят за край шторки, чтобы он стоял, а не парил. */
-const FOOT_OVERLAP = 6;
 
 export function KitchenScene({
   products,
   speech,
   pose = 'idle',
   height = BAND_HEIGHT,
-  mascotBottom = 0,
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
@@ -58,11 +59,6 @@ export function KitchenScene({
   pose?: keyof typeof MASCOT;
   /** Сколько комнаты показать по высоте. */
   height?: number;
-  /**
-   * Отступ Домового от низа сцены. Обычно это высота шторки: тогда он стоит
-   * на её краю и остаётся на «полу» в любом её положении.
-   */
-  mascotBottom?: Animated.Value | number;
   onMenuPress?: () => void;
 }) {
   const { placed } = placeProducts(products);
@@ -90,7 +86,7 @@ export function KitchenScene({
       <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
         <Text style={styles.menuText}>≡</Text>
       </Pressable>
-      <Animated.Image
+      <Image
         source={MASCOT[pose].source}
         resizeMode="contain"
         style={[
@@ -98,8 +94,7 @@ export function KitchenScene({
           {
             width: MASCOT[pose].width,
             height: MASCOT[pose].height,
-            bottom: mascotBottom,
-            marginBottom: -(MASCOT[pose].foot + FOOT_OVERLAP),
+            top: MASCOT[pose].top,
           },
         ]}
       />

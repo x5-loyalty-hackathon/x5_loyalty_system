@@ -13,10 +13,34 @@ const BAND_HEIGHT = 286;
  */
 const ART = { left: -39, top: 0, width: 468, height: 624 };
 
+/**
+ * Позы Домового.
+ *
+ * Масштаб считается по самому персонажу, а не по холсту: у спрайтов разные
+ * прозрачные поля (у позы готовки снизу их вдвое больше), поэтому одинаковая
+ * ширина картинки давала бы разный рост и разную линию пола.
+ *
+ * Целевой рост — 132 точки, ровно высота дверцы кухонного шкафа: рядом с ней
+ * он и стоит, поэтому она и есть честный ориентир масштаба. `foot` — нижнее
+ * прозрачное поле, на него опускаем спрайт, чтобы ступни встали на край шторки.
+ */
 const MASCOT = {
-  idle: require('../../assets/domovoi/mascot-spoon.png'),
-  cooking: require('../../assets/domovoi/mascot-cook.png'),
-};
+  idle: {
+    source: require('../../assets/domovoi/mascot-spoon.png'),
+    width: 163,
+    height: 181,
+    foot: 27,
+  },
+  cooking: {
+    source: require('../../assets/domovoi/mascot-cook.png'),
+    width: 182,
+    height: 182,
+    foot: 35,
+  },
+} as const;
+
+/** Насколько ступни уходят за край шторки, чтобы он стоял, а не парил. */
+const FOOT_OVERLAP = 6;
 
 export function KitchenScene({
   products,
@@ -63,9 +87,17 @@ export function KitchenScene({
         <Text style={styles.menuText}>≡</Text>
       </Pressable>
       <Animated.Image
-        source={MASCOT[pose]}
+        source={MASCOT[pose].source}
         resizeMode="contain"
-        style={[styles.mascot, { bottom: mascotBottom }]}
+        style={[
+          styles.mascot,
+          {
+            width: MASCOT[pose].width,
+            height: MASCOT[pose].height,
+            bottom: mascotBottom,
+            marginBottom: -(MASCOT[pose].foot + FOOT_OVERLAP),
+          },
+        ]}
       />
     </View>
   );
@@ -91,12 +123,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
   },
   menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
-  /**
-   * Домовой ростом с печь, а не выше неё: 124 точки — это примерно две трети
-   * высоты кухонного гарнитура в масштабе сцены. Стоит по центру, привязан к
-   * низу видимой части комнаты.
-   */
-  mascot: {
-    position: 'absolute', alignSelf: 'center', width: 124, height: 124, marginBottom: -6,
-  },
+  /** Размеры задаются позой: см. MASCOT. */
+  mascot: { position: 'absolute', alignSelf: 'center' },
 });

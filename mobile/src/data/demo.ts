@@ -113,20 +113,41 @@ export const demoRecipes: DemoRecipe[] = [
   },
 ];
 
+/**
+ * Продукт на кухне. Срока годности здесь нет намеренно: `ReceiptItem` его не
+ * содержит, а выдумывать данные, которых нет в чеке, мы не будем.
+ */
 export interface KitchenProduct {
-  id: string; name: string; quantity: string; expires: string; tone: 'good' | 'soon' | 'today';
+  id: string;
+  name: string;
+  quantity: string;
 }
 
 export const kitchenProducts: KitchenProduct[] = [
-  { id: 'pasta', name: 'Спагетти', quantity: '450 г', expires: '12 дней', tone: 'good' },
-  { id: 'mince', name: 'Фарш индейки', quantity: '400 г', expires: '2 дня', tone: 'soon' },
-  { id: 'tomato', name: 'Помидоры', quantity: '500 г', expires: '4 дня', tone: 'good' },
-  { id: 'cheese', name: 'Пармезан', quantity: '200 г', expires: '21 день', tone: 'good' },
-  { id: 'milk', name: 'Молоко', quantity: '1 л', expires: 'сегодня', tone: 'today' },
-  { id: 'bread', name: 'Хлеб', quantity: '400 г', expires: '3 дня', tone: 'good' },
+  { id: 'pasta', name: 'Спагетти', quantity: '450 г' },
+  { id: 'mince', name: 'Фарш индейки', quantity: '400 г' },
+  { id: 'tomato', name: 'Помидоры', quantity: '500 г' },
+  { id: 'cheese', name: 'Пармезан', quantity: '200 г' },
+  { id: 'milk', name: 'Молоко', quantity: '1 л' },
+  { id: 'bread', name: 'Хлеб', quantity: '400 г' },
 ];
 
-export interface CatalogProduct { id: string; name: string; unit: string; price: number; rating: number }
+export interface CatalogProduct {
+  id: string;
+  /** Какой ингредиент рецепта закрывает товар. Нужен, чтобы выбрать спрайт. */
+  ingredientId?: string;
+  name: string;
+  unit: string;
+  price: number;
+  rating: number;
+  /**
+   * Уценённый товар: короткий срок годности, цена ниже обычной.
+   * Соответствует `source: 'markdown'` в контракте backend.
+   */
+  markdown?: boolean;
+  /** Цена до уценки. Показывается зачёркнутой рядом с текущей. */
+  originalPrice?: number;
+}
 
 export const readyMeal: CatalogProduct = {
   id: 'ready-bolognese', name: 'Спагетти болоньезе, готовое блюдо', unit: '350 г', price: 249.99, rating: 4.91,
@@ -135,9 +156,10 @@ export const readyMeal: CatalogProduct = {
 export const catalogProducts: CatalogProduct[] = [
   { id: 'macfa-thin', name: 'Спагетти Макфа тонкие', unit: '450 г', price: 89.99, rating: 4.94 },
   { id: 'barilla-5', name: 'Паста Barilla Spaghetti n.5', unit: '500 г', price: 149.99, rating: 4.97 },
-  { id: 'shebekinskie', name: 'Спагетти Шебекинские', unit: '450 г', price: 74.99, rating: 4.88 },
+  { id: 'shebekinskie', name: 'Спагетти Шебекинские', unit: '450 г', price: 74.99, rating: 4.88, markdown: true, originalPrice: 119.99 },
   { id: 'rollton', name: 'Макароны Роллтон спагетти', unit: '400 г', price: 59.99, rating: 4.71 },
   { id: 'divo', name: 'Спагетти цельнозерновые Диво', unit: '400 г', price: 119, rating: 4.9 },
+  { id: 'makfa-nests', name: 'Спагетти Макфа гнёзда', unit: '400 г', price: 69.99, rating: 4.82, markdown: true, originalPrice: 109.99 },
   { id: 'red-price', name: 'Спагетти Красная цена', unit: '450 г', price: 44.99, rating: 4.65 },
 ];
 
@@ -145,21 +167,41 @@ const alternativeCatalogs: Record<string, CatalogProduct[]> = {
   onion: [
     { id: 'onion-yellow', name: 'Лук репчатый жёлтый', unit: '1 кг', price: 69.99, rating: 4.86 },
     { id: 'onion-packed', name: 'Лук репчатый фасованный', unit: '500 г', price: 54.99, rating: 4.91 },
-    { id: 'onion-red', name: 'Лук красный', unit: '500 г', price: 99.99, rating: 4.88 },
+    { id: 'onion-red', name: 'Лук красный', unit: '500 г', price: 99.99, rating: 4.88, markdown: true, originalPrice: 149.99 },
   ],
   basil: [
     { id: 'basil-pot', name: 'Базилик зелёный в горшочке', unit: '1 шт.', price: 119.99, rating: 4.9 },
     { id: 'basil-pack', name: 'Базилик свежий', unit: '30 г', price: 89.99, rating: 4.84 },
     { id: 'basil-dry', name: 'Базилик сушёный', unit: '10 г', price: 49.99, rating: 4.76 },
+    { id: 'basil-markdown', name: 'Базилик свежий, срок сегодня', unit: '30 г', price: 44.99, rating: 4.8, markdown: true, originalPrice: 89.99 },
   ],
 };
 
+/**
+ * Уценённые товары идут первыми внутри общего пула — так задан продуктовый
+ * сценарий. Порядок внутри групп сохраняется. Настоящее ранжирование придёт
+ * из модели: здесь только раскладка на две группы.
+ */
+export function markdownFirst(products: readonly CatalogProduct[]): CatalogProduct[] {
+  return [
+    ...products.filter((product) => product.markdown),
+    ...products.filter((product) => !product.markdown),
+  ];
+}
+
 export function productsForIngredient(ingredient: DemoIngredient): CatalogProduct[] {
-  if (ingredient.id === 'pasta') return catalogProducts;
-  return alternativeCatalogs[ingredient.id] ?? [
+  const pool = ingredient.id === 'pasta'
+    ? catalogProducts
+    : alternativeCatalogs[ingredient.id] ?? genericProducts(ingredient);
+  return pool.map((product) => ({ ...product, ingredientId: ingredient.id }));
+}
+
+function genericProducts(ingredient: DemoIngredient): CatalogProduct[] {
+  return [
     { id: `${ingredient.id}-x5`, name: `${ingredient.name} X5`, unit: ingredient.amount, price: 99.99, rating: 4.9 },
     { id: `${ingredient.id}-choice`, name: `${ingredient.name} Отбор`, unit: ingredient.amount, price: 129.99, rating: 4.86 },
     { id: `${ingredient.id}-value`, name: `${ingredient.name} выгодно`, unit: ingredient.amount, price: 79.99, rating: 4.74 },
+    { id: `${ingredient.id}-markdown`, name: `${ingredient.name}, короткий срок`, unit: ingredient.amount, price: 59.99, rating: 4.7, markdown: true, originalPrice: 99.99 },
   ];
 }
 

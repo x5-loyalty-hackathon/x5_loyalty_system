@@ -6,18 +6,15 @@ import { BottomNav } from '../components/BottomNav';
 import { KitchenScene } from '../components/KitchenScene';
 import { KitchenSheet } from '../components/KitchenSheet';
 import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
-import { recentReceipt } from '../fixtures/recommendationRequest';
 import { recipeDetails } from '../fixtures/recipeDetails';
 import { matchingSteps } from '../domain/mealFlow';
-import { kitchenProducts } from '../domain/kitchen';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 
 const COLLAPSED_HEIGHT = 220;
-const products = kitchenProducts(recentReceipt.items);
 export default function KitchenScreen() {
   const router = useRouter();
-  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking } = useDemo();
+  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products } = useDemo();
   const [stageHeight, setStageHeight] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const sheetHeight = useRef(new Animated.Value(COLLAPSED_HEIGHT)).current;
@@ -63,8 +60,8 @@ export default function KitchenScreen() {
                 <Choice label="Из недавних покупок →" disabled={busy} onPress={() => enter(false)} />
               </View>
               <Text style={ui.title}>Продукты на кухне</Text>
-              <Text style={ui.text}>Показаны покупки из synthetic-чека от 04.09.2026, не точный остаток дома.
-                Рисунки условные: ниже реальные названия из demo-чека.</Text>
+              <Text style={ui.text}>Начальный demo-чек от 04.09.2026 и покупки этой сессии, принятые сервером.
+                Это не точный остаток дома. Рисунки условные: ниже названия купленных товаров.</Text>
               {products.map((item) => <View key={item.id} style={styles.item}>
                 <Text style={ui.text}>{item.name}</Text>
               </View>)}

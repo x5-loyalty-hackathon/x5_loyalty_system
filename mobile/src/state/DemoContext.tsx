@@ -4,7 +4,8 @@ import type {
   Anchor, FulfillmentOption, HealthResponse, MealPlan, MealRecommendation, MealResponse,
   MealRoute, PlanRequest, ProductOption, ProgressSnapshot, RecommendationMode,
 } from '../api/types';
-import { DEMO_NOW, DEMO_USER_ID } from '../fixtures/recommendationRequest';
+import { DEMO_NOW, DEMO_USER_ID, recentReceipt } from '../fixtures/recommendationRequest';
+import { kitchenProducts, mergeKitchenProducts, purchasedKitchenProducts } from '../domain/kitchen';
 import {
   acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, receiptNotice,
 } from '../domain/mealFlow';
@@ -31,6 +32,8 @@ function useDemoState() {
   const [book, setBook] = useState<string[]>([]);
   const [plan, setPlan] = useState<MealPlan | null>(null);
   const [cooking, setCooking] = useState(false);
+  const [kitchenItems, setKitchenItems] = useState(kitchenProducts(recentReceipt.items));
+  const kitchenReceipts = useRef(new Set<string>());
   const pendingPlan = useRef<PendingPlan | null>(null);
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
@@ -148,12 +151,21 @@ function useDemoState() {
     setNotice('План сохранён. Это список на доставку или визит, не заказ и не бронь.');
   });
   const confirmPurchase = () => run(async () => {
-    if (!plan || !pendingPlan.current) throw new Error('Сначала сохраните план.');
-    const result = await api.submitReceipt(makeDemoReceipt(
-      pendingPlan.current.request, pendingPlan.current.products, DEMO_NOW));
+    if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала сохраните план.');
+    const pending = pendingPlan.current;
+    const receipt = makeDemoReceipt(pending.request, pending.products, DEMO_NOW);
+    const result = await api.submitReceipt(receipt);
     acceptProgress(result.progress);
     if (result.meal_plan) setPlan(result.meal_plan);
-    setNotice(receiptNotice(result));
+    // Business rejection/review throws before kitchen display is changed.
+    const message = receiptNotice(result);
+    if (!kitchenReceipts.current.has(receipt.receipt.receipt_id)) {
+      const purchased = purchasedKitchenProducts(selectedMeal, pending.request.selected_route, pending.products);
+      kitchenReceipts.current.add(receipt.receipt.receipt_id);
+      setKitchenItems((current) => mergeKitchenProducts(current, purchased));
+    }
+    // Keep the locked basket for retries; cooking never deletes whole packs.
+    setNotice(message);
   });
   const confirmCooking = () => run(async () => {
     if (!plan || (!canCompleteCook(plan) && plan.status !== 'completed')) throw new Error('Сначала соберите продукты.');
@@ -173,7 +185,7 @@ function useDemoState() {
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
-    cooking, startCooking, pauseCooking,
+    cooking, startCooking, pauseCooking, kitchenItems,
     actionError, notice, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }

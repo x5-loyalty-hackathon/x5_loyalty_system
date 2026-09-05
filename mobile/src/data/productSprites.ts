@@ -78,3 +78,21 @@ export function spriteForIngredient(ingredientId: string): ProductSprite | null 
   const slug = SPRITE_FOR_INGREDIENT[ingredientId];
   return slug ? PRODUCT_SPRITES[slug] ?? null : null;
 }
+
+/**
+ * Спрайт под слот заданного размера. Нужен, когда родного места для продукта
+ * уже нет: полку лучше занять подходящим по габаритам предметом, чем оставить
+ * пустой. Выбор детерминирован — зависит только от `seed`, поэтому картинка
+ * не скачет между перерисовками.
+ */
+export function spriteForSlotSize(width: number, height: number, seed: string): ProductSprite | null {
+  const candidates = Object.values(PRODUCT_SPRITES).filter(
+    (sprite) => sprite.size[0] === width && sprite.size[1] === height,
+  );
+  if (candidates.length === 0) return null;
+  let hash = 0;
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = (hash * 31 + seed.charCodeAt(index)) % 100000;
+  }
+  return candidates[hash % candidates.length];
+}

@@ -50,13 +50,13 @@ data/generated/
 # CONTRIBUTING.md's "no large generated datasets" rule and Kaggle's own
 # redistribution terms.
 #
-# Внимание: шаблон без ведущего слэша совпадает с папкой `data` на любом
-# уровне вложенности, поэтому исходники в `*/data/` нужно возвращать явно.
-# Git не заходит внутрь исключённой папки, так что возвращать надо сам
-# каталог, а не отдельные файлы в нём.
-data/
-!mobile/src/data/
-!recsys/data/
+# Anchored with a leading slash. Without it the pattern matched at every
+# level and silently swallowed recsys/data/, whose small committed JSON
+# references recsys imports at runtime — ML tests failed on a fresh clone.
+/data/
+
+# Raw collector output: a 29 MB SQLite plus ~24 MB of raw API dumps.
+x5_ready_food_collector/data/
 
 # Notebooks
 .ipynb_checkpoints/

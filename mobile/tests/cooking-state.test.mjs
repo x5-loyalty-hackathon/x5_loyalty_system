@@ -5,6 +5,7 @@ import test from 'node:test';
 import ts from 'typescript';
 import * as mealFlow from '../src/domain/mealFlow.ts';
 import * as fixtures from '../src/fixtures/recommendationRequest.ts';
+import * as kitchen from '../src/domain/kitchen.ts';
 
 const meal = {
   meal_id: 'home_meal', title: 'Блюдо дома', mode: 'current', default_route: 'cook',
@@ -22,11 +23,13 @@ const response = {
 
 // Real provider code with deterministic hook slots and controlled API outcomes.
 // Covers state transitions, not React scheduling or rendered phone navigation.
-function providerHarness() {
+function providerHarness(recommendations = response) {
   const slots = [];
   let cursor = 0;
   let completeResult = async () => { throw new Error('connection lost'); };
   let completionCalls = 0;
+  let purchaseResult = async () => { assert.fail('Cooking must not synthesize a purchase'); };
+  const receipts = [];
   const react = {
     createContext: () => ({ Provider: 'Provider' }), useContext: () => null,
     useCallback: (fn) => fn,
@@ -43,15 +46,15 @@ function providerHarness() {
   const jsx = (type, props) => ({ type, props });
   const api = {
     getHealth: async () => ({ contract_version: '1.2' }),
-    getRecommendations: async () => response,
+    getRecommendations: async () => recommendations,
     getRecipeBook: async () => ({ saved_recipe_ids: [] }),
     saveMealPlan: async (request) => ({ status: 'created', plan: { ...request, status: 'saved' } }),
     completeCook: async () => { completionCalls++; return completeResult(); },
-    submitReceipt: () => { assert.fail('Cooking must not synthesize a purchase'); },
+    submitReceipt: async (receipt) => { receipts.push(receipt); return purchaseResult(receipt); },
   };
   const modules = {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx }, '../api/endpoints': api,
-    '../fixtures/recommendationRequest': fixtures, '../domain/mealFlow': mealFlow,
+    '../fixtures/recommendationRequest': fixtures, '../domain/mealFlow': mealFlow, '../domain/kitchen': kitchen,
   };
   const source = readFileSync(new URL('../src/state/DemoContext.tsx', import.meta.url), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: {
@@ -64,6 +67,8 @@ function providerHarness() {
   return {
     render() { cursor = 0; return exports.DemoProvider({ children: null }).props.value; },
     completion(fn) { completeResult = fn; },
+    purchase(fn) { purchaseResult = fn; },
+    receipts,
     calls: () => completionCalls,
   };
 }
@@ -116,4 +121,77 @@ test('new recommendation query clears the previous cooking session and plan', as
   assert.equal(harness.render().cooking, false);
   assert.equal(harness.render().selectedMeal, null);
   assert.equal(harness.render().plan, null);
+});
+
+async function purchaseHarness() {
+  const product = {
+    sku_id: 'onion_sale', name: 'Лук, 500 г', category: 'vegetable',
+    store_id: 'store_17', price: 29.9, original_price: 49.9,
+    source: 'markdown', fulfillment_options: ['next_visit'], distance_km: 0.4,
+  };
+  const topup = { ...meal, cook_variant: { ...meal.cook_variant, missing_count: 1,
+    store_selection: { selected_store_id: 'store_17' }, ingredients: [
+      ...meal.cook_variant.ingredients,
+      { ingredient_id: 'onion', required: true, source: 'markdown', product_options: [product] },
+    ],
+  } };
+  const harness = providerHarness({ ...response, recommendations: [topup] });
+  await harness.render().loadRecipes();
+  harness.render().selectMeal('home_meal');
+  harness.render().chooseMarkdown(true);
+  assert.equal(await harness.render().savePlan(), true);
+  return harness;
+}
+
+function purchaseResponse(harness, status = 'verified') {
+  return { status, progress: { avatar_xp: 10 },
+    meal_plan: { ...harness.render().plan, status: 'collected' } };
+}
+
+test('kitchen changes after accepted purchase, not during request; retries and cooking keep items', async () => {
+  const harness = await purchaseHarness();
+  const initial = harness.render().kitchenItems;
+  let release;
+  harness.purchase(() => new Promise((resolve) => { release = resolve; }));
+  const pending = harness.render().confirmPurchase();
+  assert.deepEqual(harness.render().kitchenItems, initial);
+  assert.equal(await harness.render().confirmPurchase(), false);
+  assert.equal(harness.receipts.length, 1);
+  release(purchaseResponse(harness));
+  assert.equal(await pending, true);
+  assert.deepEqual(harness.render().kitchenItems, [...initial, { id: 'onion', name: 'Лук, 500 г' }]);
+  harness.purchase(async () => purchaseResponse(harness, 'duplicate'));
+  assert.equal(await harness.render().confirmPurchase(), true);
+  assert.deepEqual(harness.receipts[0], harness.receipts[1]);
+  assert.equal(harness.render().kitchenItems.length, initial.length + 1);
+  assert.equal(harness.render().basket.products.length, 1, 'retry keeps the locked basket');
+  assert.equal(harness.render().startCooking(), true);
+  harness.completion(async () => ({ status: 'completed',
+    plan: { ...harness.render().plan, status: 'completed' }, progress: { avatar_xp: 30 } }));
+  await harness.render().confirmCooking();
+  assert.equal(harness.render().kitchenItems.length, initial.length + 1, 'no whole-pack deletion');
+});
+
+test('rejected/review/unknown receipt outcomes do not populate kitchen or erase basket', async () => {
+  const harness = await purchaseHarness();
+  const initial = harness.render().kitchenItems;
+  for (const status of ['rejected', 'pending_review', 'unknown_status']) {
+    harness.purchase(async () => ({ status, progress: { avatar_xp: 0 }, meal_plan: null }));
+    assert.equal(await harness.render().confirmPurchase(), false, status);
+    assert.deepEqual(harness.render().kitchenItems, initial);
+    assert.equal(harness.render().basket.products.length, 1);
+    assert.ok(harness.render().actionError);
+  }
+});
+
+test('lost purchase response leaves kitchen unchanged; server duplicate recovers it once', async () => {
+  const harness = await purchaseHarness();
+  const initial = harness.render().kitchenItems;
+  harness.purchase(async () => { throw new Error('response lost'); });
+  assert.equal(await harness.render().confirmPurchase(), false);
+  assert.deepEqual(harness.render().kitchenItems, initial);
+  harness.purchase(async () => purchaseResponse(harness, 'duplicate'));
+  assert.equal(await harness.render().confirmPurchase(), true);
+  assert.deepEqual(harness.receipts[0], harness.receipts[1]);
+  assert.equal(harness.render().kitchenItems.length, initial.length + 1);
 });

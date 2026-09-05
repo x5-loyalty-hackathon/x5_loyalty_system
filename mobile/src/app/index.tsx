@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
+import { KitchenScene } from '../components/KitchenScene';
 import { PhotoStub } from '../components/PhotoStub';
 import { kitchenProducts, type KitchenProduct } from '../data/demo';
 import { color } from '../theme/tokens';
@@ -28,30 +28,10 @@ export default function KitchenScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.shell}>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={styles.hero}>
-            {/* Кадр как в макете: арт 468×248 со сдвигом влево на 39, полоса 286. */}
-            <Image
-              source={require('../../assets/kitchen/kitchen-band.png')}
-              style={styles.kitchenArt}
-            />
-            <LinearGradient
-              colors={['rgba(244,231,205,0)', color.cream]}
-              style={styles.heroFade}
-            />
-            <View style={styles.speech}>
-              <Text style={styles.speechText}>
-                Молоко надо выпить сегодня. Сварим что-нибудь?
-              </Text>
-            </View>
-            <Pressable accessibilityLabel="Меню" style={styles.menu}>
-              <Text style={styles.menuText}>≡</Text>
-            </Pressable>
-            <Image
-              source={require('../../assets/domovoi/mascot-spoon.png')}
-              resizeMode="contain"
-              style={styles.mascot}
-            />
-          </View>
+          <KitchenScene
+            products={kitchenProducts}
+            speech="Молоко надо выпить сегодня. Сварим что-нибудь?"
+          />
 
           <View style={styles.sheet}>
             <View style={styles.sectionTitleRow}>
@@ -129,22 +109,6 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: color.cream },
   shell: { flex: 1, backgroundColor: color.bg },
   scroll: { paddingBottom: 168 },
-
-  hero: { height: 286, backgroundColor: color.cream, overflow: 'hidden' },
-  kitchenArt: { position: 'absolute', left: -39, top: 0, width: 468, height: 248 },
-  heroFade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 46 },
-  speech: {
-    position: 'absolute', left: 20, top: 14, maxWidth: 200, paddingVertical: 10,
-    paddingHorizontal: 13, backgroundColor: 'rgba(255,255,255,0.94)', borderRadius: 16,
-    borderBottomLeftRadius: 4,
-  },
-  speechText: { color: color.brown, fontSize: 13, lineHeight: 17.5, fontWeight: '600' },
-  menu: {
-    position: 'absolute', right: 18, top: 14, width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
-  },
-  menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
-  mascot: { position: 'absolute', alignSelf: 'center', bottom: -24, width: 172, height: 190 },
 
   sheet: {
     marginTop: -18, paddingHorizontal: 16, paddingTop: 18, backgroundColor: color.bg,

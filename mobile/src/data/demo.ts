@@ -112,21 +112,31 @@ export const demoRecipes: DemoRecipe[] = [
   },
 ];
 
+/**
+ * Продукт на кухне. Срока годности здесь нет намеренно: `ReceiptItem` его не
+ * содержит, а выдумывать данные, которых нет в чеке, мы не будем. `markdown`
+ * приходит из чека как `is_markdown`.
+ */
 export interface KitchenProduct {
-  id: string; name: string; quantity: string; expires: string; tone: 'good' | 'soon' | 'today';
+  id: string;
+  name: string;
+  quantity: string;
+  markdown?: boolean;
 }
 
 export const kitchenProducts: KitchenProduct[] = [
-  { id: 'pasta', name: 'Спагетти', quantity: '450 г', expires: '12 дней', tone: 'good' },
-  { id: 'mince', name: 'Фарш индейки', quantity: '400 г', expires: '2 дня', tone: 'soon' },
-  { id: 'tomato', name: 'Помидоры', quantity: '500 г', expires: '4 дня', tone: 'good' },
-  { id: 'cheese', name: 'Пармезан', quantity: '200 г', expires: '21 день', tone: 'good' },
-  { id: 'milk', name: 'Молоко', quantity: '1 л', expires: 'сегодня', tone: 'today' },
-  { id: 'bread', name: 'Хлеб', quantity: '400 г', expires: '3 дня', tone: 'good' },
+  { id: 'pasta', name: 'Спагетти', quantity: '450 г' },
+  { id: 'mince', name: 'Фарш индейки', quantity: '400 г' },
+  { id: 'tomato', name: 'Помидоры', quantity: '500 г' },
+  { id: 'cheese', name: 'Пармезан', quantity: '200 г' },
+  { id: 'milk', name: 'Молоко', quantity: '1 л', markdown: true },
+  { id: 'bread', name: 'Хлеб', quantity: '400 г' },
 ];
 
 export interface CatalogProduct {
   id: string;
+  /** Какой ингредиент рецепта закрывает товар. Нужен, чтобы выбрать спрайт. */
+  ingredientId?: string;
   name: string;
   unit: string;
   price: number;
@@ -181,8 +191,14 @@ export function markdownFirst(products: readonly CatalogProduct[]): CatalogProdu
 }
 
 export function productsForIngredient(ingredient: DemoIngredient): CatalogProduct[] {
-  if (ingredient.id === 'pasta') return catalogProducts;
-  return alternativeCatalogs[ingredient.id] ?? [
+  const pool = ingredient.id === 'pasta'
+    ? catalogProducts
+    : alternativeCatalogs[ingredient.id] ?? genericProducts(ingredient);
+  return pool.map((product) => ({ ...product, ingredientId: ingredient.id }));
+}
+
+function genericProducts(ingredient: DemoIngredient): CatalogProduct[] {
+  return [
     { id: `${ingredient.id}-x5`, name: `${ingredient.name} X5`, unit: ingredient.amount, price: 99.99, rating: 4.9 },
     { id: `${ingredient.id}-choice`, name: `${ingredient.name} Отбор`, unit: ingredient.amount, price: 129.99, rating: 4.86 },
     { id: `${ingredient.id}-value`, name: `${ingredient.name} выгодно`, unit: ingredient.amount, price: 79.99, rating: 4.74 },

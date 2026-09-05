@@ -13,8 +13,11 @@
 export const GRID_W = 117;
 /** Полная высота комнаты. */
 export const GRID_H = 156;
-/** Сколько строк сетки показано в приложении. */
-export const BAND_ROWS = 62;
+/**
+ * До какой строки сетки слот остаётся на виду. Ниже начинается свёрнутая
+ * шторка со списком продуктов, и предмет за ней уже не разглядеть.
+ */
+export const VISIBLE_ROWS = 116;
 
 /** Масштаб: сколько точек экрана приходится на одну клетку сетки. */
 export const CELL = 4;
@@ -63,7 +66,7 @@ export function slotRect(slot: KitchenSlot): SlotRect {
 /** Слот целиком попадает в показанную полосу и не выходит за края экрана. */
 export function isSlotVisible(slot: KitchenSlot): boolean {
   const [x, y, w, h] = slot.rect;
-  if (y + h > BAND_ROWS) return false;
+  if (y + h > VISIBLE_ROWS) return false;
   const { left, width } = slotRect(slot);
   return left >= 0 && left + width <= SCREEN_W;
 }

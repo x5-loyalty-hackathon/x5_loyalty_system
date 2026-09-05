@@ -10,14 +10,6 @@ import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import type { KitchenProduct } from '../data/demo';
 
-type Filter = 'all' | 'soon';
-
-const TONE: Record<KitchenProduct['tone'], string> = {
-  good: color.green,
-  soon: color.orange,
-  today: color.red,
-};
-
 const SHEET_COLLAPSED = 200;
 /** Сколько комнаты остаётся над раскрытой шторкой: хватает на Домового в рост. */
 const SCENE_VISIBLE_WHEN_EXPANDED = 300;
@@ -25,7 +17,6 @@ const SCENE_VISIBLE_WHEN_EXPANDED = 300;
 export default function KitchenScreen() {
   const router = useRouter();
   const { pantry, cookingRecipe, finishCooking, cookingStatus, cookingError } = useDemo();
-  const [filter, setFilter] = useState<Filter>('all');
   const [expanded, setExpanded] = useState(false);
   // Сцена занимает весь контейнер, шторка лежит поверх её нижней части.
   const [stageHeight, setStageHeight] = useState(0);
@@ -50,8 +41,6 @@ export default function KitchenScreen() {
     }).start();
   }, [expanded, expandedHeight, sheetHeight]);
 
-  const soonCount = pantry.filter((item) => item.tone !== 'good').length;
-  const products = filter === 'soon' ? pantry.filter((item) => item.tone !== 'good') : pantry;
 
   const onFinish = async () => {
     await finishCooking();
@@ -120,16 +109,8 @@ export default function KitchenScreen() {
                   <Text style={styles.count}>по чекам · {pantry.length}</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-                  <View style={styles.filters}>
-                    <FilterChip label="Все" selected={filter === 'all'} onPress={() => setFilter('all')} />
-                    <FilterChip
-                      label={`Скоро испортится · ${soonCount}`}
-                      selected={filter === 'soon'}
-                      onPress={() => setFilter('soon')}
-                    />
-                  </View>
                   <View style={styles.grid}>
-                    {products.map((product) => (
+                    {pantry.map((product) => (
                       <KitchenCard key={product.id} product={product} />
                     ))}
                   </View>
@@ -152,26 +133,17 @@ export default function KitchenScreen() {
   );
 }
 
-function FilterChip({
-  label, selected, onPress,
-}: { label: string; selected: boolean; onPress: () => void }) {
-  return (
-    <Pressable style={[styles.filter, selected && styles.filterSelected]} onPress={onPress}>
-      <Text style={[styles.filterText, selected && styles.filterTextSelected]}>{label}</Text>
-    </Pressable>
-  );
-}
-
 function KitchenCard({ product }: { product: KitchenProduct }) {
   return (
     <View style={styles.card}>
       <PhotoStub style={styles.cardPhoto} />
       <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
       <Text style={styles.cardQty}>{product.quantity}</Text>
-      <View style={styles.pill}>
-        <View style={[styles.pillDot, { backgroundColor: TONE[product.tone] }]} />
-        <Text style={styles.pillText}>{product.expires}</Text>
-      </View>
+      {product.markdown ? (
+        <View style={styles.pill}>
+          <Text style={styles.pillText}>уценка</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -196,14 +168,6 @@ const styles = StyleSheet.create({
 
   scroll: { paddingHorizontal: 16, paddingBottom: 12 },
 
-  filters: { flexDirection: 'row', gap: 8, marginBottom: 14 },
-  filter: {
-    paddingHorizontal: 14, paddingVertical: 9, borderRadius: 18,
-    backgroundColor: color.white, minHeight: 36, justifyContent: 'center',
-  },
-  filterSelected: { backgroundColor: color.ink },
-  filterText: { color: color.ink, fontSize: 13, fontWeight: '600' },
-  filterTextSelected: { color: color.white },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   card: {
@@ -214,11 +178,10 @@ const styles = StyleSheet.create({
   cardName: { color: color.ink, fontSize: 12, lineHeight: 15, fontWeight: '600', marginBottom: 3 },
   cardQty: { color: color.muted, fontSize: 11, marginBottom: 7 },
   pill: {
-    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 4,
-    paddingHorizontal: 7, paddingVertical: 4, borderRadius: 9, backgroundColor: color.bg,
+    alignSelf: 'flex-start', paddingHorizontal: 7, paddingVertical: 4,
+    borderRadius: 9, backgroundColor: color.orange,
   },
-  pillDot: { width: 6, height: 6, borderRadius: 3 },
-  pillText: { color: color.body, fontSize: 10.5, fontWeight: '600' },
+  pillText: { color: color.white, fontSize: 10.5, fontWeight: '700' },
 
   step: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12,

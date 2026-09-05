@@ -1,15 +1,16 @@
 /**
  * Раскладка продуктов пользователя по слотам кухни.
  *
- * Правило задано артом, а не догадками: спрайт нарисован под конкретный размер
- * слота, поэтому продукт встаёт только туда, где габариты совпадают клетка в
- * клетку. Растягивать спрайт нельзя — это пиксель-арт.
+ * Спрайт нарисован под конкретный размер слота, растягивать пиксель-арт нельзя.
+ * Поэтому сначала пробуем родной спрайт продукта, а если места его размера уже
+ * нет — занимаем любое свободное и берём спрайт под него. Кухня должна
+ * наполняться по мере роста запасов; точное соответствие категории вторично.
  *
  * Раскладка детерминирована: один и тот же список продуктов всегда даёт одну
  * и ту же картинку.
  */
 import type { KitchenProduct } from './demo';
-import { spriteForIngredient, type ProductSprite } from './productSprites';
+import { spriteForIngredient, spriteForSlotSize, type ProductSprite } from './productSprites';
 import { visibleSlots, type KitchenSlot } from './kitchenSlots';
 
 export interface PlacedProduct {
@@ -18,7 +19,7 @@ export interface PlacedProduct {
   slot: KitchenSlot;
 }
 
-export type SkipReason = 'нет спрайта' | 'нет свободного места нужного размера';
+export type SkipReason = 'нет свободного места';
 
 export interface SkippedProduct {
   product: KitchenProduct;
@@ -45,14 +46,21 @@ export function placeProducts(products: readonly KitchenProduct[]): {
   const skipped: SkippedProduct[] = [];
 
   for (const product of products) {
-    const sprite = spriteForIngredient(product.id);
+    const own = spriteForIngredient(product.id);
+    let slot = own
+      ? free.find((candidate) => !taken.has(candidate.id) && fits(candidate, own))
+      : undefined;
+    let sprite = own && slot ? own : null;
+
     if (!sprite) {
-      skipped.push({ product, reason: 'нет спрайта' });
-      continue;
+      // Родного места нет — занимаем любое свободное подходящим по размеру
+      // спрайтом, чтобы полки заполнялись, а не пустовали.
+      slot = free.find((candidate) => !taken.has(candidate.id));
+      sprite = slot ? spriteForSlotSize(slot.rect[2], slot.rect[3], product.id) : null;
     }
-    const slot = free.find((candidate) => !taken.has(candidate.id) && fits(candidate, sprite));
-    if (!slot) {
-      skipped.push({ product, reason: 'нет свободного места нужного размера' });
+
+    if (!slot || !sprite) {
+      skipped.push({ product, reason: 'нет свободного места' });
       continue;
     }
     taken.add(slot.id);

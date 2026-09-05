@@ -134,6 +134,28 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const confirmPurchase = useCallback(async () => {
     setPurchaseStatus('loading');
     setPurchaseError(null);
+
+    // Купленное попадает на кухню сразу: это локальное состояние, оно не
+    // зависит от вердикта антифрода по чеку. Иначе повторный прогон демо
+    // выглядел бы как поломка, хотя товары человек действительно взял.
+    setPantry((current) => {
+      const next = [...current];
+      for (const product of basket) {
+        const id = product.ingredientId ?? product.id;
+        const item = {
+          id,
+          name: product.name,
+          quantity: product.unit,
+          markdown: product.markdown,
+        };
+        const at = next.findIndex((existing) => existing.id === id);
+        if (at >= 0) next[at] = item;
+        else next.push(item);
+      }
+      return next;
+    });
+    setBasket([]);
+
     try {
       // Ответ на чек уже несёт progress; отдельный GET подтверждает, что
       // состояние действительно сохранилось на backend.
@@ -149,7 +171,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       setPurchaseStatus('error');
       return null;
     }
-  }, [loadProgress, selectedRecipeId]);
+  }, [basket, loadProgress, selectedRecipeId]);
 
   const cookingRecipe = cookingRecipeId
     ? recipes.find((recipe) => recipe.id === cookingRecipeId) ?? null

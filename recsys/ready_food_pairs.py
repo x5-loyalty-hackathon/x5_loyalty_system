@@ -207,6 +207,20 @@ RECIPES_WITHOUT_READY_FOOD_PAIR: frozenset[str] = frozenset(
         "braised_pork_with_vegetables",
         "chicken_cucumber_salad",
         "vegetable_cheese_salad",
+        # Added for docs/research/recsys/experiment-3-catalog-coverage-report.md:
+        # short everyday dishes too generic/homemade to have a distinct
+        # prepared-meal counterpart in the September 2026 snapshot (no attempt
+        # was made to find one — see that report's "угрозы валидности").
+        "fried_chicken_breast",
+        "pork_chops",
+        "braised_beef_with_onion",
+        "fried_minced_meat_with_onion",
+        "pan_fried_semi_finished_cutlets",
+        "chicken_in_sour_cream",
+        "fried_zucchini_with_cheese",
+        "braised_cabbage",
+        "rice_milk_porridge",
+        "cottage_cheese_with_sour_cream",
     }
 )
 

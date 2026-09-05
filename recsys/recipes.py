@@ -329,6 +329,67 @@ RECIPES: tuple[Recipe, ...] = (
          "turmeric", "salt", "black_pepper"],
         preparation_minutes=35, servings=4, dish_type="Суп", cuisine="Европейская",
     ),
+    # Recipes below were added for docs/research/recsys/experiment-3-catalog-coverage-report.md:
+    # on the synthetic basket panel, the recipe that came closest to a random
+    # basket was overwhelmingly a short one (see the report), and "routine"
+    # baskets (dairy/vegetable/meat core) were the worst-covered archetype
+    # specifically because the catalog had few *short*, low-seasoning-count
+    # meat dishes to overlap with. These are ordinary short home dishes, not
+    # the elaborate ones already in the catalog above — the gap was in
+    # everyday quick cooking, not in dish variety. All ingredients already
+    # exist in ``recsys.catalog`` (no new vocabulary), including
+    # ``cutlet_semi_finished``, which had zero recipes using it before this.
+    _recipe(
+        "fried_chicken_breast", "Жареная куриная грудка",
+        ["chicken", "vegetable_oil", "salt", "black_pepper"],
+        preparation_minutes=20, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "pork_chops", "Свиные отбивные",
+        ["pork", "vegetable_oil", "paprika", "salt", "black_pepper"],
+        preparation_minutes=25, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "braised_beef_with_onion", "Говядина, тушённая с луком",
+        ["beef", "onion", "vegetable_oil", "bay_leaf", "salt", "black_pepper"],
+        preparation_minutes=70, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "fried_minced_meat_with_onion", "Жареный фарш с луком",
+        ["minced_meat", "onion", "vegetable_oil", "salt", "black_pepper"],
+        preparation_minutes=20, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "pan_fried_semi_finished_cutlets", "Котлеты жареные из полуфабриката",
+        ["cutlet_semi_finished", "vegetable_oil", "salt"],
+        preparation_minutes=15, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "chicken_in_sour_cream", "Куриное филе в сметане",
+        ["chicken", "sour_cream", "onion", "vegetable_oil", "dried_herbs", "salt", "black_pepper"],
+        preparation_minutes=35, dish_type="Основное блюдо", cuisine="Русская",
+    ),
+    _recipe(
+        "fried_zucchini_with_cheese", "Кабачки, жареные с сыром",
+        ["zucchini", "cheese", "vegetable_oil", "salt", "black_pepper"],
+        preparation_minutes=20, dish_type="Гарнир", cuisine="Русская",
+    ),
+    _recipe(
+        "braised_cabbage", "Тушёная капуста",
+        ["cabbage", "onion", "vegetable_oil", "salt", "black_pepper"],
+        preparation_minutes=30, dish_type="Гарнир", cuisine="Русская",
+    ),
+    _recipe(
+        "rice_milk_porridge", "Рисовая каша на молоке",
+        ["rice", "milk", "sugar", "salt"],
+        preparation_minutes=25, amounts={"sugar": (1, "ст. л.")},
+        dish_type="Каша", cuisine="Русская",
+    ),
+    _recipe(
+        "cottage_cheese_with_sour_cream", "Творог со сметаной",
+        ["cottage_cheese", "sour_cream"],
+        preparation_minutes=5, dish_type="Закуска", cuisine="Русская",
+    ),
 )
 
 RECIPES_BY_ID: dict[str, Recipe] = {recipe.recipe_id: recipe for recipe in RECIPES}

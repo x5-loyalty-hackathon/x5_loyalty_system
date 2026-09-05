@@ -19,8 +19,8 @@ const TONE: Record<KitchenProduct['tone'], string> = {
 };
 
 const SHEET_COLLAPSED = 200;
-/** Раскрытая шторка оставляет сверху ровно столько комнаты, сколько в макете. */
-const SCENE_VISIBLE_WHEN_EXPANDED = 268;
+/** Сколько комнаты остаётся над раскрытой шторкой: хватает на Домового в рост. */
+const SCENE_VISIBLE_WHEN_EXPANDED = 300;
 
 export default function KitchenScreen() {
   const router = useRouter();
@@ -71,11 +71,9 @@ export default function KitchenScreen() {
           mascotBottom={sheetHeight}
           products={pantry}
           pose={cookingRecipe ? 'cooking' : 'idle'}
-          speech={
-            cookingRecipe
-              ? `Готовим «${cookingRecipe.title}». Скажи, когда закончишь.`
-              : 'Молоко надо выпить сегодня. Сварим что-нибудь?'
-          }
+          // Во время готовки облачко не нужно: что происходит, видно по шагам,
+          // а Домовой в полный рост в него упирается.
+          speech={cookingRecipe ? '' : 'Молоко надо выпить сегодня. Сварим что-нибудь?'}
         />
 
         <View style={styles.sheetWrap} pointerEvents="box-none">

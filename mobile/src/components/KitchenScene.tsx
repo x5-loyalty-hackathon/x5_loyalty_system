@@ -20,22 +20,23 @@ const ART = { left: -39, top: 0, width: 468, height: 624 };
  * прозрачные поля (у позы готовки снизу их вдвое больше), поэтому одинаковая
  * ширина картинки давала бы разный рост и разную линию пола.
  *
- * Целевой рост — 132 точки, ровно высота дверцы кухонного шкафа: рядом с ней
- * он и стоит, поэтому она и есть честный ориентир масштаба. `foot` — нижнее
- * прозрачное поле, на него опускаем спрайт, чтобы ступни встали на край шторки.
+ * Рост задан пропорцией к самой кухне: столешница поднята на 200 точек над
+ * полом и должна приходиться Домовому примерно на бедро — это его кухня, он
+ * за ней работает. Отсюда рост 333 точки. `foot` — нижнее прозрачное поле,
+ * на него опускаем спрайт, чтобы ступни встали на край шторки.
  */
 const MASCOT = {
   idle: {
     source: require('../../assets/domovoi/mascot-spoon.png'),
-    width: 163,
-    height: 181,
-    foot: 27,
+    width: 411,
+    height: 456,
+    foot: 68,
   },
   cooking: {
     source: require('../../assets/domovoi/mascot-cook.png'),
-    width: 182,
-    height: 182,
-    foot: 35,
+    width: 458,
+    height: 458,
+    foot: 88,
   },
 } as const;
 
@@ -51,6 +52,7 @@ export function KitchenScene({
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
+  /** Реплика Домового. Пустая строка — облачко не показывается. */
   speech: string;
   /** Поза Домового: обычная или у плиты, когда готовим. */
   pose?: keyof typeof MASCOT;
@@ -80,9 +82,11 @@ export function KitchenScene({
 
       <LinearGradient colors={['rgba(244,231,205,0)', color.cream]} style={styles.fade} />
 
-      <View style={styles.speech}>
-        <Text style={styles.speechText}>{speech}</Text>
-      </View>
+      {speech ? (
+        <View style={styles.speech}>
+          <Text style={styles.speechText}>{speech}</Text>
+        </View>
+      ) : null}
       <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
         <Text style={styles.menuText}>≡</Text>
       </Pressable>

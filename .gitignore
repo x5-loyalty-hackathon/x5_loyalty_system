@@ -29,6 +29,7 @@ htmlcov/
 
 # JavaScript / TypeScript
 node_modules/
+.expo/
 .next/
 .nuxt/
 dist/
@@ -48,7 +49,14 @@ data/generated/
 # recsys/calibration/fit_from_kaggle.py) — never committed, per
 # CONTRIBUTING.md's "no large generated datasets" rule and Kaggle's own
 # redistribution terms.
+#
+# Внимание: шаблон без ведущего слэша совпадает с папкой `data` на любом
+# уровне вложенности, поэтому исходники в `*/data/` нужно возвращать явно.
+# Git не заходит внутрь исключённой папки, так что возвращать надо сам
+# каталог, а не отдельные файлы в нём.
 data/
+!mobile/src/data/
+!recsys/data/
 
 # Notebooks
 .ipynb_checkpoints/

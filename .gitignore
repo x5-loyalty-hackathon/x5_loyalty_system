@@ -57,5 +57,14 @@ data/generated/
 # Raw collector output: a 29 MB SQLite plus ~24 MB of raw API dumps.
 x5_ready_food_collector/data/
 
+# Materialised evaluation panels: ~6 MB of gzipped profiles and inventories,
+# rebuilt by `python -m recsys.panels`. The manifests next to them ARE
+# committed (see the negation below) — they carry the generator version, the
+# catalog hash and the content checksums, which is what a reviewer needs and
+# what `load_panel` verifies a rebuild against. Committing the payload too
+# would put megabytes of regenerable data in every clone to prove something
+# the checksum already proves.
+recsys/data/panels/**/panel.json.gz
+
 # Notebooks
 .ipynb_checkpoints/

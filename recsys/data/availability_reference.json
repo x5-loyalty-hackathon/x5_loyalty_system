@@ -1,0 +1,168 @@
+{
+ "source": "own collection, ready-food assortment",
+ "snapshot_ids": [
+  "2026-09-04T22:52:34+00:00",
+  "2026-09-04T23:38:22+00:00"
+ ],
+ "category_caveat": "Ready food only — the most localised category in the shop. Staples are very likely stocked far more uniformly, so this is not the value to use for recipe ingredients. It bounds the direction, not the number.",
+ "n_stores": 17,
+ "share_present": {
+  "min": 0.0825,
+  "median": 0.209,
+  "max": 0.7449
+ },
+ "share_present_by_chain": {
+  "perekrestok": {
+   "n_stores": 2,
+   "median": 0.6503,
+   "min": 0.5557,
+   "max": 0.7449
+  },
+  "pyaterochka": {
+   "n_stores": 15,
+   "median": 0.1844,
+   "min": 0.0825,
+   "max": 0.239
+  }
+ },
+ "observed_not_carried_median": 0.791,
+ "invented_constant": 0.08,
+ "stores": [
+  {
+   "chain": "perekrestok",
+   "city": "Москва",
+   "store_id": "1235",
+   "products_present": 441,
+   "chain_catalog": 592,
+   "share_present": 0.7449
+  },
+  {
+   "chain": "perekrestok",
+   "city": "Санкт-Петербург",
+   "store_id": "247",
+   "products_present": 329,
+   "chain_catalog": 592,
+   "share_present": 0.5557
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Волгоград",
+   "store_id": "30WQ",
+   "products_present": 223,
+   "chain_catalog": 933,
+   "share_present": 0.239
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Екатеринбург",
+   "store_id": "J125",
+   "products_present": 218,
+   "chain_catalog": 933,
+   "share_present": 0.2337
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Челябинск",
+   "store_id": "4268",
+   "products_present": 209,
+   "chain_catalog": 933,
+   "share_present": 0.224
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Москва",
+   "store_id": "35JV",
+   "products_present": 206,
+   "chain_catalog": 933,
+   "share_present": 0.2208
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Казань",
+   "store_id": "J856",
+   "products_present": 203,
+   "chain_catalog": 933,
+   "share_present": 0.2176
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Уфа",
+   "store_id": "8324",
+   "products_present": 197,
+   "chain_catalog": 933,
+   "share_present": 0.2111
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Омск",
+   "store_id": "J044",
+   "products_present": 195,
+   "chain_catalog": 933,
+   "share_present": 0.209
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Санкт-Петербург",
+   "store_id": "Q107",
+   "products_present": 172,
+   "chain_catalog": 933,
+   "share_present": 0.1844
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Новосибирск",
+   "store_id": "J168",
+   "products_present": 165,
+   "chain_catalog": 933,
+   "share_present": 0.1768
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Воронеж",
+   "store_id": "3A7B",
+   "products_present": 163,
+   "chain_catalog": 933,
+   "share_present": 0.1747
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Пермь",
+   "store_id": "332H",
+   "products_present": 147,
+   "chain_catalog": 933,
+   "share_present": 0.1576
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Нижний Новгород",
+   "store_id": "36N0",
+   "products_present": 143,
+   "chain_catalog": 933,
+   "share_present": 0.1533
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Краснодар",
+   "store_id": "36H3",
+   "products_present": 139,
+   "chain_catalog": 933,
+   "share_present": 0.149
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Ростов-на-Дону",
+   "store_id": "Q393",
+   "products_present": 115,
+   "chain_catalog": 933,
+   "share_present": 0.1233
+  },
+  {
+   "chain": "pyaterochka",
+   "city": "Самара",
+   "store_id": "3271",
+   "products_present": 77,
+   "chain_catalog": 933,
+   "share_present": 0.0825
+  }
+ ]
+}

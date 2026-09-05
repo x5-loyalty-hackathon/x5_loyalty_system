@@ -1,4 +1,5 @@
 /** Копия examples/receipt_event.json из backend. */
+/** Legacy design reference; NOT used by the API 1.2 flow. See makeDemoReceipt. */
 export const receiptEvent = {
   "user_id": "user_demo_001",
   "receipt": {

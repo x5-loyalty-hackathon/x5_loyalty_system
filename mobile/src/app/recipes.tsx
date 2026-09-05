@@ -1,108 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
 import { PhotoStub } from '../components/PhotoStub';
+import { Choice, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
-import { plural } from '../utils/plural';
-import type { DemoRecipe, DemoRecipeMode } from '../data/demo';
+import { explain, modeText, warningText } from '../domain/copy';
+import type { Anchor, RecommendationMode } from '../api/types';
 
-const tabs: Array<{ mode: DemoRecipeMode; label: string }> = [
-  { mode: 'current', label: 'Из корзины' },
-  { mode: 'repeat', label: 'Повторить' },
-  { mode: 'explore', label: 'Новые' },
+const anchors: Array<[Anchor, string]> = [
+  ['home', 'У дома'], ['work', 'У работы'], ['current_location', 'Рядом'], ['custom', 'Моё место'],
 ];
-
 export default function RecipesScreen() {
   const router = useRouter();
-  const { recipes, recipesStatus, recipesError, loadRecipes, selectRecipe } = useDemo();
-  const [tab, setTab] = useState<DemoRecipeMode>('current');
-
+  const { response, health, recipesStatus, recipesError, query, loadRecipes, selectMeal, busy } = useDemo();
   useEffect(() => { if (recipesStatus === 'idle') void loadRecipes(); }, [loadRecipes, recipesStatus]);
-
-  const openRecipe = (recipe: DemoRecipe) => {
-    selectRecipe(recipe.id);
-    router.push('/recipe');
-  };
-  const current = recipes.filter((recipe) => recipe.mode === 'current').slice(0, 3);
-  const repeat = recipes.filter((recipe) => recipe.mode === 'repeat').slice(0, 3);
-  const fresh = recipes.filter((recipe) => recipe.mode === 'explore').slice(0, 4);
-
-  return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <View style={styles.shell}>
-        <AppHeader title="Что приготовить" />
-        <View style={styles.tabs}>
-          {tabs.map((item) => (
-            <Pressable key={item.mode} onPress={() => setTab(item.mode)} style={[styles.tab, tab === item.mode && styles.tabActive]}>
-              <Text style={[styles.tabText, tab === item.mode && styles.tabTextActive]}>{item.label}</Text>
-            </Pressable>
-          ))}
+  return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+    <View style={styles.shell}>
+      <AppHeader title="Что поесть?" subtitle="Перед заказом или следующим визитом" />
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
+        <View style={ui.choices}>
+          <Choice label="Для меня" selected={query.mode === null} disabled={busy} onPress={() => void loadRecipes({ mode: null })} />
+          {(Object.keys(modeText) as RecommendationMode[]).map((mode) =>
+            <Choice key={mode} label={modeText[mode]} selected={query.mode === mode} disabled={busy}
+              onPress={() => void loadRecipes({ mode })} />)}
         </View>
-        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={styles.domovoiHint}>
-            <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.hintMascot} />
-            <Text style={styles.hintText}>
-              {recipesStatus === 'mock' ? 'Показываю демо-рецепты: backend сейчас недоступен.' : 'Собрал рецепты под то, что уже лежит на кухне. Чего не хватает — докупим одним тапом.'}
-            </Text>
-          </View>
-          {recipesError ? <Pressable onPress={() => void loadRecipes()}><Text style={styles.retry}>Повторить подключение</Text></Pressable> : null}
-
-          <SectionTitle title="Из корзины" right={`${current.length} ${plural(current.length, 'рецепт', 'рецепта', 'рецептов')} ›`} />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-            {current.map((recipe) => <LargeRecipeCard key={recipe.id} recipe={recipe} onPress={() => openRecipe(recipe)} />)}
-          </ScrollView>
-
-          <SectionTitle title="Повторить" right="любимые ›" />
-          <View style={styles.repeatList}>
-            {repeat.map((recipe) => <RepeatRecipeRow key={recipe.id} recipe={recipe} onPress={() => openRecipe(recipe)} />)}
-          </View>
-
-          <SectionTitle title="Новые рецепты" right="все ›" />
-          <View style={styles.freshGrid}>
-            {fresh.map((recipe) => <FreshRecipeCard key={recipe.id} recipe={recipe} onPress={() => openRecipe(recipe)} />)}
-          </View>
-        </ScrollView>
-        <BottomNav active="recipes" />
-      </View>
-    </SafeAreaView>
-  );
-}
-
-function SectionTitle({ title, right }: { title: string; right: string }) {
-  return <View style={styles.sectionTitle}><Text style={styles.sectionTitleText}>{title}</Text><Text style={styles.sectionTitleRight}>{right}</Text></View>;
-}
-
-function LargeRecipeCard({ recipe, onPress }: { recipe: DemoRecipe; onPress: () => void }) {
-  const have = recipe.ingredients.filter((item) => item.defaultAvailable).length;
-  return (
-    <Pressable style={styles.largeCard} onPress={onPress}>
-      <PhotoStub label="фото блюда" style={styles.largePhoto} />
-      <View style={styles.coverage}><Text style={styles.coverageText}>хватает {have} из {recipe.ingredients.length}</Text></View>
-      <Text style={styles.largeName}>{recipe.title}</Text><Text style={styles.meta}>{recipe.time} мин</Text>
-    </Pressable>
-  );
-}
-
-function RepeatRecipeRow({ recipe, onPress }: { recipe: DemoRecipe; onPress: () => void }) {
-  return (
-    <Pressable style={styles.repeatRow} onPress={onPress}>
-      <PhotoStub style={styles.repeatPhoto} />
-      <View style={styles.repeatCopy}><Text style={styles.repeatName}>{recipe.title}</Text><Text style={styles.meta}>{recipe.time} мин · {recipe.lastCooked ?? 'любимый рецепт'}</Text></View>
-      <View style={styles.heart}><Text style={styles.heartText}>♥</Text></View>
-    </Pressable>
-  );
-}
-
-function FreshRecipeCard({ recipe, onPress }: { recipe: DemoRecipe; onPress: () => void }) {
-  return (
-    <Pressable style={styles.freshCard} onPress={onPress}>
-      <PhotoStub style={styles.freshPhoto} /><Text style={styles.freshName}>{recipe.title}</Text><Text style={styles.meta}>{recipe.time} мин · {recipe.note ?? 'новое'}</Text>
-    </Pressable>
-  );
+        <View style={ui.choices}>{anchors.map(([anchor, label]) =>
+          <Choice key={anchor} label={label} selected={query.anchor === anchor} disabled={busy}
+            onPress={() => void loadRecipes({ anchor, storeId: null })} />)}</View>
+        <Text style={ui.text}>До 750 м от выбранного места. Места, расстояния и покупки синтетические; геолокация не запрашивается.</Text>
+        <View style={[styles.domovoiHint, { marginHorizontal: 0 }]}>
+          <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.hintMascot} />
+          <Text style={styles.hintText}>
+            {recipesStatus === 'loading' ? 'Подбираю доступные блюда…' :
+              recipesStatus === 'error' ? 'Не удалось получить предложения. Локальные рецепты не подставляются.' :
+              'Начнём с блюда. Покупать ничего не нужно, если всё уже есть дома.'}
+          </Text>
+        </View>
+        {recipesError ? <Text style={[ui.text, { color: color.red }]}>{recipesError}</Text> : null}
+        {recipesStatus === 'error' ? <Choice label="Повторить подключение" onPress={() => void loadRecipes()} /> : null}
+        {recipesStatus === 'ready' && response ? <>
+          <Text style={ui.text}>API {response.contract_version} · движок {health?.recommendation_engine}
+            {health?.model_fallback ? ' · резервный mock' : ''} · demo-данные</Text>
+          {query.mode === 'explore' ? <Text style={ui.text}>Вы выбрали новые блюда: среди них может быть полная корзина покупок.</Text> : null}
+          {response.warnings.map((warning) => <Text key={warning} style={ui.text}>{warningText(warning)}</Text>)}
+          {!response.recommendations.length ? <View style={ui.panel}>
+            <Text style={ui.title}>Пока нет подходящих предложений</Text>
+            <Text style={ui.text}>{query.mode === 'repeat'
+              ? 'Сохраните рецепт в книгу. В этом месте также должны быть доступны нужные товары.'
+              : 'Можно изменить режим или место. Мы не будем расширять радиус без вашего выбора.'}</Text>
+          </View> : null}
+          {response.recommendations.map((meal, index) => {
+            const needsChoice = response.challenge_selection.explicit_choice_required.includes(meal.mode);
+            return <Pressable key={meal.meal_id} disabled={busy} style={ui.panel}
+              onPress={() => {
+                if (needsChoice) { void loadRecipes({ mode: meal.mode }); return; }
+                selectMeal(meal.meal_id); router.push('/recipe');
+              }}>
+              <PhotoStub label="фото блюда" style={{ height: 110, borderRadius: 14, marginBottom: 12 }} />
+              <Text style={ui.text}>{modeText[meal.mode]}{index === 0 && response.challenge_selection.default_mode === meal.mode ? ' · основной вариант' : ''}</Text>
+              <Text style={ui.title}>{meal.title}</Text>
+              <Text style={ui.text}>{meal.cook_variant
+                ? `Докупить обязательных ингредиентов: ${meal.cook_variant.missing_count}`
+                : 'Доступно без готовки'}</Text>
+              <Text style={ui.text}>{explain(meal.reason_codes)}</Text>
+              <Text style={ui.text}>{explain(response.challenge_selection.mode_reason_codes[meal.mode] ?? [])}</Text>
+              {needsChoice ? <Text style={[ui.text, { color: color.red }]}>Собрать новое блюдо с нуля →</Text> : null}
+            </Pressable>;
+          })}
+        </> : null}
+      </ScrollView>
+      <BottomNav active="recipes" />
+    </View>
+  </SafeAreaView>;
 }
 
 const styles = StyleSheet.create({

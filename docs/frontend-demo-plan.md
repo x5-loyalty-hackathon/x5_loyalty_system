@@ -1,11 +1,16 @@
 # Как собрать мобильное демо «X5 Домовой» с настоящим backend
 
-- **Статус:** рабочий план ветки `feat/mobile-demo`, синхронизирован с
+- **Статус:** исходный UX-план ветки `feat/mobile-demo`, синхронизирован с
   meal-контрактом 04.09.2026.
 - **Owner:** Product/UX & Frontend.
 - **Контракт API 1.2:** [ADR-003](decisions/003-challenge-mode-selection.md),
   [ADR-004](decisions/004-recipe-book-and-shopping-context.md),
   [technical design](technical-design.md), схемы в `app/contracts.py`.
+
+**Обновление 05.09:** интерфейс `feat/mobile-app` перенесён и адаптирован в
+`experiment/vxofi`. Актуальный результат, границы и проверки —
+[план интеграции](mobile-integration-plan.md) и [запуск](../mobile/README.md).
+Ниже — исходная схема экранов, не отчёт о фактически проверенном UI.
 
 Цель — сделать четыре связанных экрана, которые открываются на iPhone через
 Expo Go и обращаются к уже существующему FastAPI на Mac. Публиковать приложение

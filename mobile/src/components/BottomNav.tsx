@@ -6,7 +6,7 @@ type NavKey = 'kitchen' | 'recipes' | 'catalog' | 'profile';
 const items: Array<{ key: NavKey; label: string; glyph: string; route?: '/' | '/recipes' | '/products' | '/profile' }> = [
   { key: 'kitchen', label: 'Кухня', glyph: '■', route: '/' },
   { key: 'recipes', label: 'Рецепты', glyph: '▤', route: '/recipes' },
-  { key: 'catalog', label: 'Каталог', glyph: '▦', route: '/products' },
+  { key: 'catalog', label: 'Мой план', glyph: '▦', route: '/products' },
   { key: 'profile', label: 'Профиль', glyph: '●', route: '/profile' },
 ];
 

@@ -5,6 +5,8 @@ import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
+import { levelShare } from '../domain/mealFlow';
+import { money } from '../domain/copy';
 
 export default function ProfileScreen() {
   const { progress, progressStatus, progressError, loadProgress } = useDemo();
@@ -14,7 +16,7 @@ export default function ProfileScreen() {
   }, [loadProgress, progressStatus]);
 
   const xpShare = progress
-    ? progress.avatar_xp / Math.max(1, progress.avatar_xp + progress.xp_to_next_level)
+    ? levelShare(progress)
     : 0;
 
   return (
@@ -68,14 +70,16 @@ export default function ProfileScreen() {
 
               <View style={styles.grid}>
                 <Stat value={String(progress.recipes_completed)} label="рецептов приготовлено" />
-                <Stat value={String(Math.round(progress.rescue_items))} label="куплено из подбора" />
+                <Stat value={String(progress.rescue_items)} label="уценённых единиц куплено" />
+                <Stat value={String(progress.ready_meals_completed)} label="готовых блюд куплено" />
+                <Stat value={money(progress.markdown_savings)} label="сэкономлено по чекам" />
                 <Stat value={String(progress.purchase_days)} label="дней с покупками" />
                 <Stat value={String(progress.verified_receipts)} label="подтверждённых чеков" />
               </View>
 
               <Text style={styles.footnote}>
-                Статистика личная: она не сравнивает вас с другими покупателями и не
-                показывает их список.
+                Личная demo-статистика. Публичного рейтинга и денежных наград нет.
+                Синтетические покупки не доказывают рост частоты покупок в реальности.
               </Text>
             </>
           )}

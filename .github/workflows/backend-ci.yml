@@ -35,3 +35,41 @@ jobs:
 
       - name: Run automated tests
         run: python -m pytest
+
+  mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Python for cross-language contract tests
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - name: Install backend for contract tests
+        run: python -m pip install -e '.[dev]'
+      - name: Install mobile dependencies from lockfile
+        working-directory: mobile
+        run: npm ci --legacy-peer-deps --ignore-scripts --no-audit --no-fund
+      - name: Typecheck
+        working-directory: mobile
+        run: npm run typecheck
+      - name: Client unit tests
+        working-directory: mobile
+        run: npm test
+      - name: TS builders against real FastAPI endpoints
+        working-directory: mobile
+        run: npm run test:api
+      - name: Expo export (not a device test)
+        working-directory: mobile
+        env:
+          CI: "1"
+          EXPO_NO_TELEMETRY: "1"
+          EXPO_OFFLINE: "1"
+        run: npm run export:check -- --max-workers 2

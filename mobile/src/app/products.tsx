@@ -9,7 +9,7 @@ import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { plural } from '../utils/plural';
 import {
-  formatPrice, productsForIngredient, readyMeal, type CatalogProduct,
+  formatPrice, markdownFirst, productsForIngredient, readyMeal, type CatalogProduct,
 } from '../data/demo';
 
 export default function ProductsScreen() {
@@ -20,7 +20,8 @@ export default function ProductsScreen() {
   } = useDemo();
   const [note, setNote] = useState<string | null>(null);
 
-  const products = productsForIngredient(selectedIngredient);
+  // Уценка идёт первой в общем пуле; ранжирование внутри групп — за моделью.
+  const products = markdownFirst(productsForIngredient(selectedIngredient));
   const total = basket.reduce((sum, product) => sum + product.price, 0);
   const totalParts = formatPrice(total);
 
@@ -120,8 +121,20 @@ function ProductCard({
 }: { product: CatalogProduct; inBasket: boolean; onAdd: () => void }) {
   return (
     <View style={styles.card}>
-      <PhotoStub style={styles.cardPhoto} />
-      <Price value={product.price} />
+      <View>
+        <PhotoStub style={styles.cardPhoto} />
+        {product.markdown ? (
+          <View style={styles.markdownBadge}>
+            <Text style={styles.markdownBadgeText}>↓ уценка</Text>
+          </View>
+        ) : null}
+      </View>
+      <View style={styles.priceRow}>
+        <Price value={product.price} />
+        {product.originalPrice ? (
+          <Text style={styles.oldPrice}>{formatPrice(product.originalPrice).rubles} ₽</Text>
+        ) : null}
+      </View>
       <Text style={styles.cardUnit}>{product.unit}</Text>
       <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
       <View style={styles.rating}>
@@ -183,6 +196,15 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16 },
   card: { width: '31%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16, padding: 8, paddingBottom: 10 },
   cardPhoto: { height: 104, borderRadius: 12, marginBottom: 9 },
+  markdownBadge: {
+    position: 'absolute', left: 5, top: 5, paddingHorizontal: 6, paddingVertical: 3,
+    borderRadius: 8, backgroundColor: color.orange,
+  },
+  markdownBadgeText: { color: color.white, fontSize: 9, fontWeight: '700' },
+  priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 5 },
+  oldPrice: {
+    color: color.muted, fontSize: 11, textDecorationLine: 'line-through', marginBottom: 5,
+  },
   price: { color: color.ink, fontSize: 17, fontWeight: '700', marginBottom: 5 },
   kopecks: { fontSize: 10, lineHeight: 10 },
   priceLarge: { color: color.ink, fontSize: 22, fontWeight: '700', marginBottom: 5 },

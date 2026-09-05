@@ -29,6 +29,7 @@ htmlcov/
 
 # JavaScript / TypeScript
 node_modules/
+.expo/
 .next/
 .nuxt/
 dist/

@@ -549,7 +549,16 @@ def load_panel(name: str, root: Path = PANEL_ROOT) -> Panel:
             f"panel {name!r} was written by generator v{manifest.generator_version}, "
             f"this is v{GENERATOR_VERSION} — rebuild it rather than mixing the two"
         )
-    with gzip.open(directory / "panel.json.gz", "rt", encoding="utf-8") as handle:
+    payload_path = directory / "panel.json.gz"
+    if not payload_path.exists():
+        raise FileNotFoundError(
+            f"panel {name!r} has a manifest but no payload at {payload_path}. "
+            f"The payload is gitignored and regenerable, so a fresh clone "
+            f"always looks like this — build it with `python -m recsys.panels`, "
+            f"or call load_or_build, which rebuilds and verifies against the "
+            f"committed manifest."
+        )
+    with gzip.open(payload_path, "rt", encoding="utf-8") as handle:
         payload = json.load(handle)
 
     panel = Panel(
@@ -569,15 +578,53 @@ def load_panel(name: str, root: Path = PANEL_ROOT) -> Panel:
 
 
 def load_or_build(spec: PanelSpec, root: Path = PANEL_ROOT) -> Panel:
-    """Load the stored panel if it matches this spec, else build and store it."""
+    """Load the stored panel if it is there and matches, else rebuild it.
+
+    A fresh clone has the manifest but not the payload — the manifest is
+    committed, the gzip is ignored — so keying the decision on the manifest
+    alone tried to open a file that was never checked out. That is the normal
+    state of any clone, not an error.
+
+    Rebuilding is the right response, and it is also the reproducibility check
+    the committed manifest exists for: if the rebuild does not reproduce the
+    recorded checksums, the generator has drifted from what the manifest
+    describes, and every number quoted against that panel is stale. That is
+    worth failing loudly over rather than silently regenerating different data
+    under an unchanged name.
+    """
     directory = panel_dir(spec.name, root)
-    if (directory / "manifest.json").exists():
+    stored: PanelManifest | None = None
+    manifest_path = directory / "manifest.json"
+    if manifest_path.exists():
         stored = PanelManifest.from_json(
-            json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+            json.loads(manifest_path.read_text(encoding="utf-8"))
         )
-        if stored.spec == spec and stored.generator_version == GENERATOR_VERSION:
-            return load_panel(spec.name, root)
+
+    usable = (
+        stored is not None
+        and stored.spec == spec
+        and stored.generator_version == GENERATOR_VERSION
+    )
+    if usable and (directory / "panel.json.gz").exists():
+        return load_panel(spec.name, root)
+
     panel = build_panel(spec)
+    if usable:
+        assert stored is not None
+        mismatches = [
+            f"{field}: manifest {getattr(stored, field)} != rebuild "
+            f"{getattr(panel.manifest, field)}"
+            for field in ("profiles_checksum", "inventories_checksum")
+            if getattr(stored, field) != getattr(panel.manifest, field)
+        ]
+        if mismatches:
+            raise ValueError(
+                f"panel {spec.name!r} no longer rebuilds to its committed "
+                f"manifest — " + "; ".join(mismatches) + ". Either the "
+                f"generator changed without a GENERATOR_VERSION bump, or the "
+                f"manifest is stale; regenerate with `python -m recsys.panels` "
+                f"and commit the result."
+            )
     save_panel(panel, root)
     return panel
 

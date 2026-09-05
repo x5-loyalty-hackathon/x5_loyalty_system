@@ -7,6 +7,8 @@ price/SKU-mapping check rather than duplicating it against the whole catalog.
 
 from __future__ import annotations
 
+import pytest
+
 from app.contracts import FulfillmentOption, RecommendationRequest
 from recsys.catalog import BASE_PRICE_RUB, INGREDIENTS
 from recsys.experiment3_catalog_coverage import (
@@ -78,6 +80,18 @@ def test_stable_seed_is_deterministic_and_order_sensitive() -> None:
     assert stable_seed("a", "b") != stable_seed("b", "a")
 
 
+@pytest.fixture(scope="module")
+def panels():
+    """Built once per module.
+
+    build_panel() regenerates inventories for every user at all three deficit
+    levels, so calling it per test cost about six minutes for this file alone.
+    Nothing here mutates the panels, so sharing one is safe; tests that need to
+    corrupt a panel build their own (see tests/test_panels.py).
+    """
+    return build_panel()
+
+
 def test_panel_split_is_deterministic_and_disjoint() -> None:
     """The split is now the protocol's, not a local parity trick."""
     first = build_panel()
@@ -88,28 +102,27 @@ def test_panel_split_is_deterministic_and_disjoint() -> None:
     assert not train_ids & held_ids
 
 
-def test_deficit_levels_actually_change_the_shelf() -> None:
+def test_deficit_levels_actually_change_the_shelf(panels) -> None:
     """The previous helper monkeypatched module constants generate_inventory no
     longer reads, so low/base/high were three draws at base scarcity: measured
     108/107/111 products. Real scarcity has to shrink the shelf."""
-    panels = build_panel()["train"]
+    train = panels["train"]
     counts = {
-        label: sum(len(inv) for _, inv in pairs) for label, pairs in panels.items()
+        label: sum(len(inv) for _, inv in pairs) for label, pairs in train.items()
     }
     assert counts["низкий"] > counts["база"] > counts["высокий"]
 
 
-def test_the_same_people_face_every_deficit_level() -> None:
+def test_the_same_people_face_every_deficit_level(panels) -> None:
     """Otherwise a deficit comparison is not paired."""
-    panels = build_panel()["train"]
-    ids = [[p.user.user_id for p, _ in pairs] for pairs in panels.values()]
+    ids = [[p.user.user_id for p, _ in pairs] for pairs in panels["train"].values()]
     assert all(x == ids[0] for x in ids)
 
 
-def test_abstract_missing_count_ignores_inventory() -> None:
+def test_abstract_missing_count_ignores_inventory(panels) -> None:
     """Two requests differing only in inventory_snapshot must score identically
     -- this is the defining property of the "without store constraints" metric."""
-    profile, non_empty_inventory = build_panel()["train"]["база"][0]
+    profile, non_empty_inventory = panels["train"]["база"][0]
     recipe = RECIPES_BY_ID["cottage_cheese_with_sour_cream"]
     assert non_empty_inventory  # sanity: the fixture actually varies
     request_empty_inventory = RecommendationRequest(
@@ -129,8 +142,8 @@ def test_abstract_missing_count_ignores_inventory() -> None:
     )
 
 
-def test_constrained_missing_count_never_below_zero_and_none_means_unreachable() -> None:
-    for profile, _ in build_panel()["train"]["база"][:5]:
+def test_constrained_missing_count_never_below_zero_and_none_means_unreachable(panels) -> None:
+    for profile, _ in panels["train"]["база"][:5]:
         request = RecommendationRequest(
             user=profile.user,
             current_receipt=profile.current_receipt,
@@ -156,8 +169,8 @@ def test_constrained_missing_count_never_below_zero_and_none_means_unreachable()
                 assert result is not None and result >= 0
 
 
-def test_coverage_shares_are_monotonic_in_threshold() -> None:
-    outcomes = evaluate_panel(build_panel()["train"]["база"][:30], list(RECIPES))
+def test_coverage_shares_are_monotonic_in_threshold(panels) -> None:
+    outcomes = evaluate_panel(panels["train"]["база"][:30], list(RECIPES))
     abstract = coverage_shares(outcomes, constrained=False)
     constrained = coverage_shares(outcomes, constrained=True)
     assert abstract[0] <= abstract[1] <= abstract[2]

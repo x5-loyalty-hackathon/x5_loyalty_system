@@ -13,7 +13,7 @@ export default function ProductsScreen() {
   const router = useRouter();
   const {
     selectedMeal: meal, route, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
-    choices, chooseProduct, basket, plan, savePlan, confirmPurchase, confirmCooking,
+    choices, chooseProduct, basket, plan, savePlan, confirmPurchase, startCooking,
     busy, editable, loadRecipes,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
@@ -55,7 +55,14 @@ export default function ProductsScreen() {
           const selected = choices[group.id] ? choices[group.id] === product.sku_id : group.options[0]?.sku_id === product.sku_id;
           return <View key={product.sku_id}>
             <Text style={ui.text}>{product.name} · {product.store_id} · {Math.round(product.distance_km * 1000)} м</Text>
-            <Text style={ui.text}>{money(product.price)} / упаковка{product.source === 'markdown' ? ` · уценка с ${money(product.original_price ?? product.price)}` : ' · обычная цена'}</Text>
+            <View style={styles.priceRow}>
+              <Text style={ui.text}>{money(product.price)} / упаковка</Text>
+              {product.source === 'markdown' ? <>
+                {product.original_price != null && product.original_price > product.price
+                  ? <Text style={styles.oldPrice}>{money(product.original_price)}</Text> : null}
+                <View style={styles.markdownBadge}><Text style={styles.markdownBadgeText}>↓ уценка</Text></View>
+              </> : <Text style={ui.text}>Обычная цена</Text>}
+            </View>
             {product.expires_at ? <Text style={ui.text}>Срок в demo-остатках: {product.expires_at}</Text> : null}
             <Choice label={selected ? '✓ Выбрано' : 'Выбрать'} selected={selected} disabled={!editable}
               onPress={() => chooseProduct(group.id, product.sku_id)} />
@@ -78,7 +85,8 @@ export default function ProductsScreen() {
         {plan.selected_product_ids.length > 0 ? <Choice
           label={plan.status === 'saved' ? 'Демо: подтвердить чек выбранных товаров' : 'Демо: повторить тот же чек (без новых XP)'}
           disabled={busy} onPress={() => void confirmPurchase()} /> : null}
-        {canCompleteCook(plan) ? <Choice label="Я приготовил" disabled={busy} onPress={() => void confirmCooking()} /> : null}
+        {canCompleteCook(plan) ? <Choice label="Начать готовить" disabled={busy}
+          onPress={() => { if (startCooking()) router.push('/'); }} /> : null}
         {plan.status === 'completed' ? <Choice label="Посмотреть прогресс" disabled={busy} onPress={() => router.push('/profile')} /> : null}
       </>}
       <View style={ui.choices}><Choice label="Выбрать другое блюдо" disabled={busy}
@@ -91,6 +99,10 @@ export default function ProductsScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: color.white },
   shell: { flex: 1, backgroundColor: color.bg },
+  priceRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
+  oldPrice: { color: color.muted, fontSize: 13, textDecorationLine: 'line-through' },
+  markdownBadge: { borderRadius: 8, paddingHorizontal: 7, paddingVertical: 4, backgroundColor: color.orange },
+  markdownBadgeText: { color: color.white, fontSize: 11, fontWeight: '700' },
   scroll: { paddingTop: 16, paddingBottom: 190 },
 
   sectionTitle: { color: color.ink, fontSize: 17, fontWeight: '700', marginHorizontal: 16, marginBottom: 10 },

@@ -1,5 +1,9 @@
 # Интеграция мобильного демо — 05.09.2026
 
+Это выполненный **первый** этап на mock (`658ce45`), сохранён для истории.
+Последующая кухня `4f374c3`, ML scorer `c28b613`, отличия от исходных веток и
+актуальные проверки — в [памятке интеграции](integration-handoff.md).
+
 Источник системных и продуктовых решений — `experiment/vxofi`, API 1.2,
 [ADR-003](decisions/003-challenge-mode-selection.md) и
 [ADR-004](decisions/004-recipe-book-and-shopping-context.md).

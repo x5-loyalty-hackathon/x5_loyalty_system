@@ -66,6 +66,11 @@ jobs:
       - name: TS builders against real FastAPI endpoints
         working-directory: mobile
         run: npm run test:api
+      - name: Same meal flow with the integrated ML scorer (no mock fallback)
+        working-directory: mobile
+        env:
+          X5_TEST_ENGINE: model
+        run: npm run test:api
       - name: Expo export (not a device test)
         working-directory: mobile
         env:

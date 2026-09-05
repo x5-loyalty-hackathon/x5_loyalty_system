@@ -1,10 +1,13 @@
 # Technical design: meal-first X5 Domovoi PoC
 
-- **Статус:** API contract `1.1`, challenge selector, recipe, meal-plan и
-  `cook/ready` backend flow реализованы в
-  рабочей ветке; межконтурный review требуется, 2026-09-04.
+- **Статус:** API contract `1.2`, selector, книга, single-store и `cook/ready`
+  meal-flow реализованы. UI и актуальный ML scorer интегрированы, локальные
+  автопроверки пройдены; ручной прогон на телефоне и финальный eval открыты,
+  2026-09-05. [Карта интеграции и адаптаций](integration-handoff.md).
 - **Decision source:** [ADR-001](decisions/001-recipe-first-poc.md).
 - **Meal extension:** [ADR-002](decisions/002-personal-meal-contract.md).
+- **Selector / API 1.2:** [ADR-003](decisions/003-challenge-mode-selection.md),
+  [ADR-004](decisions/004-recipe-book-and-shopping-context.md).
 - **Product source:** [current concept](research/persona_vxofi/rescue-domovoi-concept.md).
 - **Scope:** backend/integration/safety contract; frontend и ML могут
   разрабатываться параллельно.
@@ -40,7 +43,8 @@ synthetic profile + receipt + recipes + inventory
 ## 3. Non-goals первого инкремента
 
 - production-интеграция с каталогом, кассой или доставкой;
-- обучение ML-модели внутри backend;
+- промышленный training pipeline/model registry; demo-модель пока обучается
+  на синтетике при создании адаптера;
 - production database и authentication;
 - production antifraud/referral engine;
 - LLM-generated recipes или food-safety instructions;

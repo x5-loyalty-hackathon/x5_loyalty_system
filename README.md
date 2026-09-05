@@ -34,6 +34,8 @@ recommender предлагает персональный приём пищи с
 
 - [Текущее состояние](docs/project-status.md) — что уже известно и что делать
   дальше;
+- [Интеграция frontend + ML: памятка для команды](docs/integration-handoff.md) —
+  исходные коммиты, адаптации к API 1.2, карта кода и проверки перед слиянием;
 - [Исследование существующего X5 Клуба](docs/research/x5-loyalty-current-state.md)
   — факты, выводы и вопросы для брейншторма;
 - [Синтез конкурентного исследования](docs/research/benchmarks/competitive-synthesis.md)

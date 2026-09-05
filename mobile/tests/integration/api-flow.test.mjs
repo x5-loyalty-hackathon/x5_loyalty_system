@@ -11,6 +11,8 @@ import { reasonText } from '../../src/domain/copy.ts';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const python = process.env.X5_TEST_PYTHON ?? (existsSync(`${root}.venv/bin/python`) ? `${root}.venv/bin/python` : 'python3');
+const engine = process.env.X5_TEST_ENGINE ?? 'mock';
+assert.ok(['mock', 'model'].includes(engine), 'X5_TEST_ENGINE must be mock or model');
 const bridgeSource = `
 import json, sys
 from fastapi.testclient import TestClient
@@ -28,19 +30,25 @@ with TestClient(app) as client:
 `;
 async function api(t) {
   const child = spawn(python, ['-u', '-c', bridgeSource], {
-    cwd: root, env: { ...process.env, RECOMMENDATION_ENGINE: 'mock' }, stdio: ['pipe', 'pipe', 'inherit'],
+    cwd: root, env: { ...process.env, RECOMMENDATION_ENGINE: engine }, stdio: ['pipe', 'pipe', 'inherit'],
   });
   const lines = createInterface({ input: child.stdout });
   const iterator = lines[Symbol.asyncIterator]();
   t.after(() => { child.stdin.end(); child.kill(); lines.close(); });
   child.on('error', (error) => lines.close());
   assert.equal((await iterator.next()).value, 'ready', 'Python test backend must start');
-  return async (method, path, body, headers) => {
+  const call = async (method, path, body, headers) => {
     child.stdin.write(`${JSON.stringify({ method, path, body, headers })}\n`);
     const line = await iterator.next();
     assert.equal(line.done, false, 'Python backend unexpectedly stopped');
     return JSON.parse(line.value);
   };
+  const health = await call('GET', '/health');
+  assert.equal(health.status, 200);
+  assert.equal(health.body.contract_version, '1.2');
+  assert.equal(health.body.recommendation_engine, engine);
+  assert.equal(health.body.model_fallback, false, 'model tests must not silently use mock');
+  return call;
 }
 async function recommend(call, mode = null, anchor = 'home', storeId = null) {
   const response = await call('POST', '/api/v1/meal-recommendations', buildRecommendationRequest(mode, anchor, storeId));

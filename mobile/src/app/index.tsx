@@ -1,122 +1,89 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
-import { PhotoStub } from '../components/PhotoStub';
-import { Choice, flowStyles as ui } from '../components/FlowControls';
+import { KitchenScene } from '../components/KitchenScene';
+import { KitchenSheet } from '../components/KitchenSheet';
+import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
 import { recentReceipt } from '../fixtures/recommendationRequest';
+import { recipeDetails } from '../fixtures/recipeDetails';
+import { matchingSteps } from '../domain/mealFlow';
+import { kitchenProducts } from '../domain/kitchen';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 
+const COLLAPSED_HEIGHT = 220;
+const products = kitchenProducts(recentReceipt.items);
 export default function KitchenScreen() {
   const router = useRouter();
-  const { startEntry, busy } = useDemo();
+  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking } = useDemo();
+  const [stageHeight, setStageHeight] = useState(0);
+  const [expanded, setExpanded] = useState(false);
+  const sheetHeight = useRef(new Animated.Value(COLLAPSED_HEIGHT)).current;
+  const expandedHeight = Math.max(COLLAPSED_HEIGHT + 1, stageHeight - 160);
+  const steps = selectedMeal ? matchingSteps(selectedMeal, recipeDetails) : [];
+  useEffect(() => { if (cooking) setExpanded(true); }, [cooking]);
+  useEffect(() => {
+    Animated.spring(sheetHeight, {
+      toValue: expanded ? expandedHeight : COLLAPSED_HEIGHT,
+      useNativeDriver: false, bounciness: 4,
+    }).start();
+  }, [expanded, expandedHeight, sheetHeight]);
   const enter = (delivery: boolean) => {
-    startEntry(delivery ? 'delivery' : 'next_visit');
-    router.push('/recipes');
+    startEntry(delivery ? 'delivery' : 'next_visit'); router.push('/recipes');
+  };
+  const finish = async () => {
+    if (await confirmCooking()) { setExpanded(false); router.push('/profile'); }
+    // A network/business error keeps the cooking screen open with its message.
   };
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
-    <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-      <View style={styles.hero}>
-        <Image source={require('../../assets/kitchen/kitchen-band.png')} style={styles.kitchenArt} />
-        <LinearGradient colors={['rgba(244,231,205,0)', color.cream]} style={styles.heroFade} />
-        <View style={styles.speech}><Text style={styles.speechText}>Что поедим? Подберём блюдо для готовки или без неё.</Text></View>
-        <Image source={require('../../assets/domovoi/mascot-spoon.png')} resizeMode="contain" style={styles.mascot} />
+    <View style={styles.stage} onLayout={(event) => setStageHeight(event.nativeEvent.layout.height)}>
+      <KitchenScene products={products} height={stageHeight} pose={cooking ? 'cooking' : 'idle'}
+        speech={cooking ? '' : 'Что поедим? Подберём блюдо для готовки или без неё.'} />
+      <View style={styles.sheetWrap} pointerEvents="box-none">
+        <KitchenSheet height={sheetHeight} collapsedHeight={COLLAPSED_HEIGHT} expandedHeight={expandedHeight}
+          expanded={expanded} onChange={setExpanded}>
+          <ScrollView contentContainerStyle={styles.content}>
+            {cooking && selectedMeal ? <>
+              <Text style={ui.title}>Готовим: {selectedMeal.title}</Text>
+              <Text style={ui.text}>Ингредиенты подтверждены планом. Готовку отмечаем отдельно от покупки.</Text>
+              {steps.length ? steps.map((step, index) => <Text key={step} style={ui.text}>{index + 1}. {step}</Text>)
+                : <Text style={ui.text}>Для этого состава инструкция ещё не подключена.</Text>}
+              <Text style={ui.text}>Demo-инструкция. Окончание готовки не означает, что вся упаковка продукта закончилась.</Text>
+              <ActionNotice />
+              <Choice label="Я приготовил" disabled={busy} onPress={() => void finish()} />
+              <View style={ui.choices}><Choice label="Вернуться к плану" disabled={busy}
+                onPress={() => { pauseCooking(); router.push('/products'); }} /></View>
+            </> : <>
+              <Text style={ui.title}>Что поесть?</Text>
+              <Text style={ui.text}>Начните с блюда перед сборкой заказа.</Text>
+              <Choice label="Подобрать для доставки" disabled={busy} onPress={() => enter(true)} />
+              <View style={ui.choices}>
+                <Choice label="Из недавних покупок →" disabled={busy} onPress={() => enter(false)} />
+              </View>
+              <Text style={ui.title}>Продукты на кухне</Text>
+              <Text style={ui.text}>Показаны покупки из synthetic-чека от 04.09.2026, не точный остаток дома.
+                Рисунки условные: ниже реальные названия из demo-чека.</Text>
+              {products.map((item) => <View key={item.id} style={styles.item}>
+                <Text style={ui.text}>{item.name}</Text>
+              </View>)}
+              <Text style={ui.text}>Все позиции остаются в списке, даже если им не хватило места на полке.
+                Срок годности из чека неизвестен. Это не заказ доставки и не бронь.</Text>
+              <Text style={ui.text}>Сценарий работает без push-уведомлений и без нового чека.</Text>
+            </>}
+          </ScrollView>
+        </KitchenSheet>
       </View>
-      <View style={styles.sheet}>
-        <View style={ui.panel}>
-          <Text style={ui.title}>Планируете доставку?</Text>
-          <Text style={ui.text}>Сначала выберите, что поесть, затем — недостающие продукты. Это demo-точка входа рядом с доставкой, не checkout.</Text>
-          <Choice label="Что поесть? → для доставки" disabled={busy} onPress={() => enter(true)} />
-        </View>
-        <Text style={styles.title}>Недавние покупки</Text>
-        <Text style={ui.text}>Синтетический чек от 04.09.2026. Это не точный остаток на кухне; срок годности из чека неизвестен.</Text>
-        <View style={styles.grid}>{recentReceipt.items.map((item) => <View key={item.sku_id} style={styles.card}>
-          <PhotoStub style={styles.cardPhoto} /><Text style={styles.cardName}>{item.name}</Text>
-          <Text style={styles.cardQty}>В недавнем чеке</Text>
-        </View>)}</View>
-        <View style={ui.choices}>
-          <Choice label="Что приготовить из покупок?" disabled={busy} onPress={() => enter(false)} />
-        </View>
-        <Text style={ui.text}>Работает без push-уведомлений и без нового чека. Все данные и события покупки в этой сборке — демонстрационные.</Text>
-      </View>
-    </ScrollView>
+    </View>
     <BottomNav active="kitchen" />
   </View></SafeAreaView>;
 }
-
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: color.cream },
   shell: { flex: 1, backgroundColor: color.bg },
-  scroll: { paddingBottom: 168 },
-
-  hero: { height: 286, backgroundColor: color.cream, overflow: 'hidden' },
-  kitchenArt: { position: 'absolute', left: -39, top: 0, width: 468, height: 248 },
-  heroFade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 46 },
-  speech: {
-    position: 'absolute', left: 20, top: 14, maxWidth: 200, paddingVertical: 10,
-    paddingHorizontal: 13, backgroundColor: 'rgba(255,255,255,0.94)', borderRadius: 16,
-    borderBottomLeftRadius: 4,
-  },
-  speechText: { color: color.brown, fontSize: 13, lineHeight: 17.5, fontWeight: '600' },
-  menu: {
-    position: 'absolute', right: 18, top: 14, width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
-  },
-  menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
-  mascot: { position: 'absolute', alignSelf: 'center', bottom: -24, width: 172, height: 190 },
-
-  sheet: {
-    marginTop: -18, paddingHorizontal: 16, paddingTop: 18, backgroundColor: color.bg,
-    borderTopLeftRadius: 22, borderTopRightRadius: 22, minHeight: 420,
-  },
-  sectionTitleRow: {
-    flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12,
-  },
-  title: { color: color.ink, fontSize: 22, fontWeight: '700' },
-  count: { color: color.muted, fontSize: 13, fontWeight: '600' },
-
-  filters: { flexDirection: 'row', gap: 8, marginBottom: 14 },
-  filter: {
-    paddingHorizontal: 14, paddingVertical: 9, borderRadius: 18, backgroundColor: color.white,
-    minHeight: 36, justifyContent: 'center',
-  },
-  filterSelected: { backgroundColor: color.ink },
-  filterText: { color: color.ink, fontSize: 13, fontWeight: '600' },
-  filterTextSelected: { color: color.white },
-
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  card: {
-    width: '31%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16,
-    padding: 8, paddingBottom: 12,
-  },
-  cardPhoto: { height: 78, borderRadius: 12, marginBottom: 8 },
-  cardName: { color: color.ink, fontSize: 12, lineHeight: 15, fontWeight: '600', marginBottom: 3 },
-  cardQty: { color: color.muted, fontSize: 11, marginBottom: 7 },
-  pill: {
-    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 4,
-    paddingHorizontal: 7, paddingVertical: 4, borderRadius: 9, backgroundColor: color.bg,
-  },
-  pillDot: { width: 6, height: 6, borderRadius: 3 },
-  pillText: { color: color.body, fontSize: 10.5, fontWeight: '600' },
-
-  hint: {
-    marginTop: 16, padding: 14, backgroundColor: color.white, borderRadius: 18,
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-  },
-  hintMark: {
-    width: 38, height: 38, borderRadius: 12, backgroundColor: color.greenSoft,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  hintMarkText: { color: color.green, fontSize: 15, fontWeight: '700' },
-  hintText: { flex: 1, color: color.body, fontSize: 12.5, lineHeight: 17.5 },
-
-  ctaWrap: { position: 'absolute', left: 0, right: 0, bottom: 74, paddingHorizontal: 16, paddingBottom: 12 },
-  cta: {
-    height: 54, borderRadius: 16, backgroundColor: color.red, flexDirection: 'row',
-    alignItems: 'center', justifyContent: 'center', gap: 8,
-  },
-  ctaText: { color: color.white, fontSize: 16, fontWeight: '700' },
-  ctaArrow: { color: color.white, fontSize: 16, fontWeight: '700', opacity: 0.7 },
+  stage: { flex: 1, overflow: 'hidden' },
+  sheetWrap: { position: 'absolute', left: 0, right: 0, bottom: 0 },
+  content: { paddingHorizontal: 16, paddingBottom: 24 },
+  item: { borderBottomWidth: 1, borderBottomColor: color.line, paddingVertical: 6 },
 });

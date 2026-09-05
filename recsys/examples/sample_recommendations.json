@@ -1,29 +1,28 @@
 [
   {
-    "user_id": "synthetic_routine_0002",
+    "user_id": "synthetic_routine_0003",
     "archetype": "routine",
-    "radius_km": 2.1,
+    "radius_km": 3.6,
     "current_receipt_items": [
-      "Овсяные хлопья",
+      "Соль",
+      "Сельдь солёная",
+      "Корень петрушки",
       "Кефир",
-      "Фарш говяжий",
-      "Сыр",
-      "Яйца",
-      "Капуста"
+      "Сухарики",
+      "Яйца"
     ],
     "home_ingredients": [
-      "rice",
-      "vegetable_oil"
+      "oregano"
     ],
     "saved_recipes": [
-      "bliny",
-      "carrot_fritters"
+      "chicken_mushroom_salad",
+      "rice_milk_porridge"
     ],
     "history_receipt_count": 15,
     "response": {
       "contract_version": "1.2",
-      "user_id": "synthetic_routine_0002",
-      "receipt_id": "synthetic_routine_0002_current",
+      "user_id": "synthetic_routine_0003",
+      "receipt_id": "synthetic_routine_0003_current",
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
@@ -36,346 +35,20 @@
             "selected_by_effort_then_relevance"
           ],
           "explore": [
-            "novel_recipe_strategy"
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
           ]
         },
-        "explicit_choice_required": []
-      },
-      "recommendations": [
-        {
-          "recipe_id": "carrot_fritters",
-          "title": "Морковные оладьи",
-          "mode": "current",
-          "model_score": 0.961,
-          "missing_count": 2,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "quick_recipe",
-            "low_missing_count",
-            "preferred_brand_option_available"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "carrot",
-              "name": "Морковь",
-              "category": "vegetable",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "carrot_fp_12",
-                  "name": "Морковь",
-                  "category": "vegetable",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.99,
-                  "price": 43.45,
-                  "original_price": 43.45,
-                  "brand": "Первым делом",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "flour",
-              "name": "Мука",
-              "category": "pantry",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "flour_fp_19",
-                  "name": "Мука",
-                  "category": "pantry",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.87,
-                  "price": 63.25,
-                  "original_price": 63.25,
-                  "brand": "Зелёная линия",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 2.1,
-            "selected_store_id": "store_hub_1",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_hub_1",
-                "distance_km": 0.99,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "approved",
-          "warnings": []
-        },
-        {
-          "recipe_id": "cottage_cheese_bake",
-          "title": "Творожная запеканка",
-          "mode": "explore",
-          "model_score": 0.9379,
-          "missing_count": 2,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "low_missing_count",
-            "preferred_brand_option_available"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "cottage_cheese",
-              "name": "Творог",
-              "category": "dairy",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "cottage_cheese_fp_17",
-                  "name": "Творог",
-                  "category": "dairy",
-                  "store_id": "store_hub_1",
-                  "distance_km": 1.49,
-                  "price": 124.03,
-                  "original_price": 124.03,
-                  "brand": "Первым делом",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "flour",
-              "name": "Мука",
-              "category": "pantry",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "flour_fp_19",
-                  "name": "Мука",
-                  "category": "pantry",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.87,
-                  "price": 63.25,
-                  "original_price": 63.25,
-                  "brand": "Зелёная линия",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 2.1,
-            "selected_store_id": "store_hub_1",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_hub_1",
-                "distance_km": 1.49,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "approved",
-          "warnings": []
-        }
-      ],
-      "filtered_candidates": 18,
-      "warnings": []
-    }
-  },
-  {
-    "user_id": "synthetic_routine_0004",
-    "archetype": "routine",
-    "radius_km": 2.5,
-    "current_receipt_items": [
-      "Яйца",
-      "Сметана",
-      "Говядина",
-      "Сыр",
-      "Огурцы",
-      "Сливочное масло",
-      "Кефир"
-    ],
-    "home_ingredients": [
-      "pasta"
-    ],
-    "saved_recipes": [
-      "pasta_tomato",
-      "syrniki"
-    ],
-    "history_receipt_count": 15,
-    "response": {
-      "contract_version": "1.2",
-      "user_id": "synthetic_routine_0004",
-      "receipt_id": "synthetic_routine_0004_current",
-      "challenge_selection": {
-        "default_mode": "current",
-        "available_modes": [
-          "current",
+        "explicit_choice_required": [
           "explore"
-        ],
-        "mode_reason_codes": {
-          "current": [
-            "current_basket_strategy",
-            "selected_by_effort_then_relevance"
-          ],
-          "explore": [
-            "novel_recipe_strategy"
-          ]
-        },
-        "explicit_choice_required": []
+        ]
       },
       "recommendations": [
         {
-          "recipe_id": "cheese_omelette",
-          "title": "Омлет с сыром",
-          "mode": "current",
-          "model_score": 0.9698,
-          "missing_count": 1,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "quick_recipe",
-            "low_missing_count",
-            "safe_markdown_option_available"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "milk",
-              "name": "Молоко",
-              "category": "dairy",
-              "required": true,
-              "source": "markdown",
-              "product_options": [
-                {
-                  "sku_id": "milk_md_19",
-                  "name": "Молоко",
-                  "category": "dairy",
-                  "store_id": "store_14",
-                  "distance_km": 0.18,
-                  "price": 70.76,
-                  "original_price": 101.91,
-                  "brand": "Хороший выбор",
-                  "source": "markdown",
-                  "expires_at": "2026-09-05T06:08:04.833186+03:00",
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "cheese",
-              "name": "Сыр",
-              "category": "dairy",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 2.5,
-            "selected_store_id": "store_14",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_14",
-                "distance_km": 0.18,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
-        },
-        {
           "recipe_id": "carrot_fritters",
           "title": "Морковные оладьи",
-          "mode": "explore",
-          "model_score": 0.9581,
+          "mode": "current",
+          "model_score": 0.8331,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
@@ -392,13 +65,13 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "carrot_fp_8",
+                  "sku_id": "carrot_fp_19",
                   "name": "Морковь",
                   "category": "vegetable",
                   "store_id": "store_hub_1",
-                  "distance_km": 1.92,
-                  "price": 52.41,
-                  "original_price": 52.41,
+                  "distance_km": 2.09,
+                  "price": 44.85,
+                  "original_price": 44.85,
                   "brand": "Зелёная линия",
                   "source": "full_price",
                   "expires_at": null,
@@ -425,14 +98,14 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "flour_fp_15",
+                  "sku_id": "flour_fp_44",
                   "name": "Мука",
                   "category": "pantry",
                   "store_id": "store_hub_1",
-                  "distance_km": 0.76,
-                  "price": 76.39,
-                  "original_price": 76.39,
-                  "brand": null,
+                  "distance_km": 1.54,
+                  "price": 76.48,
+                  "original_price": 76.48,
+                  "brand": "Зелёная линия",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -441,12 +114,20 @@
                   ]
                 }
               ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "receipt",
+              "product_options": []
             }
           ],
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 2.5,
+            "radius_km": 3.6,
             "selected_store_id": "store_hub_1",
             "reason_codes": [
               "maximum_ingredient_coverage"
@@ -454,7 +135,7 @@
             "options": [
               {
                 "store_id": "store_hub_1",
-                "distance_km": 1.92,
+                "distance_km": 2.09,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
@@ -468,58 +149,14 @@
           ],
           "safety_status": "approved",
           "warnings": []
-        }
-      ],
-      "filtered_candidates": 21,
-      "warnings": []
-    }
-  },
-  {
-    "user_id": "synthetic_routine_0012",
-    "archetype": "routine",
-    "radius_km": 3.0,
-    "current_receipt_items": [
-      "Фарш говяжий",
-      "Яйца",
-      "Макароны",
-      "Капуста",
-      "Свинина",
-      "Куриное филе"
-    ],
-    "home_ingredients": [
-      "tomato_paste"
-    ],
-    "saved_recipes": [
-      "borsch",
-      "cheese_omelette"
-    ],
-    "history_receipt_count": 15,
-    "response": {
-      "contract_version": "1.2",
-      "user_id": "synthetic_routine_0012",
-      "receipt_id": "synthetic_routine_0012_current",
-      "challenge_selection": {
-        "default_mode": "current",
-        "available_modes": [
-          "current"
-        ],
-        "mode_reason_codes": {
-          "current": [
-            "current_basket_strategy",
-            "selected_by_effort_then_relevance"
-          ]
         },
-        "explicit_choice_required": []
-      },
-      "recommendations": [
         {
-          "recipe_id": "cheese_omelette",
-          "title": "Омлет с сыром",
-          "mode": "current",
-          "model_score": 0.8688,
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
+          "mode": "explore",
+          "model_score": 0.9082,
           "missing_count": 2,
           "reason_codes": [
-            "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
@@ -527,29 +164,21 @@
           ],
           "ingredients": [
             {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "milk",
-              "name": "Молоко",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
               "category": "dairy",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "milk_fp_25",
-                  "name": "Молоко",
+                  "sku_id": "cottage_cheese_fp_28",
+                  "name": "Творог",
                   "category": "dairy",
-                  "store_id": "store_10",
-                  "distance_km": 2.85,
-                  "price": 87.72,
-                  "original_price": 87.72,
-                  "brand": null,
+                  "store_id": "store_13_annex",
+                  "distance_km": 0.92,
+                  "price": 132.61,
+                  "original_price": 132.61,
+                  "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -560,23 +189,23 @@
               ]
             },
             {
-              "ingredient_id": "cheese",
-              "name": "Сыр",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
               "category": "dairy",
               "required": true,
               "source": "markdown",
               "product_options": [
                 {
-                  "sku_id": "cheese_md_15",
-                  "name": "Сыр",
+                  "sku_id": "sour_cream_md_97",
+                  "name": "Сметана",
                   "category": "dairy",
-                  "store_id": "store_10",
-                  "distance_km": 1.77,
-                  "price": 222.82,
-                  "original_price": 394.23,
-                  "brand": "Зелёная линия",
+                  "store_id": "store_13_annex",
+                  "distance_km": 1.89,
+                  "price": 71.66,
+                  "original_price": 118.53,
+                  "brand": "Хороший выбор",
                   "source": "markdown",
-                  "expires_at": "2026-09-04T15:32:59.339873+03:00",
+                  "expires_at": "2026-09-06T08:05:32.160838+03:00",
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -588,15 +217,15 @@
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 3.0,
-            "selected_store_id": "store_10",
+            "radius_km": 3.6,
+            "selected_store_id": "store_13_annex",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_10",
-                "distance_km": 2.85,
+                "store_id": "store_13_annex",
+                "distance_km": 1.89,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
@@ -614,29 +243,432 @@
           ]
         }
       ],
-      "filtered_candidates": 23,
+      "filtered_candidates": 43,
+      "warnings": []
+    }
+  },
+  {
+    "user_id": "synthetic_routine_0008",
+    "archetype": "routine",
+    "radius_km": 2.5,
+    "current_receipt_items": [
+      "Сливки",
+      "Яйца",
+      "Томаты",
+      "Шампиньоны",
+      "Свинина"
+    ],
+    "home_ingredients": [
+      "dried_apricots"
+    ],
+    "saved_recipes": [
+      "oatmeal_with_banana"
+    ],
+    "history_receipt_count": 15,
+    "response": {
+      "contract_version": "1.2",
+      "user_id": "synthetic_routine_0008",
+      "receipt_id": "synthetic_routine_0008_current",
+      "challenge_selection": {
+        "default_mode": "current",
+        "available_modes": [
+          "current",
+          "explore"
+        ],
+        "mode_reason_codes": {
+          "current": [
+            "current_basket_strategy",
+            "selected_by_effort_then_relevance"
+          ],
+          "explore": [
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
+          ]
+        },
+        "explicit_choice_required": [
+          "explore"
+        ]
+      },
+      "recommendations": [
+        {
+          "recipe_id": "pork_chops",
+          "title": "Свиные отбивные",
+          "mode": "current",
+          "model_score": 0.5749,
+          "missing_count": 1,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "pork",
+              "name": "Свинина",
+              "category": "meat",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "vegetable_oil_fp_102",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_18",
+                  "distance_km": 1.23,
+                  "price": 137.72,
+                  "original_price": 137.72,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "paprika",
+              "name": "Паприка",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 2.5,
+            "selected_store_id": "store_18",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_18",
+                "distance_km": 1.23,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "fried_chicken_breast",
+          "title": "Жареная куриная грудка",
+          "mode": "explore",
+          "model_score": 0.5661,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "chicken_fp_28",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_18",
+                  "distance_km": 0.9,
+                  "price": 314.5,
+                  "original_price": 314.5,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "vegetable_oil_fp_102",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_18",
+                  "distance_km": 1.23,
+                  "price": 137.72,
+                  "original_price": 137.72,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 2.5,
+            "selected_store_id": "store_18",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_18",
+                "distance_km": 1.23,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        }
+      ],
+      "filtered_candidates": 44,
+      "warnings": []
+    }
+  },
+  {
+    "user_id": "synthetic_routine_0011",
+    "archetype": "routine",
+    "radius_km": 3.3,
+    "current_receipt_items": [
+      "Сметана",
+      "Бананы",
+      "Сыр плавленый",
+      "Шампиньоны",
+      "Лапша пшеничная"
+    ],
+    "home_ingredients": [
+      "raisins"
+    ],
+    "saved_recipes": [],
+    "history_receipt_count": 15,
+    "response": {
+      "contract_version": "1.2",
+      "user_id": "synthetic_routine_0011",
+      "receipt_id": "synthetic_routine_0011_current",
+      "challenge_selection": {
+        "default_mode": null,
+        "available_modes": [
+          "explore"
+        ],
+        "mode_reason_codes": {
+          "explore": [
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
+          ]
+        },
+        "explicit_choice_required": [
+          "explore"
+        ]
+      },
+      "recommendations": [
+        {
+          "recipe_id": "chicken_and_vegetables",
+          "title": "Курица с овощами",
+          "mode": "explore",
+          "model_score": 0.8773,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "chicken_fp_30",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_21",
+                  "distance_km": 1.91,
+                  "price": 318.34,
+                  "original_price": 318.34,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "zucchini",
+              "name": "Кабачок",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "zucchini_fp_116",
+                  "name": "Кабачок",
+                  "category": "vegetable",
+                  "store_id": "store_21",
+                  "distance_km": 0.89,
+                  "price": 97.49,
+                  "original_price": 97.49,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.3,
+            "selected_store_id": "store_21",
+            "reason_codes": [
+              "maximum_ingredient_coverage",
+              "nearest_store_tiebreak"
+            ],
+            "options": [
+              {
+                "store_id": "store_21",
+                "distance_km": 1.91,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_21_annex",
+                "distance_km": 2.69,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        }
+      ],
+      "filtered_candidates": 46,
       "warnings": []
     }
   },
   {
     "user_id": "synthetic_value_0013",
     "archetype": "value",
-    "radius_km": 6.9,
+    "radius_km": 3.4,
     "current_receipt_items": [
-      "Гречка",
-      "Томаты",
-      "Фарш говяжий",
+      "Творог",
+      "Томаты черри",
+      "Овощная смесь",
+      "Сливочное масло",
+      "Бананы",
+      "Яйца",
       "Лимон",
-      "Хлеб",
-      "Макароны",
-      "Свинина"
+      "Греческий йогурт"
     ],
-    "home_ingredients": [
-      "vegetable_oil"
-    ],
-    "saved_recipes": [
-      "chicken_pilaf"
-    ],
+    "home_ingredients": [],
+    "saved_recipes": [],
     "history_receipt_count": 13,
     "response": {
       "contract_version": "1.2",
@@ -654,48 +686,153 @@
             "selected_by_effort_then_relevance"
           ],
           "explore": [
-            "novel_recipe_strategy"
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
           ]
         },
-        "explicit_choice_required": []
+        "explicit_choice_required": [
+          "explore"
+        ]
       },
       "recommendations": [
         {
-          "recipe_id": "cheese_tomato_toast",
-          "title": "Тосты с сыром и помидором",
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.959,
+          "model_score": 0.9506,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count"
+            "low_missing_count",
+            "safe_markdown_option_available",
+            "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "bread",
-              "name": "Хлеб",
-              "category": "grain",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
               "required": true,
               "source": "receipt",
               "product_options": []
             },
             {
-              "ingredient_id": "cheese",
-              "name": "Сыр",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
               "category": "dairy",
+              "required": true,
+              "source": "markdown",
+              "product_options": [
+                {
+                  "sku_id": "sour_cream_md_98",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_11",
+                  "distance_km": 1.35,
+                  "price": 61.53,
+                  "original_price": 110.13,
+                  "brand": "Хороший выбор",
+                  "source": "markdown",
+                  "expires_at": "2026-09-04T23:40:05.686613+03:00",
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.4,
+            "selected_store_id": "store_11",
+            "reason_codes": [
+              "maximum_ingredient_coverage",
+              "nearest_store_tiebreak"
+            ],
+            "options": [
+              {
+                "store_id": "store_11",
+                "distance_km": 1.35,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_11_annex",
+                "distance_km": 2.45,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "adjusted",
+          "warnings": [
+            "Markdown availability is best-effort: the item is not reserved."
+          ]
+        },
+        {
+          "recipe_id": "chicken_and_vegetables",
+          "title": "Курица с овощами",
+          "mode": "explore",
+          "model_score": 0.4133,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "cheese_fp_7",
-                  "name": "Сыр",
-                  "category": "dairy",
+                  "sku_id": "chicken_fp_27",
+                  "name": "Куриное филе",
+                  "category": "meat",
                   "store_id": "store_11_annex",
-                  "distance_km": 2.53,
-                  "price": 374.64,
-                  "original_price": 374.64,
+                  "distance_km": 2.17,
+                  "price": 276.41,
+                  "original_price": 276.41,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "zucchini",
+              "name": "Кабачок",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "zucchini_fp_109",
+                  "name": "Кабачок",
+                  "category": "vegetable",
+                  "store_id": "store_11_annex",
+                  "distance_km": 0.64,
+                  "price": 102.85,
+                  "original_price": 102.85,
                   "brand": null,
                   "source": "full_price",
                   "expires_at": null,
@@ -707,100 +844,17 @@
               ]
             },
             {
-              "ingredient_id": "tomato",
-              "name": "Томаты",
-              "category": "vegetable",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 6.9,
-            "selected_store_id": "store_11_annex",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_11_annex",
-                "distance_km": 2.53,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "approved",
-          "warnings": []
-        },
-        {
-          "recipe_id": "cucumber_tomato_salad",
-          "title": "Салат с огурцом и помидором",
-          "mode": "explore",
-          "model_score": 0.9272,
-          "missing_count": 1,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "quick_recipe",
-            "low_missing_count",
-            "home_ingredient_reuse",
-            "preferred_brand_option_available"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "cucumber",
-              "name": "Огурцы",
-              "category": "vegetable",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "cucumber_fp_10",
-                  "name": "Огурцы",
-                  "category": "vegetable",
-                  "store_id": "store_11_annex",
-                  "distance_km": 2.71,
-                  "price": 154.3,
-                  "original_price": 154.3,
-                  "brand": "Хороший выбор",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "tomato",
-              "name": "Томаты",
-              "category": "vegetable",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "vegetable_oil",
-              "name": "Растительное масло",
+              "ingredient_id": "salt",
+              "name": "Соль",
               "category": "pantry",
-              "required": true,
-              "source": "home",
+              "required": false,
+              "source": "unavailable",
               "product_options": []
             },
             {
-              "ingredient_id": "sour_cream",
-              "name": "Сметана",
-              "category": "dairy",
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
               "required": false,
               "source": "unavailable",
               "product_options": []
@@ -809,99 +863,57 @@
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 6.9,
+            "radius_km": 3.4,
             "selected_store_id": "store_11_annex",
             "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
+              "maximum_ingredient_coverage"
             ],
             "options": [
               {
                 "store_id": "store_11_annex",
-                "distance_km": 2.71,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
+                "distance_km": 2.17,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
                 "complete": true,
                 "preferred_for_anchor": false
               },
               {
                 "store_id": "store_11",
-                "distance_km": 3.6,
+                "distance_km": 0.6,
                 "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
+                "total_required_ingredients": 2,
+                "complete": false,
                 "preferred_for_anchor": false
               }
             ]
           },
           "fulfillment_options": [
-            "delivery",
             "next_visit"
           ],
           "safety_status": "approved",
           "warnings": []
         }
       ],
-      "filtered_candidates": 21,
+      "filtered_candidates": 45,
       "warnings": []
-    }
-  },
-  {
-    "user_id": "synthetic_value_0015",
-    "archetype": "value",
-    "radius_km": 3.5,
-    "current_receipt_items": [
-      "Гречка",
-      "Томатная паста",
-      "Макароны",
-      "Хлеб",
-      "Молоко",
-      "Лимон",
-      "Кефир"
-    ],
-    "home_ingredients": [],
-    "saved_recipes": [
-      "cheese_tomato_toast"
-    ],
-    "history_receipt_count": 13,
-    "response": {
-      "contract_version": "1.2",
-      "user_id": "synthetic_value_0015",
-      "receipt_id": "synthetic_value_0015_current",
-      "challenge_selection": {
-        "default_mode": null,
-        "available_modes": [],
-        "mode_reason_codes": {},
-        "explicit_choice_required": []
-      },
-      "recommendations": [],
-      "filtered_candidates": 24,
-      "warnings": [
-        "No safe recommendations are currently available."
-      ]
     }
   },
   {
     "user_id": "synthetic_value_0016",
     "archetype": "value",
-    "radius_km": 4.9,
+    "radius_km": 3.2,
     "current_receipt_items": [
-      "Кефир",
       "Овсяные хлопья",
-      "Болгарский перец",
-      "Растительное масло",
-      "Говядина",
-      "Яйца",
-      "Гречка",
-      "Хлеб"
+      "Разрыхлитель",
+      "Пармезан",
+      "Чеснок",
+      "Копчёности мясные"
     ],
     "home_ingredients": [
-      "flour",
-      "oats",
-      "pasta"
+      "dried_peas"
     ],
     "saved_recipes": [
-      "beef_pilaf"
+      "chicken_vegetable_stew"
     ],
     "history_receipt_count": 13,
     "response": {
@@ -909,54 +921,49 @@
       "user_id": "synthetic_value_0016",
       "receipt_id": "synthetic_value_0016_current",
       "challenge_selection": {
-        "default_mode": "current",
+        "default_mode": null,
         "available_modes": [
-          "current",
           "explore"
         ],
         "mode_reason_codes": {
-          "current": [
-            "current_basket_strategy",
-            "selected_by_effort_then_relevance"
-          ],
           "explore": [
-            "novel_recipe_strategy"
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
           ]
         },
-        "explicit_choice_required": []
+        "explicit_choice_required": [
+          "explore"
+        ]
       },
       "recommendations": [
         {
-          "recipe_id": "carrot_fritters",
-          "title": "Морковные оладьи",
-          "mode": "current",
-          "model_score": 0.9744,
-          "missing_count": 1,
+          "recipe_id": "chicken_cucumber_salad",
+          "title": "Салат с курицей и огурцом",
+          "mode": "explore",
+          "model_score": 0.7838,
+          "missing_count": 3,
           "reason_codes": [
-            "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count",
-            "home_ingredient_reuse",
             "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "carrot",
-              "name": "Морковь",
-              "category": "vegetable",
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "carrot_fp_8",
-                  "name": "Морковь",
-                  "category": "vegetable",
-                  "store_id": "store_14_annex",
-                  "distance_km": 0.99,
-                  "price": 54.0,
-                  "original_price": 54.0,
-                  "brand": "Первым делом",
+                  "sku_id": "chicken_fp_27",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_14",
+                  "distance_km": 1.3,
+                  "price": 298.22,
+                  "original_price": 298.22,
+                  "brand": "Зелёная линия",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -967,85 +974,45 @@
               ]
             },
             {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
+              "ingredient_id": "cucumber",
+              "name": "Огурцы",
+              "category": "vegetable",
               "required": true,
-              "source": "receipt",
-              "product_options": []
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "cucumber_fp_35",
+                  "name": "Огурцы",
+                  "category": "vegetable",
+                  "store_id": "store_14",
+                  "distance_km": 1.52,
+                  "price": 147.28,
+                  "original_price": 147.28,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
             },
             {
-              "ingredient_id": "flour",
-              "name": "Мука",
-              "category": "pantry",
-              "required": true,
-              "source": "home",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 4.9,
-            "selected_store_id": "store_14_annex",
-            "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
-            ],
-            "options": [
-              {
-                "store_id": "store_14_annex",
-                "distance_km": 0.99,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              },
-              {
-                "store_id": "store_14",
-                "distance_km": 1.11,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "approved",
-          "warnings": []
-        },
-        {
-          "recipe_id": "cottage_cheese_bake",
-          "title": "Творожная запеканка",
-          "mode": "explore",
-          "model_score": 0.9617,
-          "missing_count": 1,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "low_missing_count",
-            "home_ingredient_reuse"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "cottage_cheese",
-              "name": "Творог",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
               "category": "dairy",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "cottage_cheese_fp_12",
-                  "name": "Творог",
+                  "sku_id": "sour_cream_fp_92",
+                  "name": "Сметана",
                   "category": "dairy",
-                  "store_id": "store_14_annex",
-                  "distance_km": 0.19,
-                  "price": 126.23,
-                  "original_price": 126.23,
+                  "store_id": "store_14",
+                  "distance_km": 1.44,
+                  "price": 95.57,
+                  "original_price": 95.57,
                   "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
@@ -1057,46 +1024,45 @@
               ]
             },
             {
-              "ingredient_id": "flour",
-              "name": "Мука",
+              "ingredient_id": "salt",
+              "name": "Соль",
               "category": "pantry",
-              "required": true,
-              "source": "home",
+              "required": false,
+              "source": "unavailable",
               "product_options": []
             },
             {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
               "product_options": []
             }
           ],
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 4.9,
-            "selected_store_id": "store_14_annex",
+            "radius_km": 3.2,
+            "selected_store_id": "store_14",
             "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
+              "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_14_annex",
-                "distance_km": 0.19,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
+                "store_id": "store_14",
+                "distance_km": 1.52,
+                "covered_required_ingredients": 3,
+                "total_required_ingredients": 3,
                 "complete": true,
                 "preferred_for_anchor": false
               },
               {
-                "store_id": "store_14",
-                "distance_km": 2.81,
+                "store_id": "store_hub_1",
+                "distance_km": 1.2,
                 "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
+                "total_required_ingredients": 3,
+                "complete": false,
                 "preferred_for_anchor": false
               }
             ]
@@ -1109,34 +1075,33 @@
           "warnings": []
         }
       ],
-      "filtered_candidates": 20,
+      "filtered_candidates": 46,
       "warnings": []
     }
   },
   {
-    "user_id": "synthetic_explorer_0017",
-    "archetype": "explorer",
-    "radius_km": 3.0,
+    "user_id": "synthetic_value_0018",
+    "archetype": "value",
+    "radius_km": 5.9,
     "current_receipt_items": [
-      "Томаты",
-      "Хлеб",
-      "Гречка",
-      "Овсяные хлопья",
-      "Картофель",
-      "Яблоки",
-      "Макароны",
-      "Огурцы"
+      "Пармезан",
+      "Болгарский перец",
+      "Петрушка",
+      "Творог",
+      "Молоко",
+      "Яйца",
+      "Сыр"
     ],
     "home_ingredients": [
-      "flour",
-      "pasta"
+      "caesar_dressing",
+      "flour"
     ],
     "saved_recipes": [],
-    "history_receipt_count": 11,
+    "history_receipt_count": 13,
     "response": {
       "contract_version": "1.2",
-      "user_id": "synthetic_explorer_0017",
-      "receipt_id": "synthetic_explorer_0017_current",
+      "user_id": "synthetic_value_0018",
+      "receipt_id": "synthetic_value_0018_current",
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
@@ -1152,71 +1117,45 @@
       },
       "recommendations": [
         {
-          "recipe_id": "oatmeal_with_banana",
-          "title": "Овсяная каша с бананом",
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.952,
-          "missing_count": 2,
+          "model_score": 0.9556,
+          "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
-            "safe_markdown_option_available",
-            "preferred_brand_option_available"
+            "safe_markdown_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "milk",
-              "name": "Молоко",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
               "category": "dairy",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "milk_fp_20",
-                  "name": "Молоко",
-                  "category": "dairy",
-                  "store_id": "store_15_annex",
-                  "distance_km": 0.56,
-                  "price": 100.36,
-                  "original_price": 100.36,
-                  "brand": "Хороший выбор",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "oats",
-              "name": "Овсяные хлопья",
-              "category": "grain",
               "required": true,
               "source": "receipt",
               "product_options": []
             },
             {
-              "ingredient_id": "banana",
-              "name": "Бананы",
-              "category": "fruit",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
               "required": true,
               "source": "markdown",
               "product_options": [
                 {
-                  "sku_id": "banana_md_3",
-                  "name": "Бананы",
-                  "category": "fruit",
-                  "store_id": "store_15_annex",
-                  "distance_km": 1.42,
-                  "price": 54.64,
-                  "original_price": 94.5,
-                  "brand": "Фермерский дворик",
+                  "sku_id": "sour_cream_md_98",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_16",
+                  "distance_km": 4.52,
+                  "price": 70.43,
+                  "original_price": 109.64,
+                  "brand": "Первым делом",
                   "source": "markdown",
-                  "expires_at": "2026-09-06T17:41:58.917550+03:00",
+                  "expires_at": "2026-09-05T04:12:02.691682+03:00",
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -1228,26 +1167,17 @@
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 3.0,
-            "selected_store_id": "store_15_annex",
+            "radius_km": 5.9,
+            "selected_store_id": "store_16",
             "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
+              "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_15_annex",
-                "distance_km": 1.42,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
-                "complete": true,
-                "preferred_for_anchor": false
-              },
-              {
-                "store_id": "store_15",
-                "distance_km": 2.46,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
+                "store_id": "store_16",
+                "distance_km": 4.52,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
                 "complete": true,
                 "preferred_for_anchor": false
               }
@@ -1263,7 +1193,7 @@
           ]
         }
       ],
-      "filtered_candidates": 23,
+      "filtered_candidates": 46,
       "warnings": []
     }
   },
@@ -1272,20 +1202,15 @@
     "archetype": "explorer",
     "radius_km": 3.2,
     "current_receipt_items": [
-      "Макароны",
-      "Овсяные хлопья",
+      "Корень петрушки",
+      "Сухарики",
+      "Котлеты-полуфабрикаты",
       "Яйца",
-      "Сливочное масло",
-      "Томатная паста",
-      "Свинина",
-      "Яблоки",
-      "Лимон",
-      "Бананы"
+      "Молоко",
+      "Шампиньоны",
+      "Сезонные фрукты"
     ],
-    "home_ingredients": [
-      "oats",
-      "vegetable_oil"
-    ],
+    "home_ingredients": [],
     "saved_recipes": [],
     "history_receipt_count": 11,
     "response": {
@@ -1295,53 +1220,56 @@
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
-          "current",
-          "explore"
+          "current"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
-          ],
-          "explore": [
-            "novel_recipe_strategy"
           ]
         },
         "explicit_choice_required": []
       },
       "recommendations": [
         {
-          "recipe_id": "oatmeal_with_banana",
-          "title": "Овсяная каша с бананом",
+          "recipe_id": "pan_fried_semi_finished_cutlets",
+          "title": "Котлеты жареные из полуфабриката",
           "mode": "current",
-          "model_score": 0.9705,
+          "model_score": 0.3441,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count",
-            "safe_markdown_option_available"
+            "low_missing_count"
           ],
           "ingredients": [
             {
-              "ingredient_id": "milk",
-              "name": "Молоко",
-              "category": "dairy",
+              "ingredient_id": "cutlet_semi_finished",
+              "name": "Котлеты-полуфабрикаты",
+              "category": "meat",
               "required": true,
-              "source": "markdown",
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "milk_md_25",
-                  "name": "Молоко",
-                  "category": "dairy",
+                  "sku_id": "vegetable_oil_fp_116",
+                  "name": "Растительное масло",
+                  "category": "pantry",
                   "store_id": "store_hub_1",
-                  "distance_km": 0.88,
-                  "price": 50.07,
-                  "original_price": 86.31,
-                  "brand": "Зелёная линия",
-                  "source": "markdown",
-                  "expires_at": "2026-09-05T02:08:51.295323+03:00",
+                  "distance_km": 2.14,
+                  "price": 139.94,
+                  "original_price": 139.94,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -1350,19 +1278,11 @@
               ]
             },
             {
-              "ingredient_id": "oats",
-              "name": "Овсяные хлопья",
-              "category": "grain",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "banana",
-              "name": "Бананы",
-              "category": "fruit",
-              "required": true,
-              "source": "receipt",
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
               "product_options": []
             }
           ],
@@ -1377,7 +1297,7 @@
             "options": [
               {
                 "store_id": "store_hub_1",
-                "distance_km": 0.88,
+                "distance_km": 2.14,
                 "covered_required_ingredients": 1,
                 "total_required_ingredients": 1,
                 "complete": true,
@@ -1389,142 +1309,72 @@
             "delivery",
             "next_visit"
           ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
-        },
-        {
-          "recipe_id": "vegetable_omelette",
-          "title": "Овощной омлет",
-          "mode": "explore",
-          "model_score": 0.9412,
-          "missing_count": 2,
-          "reason_codes": [
-            "current_receipt_overlap",
-            "category_history_match",
-            "quick_recipe",
-            "low_missing_count",
-            "safe_markdown_option_available"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "milk",
-              "name": "Молоко",
-              "category": "dairy",
-              "required": true,
-              "source": "markdown",
-              "product_options": [
-                {
-                  "sku_id": "milk_md_25",
-                  "name": "Молоко",
-                  "category": "dairy",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.88,
-                  "price": 50.07,
-                  "original_price": 86.31,
-                  "brand": "Зелёная линия",
-                  "source": "markdown",
-                  "expires_at": "2026-09-05T02:08:51.295323+03:00",
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "tomato",
-              "name": "Томаты",
-              "category": "vegetable",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "tomato_fp_38",
-                  "name": "Томаты",
-                  "category": "vegetable",
-                  "store_id": "store_hub_1",
-                  "distance_km": 2.43,
-                  "price": 162.36,
-                  "original_price": 162.36,
-                  "brand": "Зелёная линия",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 3.2,
-            "selected_store_id": "store_hub_1",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_hub_1",
-                "distance_km": 2.43,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
+          "safety_status": "approved",
+          "warnings": []
         }
       ],
-      "filtered_candidates": 21,
+      "filtered_candidates": 46,
       "warnings": []
     }
   },
   {
-    "user_id": "synthetic_time_limited_0041",
-    "archetype": "time_limited",
-    "radius_km": 1.0,
+    "user_id": "synthetic_explorer_0026",
+    "archetype": "explorer",
+    "radius_km": 3.3,
     "current_receipt_items": [
-      "Мука",
-      "Творог",
-      "Яблоки",
-      "Яйца",
-      "Куриное филе",
-      "Рис"
+      "Копчёности мясные",
+      "Молоко",
+      "Курага",
+      "Лимон",
+      "Сезонные фрукты",
+      "Сухарики",
+      "Сельдь солёная"
     ],
     "home_ingredients": [
-      "bread",
+      "oats",
       "pasta"
     ],
+    "saved_recipes": [],
+    "history_receipt_count": 11,
+    "response": {
+      "contract_version": "1.2",
+      "user_id": "synthetic_explorer_0026",
+      "receipt_id": "synthetic_explorer_0026_current",
+      "challenge_selection": {
+        "default_mode": null,
+        "available_modes": [],
+        "mode_reason_codes": {},
+        "explicit_choice_required": []
+      },
+      "recommendations": [],
+      "filtered_candidates": 47,
+      "warnings": [
+        "No safe recommendations are currently available."
+      ]
+    }
+  },
+  {
+    "user_id": "synthetic_time_limited_0028",
+    "archetype": "time_limited",
+    "radius_km": 1.2,
+    "current_receipt_items": [
+      "Творог",
+      "Фета",
+      "Сметана",
+      "Сельдь солёная",
+      "Уксус"
+    ],
+    "home_ingredients": [
+      "soy_sauce"
+    ],
     "saved_recipes": [
-      "bliny",
-      "vegetable_cheese_salad"
+      "chicken_pilaf"
     ],
     "history_receipt_count": 18,
     "response": {
       "contract_version": "1.2",
-      "user_id": "synthetic_time_limited_0041",
-      "receipt_id": "synthetic_time_limited_0041_current",
+      "user_id": "synthetic_time_limited_0028",
+      "receipt_id": "synthetic_time_limited_0028_current",
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
@@ -1540,14 +1390,15 @@
       },
       "recommendations": [
         {
-          "recipe_id": "cottage_cheese_bake",
-          "title": "Творожная запеканка",
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.985,
+          "model_score": 0.9723,
           "missing_count": 0,
           "reason_codes": [
             "current_receipt_overlap",
-            "category_history_match"
+            "category_history_match",
+            "quick_recipe"
           ],
           "ingredients": [
             {
@@ -1559,17 +1410,9 @@
               "product_options": []
             },
             {
-              "ingredient_id": "flour",
-              "name": "Мука",
-              "category": "pantry",
-              "required": true,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
               "required": true,
               "source": "receipt",
               "product_options": []
@@ -1584,28 +1427,32 @@
           "warnings": []
         }
       ],
-      "filtered_candidates": 23,
+      "filtered_candidates": 46,
       "warnings": []
     }
   },
   {
-    "user_id": "synthetic_time_limited_0044",
+    "user_id": "synthetic_time_limited_0033",
     "archetype": "time_limited",
-    "radius_km": 1.2,
+    "radius_km": 1.3,
     "current_receipt_items": [
-      "Рис",
-      "Яйца",
-      "Томатная паста"
+      "Молоко",
+      "Соль",
+      "Овощная смесь",
+      "Кефир",
+      "Пармезан"
     ],
     "home_ingredients": [
-      "vegetable_oil"
+      "mayonnaise"
     ],
-    "saved_recipes": [],
+    "saved_recipes": [
+      "beef_pilaf"
+    ],
     "history_receipt_count": 18,
     "response": {
       "contract_version": "1.2",
-      "user_id": "synthetic_time_limited_0044",
-      "receipt_id": "synthetic_time_limited_0044_current",
+      "user_id": "synthetic_time_limited_0033",
+      "receipt_id": "synthetic_time_limited_0033_current",
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
@@ -1618,41 +1465,45 @@
             "selected_by_effort_then_relevance"
           ],
           "explore": [
-            "novel_recipe_strategy"
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
           ]
         },
-        "explicit_choice_required": []
+        "explicit_choice_required": [
+          "explore"
+        ]
       },
       "recommendations": [
         {
-          "recipe_id": "homemade_chicken_nuggets",
-          "title": "Куриные наггетсы домашние",
+          "recipe_id": "oatmeal_with_banana",
+          "title": "Овсяная каша с бананом",
           "mode": "current",
-          "model_score": 0.9233,
+          "model_score": 0.7106,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count"
+            "low_missing_count",
+            "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
-              "category": "meat",
+              "ingredient_id": "oats",
+              "name": "Овсяные хлопья",
+              "category": "grain",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "chicken_fp_15",
-                  "name": "Куриное филе",
-                  "category": "meat",
-                  "store_id": "store_18",
+                  "sku_id": "oats_fp_66",
+                  "name": "Овсяные хлопья",
+                  "category": "grain",
+                  "store_id": "store_19_annex",
                   "distance_km": 1.07,
-                  "price": 322.95,
-                  "original_price": 322.95,
-                  "brand": "Хороший выбор",
+                  "price": 93.47,
+                  "original_price": 93.47,
+                  "brand": "Первым делом",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -1663,50 +1514,57 @@
               ]
             },
             {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
+              "ingredient_id": "milk",
+              "name": "Молоко",
+              "category": "dairy",
               "required": true,
               "source": "receipt",
               "product_options": []
             },
             {
-              "ingredient_id": "flour",
-              "name": "Мука",
-              "category": "pantry",
+              "ingredient_id": "banana",
+              "name": "Бананы",
+              "category": "fruit",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "flour_fp_19",
-                  "name": "Мука",
-                  "category": "pantry",
-                  "store_id": "store_18",
-                  "distance_km": 1.0,
-                  "price": 67.86,
-                  "original_price": 67.86,
-                  "brand": "Фермерский дворик",
+                  "sku_id": "banana_fp_5",
+                  "name": "Бананы",
+                  "category": "fruit",
+                  "store_id": "store_19_annex",
+                  "distance_km": 0.94,
+                  "price": 103.87,
+                  "original_price": 103.87,
+                  "brand": "Зелёная линия",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
-                    "delivery",
                     "next_visit"
                   ]
                 }
               ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "receipt",
+              "product_options": []
             }
           ],
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 1.2,
-            "selected_store_id": "store_18",
+            "radius_km": 1.3,
+            "selected_store_id": "store_19_annex",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_18",
+                "store_id": "store_19_annex",
                 "distance_km": 1.07,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
@@ -1716,131 +1574,111 @@
             ]
           },
           "fulfillment_options": [
-            "delivery",
             "next_visit"
           ],
           "safety_status": "approved",
           "warnings": []
         },
         {
-          "recipe_id": "cheese_omelette",
-          "title": "Омлет с сыром",
+          "recipe_id": "fried_chicken_breast",
+          "title": "Жареная куриная грудка",
           "mode": "explore",
-          "model_score": 0.8626,
+          "model_score": 0.2248,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
-            "safe_markdown_option_available",
-            "preferred_brand_option_available"
+            "safe_markdown_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "egg",
-              "name": "Яйца",
-              "category": "egg",
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
               "required": true,
+              "source": "markdown",
+              "product_options": [
+                {
+                  "sku_id": "chicken_md_28",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_19_annex",
+                  "distance_km": 0.83,
+                  "price": 157.8,
+                  "original_price": 290.99,
+                  "brand": null,
+                  "source": "markdown",
+                  "expires_at": "2026-09-04T09:40:17.693030+03:00",
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "vegetable_oil_fp_106",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_19_annex",
+                  "distance_km": 0.62,
+                  "price": 141.83,
+                  "original_price": 141.83,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
               "source": "receipt",
               "product_options": []
             },
             {
-              "ingredient_id": "milk",
-              "name": "Молоко",
-              "category": "dairy",
-              "required": true,
-              "source": "markdown",
-              "product_options": [
-                {
-                  "sku_id": "milk_md_23",
-                  "name": "Молоко",
-                  "category": "dairy",
-                  "store_id": "store_hub_1",
-                  "distance_km": 1.02,
-                  "price": 51.25,
-                  "original_price": 103.27,
-                  "brand": null,
-                  "source": "markdown",
-                  "expires_at": "2026-09-04T07:15:40.942509+03:00",
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                },
-                {
-                  "sku_id": "milk_fp_22",
-                  "name": "Молоко",
-                  "category": "dairy",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.67,
-                  "price": 102.74,
-                  "original_price": 102.74,
-                  "brand": "Первым делом",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "cheese",
-              "name": "Сыр",
-              "category": "dairy",
-              "required": true,
-              "source": "markdown",
-              "product_options": [
-                {
-                  "sku_id": "cheese_md_14",
-                  "name": "Сыр",
-                  "category": "dairy",
-                  "store_id": "store_hub_1",
-                  "distance_km": 0.89,
-                  "price": 208.4,
-                  "original_price": 376.24,
-                  "brand": "Первым делом",
-                  "source": "markdown",
-                  "expires_at": "2026-09-05T15:47:56.045856+03:00",
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
             }
           ],
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
-            "radius_km": 1.2,
-            "selected_store_id": "store_hub_1",
+            "radius_km": 1.3,
+            "selected_store_id": "store_19_annex",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_hub_1",
-                "distance_km": 1.02,
+                "store_id": "store_19_annex",
+                "distance_km": 0.83,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
-                "preferred_for_anchor": false
-              },
-              {
-                "store_id": "store_18_annex",
-                "distance_km": 0.66,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 2,
-                "complete": false,
                 "preferred_for_anchor": false
               }
             ]
           },
           "fulfillment_options": [
-            "delivery",
             "next_visit"
           ],
           "safety_status": "adjusted",
@@ -1849,7 +1687,7 @@
           ]
         }
       ],
-      "filtered_candidates": 22,
+      "filtered_candidates": 43,
       "warnings": []
     }
   }

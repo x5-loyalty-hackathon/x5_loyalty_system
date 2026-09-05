@@ -1,5 +1,11 @@
 """The recommendation model adapter.
 
+Scorer port: recsys-benchmark@c28b613, adapted to API 1.2. Experimental
+measurements mentioned in inherited comments refer to the source branch,
+not this integrated build. See docs/integration-handoff.md. Serving retains
+our selector, explicit HOME and required-only missing counts; inferred pantry
+and alternative ranking policies are not enabled.
+
 ``MLRecommendationEngine`` implements the exact ``RecommendationEngine``
 Protocol from ``app/recommender.py`` (``rank(request) -> list[ModelRecommendation]``)
 so it's a drop-in replacement for ``DeterministicMockEngine`` — same input,
@@ -35,9 +41,12 @@ from __future__ import annotations
 import random
 from datetime import datetime
 
+from dataclasses import dataclass
+
 from app.contracts import ModelRecommendation, Recipe, RecommendationMode, RecommendationRequest
 from recsys._logistic import LogisticRegression
 from recsys.catalog import BASE_PRICE_RUB, CATEGORIES
+from recsys.pantry import DISABLED_PANTRY, PantryPolicy, available_ingredient_ids
 from recsys.profiles import ARCHETYPES, generate_population
 
 FEATURE_NAMES: tuple[str, ...] = (
@@ -50,13 +59,46 @@ FEATURE_NAMES: tuple[str, ...] = (
     "missing_ratio",
     "missing_cost_norm",
     "markdown_supply_signal",
+    # --- observable user state, derived from the user's own history ---------
+    # The label in ``_label_for_pair`` gates on four archetype traits
+    # (tolerance, time limit, discovery acceptance, markdown affinity) that no
+    # feature exposed, so the model was asked to predict a function of
+    # variables it could not see and could only learn the population marginal.
+    # These are proxies a real product genuinely has: they come from the
+    # purchase history, never from the synthetic archetype label.
+    "markdown_share_history",
+    "basket_size_norm",
+    "visit_cadence_norm",
+    "brand_concentration",
+    # --- user x item interactions ------------------------------------------
+    # A linear model cannot represent "missing_count > this user's tolerance"
+    # from the two terms separately; the ratio has to be handed to it.
+    "missing_vs_basket",
+    "prep_vs_cadence",
+    #: 1.0 when the proxies above were computed from real purchase history,
+    #: 0.0 when there was none and they fall back to today's receipt. Without
+    #: it a brand-new user is indistinguishable from a rare shopper, because
+    #: the fallback cadence is a constant that looks exactly like data.
+    "history_is_known",
 )
 
 MISSING_COST_NORMALIZER_RUB = 500.0
 LOW_MISSING_COUNT_THRESHOLD = 2
-HIGH_HISTORY_AFFINITY = 0.3
-HIGH_COVERAGE = 0.34
-NOVELTY_THRESHOLD = 0.15
+
+# Thresholds on the affinity/coverage scales, expressed as quantiles of the
+# current synthetic population so the rules they gate actually split it.
+#
+# They were re-derived when ``history_affinity`` was redefined: the old values
+# were tuned to the previous (saturated) definition and, on the new scale,
+# ``HIGH_HISTORY_AFFINITY`` admitted 97% of pairs while ``HIGH_COVERAGE``
+# admitted 1% — so both rules had stopped discriminating. A threshold that
+# matches nothing, or everything, is not a rule.
+#: ~p65 of combined affinity: "this is squarely their kind of food".
+HIGH_HISTORY_AFFINITY = 0.55
+#: ~p85 of coverage: "today's receipt already covers a real part of it".
+HIGH_COVERAGE = 0.20
+#: ~p25 of combined affinity: below this the recipe is genuinely unfamiliar.
+NOVELTY_THRESHOLD = 0.43
 DISCOVERY_BREADTH_THRESHOLD = 5 / len(CATEGORIES)
 
 
@@ -95,6 +137,84 @@ def _avg_receipt_total(request: RecommendationRequest) -> float:
     return sum(totals) / len(totals) if totals else 0.0
 
 
+@dataclass(frozen=True)
+class UserStats:
+    """Observable behaviour summary, computed once per request.
+
+    Every field is derivable from ``purchase_history`` alone — nothing here
+    reads ``SyntheticProfile.archetype``, which is generation-time truth and
+    not part of the API contract.
+    """
+
+    markdown_share: float
+    mean_basket_size: float
+    mean_cadence_days: float
+    brand_concentration: float
+    category_share: dict[str, float]
+    #: False when there was no purchase history and everything above was
+    #: inferred from a single receipt. Fabricated values must be labelled as
+    #: fabricated rather than flow into the model looking like measurements.
+    has_history: bool = True
+
+
+#: Baskets larger than this are treated as "as large as it gets" when the
+#: basket size is put on a 0..1 scale.
+BASKET_SIZE_NORMALIZER = 12.0
+
+#: Visit gaps longer than this are treated as equally infrequent.
+CADENCE_NORMALIZER_DAYS = 7.0
+
+
+
+
+def compute_user_stats(request: RecommendationRequest) -> UserStats:
+    history = list(request.purchase_history)
+    has_history = len(history) >= 2
+    receipts = history or [request.current_receipt]
+    items = [item for receipt in receipts for item in receipt.items]
+    n_items = len(items) or 1
+
+    markdown_share = sum(1 for item in items if item.is_markdown) / n_items
+    mean_basket_size = sum(len(r.items) for r in receipts) / len(receipts)
+
+    times = sorted(r.purchased_at for r in receipts)
+    if len(times) > 1:
+        gaps = [
+            (later - earlier).total_seconds() / 86400.0
+            for earlier, later in zip(times, times[1:], strict=False)
+        ]
+        mean_cadence = sum(gaps) / len(gaps)
+    else:
+        mean_cadence = CADENCE_NORMALIZER_DAYS
+
+    # Share of branded purchases going to the single most-used brand. The
+    # obvious alternative, distinct-brands / branded-items, saturates: the
+    # catalog only has four brands, so every user scored ~0.93 regardless of
+    # loyalty.
+    branded = [item.brand for item in items if item.brand]
+    if branded:
+        brand_counts: dict[str, int] = {}
+        for brand in branded:
+            brand_counts[brand] = brand_counts.get(brand, 0) + 1
+        brand_concentration = max(brand_counts.values()) / len(branded)
+    else:
+        brand_concentration = 0.0
+
+    counts: dict[str, int] = {}
+    for item in items:
+        counts[item.category] = counts.get(item.category, 0) + 1
+    category_share = {c: counts.get(c, 0) / n_items for c in CATEGORIES}
+
+    return UserStats(
+        markdown_share=markdown_share,
+        mean_basket_size=mean_basket_size,
+        mean_cadence_days=mean_cadence,
+        brand_concentration=brand_concentration,
+        category_share=category_share,
+        has_history=has_history,
+    )
+
+
 def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str]) -> float:
     if not missing_ids:
         return 0.0
@@ -103,7 +223,6 @@ def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str
         for product in request.inventory_snapshot:
             if (
                 product.is_markdown
-                and not product.is_prepared_food
                 and ingredient_id in product.ingredient_ids
                 and product.distance_km <= request.user.radius_km
             ):
@@ -112,10 +231,22 @@ def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str
     return covered / len(missing_ids)
 
 
-def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str, float]:
+def compute_features(
+    request: RecommendationRequest,
+    recipe: Recipe,
+    user_stats: UserStats | None = None,
+    pantry_policy: PantryPolicy = DISABLED_PANTRY,
+) -> dict[str, float]:
+    """Features for one (request, recipe) pair.
+
+    ``user_stats`` is recipe-independent; ``rank`` computes it once per request
+    and passes it in. Callers that omit it get the same numbers, just slower.
+    """
+    stats = user_stats if user_stats is not None else compute_user_stats(request)
+    # Current overlap is receipt-only; explicit HOME affects missing count.
     receipt_ids = _receipt_ingredient_ids(request)
-    home_ids = request.user.home_ingredient_ids
-    history_categories = _history_categories(request)
+    # Explicit HOME is retained from API 1.2; an inferred pantry remains opt-in.
+    available_ids = available_ingredient_ids(request, policy=pantry_policy)
     history_ingredient_ids = _history_ingredient_ids(request)
 
     ingredient_ids = {i.ingredient_id for i in recipe.ingredients}
@@ -123,13 +254,31 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
     total = max(len(recipe.ingredients), 1)
 
     current_hits = len(ingredient_ids & receipt_ids)
-    covered_ids = receipt_ids | home_ids
-    missing_ids = ingredient_ids - covered_ids
-    history_hits = len(categories & history_categories)
+    covered_ids = available_ids
+    required_ids = {i.ingredient_id for i in recipe.ingredients if i.required}
+    missing_ids = required_ids - covered_ids
     ingredient_history_hits = len(ingredient_ids & history_ingredient_ids)
 
     coverage = min(current_hits / total, 1.0)
-    history_affinity = min(history_hits / total, 1.0)
+    # How heavily this user actually buys the categories the recipe needs,
+    # averaged over the recipe's distinct categories.
+    #
+    # The previous definition was |recipe categories & history categories| /
+    # |recipe ingredients|. It divided a category count by an ingredient count,
+    # and every user's history covered all seven categories, so it reduced to a
+    # recipe-shape constant: measured variance was 100% between recipes and 0%
+    # between users. It was the strongest "personalisation" feature in the
+    # model and carried no personalisation at all.
+    uniform_share = 1.0 / len(CATEGORIES)
+    history_affinity = (
+        sum(
+            min(stats.category_share.get(c, 0.0) / (2.0 * uniform_share), 1.0)
+            for c in categories
+        )
+        / len(categories)
+        if categories
+        else 0.0
+    )
     ingredient_affinity = min(ingredient_history_hits / total, 1.0)
     # Ingredient-level overlap is the more specific, more discriminative
     # signal (see _history_ingredient_ids); category-level is a coarser
@@ -139,6 +288,22 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
     is_saved = 1.0 if recipe.recipe_id in request.user.saved_recipe_ids else 0.0
     novelty = 1.0 - combined_affinity
 
+    # Deliberately a pure recipe property: how long the dish takes, on a 0..1
+    # scale. It measures 100% between-recipe variance, which by the test that
+    # exposed ``history_affinity`` looks like the same defect — a recipe
+    # statistic posing as personalisation.
+    #
+    # It is not, and making it personal was tried and reverted. Two variants
+    # were measured: a per-user time budget derived from visit cadence
+    # (threshold form) and a smooth patience ratio. Neither moved the metric
+    # that matters — within-effort AUC went 0.821 -> 0.824, noise — because the
+    # personal half of the signal is already carried by ``prep_vs_cadence``,
+    # which holds more user variance (0.07) than either variant of a
+    # personalised ``time_fit`` (0.05 and 0.02).
+    #
+    # Folding recipe length and user patience into one number also hides them
+    # from a linear model, which cannot weight them separately. Keeping the
+    # item term clean and the interaction explicit is the better split.
     if recipe.preparation_minutes is None:
         time_fit = 1.0
     elif recipe.preparation_minutes <= 30:
@@ -146,7 +311,19 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
     else:
         time_fit = max(0.0, 1.0 - (recipe.preparation_minutes - 30) / 90)
 
-    missing_ratio = len(missing_ids) / total
+    missing_count = len(missing_ids)
+    missing_ratio = missing_count / total
+    # How big this top-up is next to the user's usual basket. This is the
+    # quantity the label's tolerance gate is really about, and a linear model
+    # cannot build it from ``missing_ratio`` and basket size separately.
+    missing_vs_basket = min(missing_count / max(stats.mean_basket_size, 1.0), 2.0)
+    # Frequent shoppers behave as the time-pressed segment, so a long recipe
+    # costs them more. Again an interaction the model cannot form on its own.
+    prep_minutes = float(recipe.preparation_minutes or 30)
+    prep_vs_cadence = min(
+        (prep_minutes / 60.0) * (CADENCE_NORMALIZER_DAYS / max(stats.mean_cadence_days, 0.5)),
+        3.0,
+    )
     missing_cost = sum(BASE_PRICE_RUB.get(i, 150.0) for i in missing_ids)
     missing_cost_norm = min(missing_cost / MISSING_COST_NORMALIZER_RUB, 2.0)
     markdown_signal = _markdown_supply_signal(request, missing_ids)
@@ -161,18 +338,46 @@ def compute_features(request: RecommendationRequest, recipe: Recipe) -> dict[str
         "missing_ratio": missing_ratio,
         "missing_cost_norm": missing_cost_norm,
         "markdown_supply_signal": markdown_signal,
+        "markdown_share_history": min(stats.markdown_share * 3.0, 1.0),
+        "basket_size_norm": min(stats.mean_basket_size / BASKET_SIZE_NORMALIZER, 1.0),
+        "visit_cadence_norm": min(stats.mean_cadence_days / CADENCE_NORMALIZER_DAYS, 1.0),
+        "brand_concentration": stats.brand_concentration,
+        "missing_vs_basket": missing_vs_basket,
+        "prep_vs_cadence": prep_vs_cadence,
+        "history_is_known": 1.0 if stats.has_history else 0.0,
         # not used as model input, only for mode/reason-code derivation and
         # oracle judgment below
         "_combined_affinity": combined_affinity,
         "_current_hits": float(current_hits),
-        "_missing_count": float(len(missing_ids)),
-        "_history_hits": float(history_hits),
+        "_missing_count": float(missing_count),
         "_missing_cost": missing_cost,
     }
 
 
-def _feature_vector(features: dict[str, float]) -> list[float]:
-    return [features[name] for name in FEATURE_NAMES]
+#: Features that describe how much work a recipe is, rather than how much the
+#: user would like it. The source branch benchmark explored disabling these;
+#: our serving keeps the default and applies its missing-first selector after
+#: scoring. No alternative ranking policy was ported with this adapter.
+EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
+    {"missing_ratio", "missing_cost_norm"}
+)
+
+
+def _feature_vector(
+    features: dict[str, float], *, include_effort: bool = True
+) -> list[float]:
+    """Feature row, optionally with the effort features zeroed.
+
+    Zeroing rather than dropping keeps the vector length equal to
+    ``FEATURE_NAMES`` so both variants share one classifier shape and one set
+    of weight indices — the two models stay directly comparable.
+    """
+    return [
+        features[name]
+        if include_effort or name not in EFFORT_FEATURE_NAMES
+        else 0.0
+        for name in FEATURE_NAMES
+    ]
 
 
 def _label_for_pair(
@@ -186,15 +391,19 @@ def _label_for_pair(
     rule (docs/research/persona_vxofi/rescue-domovoi-concept.md §6-7), not
     real user feedback. See module docstring."""
     params = ARCHETYPES[archetype_name]
-    missing_count = int(features["_missing_count"])
-    tolerance = params.max_missing_tolerance
-    if features["markdown_supply_signal"] >= 0.5 and rng.random() < params.markdown_affinity:
-        # Markdown-sensitive archetypes tolerate one extra missing item when
-        # rescue supply for this recipe looks good — gives the classifier a
-        # real (non-degenerate) reason to weight markdown_supply_signal.
-        tolerance += 1
-    if missing_count > tolerance:
-        return 0.0
+    # Feasibility deliberately does NOT gate this label any more.
+    #
+    # It used to open with ``if missing_count > tolerance: return 0.0``, which
+    # made relevance almost a function of how much shopping a recipe needed: no
+    # recipe with six or more missing ingredients was ever labelled relevant, so
+    # the model learned effort and nothing else (measured AUC 0.53 within
+    # equal-effort strata). Whether a basket is affordable today is the job of
+    # the service selector and the availability filter, which already
+    # do it on live inventory. This label answers only "would this person want
+    # this dish".
+    #
+    # Time is kept, because wanting a 90-minute recipe on a weeknight is a
+    # preference, not a supply constraint.
     if (
         params.time_limit_minutes is not None
         and recipe.preparation_minutes is not None
@@ -210,7 +419,13 @@ def _label_for_pair(
     return 1.0 if features["_combined_affinity"] >= HIGH_HISTORY_AFFINITY else 0.0
 
 
-def _train_classifier(*, seed: int, n_profiles: int, recipe_catalog: list[Recipe]) -> LogisticRegression:
+def _train_classifier(
+    *,
+    seed: int,
+    n_profiles: int,
+    recipe_catalog: list[Recipe],
+    include_effort: bool = True,
+) -> LogisticRegression:
     from recsys.inventory import generate_inventory  # local import: no import-time cycle
 
     rng = random.Random(seed)
@@ -236,7 +451,7 @@ def _train_classifier(*, seed: int, n_profiles: int, recipe_catalog: list[Recipe
         sampled_recipes = rng.sample(recipe_catalog, k=min(6, len(recipe_catalog)))
         for recipe in sampled_recipes:
             features = compute_features(request, recipe)
-            X.append(_feature_vector(features))
+            X.append(_feature_vector(features, include_effort=include_effort))
             y.append(_label_for_pair(rng, features=features, archetype_name=profile.archetype, recipe=recipe))
     model = LogisticRegression(n_features=len(FEATURE_NAMES))
     model.fit(X, y, epochs=250)
@@ -252,26 +467,42 @@ class MLRecommendationEngine:
         recipe_catalog: list[Recipe] | None = None,
         seed: int = 999,
         training_profiles: int = 300,
+        include_effort_features: bool = True,
+        pantry_policy: PantryPolicy = DISABLED_PANTRY,
     ) -> None:
+        """``include_effort_features=False`` trains a preference-only ranker.
+
+        Experimental ablation inherited from the source branch. Our serving
+        uses include_effort_features=True and DISABLED_PANTRY; changing those
+        requires a separate evaluation, not an API compatibility fix.
+        """
         from recsys.recipes import RECIPES  # local import avoids a hard import-time cycle
 
         self._recipe_catalog_for_training = list(recipe_catalog or RECIPES)
+        self._include_effort = include_effort_features
+        self._pantry_policy = pantry_policy
         self._classifier = _train_classifier(
             seed=seed,
             n_profiles=training_profiles,
             recipe_catalog=self._recipe_catalog_for_training,
+            include_effort=include_effort_features,
         )
 
     def rank(self, request: RecommendationRequest) -> list[ModelRecommendation]:
         history_categories = _history_categories(request)
         breadth = len(history_categories) / len(CATEGORIES)
+        user_stats = compute_user_stats(request)
 
         ranked: list[ModelRecommendation] = []
         for recipe in request.recipe_catalog:
             if not recipe.verified:
                 continue
-            features = compute_features(request, recipe)
-            score = self._classifier.predict_proba(_feature_vector(features))
+            features = compute_features(
+                request, recipe, user_stats, pantry_policy=self._pantry_policy
+            )
+            score = self._classifier.predict_proba(
+                _feature_vector(features, include_effort=self._include_effort)
+            )
             score = max(0.0, min(1.0, score))
 
             if recipe.recipe_id in request.user.saved_recipe_ids:
@@ -326,8 +557,6 @@ class MLRecommendationEngine:
             codes.append("markdown_supply_likely")
         if request.user.preferred_brands and features["coverage"] > 0:
             codes.append("brand_affinity_match")
-        if any(i.ingredient_id in request.user.home_ingredient_ids for i in recipe.ingredients):
-            codes.append("home_ingredient_reuse")
         avg_total = _avg_receipt_total(request)
         if avg_total > 0 and features["_missing_cost"] <= 0.5 * avg_total:
             codes.append("usual_price_band")

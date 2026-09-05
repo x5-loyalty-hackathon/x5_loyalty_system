@@ -30,6 +30,7 @@ function useDemoState() {
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [book, setBook] = useState<string[]>([]);
   const [plan, setPlan] = useState<MealPlan | null>(null);
+  const [cooking, setCooking] = useState(false);
   const pendingPlan = useRef<PendingPlan | null>(null);
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
@@ -41,6 +42,7 @@ function useDemoState() {
 
   const clearSelection = useCallback(() => {
     setSelectedMeal(null); setChoices({}); setPlan(null); pendingPlan.current = null;
+    setCooking(false);
     setActionError(null); setNotice(null);
   }, []);
   const loadRecipes = useCallback(async (changes: Partial<Query> = {}) => {
@@ -84,11 +86,11 @@ function useDemoState() {
   const acceptProgress = (value: ProgressSnapshot) => {
     progressGate.current.next(); setProgress(value); setProgressStatus('ready'); setProgressError(null);
   };
-  const run = async (operation: () => Promise<void>) => {
-    if (busyRef.current) return;
+  const run = async (operation: () => Promise<void>): Promise<boolean> => {
+    if (busyRef.current) return false;
     busyRef.current = true; setBusy(true); setActionError(null); setNotice(null);
-    try { await operation(); }
-    catch (error) { setActionError((error as Error).message); }
+    try { await operation(); return true; }
+    catch (error) { setActionError((error as Error).message); return false; }
     finally { busyRef.current = false; setBusy(false); }
   };
   const selectMeal = (mealId: string) => {
@@ -159,12 +161,19 @@ function useDemoState() {
     acceptProgress(result.progress);
     if (result.plan) setPlan(result.plan);
     if (!['completed', 'duplicate'].includes(result.status)) throw new Error('Готовка не подтверждена: проверьте план и покупку.');
+    setCooking(false);
     setNotice(result.status === 'duplicate' ? 'Блюдо уже учтено; повторных наград нет.' : 'Блюдо приготовлено — прогресс обновлён!');
   });
+  const startCooking = () => {
+    if (busyRef.current || !canCompleteCook(plan)) return false;
+    setCooking(true); setActionError(null); setNotice(null); return true;
+  };
+  const pauseCooking = () => { if (!busyRef.current) setCooking(false); };
   return {
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
+    cooking, startCooking, pauseCooking,
     actionError, notice, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }

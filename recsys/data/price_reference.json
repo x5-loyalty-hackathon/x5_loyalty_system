@@ -1,0 +1,15 @@
+{
+ "source": "X5 Retail Hero (Kaggle) purchases.csv",
+ "era": "2018-2019",
+ "rows_read": 3000000,
+ "usable_unit_prices": 2775798,
+ "percentiles_rub": {
+  "10": 14.0,
+  "25": 27.0,
+  "50": 45.0,
+  "75": 76.0,
+  "90": 128.0,
+  "99": 300.0
+ },
+ "mean_rub": 62.06
+}

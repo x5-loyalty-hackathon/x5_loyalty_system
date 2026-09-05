@@ -1,0 +1,4817 @@
+{
+ "snapshot_ids": [
+  "2026-09-04T22:52:34+00:00",
+  "2026-09-04T23:38:22+00:00"
+ ],
+ "city": "Москва",
+ "products": [
+  {
+   "chain": "perekrestok",
+   "plu": "2157530",
+   "name": "Лазанья мясная Золотой Петушок, 370г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3196973",
+   "name": "Сайра 5 Морей тихоокеанская натуральная 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 193.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3273892",
+   "name": "Блины С Пылу с Жару с творогом, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3403377",
+   "name": "Блины С Пылу с Жару без начинки, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3405758",
+   "name": "Блины С Пылу с Жару с курицей, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3416332",
+   "name": "Чебупицца Горячая штучка пепперони, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 191.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3421780",
+   "name": "Чебупицца Горячая штучка курочка по-итальянски, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 191.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3426375",
+   "name": "Блины С Пылу с Жару с ветчиной и сыром, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3435321",
+   "name": "Хотстеры Горячая штучка, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 191.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3446271",
+   "name": "Крылышки Горячая штучка Острые к пиву хрустящие, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3454946",
+   "name": "Чебуреки Горячая штучка со свининой и говядиной, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 263.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3463947",
+   "name": "Паста Санта Бремор антарктик криль классический из морепродуктов 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3463948",
+   "name": "Паста Санта Бремор Антарктик криль подкопчённый из морепродуктов, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3463949",
+   "name": "Паста Санта Бремор Антарктик криль сливочно-чесночный из морепродуктов, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3468682",
+   "name": "Шпроты Вкусные Консервы в масле, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3468684",
+   "name": "Шпроты Вкусные Консервы крупные в масле, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 231.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3468685",
+   "name": "Килька Вкусные Консервы неразделанная обжаренная в томатном соусе, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 89.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3469704",
+   "name": "Шпроты Вкусные Консервы в масле, 175г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 146.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3475329",
+   "name": "Шпроты Вкусные Консервы в масле, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 156.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3497737",
+   "name": "Риет Меридиан пикантный из скумбрии, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3503292",
+   "name": "Шпроты За Родину из балтийской кильки в масле, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 156.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3507133",
+   "name": "Скумбрия Доброфлот дальневосточная натуральная в масле, 245г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 177.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3607426",
+   "name": "Тунец Магуро филе натуральное 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 291.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3613299",
+   "name": "Сардина Доброфлот Иваси тихоокеанская натуральная 245г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 177.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3630750",
+   "name": "Сиг EcoFood Armenia Севанский в томатном соусе, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 559.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3633223",
+   "name": "Шпроты Барс из балтийской кильки в масле, 175г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 188.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3633258",
+   "name": "Блины Сибирская Коллекция Handmade с малиной, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 398.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3653170",
+   "name": "Торт Топ Шеф Миндальный замороженный, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 725.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3653861",
+   "name": "Горбуша натуральная Пр!ст, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 208.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3653862",
+   "name": "Сайра тихоокеанская натуральная Пр!ст, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 215.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3655792",
+   "name": "Паста Балтийский Берег Creme Le Mare сливочная из морепродуктов, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 93.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3662908",
+   "name": "Блины Сибирская Коллекция с мясом, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 423.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3681003",
+   "name": "Каша молочная рисовая Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 167.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3681730",
+   "name": "Рулетики пикантные из ветчины Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 268.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3900135",
+   "name": "Горбуша Курильский Берег натуральная, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3932486",
+   "name": "Сардина Доброфлот тихоокеанская тушка копчёная в масле, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 204.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3934770",
+   "name": "Бычки Пролив обжаренные в томатном соусе, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 242.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3940705",
+   "name": "Горбуша + скумбрия Европром рубленая, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3940708",
+   "name": "Горбуша + скумбрия Европром рубленая с ароматом копчения, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 146.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3962298",
+   "name": "Шпроты За Родину тушки из балтийской кильки в масле, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 227.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3976385",
+   "name": "Икра Санта Бремор Классическая, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3983177",
+   "name": "Икра Санта Бремор с креветкой, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 158.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "3983178",
+   "name": "Икра Санта Бремор с копчёным лососем, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4029977",
+   "name": "Паштет Формула ГОСТа из печени и икры тресковых рыб, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 135.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4034848",
+   "name": "Чебурек с мясом замороженный Маркет, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 68.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4047005",
+   "name": "Осётр EcoFood копчёный в масле, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 1549.0
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4047699",
+   "name": "Килька Барс балтийская неразделанная копчёная в томатном соусе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4088784",
+   "name": "Килька черноморская неразделанная в томатном соусе Пр!ст, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 79.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4111251",
+   "name": "Блинчики Сибирская коллекция с творогом замороженные, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 499.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4120448",
+   "name": "Паста Перекрёсток Select Болоньезе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 204.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4133217",
+   "name": "Салат Оливье Перекрёсток Select, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 509.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4133219",
+   "name": "Винегрет овощной с маслом Перекрёсток Select, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 319.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4133312",
+   "name": "Сэндвич-ролл Перекрёсток Select Цезарь, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 291.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4133313",
+   "name": "Сэндвич-ролл Перекрёсток Select с индейкой, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4147826",
+   "name": "Салат Перекрёсток Select с индейкой-барбекю, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4147834",
+   "name": "Сырники жареные Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 282.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4147835",
+   "name": "Сырники с изюмом Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 324.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4147836",
+   "name": "Сырники с курагой Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4150563",
+   "name": "Филе угря Моремания морского жареное в соусе унаги, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 576.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4155363",
+   "name": "Паста Арабьята Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4156187",
+   "name": "Паста 4 сыра Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4175863",
+   "name": "Вок с говядиной Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 356.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4175864",
+   "name": "Вок с курицей Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4183545",
+   "name": "Хумус рецепт из Иерусалима Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 308.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4186335",
+   "name": "Тунец полосатый мелко рубленный Пр!ст, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4192787",
+   "name": "Котлета из судака и креветок с рисом Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4192791",
+   "name": "Фишкейки с картофельным пюре и соусом тар-тар Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4200603",
+   "name": "Сырники жареные Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 154.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4208166",
+   "name": "Паста Санта Бремор кальмар рубленый в сливочном соусе с креветкой, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4215386",
+   "name": "Блинчики с лососем и творожным сыром Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 379.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4221854",
+   "name": "Жареный рис по-азиатски с креветками Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4225649",
+   "name": "Салат Цезарь Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 314.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4261613",
+   "name": "Шпроты в масле из Балтийской кильки Маркет, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 201.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4268960",
+   "name": "Салат Цезарь с креветками Перекрёсток Select, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 336.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4276196",
+   "name": "Поке с креветками и соусом Альтерно Перекрёсток Select, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 257.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4279853",
+   "name": "Блинчики Останкино с мясом замороженные, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4280526",
+   "name": "Том Ям с морепродуктами Шеф Перекрёсток, 370г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 428.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4309968",
+   "name": "Кебабы мясные с картофелем Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 324.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4310836",
+   "name": "Круассан с ветчиной и сыром Перекрёсток Select, 115г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4312150",
+   "name": "Азу из говядины с картофельным пюре Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4331972",
+   "name": "Салат из свеклы и брынзы с соусом песто Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4332829",
+   "name": "Бефстроганов с картофельным пюре Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 298.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4336168",
+   "name": "Паста Санта Бремор с тунцом и лососем, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 79.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4340914",
+   "name": "Борщ Фросток замороженный, 1кг",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 579.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4340929",
+   "name": "Бифштекс из говядины с картофельным пюре, Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4355381",
+   "name": "Тофники Fitdelice кокосовые замороженные, 260г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4356615",
+   "name": "Чизкейк Cheeseberry New-York с малиной замороженный, 1кг",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 1198.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4358607",
+   "name": "Сэндвич с ветчиной и сыром моцарелла Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 303.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4359664",
+   "name": "Том ям Фросток с креветками замороженный, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4359667",
+   "name": "Суп Фросток Харчо замороженный 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4361185",
+   "name": "Суп Фросток Солянка мясная замороженный, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4362089",
+   "name": "Филе куриное су-вид с соусом Бешамель и овощными биточками Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4364436",
+   "name": "Салат с куриным филе и картофелем пай Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4364437",
+   "name": "Котлета де-воляй из куриного филе с грибами и спагетти Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4364439",
+   "name": "Оладьи из курицы с рисом и овощами Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4364442",
+   "name": "Салат с тунцом и картофелем Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 251.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4366960",
+   "name": "Икра Люди Любят Классик с креветкой в соусе деликатесная, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4366961",
+   "name": "Икра Люди Любят Классик с копчёным лососем в соусе деликатесная, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4368151",
+   "name": "Стрипсы из куриного филе с картофелем Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4371075",
+   "name": "Хашбраун Зимняя Радуга картофельный жареный замороженный, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4372008",
+   "name": "Соус Клубничный Перекрёсток Select, 35г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4372009",
+   "name": "Соус Малиновый Перекрёсток Select, 35г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4372373",
+   "name": "Паста с куриным филе и соусом песто Перекрёсток Select, 250 г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 242.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4376942",
+   "name": "Онигири с креветками белоногими Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4376944",
+   "name": "Онигири с натуральным крабом Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4377397",
+   "name": "Салат Кимчи из квашеных овощей из пекинской капусты Перекрёсток Select, 200 г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 303.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4381625",
+   "name": "Паста Санта Бремор Сальса из мяса мидии чилийской, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4381670",
+   "name": "Каша рисовая с мякотью кокоса Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4381902",
+   "name": "Колбаски по-нюрнбергски с картофелем и горчичным соусом Перекрёсток Select, 205г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 336.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4381904",
+   "name": "Котлета Пожарская с картофельным пюре Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 310.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4381913",
+   "name": "Шницель куриный в яйце с картофельным пюре Перекрёсток Select, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 294.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4389855",
+   "name": "Филе куриное с грибами под сырной корочкой с картофелем Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 324.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4392893",
+   "name": "Сэндвич на угольном хлебе с индейкой перцем гриль и пикантным соусом Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4396956",
+   "name": "Чебупели Горячая Штучка с ветчиной и сыром, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4396957",
+   "name": "Чебупели Горячая Штучка сочные с мясом, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4398544",
+   "name": "Салат Нисуаз с филе-кусочками тунца запеченного и горчично-медовым соусом Перекрёсток Select, 215г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4398580",
+   "name": "Паштет из горбуши Люди Любят тонкоизмельченный стерилизованный, 125г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 135.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4401909",
+   "name": "Курица терияки на рисе Перекрёсток Select, 215г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 294.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4401912",
+   "name": "Удон с курицей и овощами Перекрёсток Select, 215г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 243.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402241",
+   "name": "Морковь По-Корейски Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402242",
+   "name": "Морковь По-Корейски Перекрёсток Select 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 194.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402245",
+   "name": "Спаржа с морковью по-корейски Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402370",
+   "name": "Щёки телячьи томлёные замороженные, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 539.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402371",
+   "name": "Говядина томлёная с кавказскими травами замороженная, 260г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 479.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4402696",
+   "name": "Тунец Люди Любят полосатый рубленый в заливке, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4403475",
+   "name": "Котлеты Сочные из индейки жареные Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 331.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4403479",
+   "name": "Сэндвич-ролл Цезарь с креветками Перекрёсток Select, 175г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 366.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4405296",
+   "name": "Щечки говяжьи томленые Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 555.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4405772",
+   "name": "Капуста с морковью по-корейски Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 174.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4405773",
+   "name": "Спаржа По-Корейски Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4406507",
+   "name": "Салат Крабовый Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 188.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4407902",
+   "name": "Блинчики с курицей и грибами в сливочном соусе Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4407903",
+   "name": "Блинчики с курицей и грибами в сливочном соусе Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 479.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4407905",
+   "name": "Блинчики с творогом Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 156.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4408479",
+   "name": "Блинчики Sибирская Коллекция с куриным филе и сыром замороженные, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 398.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4409321",
+   "name": "Свинина в соусе барбекю с рисом Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4410398",
+   "name": "Клаб Сэндвич двойной с бужениной Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4410399",
+   "name": "Сэндвич-ролл с ветчиной и португальским салатом Перекрёсток Select, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4410402",
+   "name": "Оладьи печеночные жареные Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 352.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4410403",
+   "name": "Голубцы ленивые в томатно-сметанном соусе Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4412886",
+   "name": "Горбуша Жемчужина Сахалина натуральная, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413417",
+   "name": "Изделие кондитерское Рыбки Пуноппан с кремом, 420г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 749.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413419",
+   "name": "Корн-дог с сосиской с сыром замороженный, 80г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413421",
+   "name": "Корн-дог в картофельной панировке с сосиской с сыром замороженный, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413900",
+   "name": "Тунец скипджек Люди Любят филе-кусок в масле, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413901",
+   "name": "Тунец скипджек Люди Любят филе-кусок, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413987",
+   "name": "Окрошка овощная Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 251.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4413988",
+   "name": "Набор для окрошки с куриной колбасой Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 356.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4414705",
+   "name": "Свекольник на кефире Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4415661",
+   "name": "Печень По-Строгановски с картофельным пюре Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4416810",
+   "name": "Картофель отварной с укропом Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 174.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4417712",
+   "name": "Соус Лёгкий майонезный 30% Зелёная Линия, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4419226",
+   "name": "Биточки мясные с картофельным пюре Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4419634",
+   "name": "Соус Грибной с белыми грибами 30% Зелёная Линия, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4420760",
+   "name": "Бризоль куриная с пенне и соусом Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4422046",
+   "name": "Соус Слобода Сливочный с нежным лососем 60%, 200мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4422195",
+   "name": "Сэндвич двойной с лососем и творожным сыром Перекрёсток Select, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 439.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4422949",
+   "name": "Говядина томленая в перечном соусе с орзо Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 379.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424021",
+   "name": "Мясо криля Санта Бремор антарктического в заливке, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 177.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424332",
+   "name": "Вок Dostaевский курица терияки с гречневой лапшой замороженный, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424333",
+   "name": "Вок Dostaевский курица терияки-удон замороженный, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424334",
+   "name": "Вок Dostaевский курица терияки-рис замороженный, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424335",
+   "name": "Вок Dostaевский со свининой и лапшой удон замороженный, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424684",
+   "name": "Стейк из форели на пару с отварными овощами Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 599.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4424760",
+   "name": "Пеламида Рыбное меню Филе бланшированное в масле, 175г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4425835",
+   "name": "Пирог Осетинский с сыром Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4425836",
+   "name": "Пирог Осетинский с сыром Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 271.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4425837",
+   "name": "Пирог Осетинский с картофелем и сыром Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4427468",
+   "name": "Бефстроганов Слимкафе из курицы с грибами-овощами, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 579.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4427786",
+   "name": "Эклеры Poppies шоколадные мини, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 899.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4428530",
+   "name": "Соус Чесночный майонезный Перекрёсток Select, 30г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4428532",
+   "name": "Соус Чили Сладкий Перекрёсток Select, 30г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4428533",
+   "name": "Соус Сырный майонезный Перекрёсток Select, 30г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4428799",
+   "name": "Конвертики с курицей сыром и томатами Перекрёсток Select, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4428967",
+   "name": "Тортилья с куриным филе хашбрауном и овощами Перекрёсток Select, 245г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4429146",
+   "name": "Риет Меридиан лососевый с миндалем, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4429357",
+   "name": "Конвертики с сырным кремом и малиновой начинкой Перекрёсток Select, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 231.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4429868",
+   "name": "Кутабы с сыром и помидорами Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4430711",
+   "name": "Лапша с соусом терияки Asiatique, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4430712",
+   "name": "Курица Терияки Asiatique с рисом, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4430713",
+   "name": "Тайское зеленое карри Asiatique с курицей и рисом, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4430871",
+   "name": "Лапша с Курицей Терияки Asiatique, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4431736",
+   "name": "Дамплинги Bibigo с цельной креветкой замороженные, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 499.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4431738",
+   "name": "Спринг-роллы Bibigo с кимчи замороженные, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4432804",
+   "name": "Соус Махеевъ Бургер-соус, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 134.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4433332",
+   "name": "Хычин Delis Frost с картошкой и сыром замороженный, 580г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4435181",
+   "name": "Клаб Сэндвич двойной с курицей и беконом Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4435666",
+   "name": "Салат Мимоза с неркой Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 254.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4435872",
+   "name": "Стейк из куриной грудки с овощами на гриле Перекрёсток Select 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4436507",
+   "name": "Блинчики с ветчиной и сыром Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4436606",
+   "name": "Котлеты из куриной грудки Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 220.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437060",
+   "name": "Лазанья по-милански с курицей и соусом бешамель Перекрёсток Select, 330г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 348.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437080",
+   "name": "Блинчики с ветчиной и сыром Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 310.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437243",
+   "name": "Клаб Сэндвич двойной с ветчиной и сыром Перекрёсток Select, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437462",
+   "name": "Мясо по-французски с курицей и шампиньонами Перекрёсток Select, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437477",
+   "name": "Блинчики с мясом Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4437971",
+   "name": "Борщ с говядиной Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438005",
+   "name": "Блинчики с мясом Перекрёсток Select 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 198.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438329",
+   "name": "Блинчики с мясом Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 469.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438505",
+   "name": "Салат сырный Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438506",
+   "name": "Винегрет овощной с маслом Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 156.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438507",
+   "name": "Салат Оливье Перекрёсток Select 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 254.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438509",
+   "name": "Салат с копчёной курицей-яблоками-орехами-сельдереем Перекрёсток Select 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 248.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438510",
+   "name": "Салат Оливье с говядиной Перекрёсток Select 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438649",
+   "name": "Суп куриный с фрикадельками Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4438651",
+   "name": "Котлета из говядины с соусом из белых грибов и картофельным пюре Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 469.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4439261",
+   "name": "Филе минтая под маринадом Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4440000",
+   "name": "Зразы картофельные со шпинатом и грибами замороженные Зелёная Линия, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4440025",
+   "name": "Галеты из брокколи постные замороженные Зелёная Линия, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 188.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4440026",
+   "name": "Галеты из цветной капусты постные замороженные Зелёная Линия, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 188.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4441218",
+   "name": "Соус Медово-Горчичный Перекрёсток Select, 30г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4441220",
+   "name": "Соус Сальса Перекрёсток Select, 30г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.98
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4441233",
+   "name": "Салат из свеклы с чесноком Перекрёсток Select 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 167.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4441234",
+   "name": "Плов с курицей Перекрёсток Select 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4441235",
+   "name": "Плов с курицей Перекрёсток Select, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4442431",
+   "name": "Суп-лапша грибная Перекрёсток Select 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4442571",
+   "name": "Хычин Delis Frost с сыром и зеленью замороженный, 580г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4442610",
+   "name": "Харчо Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443011",
+   "name": "Салат пикантный с сыром Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443041",
+   "name": "Салат из свёклы с черносливом Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 194.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443506",
+   "name": "Филе цыплёнка су-вид слайсами Зелёная Линия, 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443645",
+   "name": "Салат Коул Слоу капустный Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 194.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443653",
+   "name": "Биточек куриный со спагетти в томатном соусе Перекрёсток Select, 315г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443654",
+   "name": "Салат из морской капусты с крабовыми палочками Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443937",
+   "name": "Сырники запечённые Перекрёсток Select 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4443973",
+   "name": "Сырники запечённые Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444017",
+   "name": "Макароны с сыром и зеленью Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 194.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444231",
+   "name": "Чумокпаб Hanok из риса с кимчи и сыром, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444232",
+   "name": "Чумокпаб Hanok из риса с филе тунца и майонезом замороженный, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444310",
+   "name": "Рис Hanok жареный с кимчи и сыром замороженный, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 449.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444311",
+   "name": "Рис Hanok жареный с кимчи и сыром замороженный, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 449.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444312",
+   "name": "Рис Hanok жареный с кимчи замороженный, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444373",
+   "name": "Салат с тунцом и эстрагоном Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444374",
+   "name": "Салат Грибное Лукошко Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444865",
+   "name": "Уха по-фински Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444907",
+   "name": "Блинчики с вишней и крем-чизом Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444924",
+   "name": "Блины пшеничные Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444925",
+   "name": "Блины пшеничные Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 167.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4444926",
+   "name": "Блинчики с яблоком мёдом и корицей Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 125.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445378",
+   "name": "Блинчики с маковой начинкой Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445379",
+   "name": "Блины с малиной клубникой и заварным кремом Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445416",
+   "name": "Мак-энд-чиз Сырный глянец со сливочно-сырным соусом Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445448",
+   "name": "Блинчики с бананом и шоколадно-ореховой пастой Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445540",
+   "name": "Пюре картофельное Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445541",
+   "name": "Пюре картофельное Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4445782",
+   "name": "Пудинг Grand Dessert со вкусом фисташки и сливочно-малиновым муссом молочный 4.7%, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 118.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446004",
+   "name": "Говядина су-вид в бульоне Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446146",
+   "name": "Запеканка творожная с вишней Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446154",
+   "name": "Микс фруктовый ананас + киви + виноград Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446262",
+   "name": "Оладьи на кефире жареные Перекрёсток Select 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 118.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446267",
+   "name": "Котлета По-Киевски Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 419.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446269",
+   "name": "Котлета по-киевски с картофельным пюре Перекрёсток Select 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 379.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446870",
+   "name": "Тортильони с индейкой и соусом с фенхелем Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446872",
+   "name": "Спагетти Неро с креветками в томатном соусе Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 499.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446876",
+   "name": "Салат Дачный Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446877",
+   "name": "Филе индейки су-вид слайсами Перекрёсток Select, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4446987",
+   "name": "Брокколи на пару Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4447366",
+   "name": "Филе куриной грудки запечённое с томатами под сыром Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4447598",
+   "name": "Каша пшённая со льном на кокосовом молоке Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 168.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4447766",
+   "name": "Ризотто Магуро с тунцом, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448231",
+   "name": "Филе куриное су-вид с гречкой зелёной и овощами Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448232",
+   "name": "Завтрак с индейкой су-вид, яйцом и брокколи Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448233",
+   "name": "Завтрак с яйцом бобами эдамаме и брынзой Перекрёсток Select, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448234",
+   "name": "Завтрак протеиновый с креветками яйцом и киноа Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448237",
+   "name": "Салат из куриной грудки и фасоли с греческим йогуртом Перекрёсток Select, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448422",
+   "name": "Каша овсяная на молоке Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 114.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448423",
+   "name": "Каша пшённая на молоке Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4448946",
+   "name": "Котлеты домашние с говядиной Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4449831",
+   "name": "Кето-сырники на миндальной муке Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450080",
+   "name": "Креветки обжаренные на масле гхи с фунчозой и брокколи Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450437",
+   "name": "Каша овсяная на молоке с малиной замороженная Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450527",
+   "name": "Клаб Сэндвич с мортаделлой-трюфелем-сыром Перекрёсток Select, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450545",
+   "name": "Омлет Классический Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 174.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450664",
+   "name": "Запеканка творожная с черной смородиной без сахара Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 183.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450702",
+   "name": "Котлета куриная паровая с пюре из батата Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 298.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450751",
+   "name": "Суп Куриный с домашней лапшой Перекрёсток Select 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4450946",
+   "name": "Шарики сырные из моцареллы Перекрёсток Select, 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4451160",
+   "name": "Шримп-ролл Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4451290",
+   "name": "Кето-завтрак с лососем яйцом и рисом из цветной капусты Перекрёсток Select, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4451555",
+   "name": "Блинчики Сытный Край с мясом замороженные, 380г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4451764",
+   "name": "Котлеты куриные на пару Перекрёсток Select, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 204.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4451962",
+   "name": "Курица в соусе сладкий чили с кунжутом Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452074",
+   "name": "Сырники без сахара замороженные  Перекресток Select, 330г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452075",
+   "name": "Сырники классические замороженные Перекрёсток Select, 330г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452232",
+   "name": "Лазанья Болоньезе замороженная Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452460",
+   "name": "Борщ овощной Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452514",
+   "name": "Запеканка творожная с яблоком и корицей без сахара Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 261.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452644",
+   "name": "Печень по-строгановски с гречкой замороженная Перекрёсток Select, 290г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452842",
+   "name": "Мини-запеканка с грушей замороженная Перекрёсток Select, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452856",
+   "name": "Мини-запеканка с вишней замороженная Перекрёсток Select, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452883",
+   "name": "Мини-запеканка творожная замороженная Перекрёсток Select, 320г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452958",
+   "name": "Омлет-ролл с куриным филе и брокколи Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 198.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4452960",
+   "name": "Котлеты куриные на пару Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453155",
+   "name": "Перцы фаршированные в томатно-сливочном соусе замороженные Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453530",
+   "name": "Блины домашние замороженные Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453535",
+   "name": "Сырок Легенды Ямала в желе, 227г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453596",
+   "name": "Сырники без сахара запечённые Перекрёсток Select, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453705",
+   "name": "Каша пшенная с тыквой и корицей Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 161.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453732",
+   "name": "Рис с филе куриного бедра с соусом терияки замороженный Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453780",
+   "name": "Каша пшённая молочная с тыквой замороженная Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453782",
+   "name": "Лапша вок с куриным филе и овощами замороженная Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 319.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453783",
+   "name": "Спагетти Карбонара замороженные Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453784",
+   "name": "Лапша вок в сливочном тайском соусе с морепродуктами замороженная Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453804",
+   "name": "Блинчики с малиной и клубникой замороженные Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 519.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453850",
+   "name": "Гратен картофельный с курицей замороженный Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453970",
+   "name": "Оладьи куриные со спагетти в томатном соусе Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453972",
+   "name": "Салат Сельдь под шубой Перекрёсток Select 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 261.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4453977",
+   "name": "Оладьи куриные Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454139",
+   "name": "Рулетики из баклажанов с ореховой начинкой Перекрёсток Select 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454519",
+   "name": "Фрикадельки мясные с томатами и гречкой замороженные Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454573",
+   "name": "Соус томатный Кинто Шакшука летняя пастеризованный, 305г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454685",
+   "name": "Равиоли с моцареллой, базиликом и томатным соусом Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 489.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454813",
+   "name": "Каша рисовая с яблоком, манго и мякотью кокоса замороженная Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454891",
+   "name": "Оладьи мини быстрозамороженные Перекресток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 154.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454895",
+   "name": "Панкейки со сливочно-сырным кремом и вишней охлаждённые Перекрёсток Select, 165г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454913",
+   "name": "Фетучини с курицей, белыми грибами и соусом Альфредо замороженный Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454935",
+   "name": "Снекмени Классические замороженные Sибирская коллекция, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454938",
+   "name": "Снекмени Ветчина и сыр замороженные Sибирская коллекция, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4454940",
+   "name": "Пенне с куриным филе пармезаном и томатным соусом Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455158",
+   "name": "Котлеты из филе индейки с картофельным пюре замороженные Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455289",
+   "name": "Колбаски из куриного филе на гриле Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455459",
+   "name": "Каша на молоке из пшена и риса Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455573",
+   "name": "Суп из щавеля Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455671",
+   "name": "Гречка отварная со сливочным маслом Перекрёсток Select 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4455767",
+   "name": "Вафли «Очень сытные дела» Творожные бельгийские замороженные, 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456096",
+   "name": "Запеканка творожная с малиновым желе охлаждённая Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456098",
+   "name": "Запеканка творожная с абрикосовым желе охлаждённая Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456295",
+   "name": "Салат с филе индейки, сыром фета и персиком с медовой заправкой Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 419.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456296",
+   "name": "Филе индейки гриль Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456297",
+   "name": "Салат с куриным филе, персиком и соусом сладкий чили Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456298",
+   "name": "Салат с карамелизированной тыквой, козьим сыром и медово-горчичной заправкой Перекрёсток Select, 155г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456424",
+   "name": "Паста в соусе Болоньезе замороженная Mary Wong, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456426",
+   "name": "Паста с куриными фрикадельками в сырном сливочном соусе замороженная Mary Wong, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456667",
+   "name": "Голень куриная с хрустящей корочкой замороженная Перекрёсток Select, 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 449.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456767",
+   "name": "Крылышки в соусе Барбекю замороженные Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4456974",
+   "name": "Булгур в грибном соусе с курицей замороженный Mary Wong, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457226",
+   "name": "Сырники Шоколадные замороженные Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457274",
+   "name": "Шашлык куриный гриль Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 278.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457276",
+   "name": "Шашлык из свинины гриль Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 439.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457364",
+   "name": "Каша рисовая на кокосовом молоке Перекрёсток Select 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457463",
+   "name": "Крыло Терияки куриное гриль Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457522",
+   "name": "Шницель по-министерски с рисом и овощами Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 399.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457542",
+   "name": "Скрэмбл с сосиской Перекрёсток Select, 155г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 124.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4457939",
+   "name": "Наггетсы куриные замороженные Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458084",
+   "name": "Блинчики с картофелем и грибами Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 134.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458220",
+   "name": "Креветки в соусе Том Ям с отварным рисом замороженные Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 519.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458239",
+   "name": "Бейгл с форелью и сливочным сыром Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458430",
+   "name": "Сыр сулугуни жареный с соусом из клюквы Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 339.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458568",
+   "name": "Суп овощной на курином бульоне Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4458637",
+   "name": "Сэндвич-ролл с креветкой в соусе Свит Чили Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459170",
+   "name": "Зразы картофельные с говядиной Перекрёсток Select, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 230.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459435",
+   "name": "Мини-чиабатта с куриной ветчиной, омлетом и сыром Перекрёсток Select, 125г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 114.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459528",
+   "name": "Сэндвич Крок-Месье Перекрёсток Select, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459718",
+   "name": "Овощи гриль Перекрёсток Select, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459822",
+   "name": "Вафли Творожные бельгийские замороженные Перекрёсток Select, 260г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 379.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4459823",
+   "name": "Вафли Картофельные бельгийские замороженные Перекрёсток Select, 280г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4460347",
+   "name": "Суп Гаспачо томатный Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4460967",
+   "name": "Паэлья с морепродуктами и рисом басмати замороженная Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 519.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461035",
+   "name": "Суп Том Ям с морепродуктами замороженный Перекрёсток Select 370г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 429.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461200",
+   "name": "Борщ с говядиной замороженный Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461201",
+   "name": "Суп Куриный с домашней лапшой замороженный Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461202",
+   "name": "Суп-пюре из тыквы с пряностями замороженный Перекрёсток Select, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461313",
+   "name": "Филе белой рыбы с ароматными травами и овощами замороженное Перекрёсток Select, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 489.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461608",
+   "name": "Стрипсы куриные замороженные Перекрёсток Select, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461936",
+   "name": "Суп гороховый с копчёностями Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 178.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4461997",
+   "name": "Котлета из индейки с гречкой отварной Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 369.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4462256",
+   "name": "Фрикадельки По-Шведски с говядиной замороженные Перекрёсток Select, 450г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 419.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4462257",
+   "name": "Салат из свежей капусты с огурцом Перекрёсток Select 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4462258",
+   "name": "Котлеты куриные с картофельным пюре Перекрёсток Select 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 329.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4463228",
+   "name": "Суп Фо Бо Перекрёсток Select, 265г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4463237",
+   "name": "Борщ Перекрёсток Select, 270г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4463800",
+   "name": "Гирос с курицей и оливками Перекрёсток Select, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4464484",
+   "name": "Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4464537",
+   "name": "Чебупели Горячая штучка с ветчиной и сыром готовые замороженные, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4465268",
+   "name": "Суп Рамен с курицей Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4468012",
+   "name": "Сырники творожные с варёной сгущенкой Перекрёсток Select, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4468013",
+   "name": "Сырники творожные с вишней Перекрёсток Select, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 164.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4469128",
+   "name": "Морковь по-корейски Перекрёсток Select, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4469129",
+   "name": "Спаржа по-корейски Перекрёсток Select, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4469392",
+   "name": "Крем-суп Грибной Перекрёсток Select, 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4470181",
+   "name": "Салат Цезарь с курицей Перекрёсток Select, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473171",
+   "name": "Суши-сэндвич Гламурный бит с крабовыми палочками и соусом спайси Перекрёсток Select, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473639",
+   "name": "Мини-сырники Звёздное Соло творожные Перекрёсток Select, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473642",
+   "name": "Маффин с ветчиной, омлетом и сыром Перекрёсток Select, 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473940",
+   "name": "Десерт Малиновый Вайб Малина с кремом матча Перекрёсток Select, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473941",
+   "name": "Десерт Мандариновый Вайб с мандарином и сырно-сливочным кремом Перекрёсток Select, 195г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4473942",
+   "name": "Десерт Пина-Коллаба с ананасом, с кокосовой стружкой и сливочным кремом Перекрёсток Select, 210г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4474361",
+   "name": "Бургер Розовый Хит с куриной котлетой сыром чеддер и соусом кола Перекрёсток Select, 165г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "4474933",
+   "name": "Налистники конвертики Малиновый Глэм с сырным кремом и начинкой малина-юдзу Перекрёсток Select, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "72318",
+   "name": "Тунец Fortuna полосатый рубленый, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 409.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "72319",
+   "name": "Тунец Fortuna рубленый в масле, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 289.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "72320",
+   "name": "Тунец Fortuna кусочки натуральные, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 254.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "74103",
+   "name": "Скумбрия Меридиан отварная в желе, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "87726",
+   "name": "Горбуша 5 Морей натуральная, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 206.99
+  },
+  {
+   "chain": "perekrestok",
+   "plu": "99330",
+   "name": "Треска Меридиан отварная в желе, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "2087559",
+   "name": "Пицца Красная Цена Колбаса 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3273891",
+   "name": "Блины с мясом С Пылу с Жару 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 134.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3273892",
+   "name": "Блины с творогом С Пылу с Жару 360г",
+   "dish_type": "Блины",
+   "cuisine": "Русская",
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3416332",
+   "name": "Чебупицца Пепперони Горячая Штучка 250г",
+   "dish_type": "Пицца",
+   "cuisine": "Итальянская",
+   "median_price_rub": 125.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3421780",
+   "name": "Чебупицца Курочка по-итальянски Горячая Штучка 250г",
+   "dish_type": "Пицца",
+   "cuisine": "Итальянская",
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3434303",
+   "name": "Кордон Блю Мираторг с ветчиной и сыром 405г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 309.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3446271",
+   "name": "Крылышки Хрустящие острые к пиву Горячая Штучка 300г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Европейская",
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3450994",
+   "name": "Пицца Caesar la Trattoria c ветчиной и грибами 335г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 294.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3474487",
+   "name": "Слойка с сосиской замороженная п/ф 90г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3607223",
+   "name": "Хачапури с сыром и ветчиной замороженное п/ф 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3608917",
+   "name": "Лапша Лагманная домашняя Тестов 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 124.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3645121",
+   "name": "Чиабатта Рустик замороженная п/ф 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 66.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3658222",
+   "name": "Розан со смородиной замороженный п/ф 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3693580",
+   "name": "Пицца Рестория Ассорти замороженная, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3699728",
+   "name": "Блины Солнцепек с вишневой начинкой, 360г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3950268",
+   "name": "Салат Витаминный из морской капусты Fish House 430г",
+   "dish_type": "Салат",
+   "cuisine": "Русская",
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3950270",
+   "name": "Салат морская капуста с крабовым мясом Fish House 400г",
+   "dish_type": "Закуска",
+   "cuisine": "Корейская",
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "3993220",
+   "name": "Блинчики с мясом Красная цена 420г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4009387",
+   "name": "Чебурек Твистер's band Чебурито с мясом замороженный",
+   "dish_type": null,
+   "cuisine": "Русская",
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4046032",
+   "name": "Ассорти овощное черри-корнишоны ФерЭльГам, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4057687",
+   "name": "Наггетсы Вязанка куриные 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4057693",
+   "name": "Наггетсы Вязанка с индейкой замороженные 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4108226",
+   "name": "Салат из морской капусты с кальмаром в майонезе Fish House 250г",
+   "dish_type": "Салат",
+   "cuisine": "Корейская",
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4117904",
+   "name": "Багет Ржаной чесночный замороженный п/ф 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 76.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4117906",
+   "name": "Багет чесночный замороженный п/ф",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 76.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4122150",
+   "name": "Булочка с сырной начинкой замороженная п/ф 115г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4123388",
+   "name": "Смузи J7 Полезный завтрак Яблоко-Ананас-Банан-Киви-Манго 300мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 89.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4129597",
+   "name": "Чиабатта замороженная п/ф",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4150385",
+   "name": "Лазанья Болоньезе с сыром в соусе Бешамель Мираторг 350г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Итальянская",
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4168788",
+   "name": "Морс клюквенный Пятёрочка Кафе 0.5л",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4168789",
+   "name": "Морс облепиховый Пятёрочка Кафе 500мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4191428",
+   "name": "Оладьи По-домашнему Пятёрочка Кафе 160г",
+   "dish_type": "Оладьи",
+   "cuisine": "Русская",
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4191429",
+   "name": "Плов с курицей Пятёрочка Кафе 250г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Узбекская",
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4211166",
+   "name": "Брецель-дог с кунжутом замороженный п/ф 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 69.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4216694",
+   "name": "Каша Овсяная на молоке Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4216695",
+   "name": "Каша Рисовая на молоке Пятёрочка Кафе 200г",
+   "dish_type": "Каша",
+   "cuisine": "Русская",
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4260436",
+   "name": "Каша пшенная на молоке Пятёрочка Кафе, 200г",
+   "dish_type": "Каша",
+   "cuisine": "Русская",
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4278636",
+   "name": "Пирог домашний с творожной начинкой замороженный п/ф 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 39.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4279168",
+   "name": "Шаурма с курицей Пятёрочка Кафе",
+   "dish_type": "Сэндвич-ролл",
+   "cuisine": "Восточная",
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4279833",
+   "name": "Салат Фаворит с бужениной и шампиньонами Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4279853",
+   "name": "Блинчики Останкино с мясом замороженные 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 134.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4292794",
+   "name": "Суп куриный с домашней лапшой Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4292795",
+   "name": "Суп гороховый с копченостями Пятёрочка Кафе 250г",
+   "dish_type": "Суп",
+   "cuisine": "Русская",
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4292797",
+   "name": "Борщ украинский с курицей Пятёрочка Кафе 250г",
+   "dish_type": "Суп",
+   "cuisine": "Русская",
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4299030",
+   "name": "Голубцы ленивые в томатно-сметанном соусе Пятёрочка Кафе 250г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Русская",
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4300570",
+   "name": "Пекан Кленовый замороженный п/ф 85г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4306830",
+   "name": "Азу из курицы с картофельным пюре замороженное СытоЕдов 300г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Русская",
+   "median_price_rub": 200.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4315310",
+   "name": "Салат Деревенский с курицей и фасолью Пятёрочка Кафе",
+   "dish_type": "Салат",
+   "cuisine": "Русская",
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4317626",
+   "name": "Салат сельдь под шубой Пятёрочка Кафе 500г",
+   "dish_type": "Салат",
+   "cuisine": "Русская",
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4322017",
+   "name": "Салат сельдь под шубой Пятёрочка Кафе 250г",
+   "dish_type": "Салат",
+   "cuisine": "Русская",
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4323838",
+   "name": "Тефтели с пастой фузилли в томатном соусе Пятёрочка Кафе 250г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Русская",
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4335075",
+   "name": "Лапша Удон с кальмарами и креветками Пятёрочка Кафе",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Японская",
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4337338",
+   "name": "Самса с говядиной замороженная п/ф 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4342673",
+   "name": "Пирожок с капустой замороженный п/ф",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4343383",
+   "name": "Салат Фунчоза По-Корейски Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4353542",
+   "name": "Кутабы с сыром и зеленью Пятёрочка Кафе 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4355855",
+   "name": "Блинчики без начинки Пятёрочка Кафе 200г",
+   "dish_type": "Блины",
+   "cuisine": "Русская",
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4362366",
+   "name": "Запеканка Вкус & Польза творожная с черной смородиной 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4362369",
+   "name": "Запеканка Вкус & Польза творожная с яблоком и корицей",
+   "dish_type": "Запеканка",
+   "cuisine": "Русская",
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4362579",
+   "name": "Сырнички Вкус & Польза с грушей и персиком 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4362581",
+   "name": "Сырнички Вкус & Польза с вишней 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4362983",
+   "name": "Манты с мясом Пятёрочка Кафе 240г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Азиатская",
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4364574",
+   "name": "Сэндвич-ролл Цезарь Пятерочка Кафе, 200г",
+   "dish_type": "Сэндвич-ролл",
+   "cuisine": "Европейская",
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4364663",
+   "name": "Фарфале с горбушей в сливочном соусе Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4364665",
+   "name": "Паста Карбонара Пятёрочка Кафе 250г",
+   "dish_type": "Паста",
+   "cuisine": "Итальянская",
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4368756",
+   "name": "Рулетики из ветчины с сыром Пятёрочка Кафе 150г",
+   "dish_type": "Закуска",
+   "cuisine": "Русская",
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4368762",
+   "name": "Биточек куриный со спагетти в томатном соусе Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4368770",
+   "name": "Биточек с индейкой с гречневой кашей Пятёрочка Кафе 250г",
+   "dish_type": "Основное блюдо",
+   "cuisine": "Русская",
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4369485",
+   "name": "Суп Том-Ям с курицей Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4372188",
+   "name": "Онигири с курицей терияки Пятёрочка Кафе 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4374555",
+   "name": "Мясо по-французски с запечённым картофелем Пятёрочка Кафе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4376856",
+   "name": "Сэндвич-ролл с курицей том ям Пятёрочка Кафе 195г",
+   "dish_type": "Сэндвич-ролл",
+   "cuisine": "Азиатская",
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4376857",
+   "name": "Сэндвич-ролл с креветкой Пятёрочка Кафе 165г",
+   "dish_type": "Сэндвич-ролл",
+   "cuisine": "Европейская",
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4377199",
+   "name": "Шницель куриный с картофельным пюре Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4380044",
+   "name": "Хачапури с сыром замороженное п/ф 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4382597",
+   "name": "Бурек с картофелем и грибами замороженный п/ф 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4382734",
+   "name": "Спаржа по-корейски Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384698",
+   "name": "Салат Винегрет с ароматным маслом Пятёрочка Кафе, 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384701",
+   "name": "Салат Оливье Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384702",
+   "name": "Салат свекольный Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384739",
+   "name": "Шашлык куриный с картофелем и луком Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384742",
+   "name": "Бефстроганов с картофельным пюре  Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384743",
+   "name": "Курица терияки с рисом и овощами Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4384745",
+   "name": "Фрикасе из курицы с гречневой кашей Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4385455",
+   "name": "Сэндвич с ветчиной Пятёрочка Кафе, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4385456",
+   "name": "Сэндвич с курицей и беконом Пятёрочка Кафе 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4386762",
+   "name": "Салат с курицей и шампиньонами Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4389473",
+   "name": "Пирожки с картофелем и луком замороженный п/ф 75г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 35.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4391322",
+   "name": "Пицца Пепперони охлажденная Graf Ewgraf 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 359.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4391323",
+   "name": "Пицца 4 Сыра охлажденная  Graf Ewgraf 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 349.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4392992",
+   "name": "Блинчики Останкино с куриным мясом замороженные 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4394800",
+   "name": "Салат Морковь со спаржей по-корейски Пятёрочка Кафе 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4394801",
+   "name": "Салат Морковь по-корейски Пятёрочка Кафе 400г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4396959",
+   "name": "Круггетсы Горячая Штучка с сырным соусом из мяса цыплят замороженные 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 184.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4401667",
+   "name": "Хлебушек авторский зерновой на закваске замороженный п/ф 300г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 69.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4405210",
+   "name": "Хумус Классический Пятёрочка Кафе, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4405362",
+   "name": "Бульмени Горячая штучка хрустящие с мясом жареные замороженные 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4406920",
+   "name": "Онигири Филадельфия с кетой слабосоленой Пятёрочка Кафе, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4407312",
+   "name": "Шарики Papa Boba из тапиоки для бабл-ти замороженные, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 133.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4407635",
+   "name": "Улитка Греческая с мясом замороженный п/ф 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4409830",
+   "name": "Наггетсы Мираторг куриные с сыром замороженные 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4409884",
+   "name": "Улитка Греческая с курицей и картофелем замороженная п/ф 150г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4410502",
+   "name": "Огурцы Global Village Корнишоны соленые 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 139.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4410803",
+   "name": "Наггетсы Мираторг Классические куриные запеченные замороженные 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4410980",
+   "name": "Блинчики с ветчиной и сыром Пятёрочка Кафе 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4410981",
+   "name": "Блинчики с мясом Пятёрочка Кафе 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4410982",
+   "name": "Блинчики с яблоком и корицей Пятёрочка Кафе 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4413666",
+   "name": "Наггетсы Стародворье Хрустящие из мяса цыплят-бройлеров 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4416812",
+   "name": "Салат с копченой курицей и морковью по-корейски Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4417805",
+   "name": "Котлеты куриные Пятёрочка Кафе 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4419105",
+   "name": "Аджика Global Village По-домашнему 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 109.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4420773",
+   "name": "Сэндвич с бужениной Пятёрочка Кафе, 190г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4420774",
+   "name": "Сэндвич с курицей и соусом песто Пятёрочка Кафе 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4423901",
+   "name": "Сырники классические Пятёрочка Кафе 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4424927",
+   "name": "Суп Борщ украинский с курицей",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 389.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4426983",
+   "name": "Паста с курицей и соусом песто Пятёрочка Кафе 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4427823",
+   "name": "Салат с кальмаром Пятёрочка Кафе 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4427825",
+   "name": "Салат Коул Слоу капустный Пятёрочка Кафе 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4428575",
+   "name": "Самса Класспродукт с курицей замороженный п/ф 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 52.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4428840",
+   "name": "Крыло гриль Пятёрочка Кафе",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 849.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4429914",
+   "name": "Бризоль куриная с рисом Пятёрочка Кафе 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4431581",
+   "name": "Слойка с курицей и сыром КлассПродукт замороженная п/ф, 110г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4431614",
+   "name": "Шаурма с индейкой в розовом лаваше, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4431755",
+   "name": "Булочка Рустик пшеничная замороженная п/ф, 65г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 19.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4435105",
+   "name": "Салат Капуста По-Корейски Пятёрочка Кафе 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 119.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4435156",
+   "name": "Макароны по-флотски Пятёрочка Кафе, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4436289",
+   "name": "Пицца Сибирская Коллекция Classic Пепперони замороженная 340г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 539.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4436497",
+   "name": "Ролл Калифорния Пятёрочка Кафе 230г",
+   "dish_type": "Роллы",
+   "cuisine": "Японская",
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4436580",
+   "name": "Сочень с творогом и черносмородиновой начинкой замороженный п/ф, 80г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4439363",
+   "name": "Cуп-пюре Вкус&Польза из тыквы, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4439713",
+   "name": "Томаты Global Village солёные красные, 1кг",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4443043",
+   "name": "Панини с курицей гриль и огуречным соусом Релиш Пятёрочка Кафе, 195г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4443834",
+   "name": "Чебупицца со вкусом Том Ям замороженная Горячая штучка, 230г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4445984",
+   "name": "Салат Цезарь с курицей Пятёрочка Кафе, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4447865",
+   "name": "Оладьи печёночные с картофельным пюре Пятёрочка Кафе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4447872",
+   "name": "Котлета по-киевски с картофельным пюре Пятёрочка Кафе, 260г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4449199",
+   "name": "Сэндвич Карбонара Пятёрочка Кафе, 125г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4449822",
+   "name": "Сэндвич с тунцом Пятёрочка Кафе, 185г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4449902",
+   "name": "Налистники Конвертики с сырным кремом и вишневой начинкой Mr.Food, 140г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 179.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4451804",
+   "name": "Онигири с филе-кусочками тунца запечённого Пятёрочка Кафе, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4452201",
+   "name": "Ролл креветкой и творожным сыром Йуми 215г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 299.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4452801",
+   "name": "Минтай жареный под маринадом Пятёрочка Кафе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 219.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4454442",
+   "name": "Сырники творожные охлаждённые Вкус & Польза, 120г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4454512",
+   "name": "Смузи протеиновый тропический ягодно-фруктовый Вкус & Польза, 250мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4454907",
+   "name": "Тапиока молочная с соусом из клубники охлаждённая Cook Chart, 165г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 249.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4455705",
+   "name": "Капуста Три Цитруса маринованная Фэг, 350г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4456854",
+   "name": "Пирог Осетинский с сыром Пятёрочка Кафе, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 239.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4458323",
+   "name": "Ассорти черри и корнишоны солёные Ферментированные овощи, 500г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4459402",
+   "name": "Блины омлетные с сыром Пятёрочка Кафе, 160г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 189.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4459416",
+   "name": "Гречка с овощами Вкус & Польза, 220г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4459593",
+   "name": "Шаурма с филе грудки куриной Вкус & Польза, 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4459748",
+   "name": "Тортилья с курицей и хашбрауном Пятёрочка Кафе, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4459785",
+   "name": "Наггетсы Rostic's Фирменные с сырным соусом охлаждённые, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 259.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4462613",
+   "name": "Боул с крабовым мясом имитированным бобами эдамамэ и рисом Трайфл-Суши, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4462614",
+   "name": "Боул с варёными кольцами кальмара командорского и рисом Трайфл-Суши, 170г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 169.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464138",
+   "name": "Квас Вкус & Польза Витаминный нефильтрованный неосветленный 500мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 89.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464478",
+   "name": "Хотстеры готовые замороженные Горячая штучка, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 279.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464482",
+   "name": "Чебупицца Горячая штучка Курочка По-Итальянски замороженная, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 229.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464484",
+   "name": "Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464537",
+   "name": "Чебупели с ветчиной и сыром готовые замороженные Горячая штучка, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 129.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464539",
+   "name": "Чебупицца Пепперони готовая замороженная Горячая штучка, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 149.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464631",
+   "name": "Холодный суп гаспачо Alvalle из натуральных помидоров, 600 мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 269.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4464632",
+   "name": "Холодный суп гаспачо Alvalle из натуральных помидоров, 250 мл",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 159.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4467077",
+   "name": "Соус Ткемали фруктово-овощной ФЭГ, 240г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4468406",
+   "name": "Паста Болоньезе Пятерочка Кафе, 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 209.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "4468409",
+   "name": "Паста ветчина и грибы Пятёрочка Кафе 250г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 199.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "62766",
+   "name": "Лепешка томаты с базиликом",
+   "dish_type": null,
+   "cuisine": "Грузинская",
+   "median_price_rub": 95.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78000004",
+   "name": "Лепешка Томат-базилик замороженная п/ф 180г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 84.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78006137",
+   "name": "Круассан с шоколадно-ореховой начинкой 75г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78006169",
+   "name": "Хачапури с сыром и ветчиной",
+   "dish_type": null,
+   "cuisine": "Грузинская",
+   "median_price_rub": 65.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78006242",
+   "name": "Слойка с сосиской 75г",
+   "dish_type": null,
+   "cuisine": "Русская",
+   "median_price_rub": 49.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78009909",
+   "name": "Розан с начинкой Черная смородина",
+   "dish_type": null,
+   "cuisine": "Русская",
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78025520",
+   "name": "Пончики Берлинские с вареной сгущенкой 2х65г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78028935",
+   "name": "Фламиш с ветчиной и сыром 90г",
+   "dish_type": null,
+   "cuisine": "Французская",
+   "median_price_rub": 69.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030124",
+   "name": "Багет чесночный 158г",
+   "dish_type": "Выпечка",
+   "cuisine": null,
+   "median_price_rub": 75.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030125",
+   "name": "Багет ржаной чесночный",
+   "dish_type": "Выпечка",
+   "cuisine": null,
+   "median_price_rub": 75.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030362",
+   "name": "Булочка с сырной начинкой, 104г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030460",
+   "name": "Чиабатта Рустик 290г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030792",
+   "name": "Чиабатта пшеничная 100г",
+   "dish_type": "Выпечка",
+   "cuisine": "Итальянская",
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78030900",
+   "name": "Хлеб Питерский",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78032144",
+   "name": "Брецель-дог с кунжутом 159г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 75.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78032562",
+   "name": "Круассан с добавлением сливочного масла 50г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 19.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78033105",
+   "name": "Язычок слоеный с сахарной посыпкой, 40г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 9.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78033132",
+   "name": "Фило ролл с начинкой шпинат и сыр 60г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78033558",
+   "name": "Пирог домашний с творожной начинкой 96г",
+   "dish_type": null,
+   "cuisine": "Русская",
+   "median_price_rub": 39.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78034705",
+   "name": "Пирожок с капустой 65г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78034778",
+   "name": "Самса с говядиной 95г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 55.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78035589",
+   "name": "Донат с черничной начинкой 67г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 65.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78035713",
+   "name": "Хачапури с сыром 85г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78035947",
+   "name": "Бурек с картофелем и грибами 95г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036082",
+   "name": "Булочка с корицей 80г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 55.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036169",
+   "name": "Пирожок с картофелем и луком 75г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 35.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036313",
+   "name": "Хлеб Воскресный 245г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 69.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036368",
+   "name": "Хлебушек авторский зерновой на закваске 285г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 69.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036560",
+   "name": "Улитка Греческая с мясом 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78036657",
+   "name": "Улитка Греческая с начинкой курица с картофелем 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 59.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037217",
+   "name": "Самса с курицей 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 55.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037247",
+   "name": "Ягодный Пунш для безалкогольного напитка, 50г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 99.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037254",
+   "name": "Маффин с шоколадом 200г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 89.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037271",
+   "name": "Слойка с курицей и сыром, 100г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 45.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037447",
+   "name": "Сочень с творогом и черносмородиновой начинкой, 70г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 29.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78037518",
+   "name": "Шарлотка, 90г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 55.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78038161",
+   "name": "Слойка Солёная Карамель, 80г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 35.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78038282",
+   "name": "Мини багет, 127г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 19.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78038299",
+   "name": "Багет Любительский, 130г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 25.99
+  },
+  {
+   "chain": "pyaterochka",
+   "plu": "78038445",
+   "name": "Мини-пицца Пепперони, 165г",
+   "dish_type": null,
+   "cuisine": null,
+   "median_price_rub": 89.99
+  }
+ ]
+}

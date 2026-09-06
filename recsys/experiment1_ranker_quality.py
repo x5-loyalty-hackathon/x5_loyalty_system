@@ -66,7 +66,11 @@ ENGINE_ORDER = ("coverage", "ml", "catboost", "oracle")
 #: least 3 deficit levels", not a full independent sweep of each knob (that
 #: sweep already exists, per-knob, in recsys.sensitivity).
 DEFICIT_LEVELS: tuple[tuple[str, InventoryAssumptions], ...] = (
-    ("низкий", InventoryAssumptions(no_product_at_all=0.02, out_of_stock=0.02)),
+    # no_product_at_all's shipped default moved 0.08 -> 0.02 (see
+    # recsys/experimental/inventory.py; docs/research/recsys/llm-intent-eval.md
+    # §11.1); "низкий" moves down with it to stay a distinct low bracket
+    # instead of colliding with "база".
+    ("низкий", InventoryAssumptions(no_product_at_all=0.005, out_of_stock=0.02)),
     ("база", DEFAULT_INVENTORY_ASSUMPTIONS),
     ("высокий", InventoryAssumptions(no_product_at_all=0.35, out_of_stock=0.35)),
 )

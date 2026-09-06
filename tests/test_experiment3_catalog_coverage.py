@@ -178,8 +178,12 @@ def test_coverage_shares_are_monotonic_in_threshold(panels) -> None:
 
 
 def test_deficit_levels_match_the_calibrated_sensitivity_values() -> None:
-    assert DEFICIT_LEVELS["низкий"].no_product_at_all == 0.02
-    assert DEFICIT_LEVELS["база"].no_product_at_all == 0.08
+    # no_product_at_all's shipped default moved 0.08 -> 0.02 (see
+    # recsys/experimental/inventory.py; docs/research/recsys/llm-intent-eval.md
+    # §11.1), so "база" (the default) now matches what used to be "низкий",
+    # and the low/high brackets shifted down with it.
+    assert DEFICIT_LEVELS["низкий"].no_product_at_all == 0.005
+    assert DEFICIT_LEVELS["база"].no_product_at_all == 0.02
     assert DEFICIT_LEVELS["высокий"].no_product_at_all == 0.35
     assert DEFICIT_LEVELS["низкий"].out_of_stock == 0.02
     assert DEFICIT_LEVELS["база"].out_of_stock == 0.10

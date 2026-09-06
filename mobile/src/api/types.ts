@@ -76,3 +76,43 @@ export interface ReceiptProgressResponse {
   reason_codes: string[];
   progress: ProgressSnapshot;
 }
+
+export interface KitchenItem {
+  ingredient_id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
+export interface KitchenSnapshot {
+  contract_version: string;
+  user_id: string;
+  data_source: 'synthetic_from_verified_receipts';
+  items: KitchenItem[];
+}
+
+export type RecipeCompletionStatus = 'completed' | 'duplicate' | 'not_ready' | 'rejected';
+
+export interface RecipeCompletionResponse {
+  contract_version: string;
+  status: RecipeCompletionStatus;
+  reason_codes: string[];
+  kitchen: KitchenSnapshot;
+  progress: ProgressSnapshot;
+}
+
+export interface RecipeStep {
+  title: string;
+  minutes: number;
+}
+
+export interface RecipeDetails {
+  contract_version: string;
+  recipe_id: string;
+  title: string;
+  preparation_minutes: number;
+  servings: number;
+  description: string;
+  ingredient_ids: string[];
+  steps: RecipeStep[];
+}

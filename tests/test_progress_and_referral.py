@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.contracts import ReceiptProgressRequest, ReferralEvaluationRequest
 from app.main import app, progress_service, referral_service
+from app.referral_codes import generate_invite_code
 
 
 client = TestClient(app)
@@ -53,11 +54,15 @@ def referral_request(
     *,
     inviter: str = "inviter-1",
     invitee: str = "invitee-1",
+    invite_code: str | None = None,
 ) -> dict:
     return {
         "inviter_user_id": inviter,
         "invitee_user_id": invitee,
-        "invite_code": "INVITE-123",
+        # The inviter's own code by default. It used to be the literal
+        # "INVITE-123" for every inviter, which passed because nothing checked
+        # it — the tests could not have caught a forged code.
+        "invite_code": invite_code or generate_invite_code(inviter),
     }
 
 
@@ -281,3 +286,42 @@ def test_progress_contract_rejects_unknown_fields() -> None:
     response = client.post("/api/v1/events/receipts", json=payload)
 
     assert response.status_code == 422
+
+
+def test_a_forged_invite_code_cannot_credit_an_inviter() -> None:
+    """The hole this closes: invite_code was in the schema and read by nobody.
+
+    Attribution ran on whatever inviter_user_id the caller sent, so any client
+    could credit any account by inventing a six-character string. Nothing in
+    the fraud policy objected, because its device/payment signals are about
+    self-referral, not about whether the code belongs to the named inviter.
+    """
+    qualify_invitee()
+    body = post_referral(
+        referral_request(invite_code=generate_invite_code("somebody-else"))
+    )
+    assert body["status"] == "rejected"
+    assert body["reason_codes"] == ["invite_code_does_not_match_inviter"]
+    assert body["reward"]["inviter_xp"] == 0
+    assert body["inviter_progress"]["referral_rewards"] == 0
+
+
+def test_an_arbitrary_string_is_not_an_invite_code() -> None:
+    qualify_invitee()
+    body = post_referral(referral_request(invite_code="INVITE-123"))
+    assert body["status"] == "rejected"
+    assert body["reason_codes"] == ["invite_code_does_not_match_inviter"]
+
+
+def test_the_inviters_own_code_still_works() -> None:
+    qualify_invitee()
+    body = post_referral(referral_request())
+    assert body["status"] == "approved"
+    assert body["inviter_progress"]["referral_rewards"] == 1
+
+
+def test_codes_are_per_user_and_stable() -> None:
+    assert generate_invite_code("inviter-1") == generate_invite_code("inviter-1")
+    assert generate_invite_code("inviter-1") != generate_invite_code("inviter-2")
+    # Long enough to be unguessable, short enough to read out loud.
+    assert len(generate_invite_code("inviter-1")) == 8

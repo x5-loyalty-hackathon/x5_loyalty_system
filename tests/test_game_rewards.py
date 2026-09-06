@@ -248,3 +248,41 @@ def test_multiple_receipts_use_latest_contributing_purchase_not_arrival_order():
     assert result["progress"]["avatar_xp"] == 20
     assert result["progress"]["purchase_days"] == 2
     assert emit(purchase("egg", "earlier", day="04"), "plan")["meal_plan"]["reward"]["purchase_day"] == "2026-09-05"
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+@pytest.mark.parametrize("later_full", [False, True])
+@pytest.mark.parametrize("used_day", [False, True])
+def test_overlapping_receipts_use_earliest_complete_basket_before_completion(reverse, later_full, used_day):
+    request = payload(topup=True)
+    if used_day:
+        emit(request["current_receipt"])
+        save(issue(payload()), "previous")
+        assert complete("previous")["progress"]["avatar_xp"] == 20
+    request["recipe_catalog"][0]["ingredients"].append(
+        {"ingredient_id": "egg", "name": "Яйцо", "category": "egg"}
+    )
+    egg = deepcopy(request["inventory_snapshot"][0])
+    egg.update(sku_id="egg", ingredient_ids=["egg"], name="Яйцо", category="egg")
+    request["inventory_snapshot"].append(egg)
+    save(issue(request))
+    earlier = purchase(receipt_id="earlier", day="04")
+    earlier["items"] += purchase("egg")["items"]
+    later = purchase(receipt_id="later", day="05")
+    if later_full:
+        later["items"] += purchase("egg")["items"]
+    for receipt in ([later, earlier] if reverse else [earlier, later]):
+        emit(receipt, "plan")
+    result = complete()
+    assert result["plan"]["reward"] == {
+        "status": "purchase_day_reward_used" if used_day else "awarded",
+        "xp": 0 if used_day else 20, "purchase_day": "2026-09-04",
+    }
+    assert result["progress"]["avatar_xp"] == 20
+    # Completion is the evidence boundary: later events cannot re-anchor or
+    # reward the same completed task, including one that received zero XP.
+    after = emit(purchase(receipt_id="after-completion", day="06"), "plan",
+                 now="2026-09-06T14:00:00+03:00")
+    assert after["status"] == "verified"
+    assert after["meal_plan"]["reward"] == result["plan"]["reward"]
+    assert after["progress"]["avatar_xp"] == 20

@@ -194,3 +194,53 @@ test('post-checkout: verified current receipt enables one task, never passive XP
     assert.equal(result.progress.purchase_days, 1);
   }
 });
+
+test('real provider → API: ready completed on save cannot fabricate a retry purchase', { timeout: 15000 }, async (t) => {
+  const call = await api(t);
+  const body = async (method, path, payload) => {
+    const response = await call(method, path, payload);
+    assert.equal(response.status, 200, JSON.stringify(response.body));
+    return response.body;
+  };
+  let receiptCalls = 0;
+  const render = providerHarness({
+    getHealth: () => body('GET', '/health'),
+    getRecipeBook: () => body('GET', `/api/v1/saved-recipes/${DEMO_USER_ID}`),
+    getRecommendations: async () => {
+      const request = buildRecommendationRequest();
+      const ready = request.inventory_snapshot.find((p) => p.sku_id === 'ready_bolognese');
+      assert.ok(ready);
+      request.current_receipt.items = [{
+        sku_id: ready.sku_id, name: ready.name, category: ready.category,
+        ingredient_ids: [], unit_price: ready.price, is_prepared_food: true,
+      }];
+      request.current_receipt.store_id = ready.store_id;
+      const proof = await body('POST', '/api/v1/events/receipts', {
+        user_id: DEMO_USER_ID, receipt: request.current_receipt, now: DEMO_NOW,
+      });
+      assert.equal(proof.progress.avatar_xp, 0);
+      return body('POST', '/api/v1/meal-recommendations', request);
+    },
+    saveMealPlan: (plan) => body('POST', '/api/v1/meal-plans', plan),
+    submitReceipt: async (receipt) => {
+      receiptCalls++;
+      return body('POST', '/api/v1/events/receipts', receipt);
+    },
+  });
+  await render().loadRecipes();
+  assert.equal(render().recipesStatus, 'ready', render().recipesError);
+  render().selectMeal('spaghetti_bolognese');
+  render().chooseRoute('ready');
+  assert.equal(await render().savePlan(), true, render().actionError);
+  assert.equal(render().plan.status, 'completed');
+  assert.equal(render().plan.completion_evidence, 'verified_receipt:mobile-history-2026-09-04');
+  const before = render().progress;
+  assert.equal(before.avatar_xp, 20);
+  assert.equal(before.purchase_days, 1);
+  assert.equal(before.verified_receipts, 1);
+  assert.equal(render().canConfirmPurchase, false, 'UI must not offer a fabricated retry');
+  assert.equal(await render().confirmPurchase(), false, 'handler also rejects a direct call');
+  assert.equal(receiptCalls, 0);
+  assert.equal(await render().savePlan(), true, 'save retry must preserve the result');
+  assert.deepEqual(await body('GET', `/api/v1/progress/${DEMO_USER_ID}`), before);
+});

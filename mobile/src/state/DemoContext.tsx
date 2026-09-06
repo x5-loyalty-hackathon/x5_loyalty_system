@@ -35,6 +35,7 @@ function useDemoState() {
   const [kitchenItems, setKitchenItems] = useState(kitchenProducts(recentReceipt.items));
   const kitchenReceipts = useRef(new Set<string>());
   const pendingPlan = useRef<PendingPlan | null>(null);
+  const pendingReceipt = useRef<ReturnType<typeof makeDemoReceipt> | null>(null);
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -45,6 +46,7 @@ function useDemoState() {
 
   const clearSelection = useCallback(() => {
     setSelectedMeal(null); setChoices({}); setPlan(null); pendingPlan.current = null;
+    pendingReceipt.current = null;
     setCooking(false);
     setActionError(null); setNotice(null);
   }, []);
@@ -151,10 +153,16 @@ function useDemoState() {
     if (result.progress) acceptProgress(result.progress);
     setNotice(`Задание выбрано. Это не заказ и не бронь. ${rewardText(result.plan)}`);
   });
+  const canConfirmPurchase = Boolean(plan?.selected_product_ids.length
+    && plan.status !== 'cancelled' && (plan.status === 'saved' || pendingReceipt.current));
   const confirmPurchase = () => run(async () => {
     if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала сохраните план.');
+    if (!canConfirmPurchase) throw new Error('Покупка уже подтверждена. Нового чека для этого плана не требуется.');
     const pending = pendingPlan.current;
-    const receipt = makeDemoReceipt(pending.request, pending.products, DEMO_NOW);
+    // Retain the exact attempted event even if its successful response is lost.
+    // Completion on save (post-checkout ready) is not a purchase made by this UI.
+    const receipt = pendingReceipt.current ?? makeDemoReceipt(pending.request, pending.products, DEMO_NOW);
+    pendingReceipt.current = receipt;
     const result = await api.submitReceipt(receipt);
     acceptProgress(result.progress);
     if (result.meal_plan) setPlan(result.meal_plan);
@@ -187,7 +195,7 @@ function useDemoState() {
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
     cooking, startCooking, pauseCooking, kitchenItems,
-    actionError, notice, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
+    actionError, notice, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }
 type DemoValue = ReturnType<typeof useDemoState>;

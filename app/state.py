@@ -73,7 +73,7 @@ class MealPlanRecord:
     completion_evidence: str | None = None
     anchor_receipt_id: str | None = None
     awarded_xp: int = 0
-    collection_receipt_ids: set[str] = field(default_factory=set)
+    collection_receipt_matches: dict[str, set[str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -412,10 +412,9 @@ class InMemoryStateRepository:
             and item.is_prepared_food == is_ready
             and selected[item.sku_id].store_id == receipt.store_id
         }
-        newly_collected = matched - plan.collected_product_ids
         plan.collected_product_ids.update(matched)
-        if newly_collected:
-            plan.collection_receipt_ids.add(receipt.receipt_id)
+        if matched:
+            plan.collection_receipt_matches[receipt.receipt_id] = matched
         current_evidence = (
             not is_ready and self._is_bound_current_receipt(plan, receipt)
             and any(not item.is_prepared_food and
@@ -423,14 +422,20 @@ class InMemoryStateRepository:
                     for item in receipt.items)
         )
         collected = plan.selected_product_ids <= plan.collected_product_ids
-        if collected and (newly_collected or (not plan.selected_product_ids and current_evidence)):
-            if plan.anchor_receipt_id is None:
-                evidence_ids = plan.collection_receipt_ids or {receipt.receipt_id}
-                # Receipt arrival order is not purchase order: use the latest
-                # contributing purchase, then freeze the anchor once collected.
-                plan.anchor_receipt_id = max(evidence_ids, key=lambda receipt_id: (
-                    self._verified_receipts[receipt_id].purchased_at, receipt_id,
-                ))
+        if collected and plan.selected_product_ids:
+            # Canonical earliest purchase-time prefix covering the basket.
+            # Keep overlapping evidence too: an older full receipt can make a
+            # later partial receipt unnecessary, regardless of arrival order.
+            covered: set[str] = set()
+            for receipt_id in sorted(plan.collection_receipt_matches, key=lambda rid: (
+                self._verified_receipts[rid].purchased_at, rid,
+            )):
+                covered.update(plan.collection_receipt_matches[receipt_id])
+                if plan.selected_product_ids <= covered:
+                    plan.anchor_receipt_id = receipt_id
+                    break
+        elif collected and current_evidence:
+            plan.anchor_receipt_id = receipt.receipt_id
         if is_ready and collected:
             plan.status = MealPlanStatus.COMPLETED
             plan.completed_at = max(plan.created_at, receipt.purchased_at)

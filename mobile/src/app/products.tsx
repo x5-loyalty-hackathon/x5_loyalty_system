@@ -13,7 +13,7 @@ export default function ProductsScreen() {
   const router = useRouter();
   const {
     selectedMeal: meal, route, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
-    choices, chooseProduct, basket, plan, savePlan, confirmPurchase, startCooking,
+    choices, chooseProduct, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
     busy, editable, loadRecipes,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
@@ -84,7 +84,7 @@ export default function ProductsScreen() {
       {!plan ? <Choice label={editable ? 'Выбрать задание и сохранить план' : 'Повторить сохранение того же плана'}
         disabled={busy || Boolean(basket.error)} onPress={() => void savePlan()} /> : <>
         <Text style={ui.text}>План: {({ saved: 'сохранён', collected: 'продукты куплены', completed: 'блюдо завершено', cancelled: 'отменён' })[plan.status]}</Text>
-        {plan.selected_product_ids.length > 0 ? <Choice
+        {canConfirmPurchase ? <Choice
           label={plan.status === 'saved' ? 'Демо: подтвердить чек выбранных товаров' : 'Демо: повторить тот же чек (без новых XP)'}
           disabled={busy} onPress={() => void confirmPurchase()} /> : null}
         {canCompleteCook(plan) ? <Choice label="Начать готовить" disabled={busy}

@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
 import { KitchenScene } from '../components/KitchenScene';
 import { KitchenSheet } from '../components/KitchenSheet';
+import { PhotoStub } from '../components/PhotoStub';
 import { Choice, ActionNotice, PrimaryAction, flowStyles as ui } from '../components/FlowControls';
 import { recipeDetails } from '../fixtures/recipeDetails';
 import { matchingSteps } from '../domain/mealFlow';
@@ -68,15 +69,17 @@ export default function KitchenScreen() {
                   <Choice label="Мой план →" disabled={busy} onPress={() => router.push('/products')} />
                 </View>
               ) : null}
-              <Text style={ui.title}>Продукты на кухне</Text>
-              <Text style={ui.text}>Начальный demo-чек от 04.09.2026 и покупки этой сессии, принятые сервером.
-                Это не точный остаток дома. Рисунки условные: ниже названия купленных товаров.</Text>
-              {products.map((item) => <View key={item.id} style={styles.item}>
-                <Text style={ui.text}>{item.name}</Text>
-              </View>)}
-              <Text style={ui.text}>Все позиции остаются в списке, даже если им не хватило места на полке.
-                Срок годности из чека неизвестен. Это не заказ доставки и не бронь.</Text>
-              <Text style={ui.text}>Сценарий работает без push-уведомлений и без нового чека.</Text>
+              <View style={styles.pantryHead}>
+                <Text style={ui.title}>Продукты на кухне</Text>
+                <Text style={styles.pantryCount}>по чекам · {products.length}</Text>
+              </View>
+              <View style={styles.pantryGrid}>
+                {products.map((item) => <View key={item.id} style={styles.pantryCard}>
+                  <PhotoStub label="фото" style={styles.pantryPhoto} />
+                  <Text style={styles.pantryName} numberOfLines={2}>{item.name}</Text>
+                </View>)}
+              </View>
+              <Text style={styles.pantryNote}>Из чеков, не точный остаток дома.</Text>
             </>}
           </ScrollView>
         </KitchenSheet>
@@ -92,5 +95,14 @@ const styles = StyleSheet.create({
   sheetWrap: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   content: { paddingHorizontal: 16, paddingBottom: 24 },
   cta: { marginTop: 4, marginBottom: 10 },
-  item: { borderBottomWidth: 1, borderBottomColor: color.line, paddingVertical: 6 },
+  pantryHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
+  pantryCount: { color: color.muted, fontSize: 12.5, fontWeight: '600' },
+  pantryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 10 },
+  pantryCard: {
+    width: '31%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16,
+    padding: 8, paddingBottom: 10,
+  },
+  pantryPhoto: { height: 74, borderRadius: 12, marginBottom: 8 },
+  pantryName: { color: color.ink, fontSize: 12, lineHeight: 15, fontWeight: '600' },
+  pantryNote: { color: color.muted, fontSize: 12, marginTop: 12 },
 });

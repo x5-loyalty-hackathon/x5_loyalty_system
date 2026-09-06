@@ -210,3 +210,49 @@ def test_seasonings_are_listed_after_the_real_ingredients() -> None:
     for recipe in RECIPES:
         flags = [i.ingredient_id in SEASONING_IDS for i in recipe.ingredients]
         assert flags == sorted(flags), recipe.recipe_id
+
+
+def test_confirmed_false_matches_do_not_survive() -> None:
+    """Named products that were paired with the wrong dish, kept as a guard.
+
+    Each of these reached docs/recipe-catalog.md as a "готовый аналог" and, in
+    three of the four cases, as the headline "дешевле всего" offer, because it
+    was the cheapest thing matching a keyword.
+    """
+    forbidden = {
+        # A fish spread for sandwiches, matched on the word "паста".
+        "pasta_tomato": ("санта бремор", "балтийский берег", "криль"),
+        # "по-корейски" is a preparation, not a vegetable.
+        "korean_carrot": ("спаржа по-корейски", "капуста по-корейски", "фунчоза"),
+        # A bare "гриль" matched anything grilled, including vegetables.
+        "grilled_chicken_skewers": ("овощи гриль", "индейки", "сэндвич"),
+        # A chicken-and-beans salad standing in for chicken-and-mushroom.
+        "chicken_mushroom_salad": ("фасолью", "цезарь"),
+    }
+    for recipe_id, banned in forbidden.items():
+        pair = pair_for_recipe(recipe_id)
+        assert pair is not None, f"{recipe_id} lost its pair entirely"
+        names = " | ".join(meal.name.lower() for meal in pair.meals)
+        for phrase in banned:
+            assert phrase not in names, (
+                f"{recipe_id} still matches {phrase!r}: {names}"
+            )
+
+
+def test_a_recipe_with_no_true_counterpart_says_so() -> None:
+    """"Гречка с грибами" had nine matches and not one contained a mushroom.
+
+    Under "a pair means the same dish", the honest answer is no pair, recorded
+    explicitly, rather than buckwheat-with-butter presented as the counterpart.
+    """
+    assert pair_for_recipe("buckwheat_with_mushrooms") is None
+    assert "buckwheat_with_mushrooms" in RECIPES_WITHOUT_READY_FOOD_PAIR
+
+
+def test_required_ingredient_keeps_only_the_real_counterpart() -> None:
+    pair = pair_for_recipe("chicken_mushroom_salad")
+    assert pair is not None
+    assert all(
+        "гриб" in meal.name.lower() or "шампиньон" in meal.name.lower()
+        for meal in pair.meals
+    )

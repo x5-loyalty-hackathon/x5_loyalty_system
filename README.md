@@ -153,6 +153,12 @@ RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
 
 ## Быстрый старт ML/Recsys
 
+После объединения 06.09 рабочий scorer использует API 1.2 и 37 замороженных
+обучающих рецептов (общий каталог — 47). Исследовательские политики и типы ML-ветки
+сохранены отдельно: [границы, импорты и команды](recsys/experimental/README.md).
+`recsys.benchmark`, `panels`, `human_eval` и `experiment1/2/3_*` проверяют этот
+исследовательский контур, **не конечную выдачу мобильного приложения**.
+
 Требует тот же `.venv`, что и backend, плюс необязательные extras только для
 офлайн-калибровки на реальных данных (`pip install -e '.[ml]'` — не нужно
 для запуска модели/оценки/симуляции).
@@ -163,7 +169,16 @@ python -m recsys.generate_examples            # 10 профилей через �
 python -m recsys.evaluation                   # hit rate own vs shuffled-history
 python -m recsys.simulation                   # funnel на 1k/10k пользователях
 python -m recsys.economics                    # ΔCM_user по трём сценариям
+python -m recsys.llm_audit --sample 500 --dry-run  # офлайн-аудит симуляторов; без платных LLM-вызовов
 ```
+
+`recsys.llm_audit` сверяет три независимых рукописных симулятора с LLM как
+внешним наблюдателем, а не как с ground truth. `--dry-run` выполняет тот же
+отбор карточек, кэш-план и отчёт на детерминированной mock LLM, но не делает
+сетевых запросов; в конце JSON указывает число планируемых реальных вызовов и
+оценку input/output/total tokens. Для реального запуска нужны явный отказ от
+`--dry-run` и `OPENAI_API_KEY` в окружении; ключ не принимается аргументом и
+не сохраняется в репозитории.
 
 Гипотеза, схема recommender, ограничения и критерии проверки —
 [docs/research/recsys/ml-recsys-overview.md](docs/research/recsys/ml-recsys-overview.md).

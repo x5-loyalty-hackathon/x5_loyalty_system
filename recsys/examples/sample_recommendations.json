@@ -48,7 +48,7 @@
           "recipe_id": "carrot_fritters",
           "title": "Морковные оладьи",
           "mode": "current",
-          "model_score": 0.8331,
+          "model_score": 0.8301,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
@@ -154,7 +154,7 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "explore",
-          "model_score": 0.9082,
+          "model_score": 0.8846,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
@@ -294,7 +294,7 @@
           "recipe_id": "pork_chops",
           "title": "Свиные отбивные",
           "mode": "current",
-          "model_score": 0.5749,
+          "model_score": 0.5994,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
@@ -391,7 +391,7 @@
           "recipe_id": "fried_chicken_breast",
           "title": "Жареная куриная грудка",
           "mode": "explore",
-          "model_score": 0.5661,
+          "model_score": 0.5848,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
@@ -537,7 +537,7 @@
           "recipe_id": "chicken_and_vegetables",
           "title": "Курица с овощами",
           "mode": "explore",
-          "model_score": 0.8773,
+          "model_score": 0.8733,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
@@ -699,7 +699,7 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9506,
+          "model_score": 0.9433,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
@@ -785,7 +785,7 @@
           "recipe_id": "chicken_and_vegetables",
           "title": "Курица с овощами",
           "mode": "explore",
-          "model_score": 0.4133,
+          "model_score": 0.4372,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
@@ -940,7 +940,7 @@
           "recipe_id": "chicken_cucumber_salad",
           "title": "Салат с курицей и огурцом",
           "mode": "explore",
-          "model_score": 0.7838,
+          "model_score": 0.7854,
           "missing_count": 3,
           "reason_codes": [
             "category_history_match",
@@ -1120,7 +1120,7 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9556,
+          "model_score": 0.9486,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1235,7 +1235,7 @@
           "recipe_id": "pan_fried_semi_finished_cutlets",
           "title": "Котлеты жареные из полуфабриката",
           "mode": "current",
-          "model_score": 0.3441,
+          "model_score": 0.3645,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1393,7 +1393,7 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9723,
+          "model_score": 0.9688,
           "missing_count": 0,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1478,7 +1478,7 @@
           "recipe_id": "oatmeal_with_banana",
           "title": "Овсяная каша с бананом",
           "mode": "current",
-          "model_score": 0.7106,
+          "model_score": 0.7029,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1583,7 +1583,7 @@
           "recipe_id": "fried_chicken_breast",
           "title": "Жареная куриная грудка",
           "mode": "explore",
-          "model_score": 0.2248,
+          "model_score": 0.2473,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",

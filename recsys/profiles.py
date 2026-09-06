@@ -20,10 +20,11 @@ strategy.
 from __future__ import annotations
 
 import random
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
-from app.contracts import Receipt, ReceiptItem, UserProfile
+from app.contracts import Receipt, ReceiptItem, Recipe, UserProfile
 from recsys.catalog import (
     BASE_PRICE_RUB,
     BRANDS,
@@ -39,6 +40,11 @@ MSK = timezone(timedelta(hours=3))
 # and hand-written examples stay on the same clock.
 DEFAULT_NOW = datetime(2026, 9, 3, 18, 0, 0, tzinfo=MSK)
 HISTORY_WINDOW_DAYS = 45
+
+#: How far before ``now`` the newest history receipt must sit. Keeps history
+#: strictly in the past, and keeps it from colliding with the current receipt
+#: (drawn at ``now`` minus 0.5..6 hours).
+MIN_HISTORY_AGE_DAYS = 0.5
 
 
 @dataclass(frozen=True)
@@ -129,6 +135,9 @@ ARCHETYPES: dict[str, ArchetypeParams] = {
 assert abs(sum(a.population_share for a in ARCHETYPES.values()) - 1.0) < 1e-9
 
 
+ArchetypeTable = dict[str, ArchetypeParams]
+
+
 @dataclass
 class SyntheticProfile:
     archetype: str
@@ -138,10 +147,13 @@ class SyntheticProfile:
     now: datetime = DEFAULT_NOW
 
 
-def sample_archetype(rng: random.Random) -> ArchetypeParams:
-    names = list(ARCHETYPES)
-    weights = [ARCHETYPES[n].population_share for n in names]
-    return ARCHETYPES[rng.choices(names, weights=weights, k=1)[0]]
+def sample_archetype(
+    rng: random.Random, archetypes: ArchetypeTable | None = None
+) -> ArchetypeParams:
+    table = archetypes if archetypes is not None else ARCHETYPES
+    names = list(table)
+    weights = [table[n].population_share for n in names]
+    return table[rng.choices(names, weights=weights, k=1)[0]]
 
 
 def _weighted_category(rng: random.Random, params: ArchetypeParams) -> str:
@@ -234,6 +246,7 @@ def _generate_receipt(
 
 
 def _sample_home_ingredients(rng: random.Random) -> set[str]:
+    """Explicit demo input, not pantry inferred by the serving model."""
     pool = INGREDIENTS_BY_CATEGORY["pantry"] + INGREDIENTS_BY_CATEGORY["grain"]
     count = rng.choice([0, 1, 1, 2, 2, 3])
     if count == 0 or not pool:
@@ -241,12 +254,30 @@ def _sample_home_ingredients(rng: random.Random) -> set[str]:
     return set(rng.sample(list(pool), k=min(count, len(pool))))
 
 
-def _sample_saved_recipes(rng: random.Random, params: ArchetypeParams) -> set[str]:
+def _sample_saved_recipes(
+    rng: random.Random,
+    params: ArchetypeParams,
+    saved_recipe_pool: Sequence[Recipe] | None = None,
+) -> set[str]:
+    """Which recipes this shopper has already saved.
+
+    ``saved_recipe_pool`` pins the catalog this draw sees. It exists because
+    the draw is catalog-sized: ``rng.sample`` over a longer list can consume a
+    different number of values, which shifts the shared generator stream for
+    every profile sampled after this one. Measured on the 37 -> 47 catalog
+    change: 137 of 160 profiles came out with a completely different basket,
+    so a "same panel, bigger catalog" comparison silently stopped being paired.
+    Pinning the pool to a frozen baseline (see ``recsys.panels``) makes adding
+    a candidate recipe a no-op for every other field of every profile.
+
+    Defaults to the live catalog, so existing callers are unaffected.
+    """
+    pool = saved_recipe_pool if saved_recipe_pool is not None else RECIPES
     if rng.random() > params.repeat_probability:
         return set()
     matching = [
         recipe.recipe_id
-        for recipe in RECIPES
+        for recipe in pool
         if any(ing.category in params.core_categories for ing in recipe.ingredients)
     ]
     if not matching:
@@ -255,8 +286,25 @@ def _sample_saved_recipes(rng: random.Random, params: ArchetypeParams) -> set[st
     return set(rng.sample(matching, k=min(count, len(matching))))
 
 
-def generate_profile(rng: random.Random, index: int, now: datetime = DEFAULT_NOW) -> SyntheticProfile:
-    params = sample_archetype(rng)
+def generate_profile(
+    rng: random.Random,
+    index: int,
+    now: datetime = DEFAULT_NOW,
+    *,
+    archetypes: ArchetypeTable | None = None,
+    saved_recipe_pool: Sequence[Recipe] | None = None,
+) -> SyntheticProfile:
+    """Sample one profile.
+
+    ``archetypes`` lets a caller run the same generator inside a different
+    behavioural world (``recsys.regimes``) without redefining the generator.
+    Defaults to the module-level ``ARCHETYPES``, so existing callers are
+    unaffected.
+
+    ``saved_recipe_pool`` pins which catalog the saved-recipe draw sees — see
+    ``_sample_saved_recipes`` for why that matters for reproducibility.
+    """
+    params = sample_archetype(rng, archetypes)
     user_id = f"synthetic_{params.name}_{index:04d}"
     store_id = f"store_{10 + (index % 12)}"
 
@@ -265,8 +313,17 @@ def generate_profile(rng: random.Random, index: int, now: datetime = DEFAULT_NOW
     )
 
     n_receipts = max(2, round(HISTORY_WINDOW_DAYS / params.cadence_days_mean))
+    # Clamped at both ends. The upper clamp is not cosmetic: an offset above
+    # HISTORY_WINDOW_DAYS puts the receipt *after* ``now``, and the last
+    # receipt's mean offset is exactly HISTORY_WINDOW_DAYS, so roughly half of
+    # all profiles used to carry one future-dated purchase (measured: 103 of
+    # 200 profiles, 3.6% of receipts, up to 3.2 days ahead). Nothing rejected
+    # them — ``compute_user_stats`` and the history-affinity features read the
+    # whole list — so a feature computed "as of now" was partly built from
+    # purchases that had not happened yet.
+    newest_offset = HISTORY_WINDOW_DAYS - MIN_HISTORY_AGE_DAYS
     offsets_days = sorted(
-        max(0.2, rng.gauss(i * params.cadence_days_mean, params.cadence_days_std))
+        min(newest_offset, max(0.2, rng.gauss(i * params.cadence_days_mean, params.cadence_days_std)))
         for i in range(1, n_receipts + 1)
     )
     history: list[Receipt] = []
@@ -307,7 +364,7 @@ def generate_profile(rng: random.Random, index: int, now: datetime = DEFAULT_NOW
         excluded_categories=excluded_categories,
         excluded_ingredient_ids=excluded_ingredient_ids,
         home_ingredient_ids=_sample_home_ingredients(rng),
-        saved_recipe_ids=_sample_saved_recipes(rng, params),
+        saved_recipe_ids=_sample_saved_recipes(rng, params, saved_recipe_pool),
         history_categories=sorted(set(history_categories)),
         preferred_brands=preferred_brands,
     )
@@ -326,10 +383,35 @@ def generate_population(
     *,
     seed: int = 42,
     now: datetime = DEFAULT_NOW,
+    archetypes: ArchetypeTable | None = None,
+    saved_recipe_pool: Sequence[Recipe] | None = None,
+    index_offset: int = 0,
 ) -> list[SyntheticProfile]:
-    """Sample N profiles from the archetype mixture. Deterministic given seed."""
+    """Sample N profiles from the archetype mixture. Deterministic given seed.
+
+    One shared generator walks the whole population, so profile *i* depends on
+    every profile before it and on ``n``. ``recsys.panels`` builds evaluation
+    panels with a per-profile stream instead, which is what makes a panel
+    stable when the catalog or the population size changes; this function is
+    kept as-is because the committed benchmark/sensitivity numbers were
+    produced with it.
+
+    ``index_offset`` shifts the index that becomes part of every ``user_id``.
+    Two populations drawn over the same range give different people identical
+    ids, which makes any per-user join between them wrong in a way nothing
+    reports — see ``recsys.model.TRAINING_INDEX_OFFSET``.
+    """
     rng = random.Random(seed)
-    return [generate_profile(rng, i, now=now) for i in range(n)]
+    return [
+        generate_profile(
+            rng,
+            index_offset + i,
+            now=now,
+            archetypes=archetypes,
+            saved_recipe_pool=saved_recipe_pool,
+        )
+        for i in range(n)
+    ]
 
 
 def generate_balanced_sample(

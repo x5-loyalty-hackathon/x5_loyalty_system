@@ -1,10 +1,10 @@
 """The recommendation model adapter.
 
-Scorer port: recsys-benchmark@c28b613, adapted to API 1.2. Experimental
-measurements mentioned in inherited comments refer to the source branch,
-not this integrated build. See docs/integration-handoff.md. Serving retains
-our selector, explicit HOME and required-only missing counts; inferred pantry
-and alternative ranking policies are not enabled.
+Integrated from recsys-benchmark@02132c8 under API 1.2. Explicit HOME,
+required-only missing counts and prepared-food boundaries are retained.
+Experimental serving policies live in recsys.experimental, never app.service.
+Numerical observations in inherited comments belong to the source experiments,
+not measurements of this integration. See docs/integration-handoff.md.
 
 ``MLRecommendationEngine`` implements the exact ``RecommendationEngine``
 Protocol from ``app/recommender.py`` (``rank(request) -> list[ModelRecommendation]``)
@@ -355,28 +355,47 @@ def compute_features(
 
 
 #: Features that describe how much work a recipe is, rather than how much the
-#: user would like it. The source branch benchmark explored disabling these;
-#: our serving keeps the default and applies its missing-first selector after
-#: scoring. No alternative ranking policy was ported with this adapter.
+#: user would like it. The experimental ``RankingPolicy`` orders on exactly
+#: this quantity, so a model that also encodes it is duplicating the pipeline's
+#: own work — measured at r = -0.71 between ``model_score`` and missing count
+#: (see ``docs/benchmark-report.md``).
 EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
     {"missing_ratio", "missing_cost_norm"}
 )
 
+#: Features describing *the shop*, not the shopper or the dish.
+#: ``markdown_supply_signal`` reads ``request.inventory_snapshot``, which makes
+#: ``model_score`` a function of today's shelf: the same person and the same
+#: recipe score differently depending on what happened to be in stock
+#: (measured: 0.0027 of score movement across six inventory draws for one
+#: user). Three consequences, all bad for a preference model — the score cannot
+#: be cached, it cannot be compared across supply scenarios, and it quietly
+#: mixes "would they want this" with "can they buy it here", which
+#: ``docs/research/recsys/evaluation-protocol.md`` requires to be measured
+#: apart. Availability belongs to ``app.service``, which already applies it on
+#: live inventory. Same shape of defect as the effort double-count in EXP-002.
+AVAILABILITY_FEATURE_NAMES: frozenset[str] = frozenset({"markdown_supply_signal"})
+
 
 def _feature_vector(
-    features: dict[str, float], *, include_effort: bool = True
+    features: dict[str, float],
+    *,
+    include_effort: bool = True,
+    include_availability: bool = False,
 ) -> list[float]:
-    """Feature row, optionally with the effort features zeroed.
+    """Feature row, optionally with whole groups zeroed.
 
     Zeroing rather than dropping keeps the vector length equal to
-    ``FEATURE_NAMES`` so both variants share one classifier shape and one set
-    of weight indices — the two models stay directly comparable.
+    ``FEATURE_NAMES`` so every variant shares one classifier shape and one set
+    of weight indices — the models stay directly comparable.
     """
+    suppressed: set[str] = set()
+    if not include_effort:
+        suppressed |= EFFORT_FEATURE_NAMES
+    if not include_availability:
+        suppressed |= AVAILABILITY_FEATURE_NAMES
     return [
-        features[name]
-        if include_effort or name not in EFFORT_FEATURE_NAMES
-        else 0.0
-        for name in FEATURE_NAMES
+        0.0 if name in suppressed else features[name] for name in FEATURE_NAMES
     ]
 
 
@@ -398,7 +417,7 @@ def _label_for_pair(
     # recipe with six or more missing ingredients was ever labelled relevant, so
     # the model learned effort and nothing else (measured AUC 0.53 within
     # equal-effort strata). Whether a basket is affordable today is the job of
-    # the service selector and the availability filter, which already
+    # the service-side selector and the availability filter, which already
     # do it on live inventory. This label answers only "would this person want
     # this dish".
     #
@@ -419,17 +438,33 @@ def _label_for_pair(
     return 1.0 if features["_combined_affinity"] >= HIGH_HISTORY_AFFINITY else 0.0
 
 
+#: Index range for the model's own training population.
+#:
+#: ``generate_profile`` names people ``synthetic_<archetype>_<index>``, so two
+#: populations drawn over the same index range hand *different* people the same
+#: id. Measured before this existed: 87 ids shared between the training draw
+#: and the development panel. That is not a leak — the data differs — but it
+#: makes "was this user trained on?" unanswerable by id and silently corrupts
+#: any per-user join across the two. Kept clear of
+#: ``recsys.panels.COHORT_INDEX_OFFSET``.
+TRAINING_INDEX_OFFSET = 2_000_000
+
+
 def _train_classifier(
     *,
     seed: int,
     n_profiles: int,
     recipe_catalog: list[Recipe],
     include_effort: bool = True,
+    include_availability: bool = False,
 ) -> LogisticRegression:
     from recsys.inventory import generate_inventory  # local import: no import-time cycle
 
     rng = random.Random(seed)
-    training_profiles = generate_population(n_profiles, seed=seed)
+    training_profiles = generate_population(
+        n_profiles, seed=seed, index_offset=TRAINING_INDEX_OFFSET,
+        saved_recipe_pool=recipe_catalog,
+    )
     X: list[list[float]] = []
     y: list[float] = []
     for profile in training_profiles:
@@ -451,7 +486,13 @@ def _train_classifier(
         sampled_recipes = rng.sample(recipe_catalog, k=min(6, len(recipe_catalog)))
         for recipe in sampled_recipes:
             features = compute_features(request, recipe)
-            X.append(_feature_vector(features, include_effort=include_effort))
+            X.append(
+                _feature_vector(
+                    features,
+                    include_effort=include_effort,
+                    include_availability=include_availability,
+                )
+            )
             y.append(_label_for_pair(rng, features=features, archetype_name=profile.archetype, recipe=recipe))
     model = LogisticRegression(n_features=len(FEATURE_NAMES))
     model.fit(X, y, epochs=250)
@@ -468,24 +509,47 @@ class MLRecommendationEngine:
         seed: int = 999,
         training_profiles: int = 300,
         include_effort_features: bool = True,
+        include_availability_features: bool = False,
         pantry_policy: PantryPolicy = DISABLED_PANTRY,
     ) -> None:
         """``include_effort_features=False`` trains a preference-only ranker.
 
-        Experimental ablation inherited from the source branch. Our serving
-        uses include_effort_features=True and DISABLED_PANTRY; changing those
-        requires a separate evaluation, not an API compatibility fix.
-        """
-        from recsys.recipes import RECIPES  # local import avoids a hard import-time cycle
+        This switch comes from offline comparisons in
+        ``recsys.experimental.service``. API 1.2 retains effort features and
+        the accepted missing-first selector; no alternative policy is enabled.
 
-        self._recipe_catalog_for_training = list(recipe_catalog or RECIPES)
+        ``include_availability_features`` defaults to False — see
+        ``AVAILABILITY_FEATURE_NAMES`` for why a preference model must not read
+        the shelf.
+
+        ``recipe_catalog`` defaults to the **frozen baseline**, not to the live
+        catalog. Training samples six recipes per profile, so a longer catalog
+        draws a different sample and fits different weights: adding ten
+        candidate recipes moved the logistic weights by up to 0.25. A
+        catalog-vs-catalog comparison run with a per-arm engine would then
+        measure the catalog *and* a retrained model, and report the sum as the
+        catalog's effect. Promoting a recipe into training is what
+        ``recsys.catalog_freeze`` is for, and it is a deliberate act.
+        """
+        from recsys.catalog_freeze import baseline_catalog, recipe_content_hash
+
+        self._recipe_catalog_for_training = list(
+            recipe_catalog if recipe_catalog is not None else baseline_catalog()
+        )
+        #: Which catalog these weights came from, so a run can prove two arms
+        #: shared one model instead of assuming it.
+        self.training_catalog_hash = recipe_content_hash(
+            self._recipe_catalog_for_training
+        )
         self._include_effort = include_effort_features
+        self._include_availability = include_availability_features
         self._pantry_policy = pantry_policy
         self._classifier = _train_classifier(
             seed=seed,
             n_profiles=training_profiles,
             recipe_catalog=self._recipe_catalog_for_training,
             include_effort=include_effort_features,
+            include_availability=include_availability_features,
         )
 
     def rank(self, request: RecommendationRequest) -> list[ModelRecommendation]:
@@ -501,7 +565,10 @@ class MLRecommendationEngine:
                 request, recipe, user_stats, pantry_policy=self._pantry_policy
             )
             score = self._classifier.predict_proba(
-                _feature_vector(features, include_effort=self._include_effort)
+                _feature_vector(
+                    features, include_effort=self._include_effort,
+                    include_availability=self._include_availability,
+                )
             )
             score = max(0.0, min(1.0, score))
 

@@ -3,8 +3,12 @@
 - **Статус:** API contract `1.2`, selector, книга, single-store и `cook/ready`
   meal-flow реализованы. UI и актуальный ML scorer интегрированы, локальные
   автопроверки пройдены; ручной прогон на телефоне и финальный eval открыты,
-  2026-09-05. [Карта интеграции и адаптаций](integration-handoff.md).
+  2026-09-06. [Карта интеграции и адаптаций](integration-handoff.md).
 - **Decision source:** [ADR-001](decisions/001-recipe-first-poc.md).
+- **ML merge 06.09:** scorer получил исправления `02132c8`, обучение на 37
+  baseline-рецептах. Несовместимые типы/политики ML-стенда находятся в
+  [recsys/experimental](../recsys/experimental/README.md); HTTP API их не импортирует.
+  EXP-002–004 — исследовательские предложения, не смена системных ADR ниже.
 - **Meal extension:** [ADR-002](decisions/002-personal-meal-contract.md).
 - **Selector / API 1.2:** [ADR-003](decisions/003-challenge-mode-selection.md),
   [ADR-004](decisions/004-recipe-book-and-shopping-context.md).

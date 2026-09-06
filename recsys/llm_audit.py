@@ -44,8 +44,24 @@ from recsys.response_models import (
 
 PROMPT_VERSION = "v1"
 DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_OPENROUTER_MODEL = "openai/gpt-4.1-mini"
+DEFAULT_DEEPSEEK_MODEL = "deepseek-chat"
 DEFAULT_CACHE = Path(".cache/llm_audit.json")
 INDEPENDENT_RESPONDERS = (RuleBasedResponder(), ProbabilisticResponder(), EconomicResponder())
+
+OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
+OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
+DEEPSEEK_ENDPOINT = "https://api.deepseek.com/chat/completions"
+PROVIDER_KEY_ENV = {
+    "openai": "OPENAI_API_KEY",
+    "openrouter": "OPENROUTER_API_KEY",
+    "deepseek": "DEEPSEEK_API_KEY",
+}
+PROVIDER_ENDPOINT = {
+    "openai": OPENAI_ENDPOINT,
+    "openrouter": OPENROUTER_ENDPOINT,
+    "deepseek": DEEPSEEK_ENDPOINT,
+}
 
 
 @dataclass(frozen=True)
@@ -158,17 +174,127 @@ class MockLLMClient:
 
 
 class OpenAICompatibleClient:
-    """Minimal stdlib client, deliberately opt-in so dry-run stays offline."""
-    def __init__(self, model: str, api_key: str, endpoint: str = "https://api.openai.com/v1/chat/completions") -> None:
-        self.model, self.api_key, self.endpoint = model, api_key, endpoint
+    """Minimal JSON client for OpenAI-compatible chat-completion APIs.
 
-    def decide(self, features: ResponseFeatures) -> LLMDecision:
-        prompt = json.dumps(_feature_payload(features), ensure_ascii=False)
-        body = {"model": self.model, "temperature": 0, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "Choose one action: ignore, click, save, buy, substitute. Return JSON action, confidence 0..1, reason_code. Use only the supplied visible card features."}, {"role": "user", "content": prompt}]}
-        request = urllib.request.Request(self.endpoint, data=json.dumps(body).encode(), headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"})
+    ``provider`` is part of the public identity because the same model name
+    routed through two providers is not the same experimental condition.
+    OpenRouter uses the same wire format, but a different endpoint, key and
+    optional attribution headers. No key is ever accepted by a CLI argument
+    or written to the cache.
+    """
+
+    def __init__(
+        self,
+        model: str,
+        api_key: str,
+        endpoint: str = OPENAI_ENDPOINT,
+        *,
+        provider: str = "openai",
+        extra_headers: dict[str, str] | None = None,
+    ) -> None:
+        self.model = model
+        self.api_key = api_key
+        self.endpoint = endpoint
+        self.provider = provider
+        self.extra_headers = dict(extra_headers or {})
+
+    @property
+    def cache_identity(self) -> str:
+        return f"{self.provider}:{self.endpoint}:{self.model}"
+
+    @classmethod
+    def from_provider(
+        cls,
+        provider: str,
+        model: str,
+        api_key: str,
+        *,
+        endpoint: str | None = None,
+    ) -> "OpenAICompatibleClient":
+        if provider not in PROVIDER_ENDPOINT:
+            raise ValueError(f"unknown provider {provider!r}")
+        headers: dict[str, str] = {}
+        if provider == "openrouter":
+            if referer := os.environ.get("OPENROUTER_HTTP_REFERER"):
+                headers["HTTP-Referer"] = referer
+            if title := os.environ.get("OPENROUTER_APP_TITLE"):
+                headers["X-OpenRouter-Title"] = title
+        return cls(
+            model,
+            api_key,
+            endpoint or PROVIDER_ENDPOINT[provider],
+            provider=provider,
+            extra_headers=headers,
+        )
+
+    def complete_json(
+        self,
+        *,
+        system_prompt: str,
+        payload: object,
+        response_schema: dict[str, object] | None = None,
+        schema_name: str = "decision",
+        temperature: float = 0.0,
+        seed: int | None = None,
+    ) -> dict[str, object]:
+        """Return one parsed JSON object, optionally constrained by schema."""
+        response_format: dict[str, object]
+        if response_schema is None or self.provider == "deepseek":
+            # The direct DeepSeek API supports JSON mode, but not OpenAI's
+            # JSON-schema response format. The caller still validates every
+            # field locally, so malformed or semantically invalid answers are
+            # retried instead of entering the experiment.
+            response_format = {"type": "json_object"}
+        else:
+            response_format = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": schema_name,
+                    "strict": True,
+                    "schema": response_schema,
+                },
+            }
+        body: dict[str, object] = {
+            "model": self.model,
+            "temperature": temperature,
+            "response_format": response_format,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+            ],
+        }
+        if seed is not None and self.provider != "deepseek":
+            body["seed"] = seed
+        if response_schema is not None and self.provider == "openrouter":
+            # OpenRouter may route a model through several providers. Refuse
+            # a route that would silently ignore the JSON-schema requirement.
+            body["provider"] = {"require_parameters": True}
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            **self.extra_headers,
+        }
+        request = urllib.request.Request(
+            self.endpoint, data=json.dumps(body).encode(), headers=headers
+        )
         with urllib.request.urlopen(request, timeout=45) as response:  # nosec B310: explicit user opt-in
             data = json.loads(response.read())
-        return parse_decision(json.loads(data["choices"][0]["message"]["content"]))
+        content = data["choices"][0]["message"]["content"]
+        parsed = json.loads(content) if isinstance(content, str) else content
+        if not isinstance(parsed, dict):
+            raise ValueError("LLM response content must be a JSON object")
+        return parsed
+
+    def decide(self, features: ResponseFeatures) -> LLMDecision:
+        raw = self.complete_json(
+            system_prompt=(
+                "Choose one action: ignore, click, save, buy, substitute. "
+                "Return JSON action, confidence 0..1, reason_code. Use only "
+                "the supplied visible card features."
+            ),
+            payload=_feature_payload(features),
+        )
+        return parse_decision(raw)
 
 
 def collect_cards(*, users_per_regime: int = 40, seed: int = 20260905, regimes: tuple[Regime, ...] = REGIMES) -> list[AuditCard]:
@@ -334,18 +460,35 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sample", type=int, default=500)
     parser.add_argument("--users-per-regime", type=int, default=40)
     parser.add_argument("--seed", type=int, default=20260905)
-    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--provider", choices=tuple(PROVIDER_ENDPOINT), default="openai")
+    parser.add_argument("--model", default=None)
+    parser.add_argument("--endpoint", default=None, help="Override the provider endpoint (advanced).")
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--prompt-version", default=PROMPT_VERSION)
     parser.add_argument("--dry-run", action="store_true", help="Run everything with a local mock; never call a provider (recommended).")
     args = parser.parse_args(argv)
-    if not args.dry_run and not os.environ.get("OPENAI_API_KEY"):
-        parser.error("real run requires OPENAI_API_KEY in the environment; use --dry-run for the free audit")
+    model = args.model or {
+        "openai": DEFAULT_MODEL,
+        "openrouter": DEFAULT_OPENROUTER_MODEL,
+        "deepseek": DEFAULT_DEEPSEEK_MODEL,
+    }[args.provider]
+    key_env = PROVIDER_KEY_ENV[args.provider]
+    if not args.dry_run and not os.environ.get(key_env):
+        parser.error(
+            f"real {args.provider} run requires {key_env} in the environment; "
+            "use --dry-run for the free audit"
+        )
     population = collect_cards(users_per_regime=args.users_per_regime, seed=args.seed)
     sample = stratified_sample(population, args.sample, seed=args.seed)
-    client: LLMClient = MockLLMClient() if args.dry_run else OpenAICompatibleClient(args.model, os.environ["OPENAI_API_KEY"])
+    client: LLMClient = (
+        MockLLMClient()
+        if args.dry_run
+        else OpenAICompatibleClient.from_provider(
+            args.provider, model, os.environ[key_env], endpoint=args.endpoint
+        )
+    )
     rows, plan = run_audit(sample, client, JsonCache(args.cache), dry_run=args.dry_run, prompt_version=args.prompt_version)
-    print(json.dumps({"mode": "dry-run" if args.dry_run else "live", "sampling_arm": "heuristic/effort", "population_cards": len(population), "sample_cards": len(sample), "plan": plan, "report": audit_report(rows, weights_by_stratum=population_weights(population, sample)), "rows": rows}, ensure_ascii=False, indent=2))
+    print(json.dumps({"mode": "dry-run" if args.dry_run else "live", "provider": "mock" if args.dry_run else args.provider, "sampling_arm": "heuristic/effort", "population_cards": len(population), "sample_cards": len(sample), "plan": plan, "report": audit_report(rows, weights_by_stratum=population_weights(population, sample)), "rows": rows}, ensure_ascii=False, indent=2))
     return 0
 
 

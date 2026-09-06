@@ -38,6 +38,7 @@ contract.
 
 from __future__ import annotations
 
+import math
 import random
 from datetime import datetime
 
@@ -231,16 +232,47 @@ def _markdown_supply_signal(request: RecommendationRequest, missing_ids: set[str
     return covered / len(missing_ids)
 
 
+def ingredient_idf(catalog: list[Recipe]) -> dict[str, float]:
+    """log(N / recipes containing this ingredient) over the catalog.
+
+    Opt-in weighting for ``ingredient_affinity`` (see ``compute_features``'s
+    ``idf_weights``), proposed after the v3 LLM-intent live run
+    (``docs/research/recsys/llm-intent-eval.md`` §10-11) found ``own``
+    history scoring *worse* buy-intent than a random stranger's, with
+    ``poor_history_fit`` as the dominant judge reason. Unweighted overlap
+    treats a match on "salt"/"onion"/"egg" — present in nearly every recipe
+    and nearly every history — the same as a match on a rare, taste-specific
+    ingredient. Not validated against a live judge yet: construct an engine
+    with ``ingredient_idf_weights=ingredient_idf(catalog)`` to test it: the
+    default (``None``) keeps today's shipped behaviour unchanged.
+    """
+    n = max(len(catalog), 1)
+    doc_frequency: dict[str, int] = {}
+    for recipe in catalog:
+        for ingredient_id in {i.ingredient_id for i in recipe.ingredients}:
+            doc_frequency[ingredient_id] = doc_frequency.get(ingredient_id, 0) + 1
+    # +1 smoothing: an ingredient appearing in every recipe gets a small
+    # positive weight rather than exactly zero, so it still counts a little.
+    return {
+        ingredient_id: math.log(n / count) + 1e-6
+        for ingredient_id, count in doc_frequency.items()
+    }
+
+
 def compute_features(
     request: RecommendationRequest,
     recipe: Recipe,
     user_stats: UserStats | None = None,
     pantry_policy: PantryPolicy = DISABLED_PANTRY,
+    idf_weights: dict[str, float] | None = None,
 ) -> dict[str, float]:
     """Features for one (request, recipe) pair.
 
     ``user_stats`` is recipe-independent; ``rank`` computes it once per request
     and passes it in. Callers that omit it get the same numbers, just slower.
+
+    ``idf_weights`` (from ``ingredient_idf``) is opt-in and ``None`` by
+    default; see that function's docstring for why it exists.
     """
     stats = user_stats if user_stats is not None else compute_user_stats(request)
     # Current overlap is receipt-only; explicit HOME affects missing count.
@@ -279,7 +311,13 @@ def compute_features(
         if categories
         else 0.0
     )
-    ingredient_affinity = min(ingredient_history_hits / total, 1.0)
+    if idf_weights is not None:
+        overlap_ids = ingredient_ids & history_ingredient_ids
+        weighted_hits = sum(idf_weights.get(i, 0.0) for i in overlap_ids)
+        weighted_total = sum(idf_weights.get(i, 0.0) for i in ingredient_ids)
+        ingredient_affinity = min(weighted_hits / weighted_total, 1.0) if weighted_total else 0.0
+    else:
+        ingredient_affinity = min(ingredient_history_hits / total, 1.0)
     # Ingredient-level overlap is the more specific, more discriminative
     # signal (see _history_ingredient_ids); category-level is a coarser
     # fallback so a recipe with no exact-ingredient repeat isn't treated as
@@ -457,6 +495,7 @@ def _train_classifier(
     recipe_catalog: list[Recipe],
     include_effort: bool = True,
     include_availability: bool = False,
+    idf_weights: dict[str, float] | None = None,
 ) -> LogisticRegression:
     from recsys.inventory import generate_inventory  # local import: no import-time cycle
 
@@ -485,7 +524,7 @@ def _train_classifier(
         )
         sampled_recipes = rng.sample(recipe_catalog, k=min(6, len(recipe_catalog)))
         for recipe in sampled_recipes:
-            features = compute_features(request, recipe)
+            features = compute_features(request, recipe, idf_weights=idf_weights)
             X.append(
                 _feature_vector(
                     features,
@@ -511,8 +550,17 @@ class MLRecommendationEngine:
         include_effort_features: bool = True,
         include_availability_features: bool = False,
         pantry_policy: PantryPolicy = DISABLED_PANTRY,
+        use_ingredient_idf: bool = False,
     ) -> None:
         """``include_effort_features=False`` trains a preference-only ranker.
+
+        ``use_ingredient_idf=True`` switches ``ingredient_affinity`` to the
+        IDF-weighted overlap in ``ingredient_idf`` (computed over this
+        engine's *training* catalog, so the feature distribution train and
+        inference see stays consistent) instead of a flat ingredient count.
+        Default ``False`` keeps today's shipped behaviour; see
+        ``ingredient_idf``'s docstring for why this exists and what it has
+        not yet been validated against.
 
         This switch comes from offline comparisons in
         ``recsys.experimental.service``. API 1.2 retains effort features and
@@ -544,12 +592,16 @@ class MLRecommendationEngine:
         self._include_effort = include_effort_features
         self._include_availability = include_availability_features
         self._pantry_policy = pantry_policy
+        self._idf_weights = (
+            ingredient_idf(self._recipe_catalog_for_training) if use_ingredient_idf else None
+        )
         self._classifier = _train_classifier(
             seed=seed,
             n_profiles=training_profiles,
             recipe_catalog=self._recipe_catalog_for_training,
             include_effort=include_effort_features,
             include_availability=include_availability_features,
+            idf_weights=self._idf_weights,
         )
 
     def rank(self, request: RecommendationRequest) -> list[ModelRecommendation]:
@@ -562,7 +614,8 @@ class MLRecommendationEngine:
             if not recipe.verified:
                 continue
             features = compute_features(
-                request, recipe, user_stats, pantry_policy=self._pantry_policy
+                request, recipe, user_stats,
+                pantry_policy=self._pantry_policy, idf_weights=self._idf_weights,
             )
             score = self._classifier.predict_proba(
                 _feature_vector(

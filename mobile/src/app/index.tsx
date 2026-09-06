@@ -8,14 +8,22 @@ import { KitchenSheet } from '../components/KitchenSheet';
 import { PhotoStub } from '../components/PhotoStub';
 import { Choice, ActionNotice, PrimaryAction, flowStyles as ui } from '../components/FlowControls';
 import { recipeDetails } from '../fixtures/recipeDetails';
-import { matchingSteps } from '../domain/mealFlow';
+import { canCompleteCook, matchingSteps } from '../domain/mealFlow';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 
 const COLLAPSED_HEIGHT = 220;
 export default function KitchenScreen() {
   const router = useRouter();
-  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products, equipped, plan } = useDemo();
+  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, startCooking,
+    savePlanAndCook, basket, route, kitchenItems: products, equipped, plan } = useDemo();
+  const canCook = canCompleteCook(plan) || Boolean(selectedMeal && !plan && route === 'cook'
+    && !basket.error && !basket.products.length);
+  const openTask = () => {
+    if (canCook) {
+      if (plan) startCooking(); else void savePlanAndCook();
+    } else router.push(plan?.status === 'completed' ? '/profile' : '/products');
+  };
   const [stageHeight, setStageHeight] = useState(0);
   const { height: windowHeight } = useWindowDimensions();
   // onLayout на вебе иногда отдаёт нулевую высоту при первом монтировании и
@@ -68,9 +76,10 @@ export default function KitchenScreen() {
               <View style={styles.cta}>
                 <PrimaryAction label="Подобрать блюдо" disabled={busy} onPress={() => enter()} />
               </View>
-              {plan ? (
+              {selectedMeal ? (
                 <View style={ui.choices}>
-                  <Choice label="Мой план →" disabled={busy} onPress={() => router.push('/products')} />
+                  <Choice label={canCook ? 'Готовить →' : plan?.status === 'completed' ? 'Мой прогресс →' : 'Мой план →'}
+                    disabled={busy} onPress={openTask} />
                 </View>
               ) : null}
               <View style={styles.pantryHead}>

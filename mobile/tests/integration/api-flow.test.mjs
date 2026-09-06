@@ -13,6 +13,103 @@ import { endpointHarness } from '../helpers/endpointHarness.mjs';
 import { kitchenProducts } from '../../src/domain/kitchen.ts';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
+
+for (const route of ['cook', 'ready']) {
+  test(`default standalone demo → real API: ${route} works without host setup and recovers lost receipt response`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    const receipts = []; let loseFirst = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        receipts.push(receipt);
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseFirst) { loseFirst = false; throw new Error('response lost after commit'); }
+        return result;
+      },
+    });
+    assert.equal(render().isDemoCheckout, true);
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(receipts.length, 0);
+    assert.equal(await render().checkout(), false);
+    assert.equal(render().kitchenItems.length, beforeKitchen);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.deepEqual(receipts[0], receipts[1]);
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen);
+    assert.match(render().notice, /Демо-покупка подтверждена/);
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(receipts.length, 2);
+  });
+}
+
+for (const route of ['cook', 'ready']) {
+  test(`host checkout → real API: ${route}, cancellation and lost response do not duplicate purchases/XP`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    let cancel = true, opened = 0, loseReceipt = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseReceipt) { loseReceipt = false; throw new Error('response lost'); }
+        return result;
+      },
+    }, { openCheckout: async ({ plan, products }) => {
+      opened++;
+      return cancel ? { status: 'cancelled' } : { status: 'purchased', receipt: makeDemoReceipt(plan, products, DEMO_NOW) };
+    } });
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(render().editable, true);
+    const before = await body('GET', `/api/v1/progress/${DEMO_USER_ID}`);
+    assert.equal(before.verified_receipts, 0); assert.equal(before.avatar_xp, 0);
+    cancel = false;
+    assert.equal(await render().checkout(), false);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(opened, 2, 'retrying accepted receipt never reopens commerce checkout');
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen, 'lost response retry restores kitchen too');
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(opened, 2);
+  });
+}
 const python = process.env.X5_TEST_PYTHON ?? (existsSync(`${root}.venv/bin/python`) ? `${root}.venv/bin/python` : 'python3');
 const engine = process.env.X5_TEST_ENGINE ?? 'mock';
 assert.ok(['mock', 'model'].includes(engine), 'X5_TEST_ENGINE must be mock or model');
@@ -333,7 +430,8 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
   const call = await api(t);
   const events = [];
   const render = providerHarness(realEndpoints(call, async (event) => { events.push(event); }));
-  const recipes = ['spaghetti_bolognese', 'pasta_tomatoes', 'chicken_soup'];
+  const recipes = { family: 'spaghetti_bolognese', vegetable: 'pasta_tomatoes',
+    soup: 'chicken_soup', veteran: 'spaghetti_bolognese' };
   const planIds = new Set(), receiptIds = new Set();
   for (const [i, profile] of DEMO_PROFILES.entries()) {
     render().switchProfile(profile.id);
@@ -349,7 +447,8 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
     await render().loadProgress();
     assert.equal(render().progress.user_id, profile.userId);
     assert.equal(render().progress.avatar_xp, 0);
-    render().selectMeal(recipes[i]);
+    assert.ok(recipes[profile.id], `Missing test recipe for ${profile.id}`);
+    render().selectMeal(recipes[profile.id]);
     assert.ok(render().selectedMeal);
     render().chooseRoute('cook');
     assert.equal(await render().saveToBook(), true, render().actionError);
@@ -375,13 +474,13 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
   // Switching back restores server-owned data, while local cooking/plan/kitchen reset.
   render().switchProfile(DEMO_PROFILES[0].id);
   await render().loadRecipes(); await render().loadProgress();
-  assert.deepEqual(Array.from(render().book), [recipes[0]]);
+  assert.deepEqual(Array.from(render().book), [recipes[DEMO_PROFILES[0].id]]);
   assert.equal(render().progress.avatar_xp, 20);
   assert.equal(render().plan, null); assert.equal(render().cooking, false);
   assert.deepEqual(render().kitchenItems, kitchenProducts(DEMO_PROFILES[0].currentReceipt.items));
   for (const [i, profile] of DEMO_PROFILES.entries()) {
     const book = (await call('GET', `/api/v1/saved-recipes/${profile.userId}`)).body;
-    assert.deepEqual(book.saved_recipe_ids, [recipes[i]]);
+    assert.deepEqual(book.saved_recipe_ids, [recipes[profile.id]]);
     const progress = (await call('GET', `/api/v1/progress/${profile.userId}`)).body;
     assert.equal(progress.avatar_xp, 20);
     assert.equal(progress.recipes_completed, 1);

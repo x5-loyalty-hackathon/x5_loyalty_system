@@ -32,6 +32,17 @@ test('demo selector is explicitly labelled and only mounted at bottom of Profile
   }
 });
 
+test('integration overrides preserve PR10 author StyleSheet blocks exactly', () => {
+  assert.equal(Object.keys(baseline.style_sha256).length, 4);
+  for (const [path, expected] of Object.entries(baseline.style_sha256)) {
+    const source = readFileSync(new URL(path, root), 'utf8');
+    const offset = source.indexOf('StyleSheet.create(');
+    assert.ok(offset >= 0, `Missing styles in ${path}`);
+    assert.equal(createHash('sha256').update(source.slice(offset)).digest('hex'), expected,
+      `Do not change the colleague's layout/styles when repairing handlers: ${path}`);
+  }
+});
+
 test('integration does not silently add or remove screens', () => {
   const expected = Object.keys(baseline.git_blob_sha1)
     .filter((path) => path.startsWith('src/app/')).map((path) => path.slice('src/app/'.length)).sort();

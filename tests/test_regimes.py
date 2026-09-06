@@ -1,7 +1,10 @@
+import itertools
+from collections import Counter
 from dataclasses import fields
 
 from recsys.profiles import ARCHETYPES, ArchetypeParams
 from recsys.regimes import (
+    BALANCED_SAMPLE_9,
     DIALS,
     NEUTRAL_LEVEL,
     NEUTRAL_REGIME,
@@ -83,3 +86,44 @@ def test_build_is_deterministic_and_regimes_are_hashable() -> None:
     assert build_regimes() == REGIMES
     assert len({r for r in REGIMES}) == len(REGIMES)
     assert isinstance(REGIMES[0], Regime)
+
+
+def test_balanced_sample_covers_every_dial_level_equally() -> None:
+    """The nine-world sample must be a design, not the head of a sorted list.
+
+    ``REGIMES[:9]`` looked like a sample and was not: ``build_regimes`` sorts
+    by name, ``"high" < "low" < "mid"``, so the first nine worlds were the
+    neutral one plus every ``novelty=high`` world — a sweep that never varied
+    the dial it looked like it was varying.
+    """
+    assert len(BALANCED_SAMPLE_9) == 9
+    assert len(set(BALANCED_SAMPLE_9)) == 9
+    for dial, levels in DIALS.items():
+        counts = Counter(r.level_map[dial] for r in BALANCED_SAMPLE_9)
+        assert set(counts) == set(levels), f"{dial} misses a level: {counts}"
+        assert set(counts.values()) == {3}, f"{dial} is unbalanced: {counts}"
+
+
+def test_balanced_sample_is_pairwise_orthogonal_and_contains_the_neutral_world() -> None:
+    """Strength-2: every pair of levels across any two dials appears once.
+
+    That is what buys a 9-cell sweep the right to talk about a dial's effect
+    without the other dials being confounded with it.
+    """
+    assert NEUTRAL_REGIME in BALANCED_SAMPLE_9
+    for left, right in itertools.combinations(DIALS, 2):
+        pairs = Counter(
+            (r.level_map[left], r.level_map[right]) for r in BALANCED_SAMPLE_9
+        )
+        assert len(pairs) == 9, f"{left}x{right} does not cover every pair: {pairs}"
+        assert set(pairs.values()) == {1}, f"{left}x{right} is unbalanced: {pairs}"
+
+
+def test_the_old_naive_slice_would_fail_the_balance_bar() -> None:
+    """Guard the regression itself, so nobody reintroduces ``REGIMES[:9]``."""
+    naive = REGIMES[:9]
+    novelty_levels = Counter(r.level_map["novelty"] for r in naive)
+    assert set(novelty_levels.values()) != {3}, (
+        "REGIMES[:9] is balanced now — if the sort order changed, this test and "
+        "BALANCED_SAMPLE_9's docstring both need rereading"
+    )

@@ -123,6 +123,45 @@ REGIMES: tuple[Regime, ...] = build_regimes()
 NEUTRAL_REGIME: Regime = REGIMES[0]
 
 
+#: A stratified 9-world sample for stands that cannot afford the full 27
+#: (``sensitivity``, ``split_audit``, ``experiment1_ranker_quality``).
+#:
+#: The previous ``REGIMES[:9]`` "sample" was an accident of ``build_regimes``
+#: sorting worlds by name: since ``"high" < "low" < "mid"`` alphabetically,
+#: the first 9 names are the neutral world plus *every* ``novelty=high``
+#: world and nothing else — no ``novelty=low``, no ``novelty=mid`` besides
+#: neutral. A 9-cell stand built on that slice cannot see what happens at
+#: low or mid novelty at all, which defeats the entire point of ``regimes``
+#: (see module docstring): "10,000 users drawn from one world still describe
+#: one world," and a biased 9-cell slice is one world wearing a grid's
+#: clothing.
+#:
+#: This is instead a genuine strength-2 orthogonal array (an L9 Latin
+#: square): built as ``novelty = level[i]``, ``promo = level[j]``,
+#: ``repeat = level[(i + j) % 3]`` for ``i, j in 0..2``, with level 0 mapped
+#: to "mid" so the all-neutral world (``i = j = 0``) is included — matching
+#: the old convention that a 9-world sample always contains the neutral
+#: point. The construction guarantees, over the 9 rows: every level of every
+#: dial appears exactly 3 times, and every *pair* of levels between any two
+#: dials appears exactly once. That is a much stronger property than a
+#: random 9-of-27 draw would give for free, at the same cost (9 cells).
+def _build_balanced_sample_9() -> tuple[Regime, ...]:
+    dial_names = tuple(DIALS)  # ("novelty", "promo", "repeat"), dict order
+    level_cycle = ("mid", "low", "high")  # index 0 must be the neutral level
+    by_levels = {regime.levels: regime for regime in REGIMES}
+    rows: list[Regime] = []
+    for i in range(3):
+        for j in range(3):
+            k = (i + j) % 3
+            values = (level_cycle[i], level_cycle[j], level_cycle[k])
+            key = tuple(zip(dial_names, values, strict=True))
+            rows.append(by_levels[key])
+    return tuple(rows)
+
+
+BALANCED_SAMPLE_9: tuple[Regime, ...] = _build_balanced_sample_9()
+
+
 def regimes_where(dial: str, level: str) -> tuple[Regime, ...]:
     """Every regime holding ``dial`` at ``level`` — the slice for a dial effect."""
     if dial not in DIALS:

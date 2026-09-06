@@ -31,7 +31,7 @@ from pathlib import Path
 
 from recsys.panels import SPLIT_WEIGHTS, Panel, development_splits, load_panel, split_of
 from recsys.profiles import SyntheticProfile, generate_population
-from recsys.regimes import REGIMES
+from recsys.regimes import BALANCED_SAMPLE_9
 
 #: Every read of the test split is appended here. The protocol says test is
 #: read once, after a decision is final; discipline that is not recorded is
@@ -155,7 +155,7 @@ def _seen_before_hashes() -> dict[str, set[str]]:
     # What experiments 1-3 and the benchmark measured on: one draw per regime,
     # seed + regime_index, 80 users, as recsys.benchmark/sensitivity do it.
     experiment_hashes: set[str] = set()
-    for regime_index, regime in enumerate(REGIMES[:9]):
+    for regime_index, regime in enumerate(BALANCED_SAMPLE_9):
         for profile in generate_population(
             80, seed=20260905 + regime_index, archetypes=regime.archetypes()
         ):

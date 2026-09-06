@@ -47,7 +47,7 @@ from recsys.benchmark import (
 )
 from recsys.inventory import DEFAULT_INVENTORY_ASSUMPTIONS, InventoryAssumptions
 from recsys.profiles import ARCHETYPES, ArchetypeTable
-from recsys.regimes import REGIMES, Regime
+from recsys.regimes import BALANCED_SAMPLE_9, Regime
 from recsys.response_models import (
     EconomicResponder,
     ProbabilisticResponder,
@@ -56,7 +56,11 @@ from recsys.response_models import (
 
 OUTPUT_PATH = Path("docs/sensitivity-report.md")
 
-DEFAULT_REGIMES = REGIMES[:9]
+#: Nine worlds, balanced across every dial — see
+#: ``recsys.regimes.BALANCED_SAMPLE_9``. This used to be ``REGIMES[:9]``,
+#: which alphabetical sorting made "the neutral world plus eight
+#: novelty=high worlds", so the whole sweep ran in high-novelty territory.
+DEFAULT_REGIMES = BALANCED_SAMPLE_9
 
 #: Raised from 40 after a seed-stability check: at 30 users the *baseline*
 #: claims flipped between seeds, so the sweep was measuring noise rather than

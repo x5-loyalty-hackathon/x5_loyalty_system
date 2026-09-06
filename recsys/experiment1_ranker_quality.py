@@ -46,15 +46,15 @@ from recsys.model import MLRecommendationEngine, compute_features, compute_user_
 from recsys.oracle_ranking_engine import OracleRankingEngine
 from recsys.pantry import DISABLED_PANTRY, available_ingredient_ids
 from recsys.panels import experiment_panels
-from recsys.regimes import REGIMES
+from recsys.regimes import BALANCED_SAMPLE_9
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-1-ranker-quality-report.md")
 
 #: The metric-0.19 passport (plan §0) fixes these for cross-experiment
-#: comparability: same seed, same TOP_K, same REGIMES[:9]/80-per-regime scale.
+#: comparability: same seed, same TOP_K, same 9-world/80-per-regime scale.
 DEFAULT_SEED = 20260905
 TOP_K = 3
-REGIMES_USED = REGIMES[:9]
+REGIMES_USED = BALANCED_SAMPLE_9
 USERS_PER_REGIME = 80
 
 #: Report/table column order for the 4 candidates, matching build_engines().
@@ -570,7 +570,7 @@ def main() -> int:
     ab_results = run_eval_ab(engines, progress=True)
     n_panel_users = len(experiment_panels("train")["база"].profiles)
 
-    eval_c_regimes = REGIMES[:5]
+    eval_c_regimes = BALANCED_SAMPLE_9[:5]
     eval_c_users = 30
     print("running Eval C (secondary sanity check)...", flush=True)
     c_results = run_eval_c(

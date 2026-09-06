@@ -1,0 +1,51 @@
+{
+  "cases_sha256": "3e7347ce920d61a0a9633a4b8734c3a6581541071098c3e60973b26ee4e06210",
+  "contract_version": "1.3",
+  "diagnostics": {
+    "archetype_counts": {
+      "explorer": 3,
+      "routine": 21,
+      "time_limited": 9,
+      "value": 7
+    },
+    "empty_profiles": 12,
+    "profiles_with_results": 28,
+    "returned_meals": 43
+  },
+  "engine": "model",
+  "format_version": "1",
+  "full_archive_included": false,
+  "git_head": "90925301562116cecc6752d2188b56eac22e44d1",
+  "limitations": [
+    "Synthetic profiles and inventory; not representative measurements of X5 customers.",
+    "Full current serving catalog, not the mobile three-recipe demo or a new training baseline.",
+    "Cooking profiles only; this inventory generator has no prepared-food SKU. Ready quality is not evaluated.",
+    "Default meal feed after safety, single-store feasibility and selector; no forced mode quotas.",
+    "Empty responses are retained. Quality labels, baseline comparison and hit rate are not computed (D3 pending).",
+    "Offer tokens are replaced with null in the archive; it cannot activate tasks or replay rewards.",
+    "No purchases or rewards are submitted. Purchase history in a request is not verified purchase evidence.",
+    "No causal uplift or economics is measured by this export."
+  ],
+  "llm_input_format": "profile-feed-v1",
+  "llm_inputs_sha256": "1286427bcba9e5791af49f271f0aea98c442f9a1c9d64d21cf6aadf0b5d8f068",
+  "model_fallback": false,
+  "n_profiles": 40,
+  "quality_status": "not_assessed",
+  "radius_km": 0.75,
+  "seed": 606,
+  "serving_catalog_hash": "feb0cc97021b3ba8",
+  "serving_catalog_size": 47,
+  "source_sha256": {
+    "app/contracts.py": "e6a16b00d2d13d4c2fcf5021421be113639b88815bcfbc6fd5da26ccb420697b",
+    "app/main.py": "7aaa130fedad60412d2e509c1c3562590e00a61948e8f6328fb08d4215cf2eaa",
+    "app/safety.py": "f7597ee2efe3dcbea5014fc6dad95098587a725c2e78f6d10de0abe5a1e187bd",
+    "app/service.py": "a97edafcb1986136b5b4a02c7626e3276566db02b9c0cf2bed2766ed3396fe10",
+    "recsys/catalog.py": "a28a77186137bcfa91ab36880567f01a2e65731e04348af39a71d11f6bcce1de",
+    "recsys/inventory.py": "6fdd34df3f66c9e3ab7c51b95cad19f10fd0f7d42a3177a7047945ec652c7b6d",
+    "recsys/model.py": "7e28f8ee2ab4d50ff4f6d038df2d258dc12d344456b85b16fc96f3ac64721464",
+    "recsys/profiles.py": "3d1204ddc86adf32f7fe732b178f3a3194db53186bf75c3d233e7705f9ab31a7",
+    "recsys/recipes.py": "5675161e18835c89dad6626a25e3cf20e1bcf9e474d0330e139e95fc41fb6fcd",
+    "scripts/serving_review_pack.py": "808f55f6b484e47e61d1abb2de115a2b8d8ff17d5d5ea3065984ebc8e609a814"
+  },
+  "training_catalog_hash": "b567455832aa78fc"
+}

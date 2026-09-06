@@ -20,7 +20,7 @@ function sourceTone(source: keyof typeof sourceText): string {
 
 export default function RecipeScreen() {
   const router = useRouter();
-  const { selectedMeal: meal, route, chooseRoute, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
+  const { selectedMeal: meal, route, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Выберите блюдо" />
     <Choice label="К предложениям" onPress={() => router.replace('/recipes')} /></SafeAreaView>;
   const cook = meal.cook_variant;
@@ -58,11 +58,8 @@ export default function RecipeScreen() {
         </View>
         <Text style={styles.lead}>{[explain(meal.reason_codes), explain(meal.route_reason_codes)]
           .filter(Boolean).join(' ')}</Text>
-        <View style={ui.choices}>{meal.available_routes.map((option) =>
-          <Choice key={option} label={option === 'cook' ? 'Приготовить' : 'Нет времени — без готовки'}
-            selected={route === option} disabled={!editable} onPress={() => chooseRoute(option)} />)}</View>
         {route === 'cook' && cook ? <>
-          <Text style={styles.hint}>Недавний чек не гарантирует наличие продуктов дома. В этой версии поправка «закончилось» ещё не подключена.</Text>
+          <Text style={styles.hint}>Проверьте, что эти продукты действительно есть дома.</Text>
           <Text style={styles.sectionTitle}>Ингредиенты</Text>
           <View style={styles.ingredients}>{cook.ingredients.map((item) =>
             <View style={[styles.row, item.source === 'unavailable' && styles.rowNeeded]} key={item.ingredient_id}>

@@ -168,6 +168,51 @@ def effort_confound(
     return {name: pearson(values, missing) for name, values in columns.items()}
 
 
+def effort_residual_variance(
+    *, n_profiles: int = DEFAULT_PROFILES, seed: int = DEFAULT_SEED
+) -> dict[str, float]:
+    """Share of each feature's variance that survives holding effort fixed.
+
+    ``effort_confound`` answers "does this feature move with missing count?",
+    which is the wrong question on its own: ``time_fit`` moves with it at
+    -0.59 purely because longer recipes need more shopping, yet more than half
+    its variance is unrelated to effort and the label gates on it directly.
+    Suppressing a feature on correlation alone would throw that away.
+
+    This answers the sharper question: *once missing count is held fixed, is
+    there anything left?* A feature that is missing count re-expressed —
+    divided by basket size, by ingredient count, priced up — collapses to near
+    zero here, because within a stratum it is nearly constant. A feature that
+    carries its own signal keeps most of its variance.
+
+    Returns within-stratum variance / total variance per feature, in 0..1.
+    """
+    columns: dict[str, list[float]] = {name: [] for name in FEATURE_NAMES}
+    strata: dict[int, dict[str, list[float]]] = defaultdict(
+        lambda: {name: [] for name in FEATURE_NAMES}
+    )
+    for _, request, recipes in _samples(n_profiles, seed):
+        for recipe in recipes:
+            features = compute_features(request, recipe)
+            bucket = int(features["_missing_count"])
+            for name in FEATURE_NAMES:
+                columns[name].append(features[name])
+                strata[bucket][name].append(features[name])
+
+    shares: dict[str, float] = {}
+    for name, values in columns.items():
+        total = statistics.pvariance(values) if len(values) > 1 else 0.0
+        weighted, weight_total = 0.0, 0
+        for bucket in strata.values():
+            group = bucket[name]
+            if len(group) > 1:
+                weighted += statistics.pvariance(group) * len(group)
+                weight_total += len(group)
+        within = weighted / weight_total if weight_total else 0.0
+        shares[name] = (within / total) if total > 1e-12 else 0.0
+    return shares
+
+
 def stratified_signal(
     engine: RecommendationEngine,
     *,

@@ -349,8 +349,25 @@ def compute_features(
 #: this quantity, so a model that also encodes it is duplicating the pipeline's
 #: own work — measured at r = -0.71 between ``model_score`` and missing count
 #: (see ``docs/benchmark-report.md``).
+#:
+#: Membership is decided by *provenance*, not by correlation: a feature belongs
+#: here when it is computed from the missing set itself (``missing_ids``,
+#: ``missing_count``, ``missing_cost``). That rule is what keeps the registry
+#: checkable — correlation alone would sweep in ``time_fit``, which correlates
+#: at -0.59 only because longer recipes also need more shopping, and which the
+#: label deliberately gates on (a 90-minute recipe on a weeknight is a
+#: preference, not a supply constraint). Suppressing it would remove real
+#: signal.
+#:
+#: ``missing_vs_basket`` was added by the ADR-003 patch and not registered here
+#: for three commits. Measured: r = 0.89 with missing count — the strongest
+#: effort correlate of any feature, above both features that *were* declared —
+#: and only 19% of its variance survives conditioning on missing count, i.e. it
+#: is missing count rescaled per user rather than a distinct quantity.
+#: ``recsys.diagnostics.effort_residual_variance`` and its guard test now fail
+#: if another such feature is added without being declared.
 EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
-    {"missing_ratio", "missing_cost_norm"}
+    {"missing_ratio", "missing_cost_norm", "missing_vs_basket"}
 )
 
 #: Features describing *the shop*, not the shopper or the dish.

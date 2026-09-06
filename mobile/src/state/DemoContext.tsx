@@ -139,7 +139,7 @@ function useDemoState() {
     if (!['created', 'duplicate'].includes(result.status)) throw new Error('Не удалось сохранить рецепт.');
     setBook(result.saved_recipe_ids); setNotice('Рецепт в книге. Его можно выбрать через «Повторить».');
   });
-  const savePlan = () => run(async () => {
+  const persistPlan = async () => {
     if (!selectedMeal) throw new Error('Сначала выберите блюдо.');
     if (!pendingPlan.current) {
       pendingPlan.current = {
@@ -155,6 +155,20 @@ function useDemoState() {
     setPlan(result.plan);
     if (result.progress) acceptProgress(result.progress);
     setNotice(`Задание выбрано. Это не заказ и не бронь. ${rewardText(result.plan)}`);
+    return result.plan;
+  };
+
+  const savePlan = () => run(async () => { await persistPlan(); });
+
+  /**
+   * Короткий путь с карточки блюда, когда докупать нечего: задание создаётся и
+   * готовка открывается сразу. Решение принимается по свежему ответу сервера,
+   * а не по состоянию — оно на этом тике ещё пустое.
+   */
+  const savePlanAndCook = () => run(async () => {
+    const saved = await persistPlan();
+    if (!canCompleteCook(saved)) throw new Error('Сначала соберите продукты.');
+    setCooking(true);
   });
   const canConfirmPurchase = Boolean(plan?.selected_product_ids.length
     && plan.status !== 'cancelled' && (plan.status === 'saved' || pendingReceipt.current));
@@ -197,7 +211,7 @@ function useDemoState() {
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
-    cooking, startCooking, pauseCooking, kitchenItems,
+    cooking, startCooking, pauseCooking, savePlanAndCook, kitchenItems,
     equipped,
     toggleUpgrade: (upgradeId: string) =>
       setEquipped((current) => ({ ...current, [upgradeId]: !current[upgradeId] })),

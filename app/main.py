@@ -1,12 +1,15 @@
 import logging
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.contracts import (
     CookingConfirmationRequest,
     HealthResponse,
+    HomeDecorationApplyRequest,
+    HomeDecorationGoalRequest,
+    HomeDecorationSnapshot,
     MealPlanCompletionResponse,
     MealPlanSaveRequest,
     MealPlanSaveResponse,
@@ -23,6 +26,7 @@ from app.contracts import (
     SavedRecipeSaveResponse,
 )
 from app.fraud import ReceiptFraudPolicy, ReferralFraudPolicy
+from app.home_decoration import HomeDecorationItemLocked, HomeDecorationItemNotFound
 from app.meal_plan import MealPlanService
 from app.progress import ProgressService
 from app.recipe_book import RecipeBookService
@@ -146,6 +150,46 @@ def save_recipe(request: SavedRecipeSaveRequest) -> SavedRecipeSaveResponse:
 )
 def list_saved_recipes(user_id: str) -> SavedRecipeCollection:
     return recipe_book_service.list(user_id)
+
+
+@app.get(
+    "/api/v1/home-decoration/{user_id}",
+    response_model=HomeDecorationSnapshot,
+)
+def get_home_decoration(user_id: str) -> HomeDecorationSnapshot:
+    return state_repository.home_decoration(user_id)
+
+
+@app.post(
+    "/api/v1/home-decoration/{user_id}/goal",
+    response_model=HomeDecorationSnapshot,
+)
+def set_home_decoration_goal(
+    user_id: str, request: HomeDecorationGoalRequest,
+) -> HomeDecorationSnapshot:
+    try:
+        return state_repository.set_home_decoration_goal(
+            user_id=user_id, item_id=request.item_id,
+        )
+    except HomeDecorationItemNotFound as exc:
+        raise HTTPException(status_code=404, detail="home_decoration_item_not_found") from exc
+
+
+@app.post(
+    "/api/v1/home-decoration/{user_id}/apply",
+    response_model=HomeDecorationSnapshot,
+)
+def apply_home_decoration(
+    user_id: str, request: HomeDecorationApplyRequest,
+) -> HomeDecorationSnapshot:
+    try:
+        return state_repository.apply_home_decoration(
+            user_id=user_id, item_id=request.item_id,
+        )
+    except HomeDecorationItemNotFound as exc:
+        raise HTTPException(status_code=404, detail="home_decoration_item_not_found") from exc
+    except HomeDecorationItemLocked as exc:
+        raise HTTPException(status_code=409, detail="home_decoration_item_locked") from exc
 
 
 @app.post(

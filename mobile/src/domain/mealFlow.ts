@@ -138,7 +138,7 @@ export function rewardText(plan: MealPlan | null): string {
   switch (plan.reward?.status) {
     case 'awarded': return `За это задание начислено ${plan.reward.xp} XP.`;
     case 'available': return 'Покупка подтверждена. После выполнения задания — 20 XP.';
-    case 'purchase_day_reward_used': return 'За этот покупочный день бонус уже получен. Можно готовить дальше без дополнительных XP.';
+    case 'purchase_day_reward_used': return 'За этот покупочный день бонус уже получен. Можно выполнять другие задания без дополнительных XP.';
     case 'no_purchase_evidence': return 'Можно готовить и сохранить результат. Без подходящей подтверждённой покупки XP не начисляются.';
     default: return 'Ожидаем покупку продуктов задания. Бонус — 20 XP, не более одного на покупочный день.';
   }

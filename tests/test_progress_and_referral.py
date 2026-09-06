@@ -2,9 +2,11 @@ from copy import deepcopy
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi.testclient import TestClient
+import pytest
 
 from app.contracts import ReceiptProgressRequest, ReferralEvaluationRequest
 from app.main import app, progress_service, referral_service
+from app.referral_codes import issue_invite_code, verify_invite_code
 
 
 client = TestClient(app)
@@ -53,11 +55,12 @@ def referral_request(
     *,
     inviter: str = "inviter-1",
     invitee: str = "invitee-1",
+    invite_code: str | None = None,
 ) -> dict:
     return {
         "inviter_user_id": inviter,
         "invitee_user_id": invitee,
-        "invite_code": "INVITE-123",
+        "invite_code": issue_invite_code(inviter) if invite_code is None else invite_code,
     }
 
 
@@ -367,3 +370,58 @@ def test_progress_contract_rejects_unknown_fields() -> None:
     response = client.post("/api/v1/events/receipts", json=payload)
 
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize("code_owner", ["somebody-else", None])
+def test_wrong_invite_code_cannot_credit_an_inviter(code_owner) -> None:
+    qualify_invitee()
+    code = issue_invite_code(code_owner) if code_owner else "INVITE-123"
+    body = post_referral(referral_request(invite_code=code))
+
+    assert body["contract_version"] == "1.3"
+    assert body["status"] == "rejected"
+    assert body["reason_codes"] == ["invite_code_does_not_match_inviter"]
+    assert body["reward"]["inviter_xp"] == body["reward"]["invitee_xp"] == 0
+    assert body["inviter_progress"]["referral_rewards"] == 0
+    assert body["invitee_progress"]["referral_rewards"] == 0
+
+    # Invalid input must not reserve the invitee or prevent a legitimate award.
+    assert post_referral(referral_request())["status"] == "approved"
+
+
+def test_invite_code_is_checked_on_duplicate_requests() -> None:
+    qualify_invitee()
+    post_referral(referral_request())
+    body = post_referral(referral_request(invite_code="INVITE-123"))
+
+    assert body["status"] == "rejected"
+    assert body["reason_codes"] == ["invite_code_does_not_match_inviter"]
+    assert body["reward"]["inviter_xp"] == body["reward"]["invitee_xp"] == 0
+    assert body["inviter_progress"]["avatar_xp"] == 20
+    assert body["invitee_progress"]["avatar_xp"] == 20
+
+
+@pytest.mark.parametrize("code", ["ПРИВЕТ12", "😀😀😀😀😀😀😀😀"])
+def test_non_ascii_invite_code_is_rejected_without_server_error(code) -> None:
+    qualify_invitee()
+    body = post_referral(referral_request(invite_code=code))
+
+    assert body["status"] == "rejected"
+    assert body["reason_codes"] == ["invite_code_does_not_match_inviter"]
+
+
+def test_invite_codes_are_stable_bound_and_allow_human_entry() -> None:
+    code = issue_invite_code("inviter-1")
+    assert code == issue_invite_code("inviter-1")
+    assert code != issue_invite_code("inviter-2")
+    assert len(code) == 8
+    assert verify_invite_code(f" {code.lower()} ", "inviter-1")
+    assert not verify_invite_code(code, "inviter-2")
+
+
+def test_changing_referral_secret_invalidates_previous_codes(monkeypatch) -> None:
+    monkeypatch.setenv("REFERRAL_CODE_SECRET", "first-test-secret")
+    previous = issue_invite_code("inviter-1")
+    monkeypatch.setenv("REFERRAL_CODE_SECRET", "second-test-secret")
+    assert not verify_invite_code(previous, "inviter-1")
+    assert verify_invite_code(issue_invite_code("inviter-1"), "inviter-1")

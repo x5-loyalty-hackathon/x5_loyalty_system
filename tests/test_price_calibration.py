@@ -9,12 +9,14 @@ is rebuilt by ``python -m recsys.calibrate_prices``.
 from __future__ import annotations
 
 import statistics
+from pathlib import Path
 
 from recsys.catalog import (
     BASE_PRICE_RUB,
     PRICE_ERA_MULTIPLIER_BAND,
     PRICE_REFERENCE,
     REFERENCE_MEDIAN_PRICE_RUB,
+    observed_price_era_multiplier,
 )
 
 
@@ -58,3 +60,31 @@ def test_no_ingredient_is_priced_absurdly() -> None:
     for ingredient_id, price in BASE_PRICE_RUB.items():
         assert price > 0, ingredient_id
         assert price <= ceiling, f"{ingredient_id} at {price} exceeds {ceiling}"
+
+
+def test_the_multiplier_is_computed_not_transcribed() -> None:
+    """The generated catalog doc must quote the live ratio, not a memory of it.
+
+    docs/recipe-catalog.md carried the literal "×2.4" while the catalog had
+    drifted to ×2.31. The band test above could not catch it: the band spans
+    1.8-3.0, so both numbers pass it and the prose was free to be wrong.
+    """
+    assert observed_price_era_multiplier() == statistics.median(
+        BASE_PRICE_RUB.values()
+    ) / REFERENCE_MEDIAN_PRICE_RUB
+
+    doc = Path("docs/recipe-catalog.md").read_text(encoding="utf-8")
+    quoted = f"×{observed_price_era_multiplier():.2f}"
+    assert quoted in doc, (
+        f"docs/recipe-catalog.md does not quote the current ratio {quoted} — "
+        "regenerate it with `python -m recsys.generate_recipe_doc`"
+    )
+
+
+def test_generated_catalog_preserves_research_serving_boundary() -> None:
+    from recsys.generate_recipe_doc import build
+
+    generated = build()
+    assert "> Код стенда использует `recsys.experimental`" in generated
+    assert "HTTP API 1.3 такого поля нет" in generated
+    assert "из `recsys/experimental/recipes.py`" in generated

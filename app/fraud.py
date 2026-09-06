@@ -9,6 +9,7 @@ from app.contracts import (
     ReferralEvaluationRequest,
     ReferralStatus,
 )
+from app.referral_codes import verify_invite_code
 
 
 RECEIPT_FUTURE_TOLERANCE = timedelta(minutes=5)
@@ -74,6 +75,13 @@ class ReferralFraudPolicy:
                 ReferralStatus.REJECTED,
                 1.0,
                 ["self_referral"],
+            )
+        # Code ownership is independent of shared-device/payment signals.
+        if not verify_invite_code(request.invite_code, request.inviter_user_id):
+            return ReferralFraudDecision(
+                ReferralStatus.REJECTED,
+                1.0,
+                ["invite_code_does_not_match_inviter"],
             )
         if existing_inviter == request.inviter_user_id:
             return ReferralFraudDecision(

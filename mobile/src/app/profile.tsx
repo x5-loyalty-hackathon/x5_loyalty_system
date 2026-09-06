@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
+import { DemoProfileSelector } from '../components/DemoProfileSelector';
 import { BottomNav } from '../components/BottomNav';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
@@ -24,6 +25,7 @@ export default function ProfileScreen() {
       <View style={styles.shell}>
         <AppHeader title="Профиль" subtitle="Прогресс Домового" back={false} />
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <DemoProfileSelector />
           {progressStatus === 'loading' || progressStatus === 'idle' ? (
             <View style={styles.center}>
               <ActivityIndicator color={color.red} />

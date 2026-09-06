@@ -92,12 +92,14 @@ RELEVANCE_FIRST = RankingPolicy(
 #: docs/research/recsys/experiment-2-service-logic-report.md (variant 1).
 MODEL_ORDER = RankingPolicy(name="model_order", model_weight=1.0, effort_first=False)
 
-#: Chosen empirically as the 75th percentile of ``missing_count`` over the
-#: standard basket panel (``REGIMES[:9]``, 80 users/regime, seed 20260905) —
-#: see docs/research/recsys/experiment-2-service-logic-report.md. Deliberately
-#: below MAX_EFFORT_MISSING_COUNT (8): the point of this cap is to reject the
-#: costliest quarter of *assemblable* recipes as not realistically buyable
-#: today, not merely to clip an extreme tail.
+#: Experimental cap inherited unchanged from the source ML branch. Source fix
+#: 70f85dc corrects its provenance: experiment_panels("train")["база"], frozen
+#: baseline catalog, all assembled candidates before sorting/truncation; the
+#: panel does not sweep REGIMES[:9]. That source's 2026-09-06 remeasurement
+#: reports 603 users, p50=4/p75=6/p90=8/max=14 at base deficit. These numbers
+#: are source provenance, not a new local measurement or HTTP API 1.3 policy.
+#: The cap was calibrated at base deficit and is not a universal percentile
+#: across supply levels. Existing experiment reports remain historical.
 FEASIBILITY_MISSING_CAP = 6
 
 #: Exclude the infeasible, keep the model's order for what's left — distinct

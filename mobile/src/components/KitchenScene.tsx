@@ -4,6 +4,8 @@ import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
 import type { KitchenProduct } from '../domain/kitchen';
 import { color } from '../theme/tokens';
+import { KitchenWallpaper } from './KitchenWallpaper';
+import { KITCHEN_ART } from '../domain/homeDecoration';
 
 /** Высота полосы по умолчанию — как в макете экрана «после чека». */
 const BAND_HEIGHT = 286;
@@ -11,7 +13,7 @@ const BAND_HEIGHT = 286;
  * Арт комнаты: сетка 117×156 по 4 точки на клетку, сдвиг влево как в макете.
  * Показываем столько, сколько влезает: лишнее обрезается по высоте полосы.
  */
-const ART = { left: -39, top: 0, width: 468, height: 624 };
+const ART = KITCHEN_ART;
 
 /**
  * Позы Домового.
@@ -51,6 +53,7 @@ export function KitchenScene({
   pose = 'idle',
   height = BAND_HEIGHT,
   onMenuPress,
+  wallpaperId,
 }: {
   products: readonly KitchenProduct[];
   /** Реплика Домового. Пустая строка — облачко не показывается. */
@@ -60,12 +63,14 @@ export function KitchenScene({
   /** Сколько комнаты показать по высоте. */
   height?: number;
   onMenuPress?: () => void;
+  wallpaperId?: string | null;
 }) {
   const { placed } = placeProducts(products);
 
   return (
     <View style={[styles.band, { height }]}>
       <Image source={require('../../assets/kitchen/kitchen-full.png')} style={styles.art} />
+      <KitchenWallpaper itemId={wallpaperId} />
 
       {placed.map(({ sprite, slot }) => (
         <Image
@@ -83,8 +88,9 @@ export function KitchenScene({
           <Text style={styles.speechText}>{speech}</Text>
         </View>
       ) : null}
-      {onMenuPress ? <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
-        <Text style={styles.menuText}>≡</Text>
+      {onMenuPress ? <Pressable accessibilityRole="button" accessibilityLabel="Оформление дома"
+        testID="open-home-decoration" style={styles.menu} onPress={onMenuPress}>
+        <Text style={styles.menuText}>Обои</Text>
       </Pressable> : null}
       <Image
         source={MASCOT[pose].source}
@@ -118,10 +124,10 @@ const styles = StyleSheet.create({
   },
   speechText: { color: color.brown, fontSize: 13, lineHeight: 17.5, fontWeight: '600' },
   menu: {
-    position: 'absolute', right: 18, top: 14, width: 36, height: 36, borderRadius: 18,
+    position: 'absolute', right: 18, top: 14, width: 65, height: 40, borderRadius: 18, zIndex: 1,
     backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
   },
-  menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
+  menuText: { color: color.brown, fontSize: 13, fontWeight: '700' },
   /** Размеры задаются позой: см. MASCOT. */
   mascot: { position: 'absolute', alignSelf: 'center' },
 });

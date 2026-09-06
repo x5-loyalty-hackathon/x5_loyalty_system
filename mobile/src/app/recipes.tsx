@@ -3,6 +3,7 @@ import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
+import { DemoProfileSelector } from '../components/DemoProfileSelector';
 import { BottomNav } from '../components/BottomNav';
 import { PhotoStub } from '../components/PhotoStub';
 import { Choice, flowStyles as ui } from '../components/FlowControls';
@@ -22,6 +23,7 @@ export default function RecipesScreen() {
     <View style={styles.shell}>
       <AppHeader title="Что поесть?" subtitle="Перед заказом или следующим визитом" />
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
+        <DemoProfileSelector />
         <View style={ui.choices}>
           <Choice label="Для меня" selected={query.mode === null} disabled={busy} onPress={() => void loadRecipes({ mode: null })} />
           {(Object.keys(modeText) as RecommendationMode[]).map((mode) =>

@@ -156,19 +156,93 @@ class ReadyFoodPair:
         return min(priced, key=lambda m: m.median_price_rub) if priced else None
 
 
-# recipe_id -> (concept label, name classifier). Concepts a recipe has no
-# counterpart for are listed in RECIPES_WITHOUT_READY_FOOD_PAIR below.
-_PAIR_DEFINITIONS: tuple[tuple[str, str, str], ...] = (
+@dataclass(frozen=True)
+class PairDefinition:
+    """How one recipe finds its counterparts in the product catalog.
+
+    ``name_pattern`` alone proved too coarse. Product names are the only field
+    present for the whole catalog, but a single "does this word appear" test
+    cannot tell a dish from a different dish that shares a word, and the card
+    facets that could veto it exist for ~6% of products. Two measured
+    consequences, both of which reached the generated catalog document as
+    "готовый аналог":
+
+    * "Гречка с грибами" was paired with "Гречка отварная со сливочным маслом"
+      — none of its nine matches contained a mushroom at all.
+    * "Паста с томатным соусом" was paired with "Паста Санта Бремор с тунцом и
+      лососем", a fish spread for sandwiches, because it was the cheapest thing
+      matching the word "паста".
+
+    So a definition may also carry:
+
+    ``require``
+        A second pattern the name must *also* match — the recipe's defining
+        ingredient. This is what makes a pair mean "the same dish" rather than
+        "a dish from the same family".
+    ``exclude``
+        A pattern that disqualifies a name outright, for false friends that
+        share the keyword but belong to another product category entirely.
+
+    Where ``require`` leaves a recipe with no counterpart, that is the honest
+    answer and the recipe belongs in ``RECIPES_WITHOUT_READY_FOOD_PAIR`` with
+    a stated reason, not paired with an approximation.
+    """
+
+    recipe_id: str
+    concept: str
+    name_pattern: str
+    require: str | None = None
+    exclude: str | None = None
+
+
+# Concepts a recipe has no counterpart for are listed in
+# RECIPES_WITHOUT_READY_FOOD_PAIR below.
+_PAIR_DEFINITIONS: tuple[PairDefinition, ...] = tuple(
+    PairDefinition(*entry) for entry in (
     ("bliny", "Блины и блинчики", r"блин"),
     ("meat_cutlets_with_mash", "Котлеты и тефтели с гарниром", r"котлет|биточек|тефтел|шницел|фрикадельк"),
     ("cheese_tomato_toast", "Сэндвичи и тосты", r"сэндвич|сендвич|тост"),
-    ("pasta_tomato", "Паста и лазанья", r"\bпаста |макарон|спагетти|фузилли|фарфале|лазань"),
-    ("korean_carrot", "Овощи по-корейски", r"по-корейски|по корейски"),
+    # "Паста" is both a dish and a spread. The Санта Бремор / Балтийский Берег
+    # seafood spreads are sandwich paste, not a pasta dish, and being the
+    # cheapest matches they took the headline offer.
+    (
+        "pasta_tomato",
+        "Паста и лазанья",
+        r"\bпаста |макарон|спагетти|фузилли|фарфале|лазань",
+        None,
+        r"санта бремор|балтийский берег|морепродукт|криль|creme le mare|мидии",
+    ),
+    # "по-корейски" is a preparation, not a vegetable: it also matches спаржа,
+    # капуста and фунчоза по-корейски.
+    (
+        "korean_carrot",
+        "Морковь по-корейски",
+        r"по-корейски|по корейски",
+        r"морков",
+        r"куриц",
+    ),
     ("syrniki", "Сырники", r"сырник|сырничк"),
-    ("grilled_chicken_skewers", "Курица гриль и шашлык", r"шашлык|крылышк|крыло цыпленка|голень.*гриль|гриль"),
+    # A bare "гриль" matched "Овощи гриль" (no meat), "Филе индейки гриль"
+    # (turkey) and a grilled-pepper sandwich, while the exact counterpart
+    # ("Шашлык куриный гриль") sat in the same pool. The pattern is now the
+    # skewer/wing forms themselves; "куриное" is not *required*, because a
+    # wing is chicken by default and naming it is optional ("Крыло гриль"),
+    # so the other meats are excluded instead.
+    (
+        "grilled_chicken_skewers",
+        "Куриный шашлык и крылья",
+        r"шашлык|крылышк|крыло|голень",
+        None,
+        r"свинин|индейк|баранин|говядин|овощ",
+    ),
     ("teriyaki_chicken_noodles", "Азиатская лапша и курица терияки", r"терияки|лапша вок|удон|\bвок\b"),
-    ("buckwheat_with_mushrooms", "Гречка с гарниром", r"гречнев|гречк|\bгреч[аеи]\b"),
-    ("chicken_mushroom_salad", "Салат с курицей", r"салат.*(курице|курицей|курочка)|черепаха|метёлк|метелк"),
+    (
+        "chicken_mushroom_salad",
+        "Салат с курицей и грибами",
+        r"салат.*(курице|курицей|курочка)|черепаха|метёлк|метелк",
+        r"гриб|шампиньон",
+        None,
+    ),
     ("caesar_salad", "Салат Цезарь", r"цезарь"),
     ("cottage_cheese_bake", "Творожная запеканка", r"запеканк"),
     ("healthy_cottage_cheese_bake", "Творожная запеканка", r"запеканк"),
@@ -189,6 +263,7 @@ _PAIR_DEFINITIONS: tuple[tuple[str, str, str], ...] = (
     ("chicken_vegetable_stew", "Рагу и жаркое", r"рагу|чахохбили|жарко"),
     ("pumpkin_cream_soup", "Крем-суп из тыквы", r"(крем-суп|суп-пюре|суп).*тыкв|тыкв.*(крем-суп|суп-пюре|суп)"),
     ("vegetable_omelette", "Омлет", r"омлет"),
+    )
 )
 
 #: Recipes with no prepared counterpart in the Moscow slice. Kept explicit so
@@ -203,6 +278,11 @@ RECIPES_WITHOUT_READY_FOOD_PAIR: frozenset[str] = frozenset(
         "greek_salad",
         "apple_pie",
         "carrot_fritters",
+        # Nine products matched the word "гречка"; not one of them contained a
+        # mushroom. The dish exists in the snapshot only as buckwheat with
+        # butter, turkey or liver, so under "a pair means the same dish" this
+        # recipe has no counterpart rather than an approximate one.
+        "buckwheat_with_mushrooms",
         "chicken_vegetable_stew",
         "braised_pork_with_vegetables",
         "chicken_cucumber_salad",
@@ -237,19 +317,27 @@ def _card_contradicts(recipe_dish_type: str | None, meal: ReadyMeal) -> bool:
 
 def _build_pairs() -> tuple[ReadyFoodPair, ...]:
     pairs: list[ReadyFoodPair] = []
-    for recipe_id, concept, pattern in _PAIR_DEFINITIONS:
-        recipe = RECIPES_BY_ID[recipe_id]
-        compiled = re.compile(pattern)
+    for definition in _PAIR_DEFINITIONS:
+        recipe = RECIPES_BY_ID[definition.recipe_id]
+        compiled = re.compile(definition.name_pattern)
+        required = re.compile(definition.require) if definition.require else None
+        excluded = re.compile(definition.exclude) if definition.exclude else None
         meals = tuple(
             meal
             for meal, lowered in zip(READY_FOOD_CATALOG, _LOWER_NAMES)
-            if compiled.search(lowered) and not _card_contradicts(recipe.dish_type, meal)
+            if compiled.search(lowered)
+            and (required is None or required.search(lowered))
+            and (excluded is None or not excluded.search(lowered))
+            and not _card_contradicts(recipe.dish_type, meal)
         )
         if not meals:
             continue
         pairs.append(
             ReadyFoodPair(
-                recipe_id=recipe_id, concept=concept, name_pattern=pattern, meals=meals
+                recipe_id=definition.recipe_id,
+                concept=definition.concept,
+                name_pattern=definition.name_pattern,
+                meals=meals,
             )
         )
     pairs.sort(key=lambda pair: (-len(pair.meals), pair.recipe_id))

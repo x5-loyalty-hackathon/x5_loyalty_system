@@ -1,8 +1,10 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { KITCHEN_BASE_LAYERS, kitchenLayerRect } from '../data/kitchenLayers';
+import { KITCHEN_UPGRADES } from '../data/kitchenUpgrades';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
+import type { ImageSourcePropType as KitchenLayerSource } from 'react-native';
 import type { KitchenProduct } from '../domain/kitchen';
 import { color } from '../theme/tokens';
 
@@ -45,6 +47,7 @@ export function KitchenScene({
   speech,
   pose = 'idle',
   height = BAND_HEIGHT,
+  equipped,
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
@@ -54,16 +57,26 @@ export function KitchenScene({
   pose?: keyof typeof MASCOT;
   /** Сколько комнаты показать по высоте. */
   height?: number;
+  /** Поставленная косметика: id предмета -> стоит ли он на кухне. */
+  equipped?: Record<string, boolean>;
   onMenuPress?: () => void;
 }) {
   const { placed } = placeProducts(products);
+
+  // Поставленный предмет подменяет спрайт своего слоя. Габариты совпадают с
+  // базовым, поэтому подмена ничего не двигает. Если на один слой поставлено
+  // несколько вариантов, выигрывает последний в каталоге.
+  const skins = new Map<string, KitchenLayerSource>();
+  for (const upgrade of KITCHEN_UPGRADES) {
+    if (equipped?.[upgrade.id]) skins.set(upgrade.layer, upgrade.source);
+  }
 
   return (
     <View style={[styles.band, { height }]}>
       {KITCHEN_BASE_LAYERS.map((layer) => (
         <Image
           key={layer.id}
-          source={layer.source}
+          source={skins.get(layer.id) ?? layer.source}
           style={[styles.layer, kitchenLayerRect(layer)]}
           resizeMode="stretch"
         />

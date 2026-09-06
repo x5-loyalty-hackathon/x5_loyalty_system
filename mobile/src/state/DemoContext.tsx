@@ -40,6 +40,9 @@ function useDemoState() {
   const busyRef = useRef(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // Поставленная косметика: id предмета -> стоит ли он на кухне. Открытие
+  // считается от уровня и живёт на сервере, а выбор оформления — локальный.
+  const [equipped, setEquipped] = useState<Record<string, boolean>>({});
   const [progress, setProgress] = useState<ProgressSnapshot | null>(null);
   const [progressStatus, setProgressStatus] = useState<AsyncStatus>('idle');
   const [progressError, setProgressError] = useState<string | null>(null);
@@ -195,6 +198,9 @@ function useDemoState() {
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
     cooking, startCooking, pauseCooking, kitchenItems,
+    equipped,
+    toggleUpgrade: (upgradeId: string) =>
+      setEquipped((current) => ({ ...current, [upgradeId]: !current[upgradeId] })),
     actionError, notice, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }

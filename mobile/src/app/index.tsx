@@ -14,7 +14,7 @@ import { color } from '../theme/tokens';
 const COLLAPSED_HEIGHT = 220;
 export default function KitchenScreen() {
   const router = useRouter();
-  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products } = useDemo();
+  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products, equipped } = useDemo();
   const [stageHeight, setStageHeight] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const sheetHeight = useRef(new Animated.Value(COLLAPSED_HEIGHT)).current;
@@ -36,7 +36,7 @@ export default function KitchenScreen() {
   };
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
     <View style={styles.stage} onLayout={(event) => setStageHeight(event.nativeEvent.layout.height)}>
-      <KitchenScene products={products} height={stageHeight} pose={cooking ? 'cooking' : 'idle'}
+      <KitchenScene products={products} height={stageHeight} equipped={equipped} pose={cooking ? 'cooking' : 'idle'}
         speech={cooking ? '' : 'Что поедим? Подберём блюдо для готовки или без неё.'} />
       <View style={styles.sheetWrap} pointerEvents="box-none">
         <KitchenSheet height={sheetHeight} collapsedHeight={COLLAPSED_HEIGHT} expandedHeight={expandedHeight}

@@ -15,8 +15,11 @@ from recsys.llm_intent_eval import (
     IntentStudy,
     MockIntentClient,
     _blend_neighbor_history,
+    _cf_knn_neighbors,
+    _cf_user_vectors,
     _cosine_similarity,
     _deranged_partners,
+    _ingredient_count_vector,
     _knn_neighbors,
     _validate_cookable,
     analyse_study,
@@ -81,6 +84,20 @@ def test_judge_never_sees_arm_identity_or_internal_scores(study_fixture, request
         assert len({repr(case.payload["shopper_context"]) for case in cases}) == 1
         for case in cases:
             assert not (_all_keys(case.payload) & FORBIDDEN_PAYLOAD_KEYS)
+
+
+@pytest.mark.parametrize("ranking_policy", ["effort_first", "model_order"])
+def test_cf_similar_method_builds_a_study_and_is_recorded_in_metadata(ranking_policy) -> None:
+    panel = build_panel(PanelSpec(name=f"llm_intent_cf_study_{ranking_policy}", n_users=8, seed=707))
+    study = build_study(
+        panel, ranking_policy=ranking_policy, max_personas=6, seed=808,
+        similar_k=3, similar_method="cf",
+    )
+    assert study.similar_method == "cf"
+    assert study.similar_k == 3
+    for persona_id in study.persona_ids:
+        by_arm = {case.arm: case for case in study.cases if case.persona_id == persona_id}
+        assert ARM_SIMILAR in by_arm
 
 
 def test_world_selection_matches_ranking_policy(production_study, experimental_study) -> None:
@@ -181,6 +198,36 @@ def test_blend_neighbor_history_unions_fields_and_is_order_independent() -> None
     assert categories == sorted(set(categories))
     assert brands == sorted(set(brands))
     assert isinstance(saved, set)
+
+
+def test_ingredient_count_vector_sums_quantities_across_receipts() -> None:
+    panel = build_panel(PanelSpec(name="llm_intent_cf_counts", n_users=5, seed=11))
+    profile = panel.profiles[0]
+    vector = _ingredient_count_vector(profile)
+    expected: dict[str, float] = {}
+    for receipt in profile.purchase_history:
+        for item in receipt.items:
+            for ingredient_id in item.ingredient_ids:
+                expected[ingredient_id] = expected.get(ingredient_id, 0.0) + item.quantity
+    assert vector == expected
+
+
+def test_cf_user_vectors_are_l2_bounded_and_cover_the_whole_pool() -> None:
+    panel = build_panel(PanelSpec(name="llm_intent_cf_vectors", n_users=15, seed=11))
+    vectors = _cf_user_vectors(panel.profiles, n_factors=4, seed=0)
+    assert set(vectors) == {p.user.user_id for p in panel.profiles}
+    # NMF factors are non-negative by construction.
+    assert all(value >= 0.0 for vector in vectors.values() for value in vector.values())
+
+
+def test_cf_knn_neighbors_are_never_the_persona_itself() -> None:
+    panel = build_panel(PanelSpec(name="llm_intent_cf_knn", n_users=15, seed=11))
+    neighbors = _cf_knn_neighbors(panel.profiles, panel.profiles, k=3, seed=0)
+    assert set(neighbors) == {p.user.user_id for p in panel.profiles}
+    for profile in panel.profiles:
+        own_id = profile.user.user_id
+        assert len(neighbors[own_id]) == 3
+        assert own_id not in {n.user.user_id for n in neighbors[own_id]}
 
 
 @pytest.mark.parametrize("study_fixture", ["production_study", "experimental_study"])

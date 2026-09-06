@@ -373,6 +373,13 @@ class IntentStudy:
     #: the original single-look-alike design; a k-NN blend is the product
     #: hypothesis proposed after v3.1 (docs/research/recsys/llm-intent-eval.md).
     similar_k: int = 1
+    #: "category" (shipped v3.2/v3.3: cosine over 7-category purchase share)
+    #: or "cf" (NMF-learned user embeddings over ~90 ingredients — see
+    #: _cf_user_vectors). Untested hypothesis proposed after the k-NN blend
+    #: win: a properly-learned taste embedding instead of a hand-picked
+    #: 7-dimensional vector, the direct analogue of Spotify/Yandex Music's
+    #: collaborative filtering.
+    similar_method: str = "category"
 
     @property
     def persona_ids(self) -> tuple[str, ...]:
@@ -410,15 +417,19 @@ def _cosine_similarity(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
 
-def _knn_neighbors(
-    targets: list[SyntheticProfile], pool: list[SyntheticProfile], *, k: int
+def _knn_neighbors_from_vectors(
+    targets: list[SyntheticProfile],
+    pool: list[SyntheticProfile],
+    *,
+    k: int,
+    vectors: dict[str, dict[str, float]],
 ) -> dict[str, list[SyntheticProfile]]:
     """For each of ``targets``, the ``k`` most similar *other* profiles in
-    ``pool`` by cosine similarity over category-purchase-share — "shoppers
-    like you", blended, as opposed to ``shuffled``'s single uniformly-random
-    partner or a single 1-nearest-neighbor look-alike (noisy: one neighbor's
-    idiosyncratic history is not obviously more representative than the
-    target's own).
+    ``pool`` by cosine similarity over a precomputed per-user vector —
+    "shoppers like you", blended, as opposed to ``shuffled``'s single
+    uniformly-random partner or a single 1-nearest-neighbor look-alike (noisy:
+    one neighbor's idiosyncratic history is not obviously more representative
+    than the target's own).
 
     ``pool`` should be the full panel, not just the sampled ``targets``, so a
     small ``--personas`` run still gets a meaningful neighborhood to search.
@@ -426,7 +437,6 @@ def _knn_neighbors(
     """
     if k < 1:
         raise ValueError("k must be >= 1")
-    vectors = {profile.user.user_id: _category_share_vector(profile) for profile in pool}
     by_id = {profile.user.user_id: profile for profile in pool}
     neighbors: dict[str, list[SyntheticProfile]] = {}
     for profile in targets:
@@ -441,6 +451,97 @@ def _knn_neighbors(
         )
         neighbors[own_id] = [by_id[candidate_id] for _, candidate_id in scored[:k]]
     return neighbors
+
+
+def _knn_neighbors(
+    targets: list[SyntheticProfile], pool: list[SyntheticProfile], *, k: int
+) -> dict[str, list[SyntheticProfile]]:
+    """Baseline "similar": cosine similarity over 7-category purchase share —
+    a hand-picked, coarse vector. See ``_cf_knn_neighbors`` for the learned
+    alternative.
+    """
+    vectors = {profile.user.user_id: _category_share_vector(profile) for profile in pool}
+    return _knn_neighbors_from_vectors(targets, pool, k=k, vectors=vectors)
+
+
+def _ingredient_count_vector(profile: SyntheticProfile) -> dict[str, float]:
+    """Implicit-feedback counts per ingredient — the item space collaborative
+    filtering factors over, analogous to a listener's per-track play counts."""
+    counts: dict[str, float] = {}
+    for receipt in profile.purchase_history:
+        for item in receipt.items:
+            for ingredient_id in item.ingredient_ids:
+                counts[ingredient_id] = counts.get(ingredient_id, 0.0) + item.quantity
+    return counts
+
+
+def _cf_user_vectors(
+    pool: list[SyntheticProfile], *, n_factors: int = 16, seed: int = 0
+) -> dict[str, dict[str, float]]:
+    """Collaborative-filtering user embeddings via NMF on the user x
+    ingredient implicit-count matrix — the learned analogue of a Spotify-style
+    latent taste vector, in place of ``_category_share_vector``'s hand-picked
+    7-category share. Ingredients (~90) are a far richer item space than the
+    7 broad categories the baseline "similar" compares on, and the factors
+    are fit from co-purchase structure across the whole panel rather than
+    read off one user's marginal frequencies.
+
+    Requires the optional ``ml`` extra (numpy + scikit-learn; see
+    pyproject.toml's ``[project.optional-dependencies]``) — imported lazily so
+    the default ("category") method stays dependency-free.
+    """
+    import numpy as np
+    from sklearn.decomposition import NMF
+
+    ingredient_counts = [_ingredient_count_vector(profile) for profile in pool]
+    ingredient_ids = sorted({ingredient_id for counts in ingredient_counts for ingredient_id in counts})
+    if not ingredient_ids:
+        return {profile.user.user_id: {} for profile in pool}
+    index = {ingredient_id: position for position, ingredient_id in enumerate(ingredient_ids)}
+    matrix = np.zeros((len(pool), len(ingredient_ids)))
+    for row, counts in enumerate(ingredient_counts):
+        for ingredient_id, count in counts.items():
+            matrix[row, index[ingredient_id]] = count
+
+    n_components = max(1, min(n_factors, len(pool) - 1, len(ingredient_ids)))
+    model = NMF(n_components=n_components, init="nndsvda", random_state=seed, max_iter=500)
+    user_factors = model.fit_transform(matrix)
+    return {
+        profile.user.user_id: {f"f{i}": float(value) for i, value in enumerate(user_factors[row])}
+        for row, profile in enumerate(pool)
+    }
+
+
+def _cf_knn_neighbors(
+    targets: list[SyntheticProfile],
+    pool: list[SyntheticProfile],
+    *,
+    k: int,
+    n_factors: int = 16,
+    seed: int = 0,
+) -> dict[str, list[SyntheticProfile]]:
+    """"similar", with neighbors found in a learned NMF taste-embedding space
+    instead of the raw 7-category share vector. See ``_cf_user_vectors``."""
+    vectors = _cf_user_vectors(pool, n_factors=n_factors, seed=seed)
+    return _knn_neighbors_from_vectors(targets, pool, k=k, vectors=vectors)
+
+
+SIMILAR_METHODS = ("category", "cf")
+
+
+def _select_neighbors(
+    similar_method: str,
+    profiles: list[SyntheticProfile],
+    pool: list[SyntheticProfile],
+    *,
+    k: int,
+    seed: int,
+) -> dict[str, list[SyntheticProfile]]:
+    if similar_method == "cf":
+        return _cf_knn_neighbors(profiles, pool, k=k, seed=seed)
+    if similar_method == "category":
+        return _knn_neighbors(profiles, pool, k=k)
+    raise ValueError(f"unknown similar_method {similar_method!r}, expected one of {SIMILAR_METHODS}")
 
 
 def _blend_neighbor_history(neighbors: list[SyntheticProfile]) -> tuple[list, list[str], list[str], set[str]]:
@@ -596,7 +697,8 @@ def _recommendation_payload_experimental(served: ExpRecipeRecommendation, recipe
 
 
 def _build_experimental_study(
-    panel: Panel, *, top_k: int, seed: int, max_personas: int | None, similar_k: int = 1
+    panel: Panel, *, top_k: int, seed: int, max_personas: int | None,
+    similar_k: int = 1, similar_method: str = "category",
 ) -> IntentStudy:
     catalog = exp_baseline_catalog()
     recipe_lookup = {recipe.recipe_id: recipe for recipe in catalog}
@@ -612,7 +714,7 @@ def _build_experimental_study(
     selected = _selected_pairs(panel, max_personas, seed=seed)
     profiles = [profile for profile, _ in selected]
     partners = _deranged_partners(profiles, seed=seed)
-    neighbors = _knn_neighbors(profiles, panel.profiles, k=similar_k)
+    neighbors = _select_neighbors(similar_method, profiles, panel.profiles, k=similar_k, seed=seed)
     cases: list[IntentCase] = []
     for (profile, inventory), partner in zip(selected, partners, strict=True):
         neighbor_history, neighbor_categories, neighbor_brands, neighbor_saved = _blend_neighbor_history(
@@ -675,6 +777,7 @@ def _build_experimental_study(
         top_k=top_k,
         seed=seed,
         similar_k=similar_k,
+        similar_method=similar_method,
     )
 
 
@@ -910,7 +1013,7 @@ def _recommendation_payload_production(meal, recipe_lookup) -> dict[str, object]
 
 def _build_production_study(
     panel: Panel, *, top_k: int, seed: int, max_personas: int | None,
-    model_variant: str = "default", similar_k: int = 1,
+    model_variant: str = "default", similar_k: int = 1, similar_method: str = "category",
 ) -> IntentStudy:
     # Same split app/main.py's default construction produces: MLRecommendationEngine()
     # with no recipe_catalog argument trains on the frozen 37-recipe baseline
@@ -937,7 +1040,7 @@ def _build_production_study(
     selected = _selected_pairs(panel, max_personas, seed=seed)
     profiles = [profile for profile, _ in selected]
     partners = _deranged_partners(profiles, seed=seed)
-    neighbors = _knn_neighbors(profiles, panel.profiles, k=similar_k)
+    neighbors = _select_neighbors(similar_method, profiles, panel.profiles, k=similar_k, seed=seed)
     cases: list[IntentCase] = []
     for (profile, inventory), partner in zip(selected, partners, strict=True):
         neighbor_history, neighbor_categories, neighbor_brands, neighbor_saved = _blend_neighbor_history(
@@ -1007,23 +1110,26 @@ def _build_production_study(
         top_k=top_k,
         seed=seed,
         similar_k=similar_k,
+        similar_method=similar_method,
     )
 
 
 def build_study(
     panel: Panel, *, ranking_policy: str, top_k: int = 3, seed: int = 20260906,
-    max_personas: int | None = None, model_variant: str = "default", similar_k: int = 1,
+    max_personas: int | None = None, model_variant: str = "default",
+    similar_k: int = 1, similar_method: str = "category",
 ) -> IntentStudy:
     world = RANKING_POLICY_WORLD[ranking_policy]
     if world == "production":
         return _build_production_study(
             panel, top_k=top_k, seed=seed, max_personas=max_personas,
-            model_variant=model_variant, similar_k=similar_k,
+            model_variant=model_variant, similar_k=similar_k, similar_method=similar_method,
         )
     if model_variant != "default":
         raise ValueError("model_variant is only wired up for the production world so far")
     return _build_experimental_study(
-        panel, top_k=top_k, seed=seed, max_personas=max_personas, similar_k=similar_k
+        panel, top_k=top_k, seed=seed, max_personas=max_personas,
+        similar_k=similar_k, similar_method=similar_method,
     )
 
 
@@ -1250,6 +1356,7 @@ def _metadata(study: IntentStudy, client: IntentClient, *, live: bool, replicate
         "ranking_policy": study.ranking_policy,
         "model_variant": study.model_variant,
         "similar_k": study.similar_k,
+        "similar_method": study.similar_method,
         "top_k": study.top_k,
         "seed": study.seed,
         "personas": len(study.persona_ids),
@@ -1287,6 +1394,15 @@ def main(argv: list[str] | None = None) -> int:
         "recsys.llm_intent_eval._knn_neighbors). 1 is a single look-alike; "
         "5-10 smooths over one neighbor's idiosyncratic history.",
     )
+    parser.add_argument(
+        "--similar-method",
+        choices=SIMILAR_METHODS,
+        default="category",
+        help="category (default, shipped v3.2/v3.3): cosine over 7-category "
+        "purchase share. cf: NMF-learned user taste embeddings over ~90 "
+        "ingredients (needs the `ml` extra: pip install -e '.[ml]') — the "
+        "collaborative-filtering upgrade proposed after the k-NN blend win.",
+    )
     parser.add_argument("--replicates", type=int, default=1)
     parser.add_argument("--seed", type=int, default=20260906)
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
@@ -1310,7 +1426,8 @@ def main(argv: list[str] | None = None) -> int:
     panel = development_splits()["validation"]
     study = build_study(
         panel, ranking_policy=args.ranking_policy, top_k=args.top_k, seed=args.seed,
-        max_personas=args.personas or None, model_variant=args.model_variant, similar_k=args.similar_k,
+        max_personas=args.personas or None, model_variant=args.model_variant,
+        similar_k=args.similar_k, similar_method=args.similar_method,
     )
     rows, usage = run_study(study, client, IntentCache(args.cache), live=args.live, replicates=args.replicates)
     result = {

@@ -1,5 +1,5 @@
 {
-  "cases_sha256": "3e7347ce920d61a0a9633a4b8734c3a6581541071098c3e60973b26ee4e06210",
+  "cases_sha256": "88e18ac1482b9277495e1b2060bdf4c1be0cdf5f43a5500f9e31c77badbbd53d",
   "contract_version": "1.3",
   "diagnostics": {
     "archetype_counts": {
@@ -8,14 +8,14 @@
       "time_limited": 9,
       "value": 7
     },
-    "empty_profiles": 12,
-    "profiles_with_results": 28,
-    "returned_meals": 43
+    "empty_profiles": 1,
+    "profiles_with_results": 39,
+    "returned_meals": 77
   },
   "engine": "model",
   "format_version": "1",
   "full_archive_included": false,
-  "git_head": "05cc691775bc4728bfdd5c0c8a21a85a14f77774",
+  "git_head": "d1d40eefe414a8ce8fa24612b792f081a375ba88",
   "limitations": [
     "Synthetic profiles and inventory; not representative measurements of X5 customers.",
     "Full current serving catalog, not the mobile three-recipe demo or a new training baseline.",
@@ -27,7 +27,7 @@
     "No causal uplift or economics is measured by this export."
   ],
   "llm_input_format": "profile-feed-v1",
-  "llm_inputs_sha256": "1286427bcba9e5791af49f271f0aea98c442f9a1c9d64d21cf6aadf0b5d8f068",
+  "llm_inputs_sha256": "6623976e10174564f529731f1ca7cb22e9c339ae1fd74cc19d2b4cc2e65e00e6",
   "model_fallback": false,
   "n_profiles": 40,
   "quality_status": "not_assessed",
@@ -41,8 +41,8 @@
     "app/safety.py": "f7597ee2efe3dcbea5014fc6dad95098587a725c2e78f6d10de0abe5a1e187bd",
     "app/service.py": "578bf36625f609a6dd11ca65f9d2ae78e13be1690453ed54edb6619b73e8f0bf",
     "recsys/catalog.py": "a28a77186137bcfa91ab36880567f01a2e65731e04348af39a71d11f6bcce1de",
-    "recsys/inventory.py": "6fdd34df3f66c9e3ab7c51b95cad19f10fd0f7d42a3177a7047945ec652c7b6d",
-    "recsys/model.py": "7e28f8ee2ab4d50ff4f6d038df2d258dc12d344456b85b16fc96f3ac64721464",
+    "recsys/inventory.py": "d03aae72eac3c48db62178e1fa17f938130c500bfb12cb5d10f4fcb3e5aac536",
+    "recsys/model.py": "bfd4a320d2b6f9f9b92306ff360a4f0682bd6440067e1bb9f818ef135924aab2",
     "recsys/profiles.py": "3d1204ddc86adf32f7fe732b178f3a3194db53186bf75c3d233e7705f9ab31a7",
     "recsys/recipes.py": "5675161e18835c89dad6626a25e3cf20e1bcf9e474d0330e139e95fc41fb6fcd",
     "scripts/serving_review_pack.py": "808f55f6b484e47e61d1abb2de115a2b8d8ff17d5d5ea3065984ebc8e609a814"

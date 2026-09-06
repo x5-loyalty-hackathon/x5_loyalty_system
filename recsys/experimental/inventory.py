@@ -31,12 +31,40 @@ from recsys.sku_mapping import synthetic_sku_id
 # docs/research/recsys/economics-and-simulation.md), not measured X5 supply
 # rates. They're kept as module constants so evaluation/simulation
 # sensitivity scenarios can override them explicitly.
-P_NO_PRODUCT_AT_ALL = 0.08
+#
+# P_NO_PRODUCT_AT_ALL was 0.08, rolled independently per ingredient with no
+# retry. Compounded across a recipe's required ingredients — and shared
+# staples (egg, onion, flour...) sit in most recipes at once — a single
+# unlucky roll on one shared ingredient could silently zero out a large slice
+# of the catalog for one unlucky persona: measured on the live-run panel, 37
+# of 208 personas had literally no assemblable recipe anywhere in the
+# 47-recipe catalog (docs/research/recsys/llm-intent-eval.md §11.1), and
+# no_safe_product was 85% of the failures, not store mismatches. A real
+# supermarket practically always carries a staple ingredient in *some* form;
+# 8% independent-per-item absence was never a realistic supply model. See
+# recsys/inventory.py (the production twin of this module) for the same fix
+# applied there first.
+P_NO_PRODUCT_AT_ALL = 0.02
 P_WITHIN_RADIUS = 0.70
 P_SAFETY_INELIGIBLE = 0.05
 P_OUT_OF_STOCK = 0.10
 P_MARKDOWN_OFFERED = 0.50
 P_MARKDOWN_ALREADY_EXPIRED = 0.10
+
+#: Independent full-price listings generated per stocked ingredient. A single
+#: listing meant a single roll of P_SAFETY_INELIGIBLE/P_OUT_OF_STOCK could
+#: remove an ingredient — and therefore every recipe needing it — with no
+#: recourse for ingredients outside RESCUE_CATEGORIES, which never get a
+#: markdown backup either. Real shelves rarely carry just one SKU of a staple.
+FULL_PRICE_ATTEMPTS_PER_INGREDIENT = 2
+
+#: Share of listings placed at the shopper's own home store rather than the
+#: annex/hub. Previously uniform across the 3 nearby stores, which made the
+#: single-store basket-assembly requirement fail even when every ingredient
+#: was individually in stock somewhere nearby — a real regular grocery store
+#: predictably carries most of what you need, it isn't a coin flip between
+#: three interchangeable branches.
+HOME_STORE_WEIGHT = 0.70
 
 
 @dataclass(frozen=True)
@@ -60,9 +88,25 @@ class InventoryAssumptions:
     #: calibrated against 2018-2019 receipts with an observed 2.4x era factor;
     #: this dial asks what happens if that factor is wrong.
     price_level: float = 1.0
+    #: Independent full-price listings per stocked ingredient (see module docstring).
+    full_price_attempts: int = FULL_PRICE_ATTEMPTS_PER_INGREDIENT
+    #: Share of listings placed at the shopper's home store vs annex/hub.
+    home_store_weight: float = HOME_STORE_WEIGHT
 
 
 DEFAULT_INVENTORY_ASSUMPTIONS = InventoryAssumptions()
+
+
+def _choose_store(
+    rng: random.Random,
+    *,
+    home_store_id: str,
+    other_stores: list[str],
+    assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS,
+) -> str:
+    if rng.random() < assumptions.home_store_weight:
+        return home_store_id
+    return rng.choice(other_stores)
 
 
 def _distance_km(
@@ -177,30 +221,36 @@ def generate_inventory(
     )
     ids = list(ingredient_ids) if ingredient_ids is not None else list(INGREDIENTS)
     nearby_stores = [home_store_id, f"{home_store_id}_annex", "store_hub_1"]
+    other_stores = nearby_stores[1:]
     products: list[InventoryProduct] = []
     index = 0
     for ingredient_id in ids:
         if rng.random() < assumptions.no_product_at_all:
             continue
-        store_id = rng.choice(nearby_stores)
-        products.append(
-            _full_price_product(
-                rng,
-                ingredient_id=ingredient_id,
-                store_id=store_id,
-                now=now,
-                user_radius_km=user_radius_km,
-                index=index,
-                assumptions=assumptions,
+        for _ in range(assumptions.full_price_attempts):
+            store_id = _choose_store(
+                rng, home_store_id=home_store_id, other_stores=other_stores, assumptions=assumptions
             )
-        )
-        index += 1
+            products.append(
+                _full_price_product(
+                    rng,
+                    ingredient_id=ingredient_id,
+                    store_id=store_id,
+                    now=now,
+                    user_radius_km=user_radius_km,
+                    index=index,
+                    assumptions=assumptions,
+                )
+            )
+            index += 1
 
         if (
             ingredient_category(ingredient_id) in RESCUE_CATEGORIES
             and rng.random() < markdown_rate
         ):
-            store_id = rng.choice(nearby_stores)
+            store_id = _choose_store(
+                rng, home_store_id=home_store_id, other_stores=other_stores, assumptions=assumptions
+            )
             products.append(
                 _markdown_product(
                     rng,

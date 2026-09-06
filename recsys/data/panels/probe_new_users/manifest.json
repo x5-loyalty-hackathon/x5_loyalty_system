@@ -5,13 +5,15 @@
   "seed": 20260905,
   "regime": "novelty=mid/promo=mid/repeat=mid",
   "assumptions": {
-   "no_product_at_all": 0.08,
+   "no_product_at_all": 0.02,
    "within_radius": 0.7,
    "safety_ineligible": 0.05,
    "out_of_stock": 0.1,
    "markdown_offered": 0.5,
    "markdown_already_expired": 0.1,
-   "price_level": 1.0
+   "price_level": 1.0,
+   "full_price_attempts": 2,
+   "home_store_weight": 0.7
   },
   "now": "2026-09-03T18:00:00+03:00",
   "cohort": "holdout_users"
@@ -19,9 +21,9 @@
  "generator_version": 1,
  "saved_recipe_pool_hash": "dda665585c844cfc",
  "profiles_checksum": "422715d39e54c696",
- "inventories_checksum": "133a4b7bf8532ecd",
+ "inventories_checksum": "91213246533fd39f",
  "n_profiles": 200,
- "n_products": 22355,
+ "n_products": 42999,
  "archetype_counts": {
   "routine": 69,
   "value": 57,

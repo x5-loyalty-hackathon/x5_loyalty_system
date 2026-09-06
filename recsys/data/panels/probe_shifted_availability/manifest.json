@@ -11,7 +11,9 @@
    "out_of_stock": 0.35,
    "markdown_offered": 0.5,
    "markdown_already_expired": 0.1,
-   "price_level": 1.0
+   "price_level": 1.0,
+   "full_price_attempts": 2,
+   "home_store_weight": 0.7
   },
   "now": "2026-09-03T18:00:00+03:00",
   "cohort": "base"
@@ -19,9 +21,9 @@
  "generator_version": 1,
  "saved_recipe_pool_hash": "dda665585c844cfc",
  "profiles_checksum": "777fc3a7219aabf3",
- "inventories_checksum": "a77ebbc98956279f",
+ "inventories_checksum": "df99ecdb283239a4",
  "n_profiles": 200,
- "n_products": 15777,
+ "n_products": 28706,
  "archetype_counts": {
   "time_limited": 24,
   "routine": 94,

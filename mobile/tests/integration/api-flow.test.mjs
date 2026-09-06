@@ -15,6 +15,53 @@ import { kitchenProducts } from '../../src/domain/kitchen.ts';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 
 for (const route of ['cook', 'ready']) {
+  test(`default standalone demo → real API: ${route} works without host setup and recovers lost receipt response`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    const receipts = []; let loseFirst = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        receipts.push(receipt);
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseFirst) { loseFirst = false; throw new Error('response lost after commit'); }
+        return result;
+      },
+    });
+    assert.equal(render().isDemoCheckout, true);
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(receipts.length, 0);
+    assert.equal(await render().checkout(), false);
+    assert.equal(render().kitchenItems.length, beforeKitchen);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.deepEqual(receipts[0], receipts[1]);
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen);
+    assert.match(render().notice, /Демо-покупка подтверждена/);
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(receipts.length, 2);
+  });
+}
+
+for (const route of ['cook', 'ready']) {
   test(`host checkout → real API: ${route}, cancellation and lost response do not duplicate purchases/XP`, { timeout: 15000 }, async (t) => {
     const call = await api(t);
     const body = async (method, path, payload) => {

@@ -15,7 +15,7 @@ export default function ProductsScreen() {
   const {
     selectedMeal: meal, route, fulfillment, markdown,
     choices, chooseProduct, chooseRoute, takeReadyMeal, readyProduct, basket, plan, checkout,
-    busy, editable,
+    busy, editable, isDemoCheckout,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
     <View style={ui.panel}><Text style={ui.text}>Сначала выберите блюдо. Отдельного каталога случайных товаров здесь нет.</Text>
@@ -98,6 +98,7 @@ export default function ProductsScreen() {
 
     <View style={styles.basketBar}>
       <Text style={styles.basketHint}>
+        {isDemoCheckout ? 'Демо: оформление и покупка моделируются.\n' : ''}
         {plan?.status === 'collected' ? 'Куплено — готовка на Кухне'
           : plan?.status === 'completed' ? 'Задание выполнено'
           : !basket.products.length && !basket.error ? 'Всё есть — готовка на Кухне' : 'К оформлению'}

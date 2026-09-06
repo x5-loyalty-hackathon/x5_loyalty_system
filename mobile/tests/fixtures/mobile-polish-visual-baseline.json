@@ -8,9 +8,9 @@
       "reason": "Approved 07.09: existing task action opens cooking on Kitchen or ready progress; unsaved draft remains reachable. No layout/style changes."
     },
     "src/app/products.tsx": {
-      "git_blob_sha1": "643ea195330eb44c375be1355e2c044d6b884797",
+      "git_blob_sha1": "9a7b5d37c38c9369a2db7e31a7df43ebeb49918d",
       "approved_on": "2026-09-07",
-      "reason": "Approved 07.09: existing CTA hands off host checkout, never save/receipt/cook cycle; matching ready SKU and truthful captions. No layout/style changes."
+      "reason": "Approved 07.09: existing CTA hands off checkout, matching ready SKU, truthful captions. Follow-up approval: default PoC simulates external purchase with explicit pre-tap demo text in existing basketHint. No new controls, styles or assets."
     },
     "src/app/recipe.tsx": {
       "git_blob_sha1": "0b900ae671ac7293861678134c121500bb62c44a",

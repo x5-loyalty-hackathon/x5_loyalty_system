@@ -19,6 +19,7 @@ interface DecorationFailure { action: DecorationAction; message: string }
 const initialQuery: Query = { mode: null, anchor: 'home', storeId: null };
 const emptyBasket = { products: [], total: 0, savings: 0, error: 'Сначала выберите блюдо.' };
 function useDemoState(commerceHost?: CommerceHost) {
+  const isDemoCheckout = (commerceHost ?? getCommerceHost()).mode === 'demo';
   const [profile, setProfile] = useState(DEFAULT_DEMO_PROFILE);
   const profileRef = useRef(DEFAULT_DEMO_PROFILE);
   // A generation also distinguishes A → B → A: user ID alone cannot reject
@@ -327,7 +328,7 @@ function useDemoState(commerceHost?: CommerceHost) {
       setKitchenItems((current) => mergeKitchenProducts(current, purchased));
     }
     // Keep the locked basket for retries; cooking never deletes whole packs.
-    setNotice(`${message} ${rewardText(result.meal_plan)}`);
+    setNotice(`${isDemoCheckout ? 'Демо-покупка подтверждена. ' : ''}${message} ${rewardText(result.meal_plan)}`);
   };
   // Synthetic driver retained for API/regression tests, never used by game buttons.
   const confirmPurchase = () => run(async (isCurrent) => {
@@ -344,7 +345,8 @@ function useDemoState(commerceHost?: CommerceHost) {
     if (pendingReceipt.current && pendingPlan.current) {
       await acceptPurchase(pendingReceipt.current, pendingPlan.current, isCurrent); return;
     }
-    // Check integration before activating a task; standalone browsing is not checkout.
+    // The standalone default models external checkout. It never bypasses plan
+    // activation or receipt verification, and never replaces a failing real host.
     const host = commerceHost ?? getCommerceHost();
     const saved = await persistPlan(isCurrent, userId);
     if (!saved || !isCurrent()) return;
@@ -393,7 +395,7 @@ function useDemoState(commerceHost?: CommerceHost) {
     equipped,
     toggleUpgrade: (upgradeId: string) =>
       setEquipped((current) => ({ ...current, [upgradeId]: !current[upgradeId] })),
-    actionError, notice, checkout, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
+    actionError, notice, checkout, isDemoCheckout, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }
 type DemoValue = ReturnType<typeof useDemoState>;

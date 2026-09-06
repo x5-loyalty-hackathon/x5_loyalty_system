@@ -63,6 +63,14 @@ test('actual basket button only hands off checkout, never saves/confirms/cooks/n
   assert.equal(calls, 1); assert.deepEqual(tree.routes, []);
 });
 
+test('default PoC visibly discloses the simulated purchase before tapping checkout', () => {
+  const warning = 'Демо: оформление и покупка моделируются.';
+  const copy = (tree) => tree.nodes.filter((node) => node.type === 'Text')
+    .map((node) => [node.props.children].flat(Infinity).filter((item) => typeof item === 'string').join('')).join('\n');
+  assert.ok(copy(screen('products', { ...state, isDemoCheckout: true })).includes(warning));
+  assert.equal(copy(screen('products', { ...state, isDemoCheckout: false })).includes(warning), false);
+});
+
 test('actual basket button is disabled for invalid/empty carts and purchased/completed tasks', () => {
   for (const patch of [
     { basket: { ...state.basket, error: 'Unavailable' } },

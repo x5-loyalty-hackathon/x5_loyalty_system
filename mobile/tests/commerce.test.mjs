@@ -3,6 +3,7 @@ import test from 'node:test';
 import { providerHarness } from './helpers/providerHarness.mjs';
 import { makeDemoReceipt } from '../src/domain/mealFlow.ts';
 import { DEMO_NOW, DEMO_PROFILES } from '../src/fixtures/recommendationRequest.ts';
+import { demoCommerceHost, getCommerceHost } from '../src/domain/commerce.ts';
 
 const product = (id, fulfillment = ['delivery'], source = 'full_price') => ({
   sku_id: id, name: id, category: 'vegetable', store_id: 'store_17', price: 30,
@@ -87,12 +88,56 @@ test('A → B → A restores delivery/markdown defaults and ignores old ready ha
   assert.equal(render().basket.products[0].sku_id, 'sale');
 });
 
-test('missing commerce host does not activate a plan or fabricate a receipt', async () => {
+test('standalone checkout works by default; browsing is not a simulated purchase', async () => {
   const { render, plans, receipts } = await setup();
-  assert.equal(await render().checkout(), false);
-  assert.match(render().actionError, /автономном демо/);
+  assert.equal(render().isDemoCheckout, true);
   assert.equal(plans.length, 0); assert.equal(receipts.length, 0);
-  assert.equal(render().editable, true);
+  assert.equal(await render().checkout(), true, render().actionError);
+  assert.equal(plans.length, 1); assert.equal(receipts.length, 1);
+  assert.equal(receipts[0].receipt.items[0].sku_id, 'sale');
+  assert.equal(receipts[0].receipt.purchased_at, DEMO_NOW);
+  assert.equal(render().plan.status, 'collected'); assert.equal(render().cooking, false);
+  assert.match(render().notice, /Демо-покупка подтверждена/);
+  assert.equal(await render().checkout(), false);
+  assert.equal(receipts.length, 1);
+});
+
+test('demo adapter returns stable evidence on retry and rejects checkout/plan mismatch', async () => {
+  const { render, plans } = await setup();
+  await render().savePlan();
+  const request = { checkoutId: plans[0].plan_id, plan: plans[0], products: render().basket.products };
+  const first = await demoCommerceHost.openCheckout(request);
+  assert.deepEqual(await demoCommerceHost.openCheckout(request), first);
+  assert.equal(first.receipt.receipt.purchased_at, DEMO_NOW);
+  await assert.rejects(demoCommerceHost.openCheckout({ ...request, checkoutId: 'other' }), /не совпадает/);
+});
+
+test('configured external host failure never falls back to a demo purchase', async () => {
+  const { render, receipts } = await setup({ mode: 'external', openCheckout: async () => { throw new Error('host unavailable'); } });
+  assert.equal(render().isDemoCheckout, false);
+  assert.equal(await render().checkout(), false);
+  assert.equal(receipts.length, 0); assert.equal(render().plan.status, 'saved');
+  assert.equal(render().actionError, 'host unavailable');
+});
+
+test('web host overrides standalone demo; removing it restores the default', () => {
+  const previous = globalThis.__X5_COMMERCE_HOST__;
+  try {
+    const external = { mode: 'external', openCheckout: async () => ({ status: 'cancelled' }) };
+    globalThis.__X5_COMMERCE_HOST__ = external;
+    assert.equal(getCommerceHost(), external);
+    delete globalThis.__X5_COMMERCE_HOST__;
+    assert.equal(getCommerceHost(), demoCommerceHost);
+  } finally { globalThis.__X5_COMMERCE_HOST__ = previous; }
+});
+
+test('backend failure in standalone demo does not show success or add kitchen items', async () => {
+  const { render } = await setup(undefined, { submitReceipt: async () => { throw new Error('backend unavailable'); } });
+  const before = render().kitchenItems;
+  assert.equal(await render().checkout(), false);
+  assert.deepEqual(render().kitchenItems, before);
+  assert.doesNotMatch(render().notice ?? '', /Демо-покупка подтверждена/);
+  assert.equal(render().plan.status, 'saved');
 });
 
 test('cancelled external checkout preserves editable draft without a purchase or XP', async () => {

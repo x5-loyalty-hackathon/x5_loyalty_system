@@ -1,8 +1,6 @@
-// Explicit synthetic HOST driver. It does not add checkout UI to the game.
-// Requires a disposable running backend and web demo; see docs/commerce-host.md.
+// Out-of-the-box PoC acceptance: no injected host, console commands or flags.
+// Requires a disposable running backend and ordinary web demo.
 import assert from 'node:assert/strict';
-import { makeDemoReceipt } from '../src/domain/mealFlow.ts';
-import { DEMO_NOW } from '../src/fixtures/recommendationRequest.ts';
 
 const { chromium } = await import(process.env.X5_PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch();
@@ -16,47 +14,27 @@ const text = (value) => page.getByText(value, { exact: true }).filter({ visible:
 const button = (value) => page.getByRole('button', { name: value, exact: true }).filter({ visible: true });
 const waitPost = (suffix) => page.waitForResponse((r) => r.url().endsWith(suffix) && r.request().method() === 'POST');
 const checkout = async () => {
+  const response = waitPost('/events/receipts');
   await button('К оформлению').click();
-  await page.waitForFunction(() => Boolean(globalThis.__X5_SMOKE_CHECKOUT__));
-  return page.evaluate(() => globalThis.__X5_SMOKE_CHECKOUT__.request);
+  return (await response).json();
 };
-const finishCheckout = (result) => page.evaluate((value) => {
-  globalThis.__X5_SMOKE_CHECKOUT__.resolve(value);
-  globalThis.__X5_SMOKE_CHECKOUT__ = undefined;
-}, result);
 try {
   await page.goto(process.env.X5_SMOKE_URL || 'http://localhost:8081', { waitUntil: 'networkidle' });
   await text('Рецепты').click();
   await text('Спагетти болоньезе').click();
   await button('Выбрать товары').click();
-  await button('К оформлению').click();
-  await page.getByText('В автономном демо оно не подключено.', { exact: false }).filter({ visible: true }).waitFor();
+  await page.getByText('Демо: оформление и покупка моделируются.', { exact: false }).filter({ visible: true }).waitFor();
   assert.equal(posts.filter((p) => p.path.endsWith('/meal-plans')).length, 0);
-  console.log('PASS: no host = no invented order, receipt or task');
-
-  // The external test host resolves cancellation/purchase separately from taps.
-  await page.evaluate(() => {
-    globalThis.__X5_COMMERCE_HOST__ = { openCheckout: (request) => new Promise((resolve) => {
-      globalThis.__X5_SMOKE_CHECKOUT__ = { request, resolve };
-    }) };
-  });
-  const cart = await checkout();
-  const receiptCount = posts.filter((p) => p.path.endsWith('/events/receipts')).length;
-  await finishCheckout({ status: 'cancelled' });
-  await text('Оформление отменено. Выбранные товары остались в корзине.').waitFor();
-  assert.equal(posts.filter((p) => p.path.endsWith('/events/receipts')).length, receiptCount);
   await text('Кухня').click();
   await button('Мой план →').click();
-  const retry = await checkout();
-  assert.deepEqual(retry.products, cart.products);
-  const received = waitPost('/events/receipts');
-  await finishCheckout({ status: 'purchased', receipt: makeDemoReceipt(retry.plan, retry.products, DEMO_NOW) });
-  const bought = await (await received).json();
+  if (process.env.X5_SMOKE_SCREENSHOT) await page.screenshot({ path: `${process.env.X5_SMOKE_SCREENSHOT}.before-checkout.png` });
+  const bought = await checkout();
   assert.equal(bought.meal_plan.status, 'collected'); assert.equal(bought.progress.avatar_xp, 0);
-  await text('Куплено — готовка на Кухне').waitFor();
+  await page.getByText('Демо-покупка подтверждена.', { exact: false }).filter({ visible: true }).waitFor();
+  await page.getByText('Куплено — готовка на Кухне', { exact: false }).filter({ visible: true }).waitFor();
   assert.equal(await button('К оформлению').isDisabled(), true);
   assert.equal(posts.filter((p) => p.path.endsWith('/complete-cook')).length, 0);
-  console.log('PASS: cancel preserves cart; purchased cook cart does not cook or replay receipts');
+  console.log('PASS: demo explained before tap; no host setup; cart preserved; real API confirms synthetic purchase');
 
   await text('Кухня').click(); await button('Готовить →').click();
   const cookedResponse = page.waitForResponse((r) => r.url().endsWith('/complete-cook'));
@@ -65,17 +43,16 @@ try {
   assert.equal(cooked.status, 'completed'); assert.equal(cooked.progress.avatar_xp, 20);
   await text('Рецепты').click(); await text('Спагетти болоньезе').click();
   await button('Купить готовое').click();
-  const readyRequest = await checkout();
-  assert.equal(readyRequest.plan.selected_route, 'ready');
-  const readyResponse = waitPost('/events/receipts');
-  await finishCheckout({ status: 'purchased', receipt: makeDemoReceipt(readyRequest.plan, readyRequest.products, DEMO_NOW) });
-  const ready = await (await readyResponse).json();
+  const ready = await checkout();
+  assert.equal(ready.meal_plan.selected_route, 'ready');
   assert.equal(ready.meal_plan.status, 'completed');
   assert.equal(ready.progress.avatar_xp, 20, 'same purchase day must not award again');
-  await text('Задание выполнено').waitFor();
+  await page.getByText('Задание выполнено', { exact: false }).filter({ visible: true }).waitFor();
   assert.equal(await button('К оформлению').isDisabled(), true);
   await text('Кухня').click(); await button('Мой прогресс →').click();
   assert.equal(posts.filter((p) => p.path.endsWith('/complete-cook')).length, 1);
+  assert.equal(posts.filter((p) => p.path.endsWith('/events/receipts') && p.body.meal_plan_id).length, 2);
+  assert.equal(await page.evaluate(() => globalThis.__X5_COMMERCE_HOST__ === undefined), true);
   assert.deepEqual(errors, []);
   if (process.env.X5_SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.X5_SMOKE_SCREENSHOT });
   console.log('PASS: Kitchen cook completion; ready completes on receipt; no additional XP; no JS errors');

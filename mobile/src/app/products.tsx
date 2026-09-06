@@ -24,13 +24,19 @@ export default function ProductsScreen() {
   const groups = purchaseGroups(meal, route, fulfillment, markdown);
   const stores = route === 'cook' ? meal.cook_variant?.store_selection : null;
   const variant = route === 'cook' ? meal.cook_variant : meal.ready_variant;
-  const ready = route === 'cook' ? meal.ready_variant?.product_options[0] : null;
+  // Готовое блюдо на обоих маршрутах показываем одной широкой карточкой.
+  // Раньше выбранный маршрут разворачивал сетку одинаковых позиций по
+  // магазинам: выбирать там было нечего, а дубли читались как ошибка.
+  const readyOptions = meal.ready_variant?.product_options ?? [];
+  const readyPicked = readyOptions.find((option) => option.sku_id === choices.ready) ?? readyOptions[0] ?? null;
+  const ready = route === 'ready' ? readyPicked : readyOptions[0] ?? null;
+  const taken = route === 'ready';
   const hasPlan = Boolean(plan);
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
     <AppHeader title="Мой план" subtitle={meal.title} />
     <ScrollView contentContainerStyle={styles.scroll}>
       {ready ? <>
-        <Text style={styles.sectionTitle}>Можно не готовить</Text>
+        <Text style={styles.sectionTitle}>{taken ? 'Готовое блюдо выбрано' : 'Можно не готовить'}</Text>
         <View style={styles.readyCard}>
           <PhotoStub label="фото" style={styles.readyPhoto} />
           <View style={styles.readyCopy}>
@@ -39,14 +45,14 @@ export default function ProductsScreen() {
             <Text style={styles.readyUnit}>{Math.round(ready.distance_km * 1000)} м · {ready.store_id}</Text>
             <Text style={styles.readyName} numberOfLines={2}>{ready.name}</Text>
           </View>
-          <Pressable style={styles.readyAdd} disabled={!editable} onPress={() => chooseRoute('ready')}>
-            <Text style={styles.readyAddText}>Взять</Text>
+          <Pressable style={[styles.readyAdd, taken && styles.readyAddDone]} disabled={!editable || taken}
+            onPress={() => chooseRoute('ready')}>
+            <Text style={styles.readyAddText}>{taken ? 'В корзине' : 'Взять'}</Text>
           </Pressable>
         </View>
       </> : null}
 
-      {route === 'ready' && meal.available_routes.includes('cook') ? <>
-        <Text style={styles.sectionTitle}>Готовое блюдо выбрано</Text>
+      {taken && meal.available_routes.includes('cook') ? <>
         <View style={styles.assistant}>
           <Image source={require('../../assets/domovoi/mascot-think.png')} resizeMode="contain" style={styles.assistantMascot} />
           <Text style={styles.assistantText}>Чек завершит сценарий сразу, без готовки.</Text>
@@ -58,7 +64,7 @@ export default function ProductsScreen() {
         </View>
       </> : null}
 
-      {groups.map((group) => <View key={group.id} style={{ marginBottom: 18 }}>
+      {(taken ? [] : groups).map((group) => <View key={group.id} style={{ marginBottom: 18 }}>
         <View style={[styles.sectionRow, { marginHorizontal: 16 }]}>
           <Text style={[styles.sectionTitle, { marginHorizontal: 0 }]}>{group.name}</Text>
           <Text style={styles.sectionMeta}>{group.options.length ? `${group.options.length} товара` : ''}</Text>
@@ -149,6 +155,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end', paddingHorizontal: 16, paddingVertical: 11,
     borderRadius: 14, backgroundColor: color.red, minHeight: 44, justifyContent: 'center',
   },
+  readyAddDone: { backgroundColor: color.green },
   readyAddText: { color: color.white, fontSize: 13, fontWeight: '700' },
 
   assistant: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, marginBottom: 12 },

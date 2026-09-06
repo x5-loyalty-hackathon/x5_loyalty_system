@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from app.contracts import Receipt, ReceiptItem
+from recsys.experimental.contracts import Receipt, ReceiptItem
 from recsys.catalog import CATEGORIES
 from recsys.dish_signal import (
     DISH_FEATURE_NAMES,
@@ -22,9 +22,9 @@ from recsys.dish_signal import (
     ready_meal_receipt_item,
     ready_meal_ref,
 )
-from recsys.profiles import DEFAULT_NOW
+from recsys.experimental.profiles import DEFAULT_NOW
 from recsys.ready_food_pairs import READY_FOOD_PAIRS, pairs_for_plu
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES_BY_ID
 
 
 def _pair(recipe_id: str):
@@ -157,12 +157,12 @@ def test_recent_taste_outweighs_old_taste() -> None:
 def test_taste_decays_far_slower_than_perishable_stock() -> None:
     """Liking borsch does not expire on the dairy clock.
 
-    ``recsys.pantry`` models whether food is physically gone — dairy at five
+    ``recsys.experimental.pantry`` models whether food is physically gone — dairy at five
     days, meat at four. This models whether a preference still holds, which is
     a different quantity on a different scale, and the two must not be
     accidentally tuned to the same number.
     """
-    from recsys.pantry import CATEGORY_HALF_LIFE_DAYS
+    from recsys.experimental.pantry import CATEGORY_HALF_LIFE_DAYS
 
     perishables = [CATEGORY_HALF_LIFE_DAYS[c] for c in ("dairy", "meat", "vegetable")]
     assert TASTE_HALF_LIFE_DAYS > 5 * max(perishables)

@@ -3,13 +3,24 @@
 Proof of concept персонального игрового слоя поверх программы лояльности X5 для
 недельного хакатона ИТМО по кейсу X5 Tech.
 
-Проект перешёл от discovery к реализации recipe-first PoC. После покупки
-recommender предлагает персональные рецепты, позволяет выбрать для недостающих
-ингредиентов markdown/full-price товары в достижимом радиусе и передать список
-в доставку либо сохранить к следующему визиту. Следующий чек обновляет личную
-кухню Домового. Текущие решения зафиксированы в
-[ADR-001](docs/decisions/001-recipe-first-poc.md), а технический контракт — в
-[design doc](docs/technical-design.md).
+Проект перешёл от discovery к реализации meal-first PoC. После покупки
+recommender предлагает персональный приём пищи с вариантами `приготовить` и
+`взять готовое`. Для рецепта можно выбрать markdown/full-price ингредиенты в
+одной точке рядом с текущим местом, домом или работой и передать список в
+доставку либо сохранить к следующему визиту. Сам рецепт сохраняется в книгу и
+становится вариантом `repeat`. Подтверждённый чек и подтверждение готовки обновляют личную
+кухню Домового. Продуктовые и контрактные решения зафиксированы в
+[ADR-001](docs/decisions/001-recipe-first-poc.md),
+[ADR-002](docs/decisions/002-personal-meal-contract.md),
+[ADR-003](docs/decisions/003-challenge-mode-selection.md) и
+[ADR-004](docs/decisions/004-recipe-book-and-shopping-context.md); актуальная схема API
+описана в [design doc](docs/technical-design.md).
+
+**Реализованный контракт наград, API 1.3:**
+[игровые задания и XP — ADR-005](docs/decisions/005-game-tasks-and-xp.md).
+Награда требует выбранного задания и подходящей покупки; автоматические XP за
+обычный чек отменены. Предел — один бонус 20 XP на покупочный день. Декор и
+новые сцены не объявлены реализованными; [остаток до PoC](docs/poc-readiness.md).
 
 ## Что должно войти в PoC
 
@@ -29,6 +40,10 @@ recommender предлагает персональные рецепты, поз
 
 - [Текущее состояние](docs/project-status.md) — что уже известно и что делать
   дальше;
+- [Чеклист до PoC и защиты](docs/poc-readiness.md) — оставшиеся задачи,
+  критерии готовности и очередь свежих изменений mobile;
+- [Интеграция frontend + ML: памятка для команды](docs/integration-handoff.md) —
+  исходные коммиты, адаптации к API 1.2, карта кода и проверки перед слиянием;
 - [Исследование существующего X5 Клуба](docs/research/x5-loyalty-current-state.md)
   — факты, выводы и вопросы для брейншторма;
 - [Синтез конкурентного исследования](docs/research/benchmarks/competitive-synthesis.md)
@@ -41,6 +56,16 @@ recommender предлагает персональные рецепты, поз
   обсуждения;
 - [Журнал решений](docs/decision-log.md) — источник принятых продуктовых и
   инженерных решений;
+- [Контракт `cook / ready`](docs/decisions/002-personal-meal-contract.md) —
+  единая meal-рекомендация, планы, события и LLM-персоны;
+- [Выбор типа челленджа](docs/decisions/003-challenge-mode-selection.md) — один
+  default `current/repeat/explore`, объяснимые альтернативы и full-basket opt-in;
+- [Книга рецептов и точка сбора](docs/decisions/004-recipe-book-and-shopping-context.md)
+  — `save → repeat`, home/work/current/custom и одна cook-точка;
+- [Игровые задания и XP](docs/decisions/005-game-tasks-and-xp.md) — три цели на
+  основе current/repeat/explore, условия покупки/награды, предел и тесты API 1.3;
+- [Одностраничный план пилота](docs/pilot-plan.md) — test/control, покупочные
+  дни, маржинальный guardrail и правила остановки;
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
   компактное описание согласованной концепции;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
@@ -85,6 +110,34 @@ curl -sS \
   http://127.0.0.1:8000/api/v1/recommendations
 ```
 
+Flow с альтернативой готового блюда. **Перед сохранением плана подставьте в
+`examples/meal_plan_request.json` актуальный `offer_id` выбранного блюда из
+первого ответа** (или отправьте изменённый JSON через Swagger UI). Статический
+`REPLACE_WITH_ISSUED_OFFER_ID` намеренно не принимается как выданная рекомендация.
+После перезапуска сервера нужно получить новый оффер.
+
+```bash
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/meal_recommendation_request.json \
+  http://127.0.0.1:8000/api/v1/meal-recommendations
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/saved_recipe_request.json \
+  http://127.0.0.1:8000/api/v1/saved-recipes
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/meal_plan_request.json \
+  http://127.0.0.1:8000/api/v1/meal-plans
+
+curl -sS \
+  -H 'Content-Type: application/json' \
+  --data @examples/ready_receipt_event.json \
+  http://127.0.0.1:8000/api/v1/events/receipts
+```
+
 Receipt/progress и referral можно воспроизвести после запуска API:
 
 ```bash
@@ -101,9 +154,10 @@ curl -sS \
 
 Сервис по умолчанию использует детерминированный mock recommender и
 process-local in-memory state; state сбрасывается при перезапуске процесса —
-это ограничение PoC, а не production design. Обученный ML-адаптер
-подключается без изменения HTTP-контракта через `RecommendationEngine.rank()`
-и переменную окружения:
+это ограничение PoC, а не production design. Синтетический ML/Recsys
+smoke-адаптер подключается без изменения HTTP-контракта через
+`RecommendationEngine.rank()` и переменную окружения. Он проверяет интеграцию
+и не должен выдаваться за финальную модель или измеренный uplift:
 
 ```bash
 RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
@@ -111,12 +165,18 @@ RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
 
 ## Быстрый старт ML/Recsys
 
+После объединения и исправлений 06.09 рабочий scorer использует API 1.3 и 37 замороженных
+обучающих рецептов (общий каталог — 47). Исследовательские политики и типы ML-ветки
+сохранены отдельно: [границы, импорты и команды](recsys/experimental/README.md).
+`recsys.benchmark`, `panels`, `human_eval` и `experiment1/2/3_*` проверяют этот
+исследовательский контур, **не конечную выдачу мобильного приложения**.
+
 Требует тот же `.venv`, что и backend, плюс необязательные extras только для
 офлайн-калибровки на реальных данных (`pip install -e '.[ml]'` — не нужно
 для запуска модели/оценки/симуляции).
 
 ```bash
-python -m pytest tests/test_recsys_*.py       # 42 теста контура
+python -m pytest tests/test_recsys_*.py       # тесты контура
 python -m recsys.generate_examples            # 10 профилей через реальный API
 python -m recsys.evaluation                   # hit rate own vs shuffled-history
 python -m recsys.simulation                   # funnel на 1k/10k пользователях

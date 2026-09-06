@@ -1,6 +1,6 @@
 """A ranking ceiling *given the features a ranker can see*, not an absolute one.
 
-``recsys.evaluation.oracle_relevant`` is a binary verdict, not an order, and
+``recsys.experimental.evaluation.oracle_relevant`` is a binary verdict, not an order, and
 two of its three branches key on quantities a ``RecommendationEngine`` can
 actually observe: ``is_saved`` and ``coverage >= HIGH_COVERAGE``. The third
 branch (novel vs. familiar) further depends on ``ArchetypeParams.discovery_acceptance``,
@@ -19,8 +19,8 @@ label, not as evidence of real-user relevance.
 
 from __future__ import annotations
 
-from app.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
-from recsys.model import HIGH_COVERAGE, compute_features, compute_user_stats
+from recsys.experimental.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
+from recsys.experimental.model import HIGH_COVERAGE, compute_features, compute_user_stats
 
 #: Discrete precedence tiers mirroring oracle_relevant's own if/elif order:
 #: a saved recipe always outranks a merely-high-coverage one, which always

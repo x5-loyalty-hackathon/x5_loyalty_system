@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from app.contracts import (
+from recsys.experimental.contracts import (
     FulfillmentOption,
     InventoryProduct,
     ModelRecommendation,
@@ -25,8 +25,8 @@ from app.contracts import (
     SafetyStatus,
     UserProfile,
 )
-from app.safety import SafetyPolicy
-from app.service import (
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import (
     BLENDED,
     EFFORT_FIRST,
     FEASIBILITY_MISSING_CAP,
@@ -101,7 +101,7 @@ def _request(recipes: list[Recipe]) -> RecommendationRequest:
 class FakeEngine:
     """Ranks by an explicit, caller-supplied score per recipe id.
 
-    ``recsys.model.MLRecommendationEngine`` is deliberately not used here:
+    ``recsys.experimental.model.MLRecommendationEngine`` is deliberately not used here:
     these tests are about what ``RecommendationService``/``RankingPolicy`` do
     with a fixed ``model_score``, the same fixation the real experiment 2
     script relies on, so the score has to be a dial, not a trained output.

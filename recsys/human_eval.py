@@ -3,8 +3,8 @@
 Why
 ---
 Every relevance number this project has is self-referential.
-``recsys.evaluation.oracle_relevant`` is derived from the same archetype rules
-as ``recsys.model._label_for_pair``, so agreement with it measures whether a
+``recsys.experimental.evaluation.oracle_relevant`` is derived from the same archetype rules
+as ``recsys.experimental.model._label_for_pair``, so agreement with it measures whether a
 model reproduced a rule we wrote, not whether a person would cook the dish.
 CatBoost scoring 100% against it is the proof: you cannot beat 100%, and a
 metric at its ceiling has stopped measuring.
@@ -48,15 +48,15 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from app.contracts import RecipeRecommendation, RecommendationRequest
-from app.safety import SafetyPolicy
-from app.service import MODEL_ORDER, RecommendationService
+from recsys.experimental.contracts import RecipeRecommendation, RecommendationRequest
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import MODEL_ORDER, RecommendationService
 from recsys._seeds import stable_seed
-from recsys.catalog_freeze import baseline_catalog
-from recsys.evaluation import oracle_relevant
-from recsys.model import compute_user_stats
+from recsys.experimental.catalog_freeze import baseline_catalog
+from recsys.experimental.evaluation import oracle_relevant
+from recsys.experimental.model import compute_user_stats
 from recsys.panels import Panel, development_splits
-from recsys.profiles import SyntheticProfile
+from recsys.experimental.profiles import SyntheticProfile
 from recsys.ready_food_pairs import ready_meal_options
 
 OUTPUT_ROOT = Path("recsys/data/human_eval")
@@ -215,7 +215,7 @@ def build_engines() -> dict[str, object]:
     from recsys.benchmark import RandomEngine
     from recsys.catboost_model import CatBoostRecommendationEngine
     from recsys.coverage_heuristic_engine import CoverageHeuristicEngine
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.model import MLRecommendationEngine
     from recsys.oracle_ranking_engine import OracleRankingEngine
 
     catalog = baseline_catalog()

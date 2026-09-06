@@ -1,5 +1,5 @@
 from recsys.catalog import BASE_PRICE_RUB, INGREDIENTS
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES_BY_ID
 from recsys.sku_mapping import INGREDIENT_SKU_MAPPINGS, synthetic_sku_id
 
 

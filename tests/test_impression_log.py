@@ -21,13 +21,13 @@ from app.impression_log import (
     estimate_policy_value,
     log_completeness,
 )
-from app.recommender import DeterministicMockEngine
-from app.safety import SafetyPolicy
-from app.service import EFFORT_FIRST, RecommendationService
-from app.contracts import RecommendationRequest
-from recsys.catalog_freeze import baseline_catalog
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import EFFORT_FIRST, RecommendationService
+from recsys.experimental.contracts import RecommendationRequest
+from recsys.experimental.catalog_freeze import baseline_catalog
 from recsys.panels import PanelSpec, build_panel
-from recsys.profiles import DEFAULT_NOW
+from recsys.experimental.profiles import DEFAULT_NOW
 
 RECIPES = [f"r{i}" for i in range(10)]
 

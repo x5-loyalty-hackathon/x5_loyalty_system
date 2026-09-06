@@ -25,6 +25,7 @@ of them are allowed to be missing.
 from __future__ import annotations
 
 from app.contracts import Recipe, RecipeIngredient
+from recsys.recipe_metadata import RECIPE_METADATA, RecipeMetadata
 from recsys.catalog import (
     DEFAULT_SERVINGS,
     TO_TASTE,
@@ -89,15 +90,16 @@ def _recipe(
     ordered = [i for i in ingredient_ids if not is_seasoning(i)]
     ordered += [i for i in ingredient_ids if is_seasoning(i)]
     overrides = amounts or {}
+    RECIPE_METADATA[recipe_id] = RecipeMetadata(
+        servings=servings, dish_type=dish_type, cuisine=cuisine,
+    )
     return Recipe(
         recipe_id=recipe_id,
         title=title,
         ingredients=[_ing(i, servings=servings, amounts=overrides) for i in ordered],
         verified=True,
         preparation_minutes=preparation_minutes,
-        servings=servings,
-        dish_type=dish_type,
-        cuisine=cuisine,
+        meal_intent_id=recipe_id,
     )
 
 

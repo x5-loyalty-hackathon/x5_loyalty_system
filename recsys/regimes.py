@@ -2,7 +2,7 @@
 
 Why this exists
 ---------------
-``recsys.profiles`` defines one population — four archetypes with fixed
+``recsys.experimental.profiles`` defines one population — four archetypes with fixed
 parameters. Any A/B run against that single population answers "which arm wins
 **in this one world**", and we have no way to know whether that world resembles
 Пятёрочка. Two equally plausible worlds can rank recommenders in opposite
@@ -48,7 +48,7 @@ from __future__ import annotations
 import itertools
 from dataclasses import dataclass, replace
 
-from recsys.profiles import ARCHETYPES, ArchetypeParams, ArchetypeTable
+from recsys.experimental.profiles import ARCHETYPES, ArchetypeParams, ArchetypeTable
 
 #: dial -> level -> multiplier applied to that dial's archetype parameter.
 DIALS: dict[str, dict[str, float]] = {

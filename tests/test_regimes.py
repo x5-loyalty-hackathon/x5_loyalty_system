@@ -1,6 +1,6 @@
 from dataclasses import fields
 
-from recsys.profiles import ARCHETYPES, ArchetypeParams
+from recsys.experimental.profiles import ARCHETYPES, ArchetypeParams
 from recsys.regimes import (
     DIALS,
     NEUTRAL_LEVEL,

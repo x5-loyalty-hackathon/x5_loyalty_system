@@ -68,3 +68,23 @@ def test_generation_is_deterministic_given_a_seed() -> None:
     b = generate_inventory(random.Random(42), now=DEFAULT_NOW, home_store_id="s", user_radius_km=3.0)
     assert [p.sku_id for p in a] == [p.sku_id for p in b]
     assert [p.price for p in a] == [p.price for p in b]
+
+
+def test_generation_normalizes_caller_ingredient_order() -> None:
+    ids = ["milk", "egg", "tomato"]
+    a = generate_inventory(
+        random.Random(42),
+        now=DEFAULT_NOW,
+        home_store_id="s",
+        user_radius_km=3.0,
+        ingredient_ids=ids,
+    )
+    b = generate_inventory(
+        random.Random(42),
+        now=DEFAULT_NOW,
+        home_store_id="s",
+        user_radius_km=3.0,
+        ingredient_ids=reversed(ids),
+    )
+
+    assert a == b

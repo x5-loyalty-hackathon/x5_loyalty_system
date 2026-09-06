@@ -4,9 +4,9 @@ Why more than one
 -----------------
 A synthetic A/B needs something to play the user. Whatever we pick becomes the
 ground truth, and the winner is then a property of that choice as much as of the
-recommender. ``recsys.evaluation.oracle_relevant`` already shows the failure
+recommender. ``recsys.experimental.evaluation.oracle_relevant`` already shows the failure
 mode in miniature: it shares its rule structure with the label generator that
-trained ``recsys.model``, so a good score there partly measures the model
+trained ``recsys.experimental.model``, so a good score there partly measures the model
 agreeing with its own teacher.
 
 The fix is not a better single simulator — there is no way to validate one
@@ -28,7 +28,7 @@ The four below disagree by construction:
     and minutes. It is the adversarial reading of the product: a user who only
     asks "is this cheaper than buying it ready?".
 ``OracleResponder``
-    The incumbent rule from ``recsys.evaluation``. Kept precisely *because* it
+    The incumbent rule from ``recsys.experimental.evaluation``. Kept precisely *because* it
     is self-referential — it is the control that shows what a compromised
     simulator looks like next to the others.
 
@@ -55,14 +55,14 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Callable, Protocol
 
-from app.contracts import (
+from recsys.experimental.contracts import (
     IngredientSource,
     Recipe,
     RecipeRecommendation,
     RecommendationMode,
     RecommendationRequest,
 )
-from recsys.profiles import ArchetypeParams, SyntheticProfile
+from recsys.experimental.profiles import ArchetypeParams, SyntheticProfile
 
 
 class UserAction(str, Enum):
@@ -312,10 +312,10 @@ class EconomicResponder:
 
 
 class OracleResponder:
-    """The incumbent relevance rule from ``recsys.evaluation``.
+    """The incumbent relevance rule from ``recsys.experimental.evaluation``.
 
     Included as a *control*, not as a peer. It descends from the same archetype
-    rules that generated ``recsys.model``'s training labels, so an arm built on
+    rules that generated ``recsys.experimental.model``'s training labels, so an arm built on
     that model has a structural advantage here that it does not have anywhere
     else. Watching it disagree with the other three is the point.
     """
@@ -323,7 +323,7 @@ class OracleResponder:
     name = "oracle_selfref"
 
     def respond(self, ctx: ResponseContext) -> UserAction:
-        from recsys.evaluation import oracle_relevant
+        from recsys.experimental.evaluation import oracle_relevant
 
         relevant = oracle_relevant(ctx.profile, ctx.recipe, ctx.request)
         if not relevant:

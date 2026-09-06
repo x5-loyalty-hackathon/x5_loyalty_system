@@ -30,7 +30,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from recsys.panels import SPLIT_WEIGHTS, Panel, development_splits, load_panel, split_of
-from recsys.profiles import SyntheticProfile, generate_population
+from recsys.experimental.profiles import SyntheticProfile, generate_population
 from recsys.regimes import REGIMES
 
 #: Every read of the test split is appended here. The protocol says test is
@@ -147,7 +147,7 @@ def _seen_before_hashes() -> dict[str, set[str]]:
     or measured on, reconstructed from how each caller built its own draw."""
     seen: dict[str, set[str]] = {}
 
-    # What MLRecommendationEngine fits on, from recsys.model._train_classifier.
+    # What MLRecommendationEngine fits on, from recsys.experimental.model._train_classifier.
     seen["model_training"] = {
         profile_content_hash(p) for p in generate_population(300, seed=999)
     }

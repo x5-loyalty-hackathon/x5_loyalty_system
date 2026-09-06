@@ -11,7 +11,7 @@ from dataclasses import replace
 
 import pytest
 
-from recsys.catalog_freeze import (
+from recsys.experimental.catalog_freeze import (
     BASELINE_RECIPE_IDS,
     CANDIDATE_RECIPE_IDS,
     baseline_catalog,
@@ -20,7 +20,7 @@ from recsys.catalog_freeze import (
     missing_ids,
     recipe_content_hash,
 )
-from recsys.inventory import DEFAULT_INVENTORY_ASSUMPTIONS
+from recsys.experimental.inventory import DEFAULT_INVENTORY_ASSUMPTIONS
 from recsys.panels import (
     COHORT_INDEX_OFFSET,
     GENERATOR_VERSION,
@@ -34,8 +34,8 @@ from recsys.panels import (
     split_of,
     validate_panel,
 )
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.experimental.profiles import generate_population
+from recsys.experimental.recipes import RECIPES
 
 
 def _spec(**overrides) -> PanelSpec:
@@ -133,7 +133,7 @@ def test_legacy_generator_still_couples_profiles_to_the_catalog() -> None:
     unsafe path, so anyone tempted to build a new experiment on it sees the
     reason not to.
     """
-    import recsys.profiles as profiles_module
+    import recsys.experimental.profiles as profiles_module
 
     baseline = tuple(baseline_catalog())
     extended = baseline + tuple(candidate_catalog())

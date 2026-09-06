@@ -1,37 +1,14 @@
-"""What the shopper probably already has at home.
+"""Scorer availability adapter, ported from recsys-benchmark@c28b613.
 
-The pipeline treats "you have it" as "it is on today's receipt". Measured over
-the synthetic population, that overstates the shopping list badly: **20% of
-the ingredients we tell people to buy were bought by them within the last
-seven days**, 29% within fourteen, 46% within thirty. Eggs are the extreme
-case at 96%.
+API 1.2 default: raw ingredients in current_receipt plus explicit user HOME.
+The supplied receipt need not be from today; it is evidence of a purchase,
+not proof of remaining quantity, freshness, or food safety.
 
-For a product built around availability this is not a detail — ``missing_count``
-is the quantity the whole ranking policy sorts on, and it is inflated.
-
-Why a threshold would be wrong
-------------------------------
-"Bought in the last week, therefore has it" fails in both directions. Staples
-break it hardest: only 6% of ``pantry`` items (flour, oil, salt) appear in a
-recent receipt, not because people lack them but because one purchase lasts
-months. Perishables break it the other way — milk bought six days ago is
-probably gone.
-
-So this models *depletion*, not recency: one purchase lasts a category-typical
-time, and the probability it survives decays from there.
-
-Asymmetry of being wrong
-------------------------
-The two errors are not equal. Telling someone they need to buy flour they
-already have is a small annoyance. Telling them they have eggs when they do not
-strands them at the stove with a half-made dinner. So the default threshold is
-deliberately high, and an ingredient never seen in the history is assumed
-absent rather than assumed to be a staple everyone owns.
-
-Nothing here changes behaviour by default: ``PantryPolicy.disabled()`` is what
-the service and the model use unless a caller opts in, so the effect can be
-measured on the bench before it is shipped — the same discipline
-``app.service.RankingPolicy`` follows.
+Historical depletion estimates below are experimental and DISABLED in serving.
+Their category half-lives and probabilities are hypotheses, not expiry dates.
+An enabled experimental model must not turn those estimates into safe product
+options: final availability/safety remains the responsibility of app.service.
+See docs/integration-handoff.md for provenance and compatibility boundaries.
 """
 
 from __future__ import annotations
@@ -41,11 +18,11 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from app.contracts import RecommendationRequest
-from recsys.catalog import ingredient_category
+from recsys.catalog import INGREDIENTS, ingredient_category
 
 #: How long one purchase of a category typically lasts, in days. These are
-#: cook's estimates, not measurements — ``recsys.sensitivity`` is the place to
-#: ask whether being wrong about them changes anything.
+#: assumptions, not measurements or safe storage periods. Sensitivity
+#: experiments remain on the source ML branch, outside this integration.
 CATEGORY_HALF_LIFE_DAYS: dict[str, float] = {
     "pantry": 60.0,
     "grain": 30.0,
@@ -83,7 +60,7 @@ class PantryEstimate:
 
     @property
     def is_observed(self) -> bool:
-        """True only for today's receipt — the one case that is not a guess."""
+        """Observed in the supplied receipt; does not certify stock or freshness."""
         return self.reason == "in_basket"
 
 
@@ -132,6 +109,8 @@ DISABLED_PANTRY = PantryPolicy.disabled()
 
 
 def category_half_life_days(ingredient_id: str) -> float:
+    if ingredient_id not in INGREDIENTS:
+        return DEFAULT_HALF_LIFE_DAYS
     return CATEGORY_HALF_LIFE_DAYS.get(
         ingredient_category(ingredient_id), DEFAULT_HALF_LIFE_DAYS
     )
@@ -142,6 +121,8 @@ def purchase_intervals(request: RecommendationRequest) -> dict[str, list[float]]
     dates: dict[str, list[datetime]] = {}
     for receipt in [*request.purchase_history, request.current_receipt]:
         for item in receipt.items:
+            if item.is_prepared_food:
+                continue
             for ingredient_id in item.ingredient_ids:
                 dates.setdefault(ingredient_id, []).append(receipt.purchased_at)
 
@@ -192,7 +173,7 @@ def survival_probability(
     policy: PantryPolicy = DISABLED_PANTRY,
     intervals: dict[str, list[float]] | None = None,
 ) -> float:
-    """Probability one purchase is still usable after this many days."""
+    """Hypothetical remaining-stock probability; never food safety/expiry."""
     if days_since_purchase <= 0:
         return 1.0
     return 0.5 ** (
@@ -210,6 +191,8 @@ def _last_purchase_days(
         if age_days < 0:
             continue
         for item in receipt.items:
+            if item.is_prepared_food:
+                continue
             for ingredient_id in item.ingredient_ids:
                 previous = latest.get(ingredient_id)
                 if previous is None or age_days < previous:
@@ -225,14 +208,15 @@ def estimate_pantry(
 ) -> dict[str, PantryEstimate]:
     """Per-ingredient belief that the shopper already has it.
 
-    Today's basket is certainty; everything else decays. Ingredients never seen
-    in the history are simply absent from the result — assuming an unseen
-    staple is owned is the error that strands people.
+    Receipt and explicit HOME are fixed inputs. Only experimental opt-in uses
+    history decay. A score of 1 for an input means inclusion, not verified stock.
     """
     moment = now or request.now
     estimates: dict[str, PantryEstimate] = {}
 
     for item in request.current_receipt.items:
+        if item.is_prepared_food:
+            continue
         for ingredient_id in item.ingredient_ids:
             estimates[ingredient_id] = PantryEstimate(
                 ingredient_id=ingredient_id,
@@ -240,6 +224,12 @@ def estimate_pantry(
                 days_since_purchase=0.0,
                 reason="in_basket",
             )
+
+    for ingredient_id in request.user.home_ingredient_ids:
+        estimates.setdefault(ingredient_id, PantryEstimate(
+            ingredient_id=ingredient_id, probability=1.0,
+            days_since_purchase=None, reason="explicit_home",
+        ))
 
     if not policy.enabled:
         return estimates
@@ -267,8 +257,8 @@ def available_ingredient_ids(
 ) -> set[str]:
     """Ingredients to treat as already at home.
 
-    With the default disabled policy this is exactly today's receipt, so the
-    shipped behaviour is unchanged until someone opts in.
+    Default: raw receipt ingredients and explicit HOME; historical inference
+    stays disabled. This does not set the challenge mode to current.
     """
     return {
         estimate.ingredient_id

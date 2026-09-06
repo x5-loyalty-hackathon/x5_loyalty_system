@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Animated, PanResponder, StyleSheet, View } from 'react-native';
+import { Animated, PanResponder, Pressable, StyleSheet, View } from 'react-native';
 import { color } from '../theme/tokens';
 
 /**
@@ -18,7 +18,7 @@ export function KitchenSheet({
   onChange,
   children,
 }: {
-  /** Высотой владеет экран: к ней привязан не только сам лист, но и Домовой. */
+  /** Высотой владеет экран; персонаж остаётся на полу за панелью. */
   height: Animated.Value;
   collapsedHeight: number;
   expandedHeight: number;
@@ -27,36 +27,47 @@ export function KitchenSheet({
   children: React.ReactNode;
 }) {
   const start = useRef(expanded ? expandedHeight : collapsedHeight);
+  // PanResponder is retained across renders; layout/callbacks must stay fresh.
+  const latest = useRef({ height, collapsedHeight, expandedHeight, expanded, onChange });
+  latest.current = { height, collapsedHeight, expandedHeight, expanded, onChange };
 
   const pan = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_event, gesture) => Math.abs(gesture.dy) > 6,
       onPanResponderGrant: () => {
-        height.stopAnimation((value: number) => {
+        latest.current.height.stopAnimation((value: number) => {
           start.current = value;
         });
       },
       onPanResponderMove: (_event, gesture) => {
         // Тянем вверх — панель растёт, поэтому знак инвертирован.
         const next = start.current - gesture.dy;
-        height.setValue(Math.min(expandedHeight, Math.max(collapsedHeight, next)));
+        const current = latest.current;
+        current.height.setValue(Math.min(current.expandedHeight, Math.max(current.collapsedHeight, next)));
       },
       onPanResponderRelease: (_event, gesture) => {
         const next = start.current - gesture.dy;
-        const middle = (collapsedHeight + expandedHeight) / 2;
+        const current = latest.current;
+        const middle = (current.collapsedHeight + current.expandedHeight) / 2;
         // Быстрый рывок решает за пользователя, медленный — по середине хода.
         const shouldExpand =
           Math.abs(gesture.vy) > 0.5 ? gesture.vy < 0 : next > middle;
-        onChange(shouldExpand);
+        current.onChange(shouldExpand);
+      },
+      onPanResponderTerminate: () => {
+        const current = latest.current;
+        current.height.setValue(current.expanded ? current.expandedHeight : current.collapsedHeight);
       },
     }),
   ).current;
 
   return (
     <Animated.View style={[styles.sheet, { height }]}>
-      <View style={styles.handleArea} {...pan.panHandlers}>
+      <Pressable style={styles.handleArea} {...pan.panHandlers} accessibilityRole="button"
+        accessibilityLabel={expanded ? 'Свернуть панель кухни' : 'Развернуть панель кухни'}
+        accessibilityState={{ expanded }} onPress={() => onChange(!expanded)}>
         <View style={styles.handle} />
-      </View>
+      </Pressable>
       <View style={styles.body}>{children}</View>
     </Animated.View>
   );
@@ -75,7 +86,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   /** Зона захвата шире самой полоски, чтобы попадать пальцем. */
-  handleArea: { paddingTop: 8, paddingBottom: 6, alignItems: 'center' },
+  handleArea: { minHeight: 44, justifyContent: 'center', alignItems: 'center' },
   handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: color.iconIdle },
   body: { flex: 1 },
 });

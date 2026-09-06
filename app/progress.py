@@ -36,12 +36,21 @@ class ProgressService:
                 fraud_score=decision.score,
                 reason_codes=decision.reason_codes,
                 progress=self._repository.snapshot(request.user_id),
+                meal_plan=(
+                    self._repository.receipt_plan_snapshot(
+                        user_id=request.user_id,
+                        receipt_id=request.receipt.receipt_id,
+                        plan_id=request.meal_plan_id,
+                    ) if decision.status == ReceiptEventStatus.DUPLICATE else None
+                ),
             )
 
         outcome = self._repository.record_receipt(
             user_id=request.user_id,
             receipt=request.receipt,
             recipe_completed=request.recipe_completed,
+            meal_plan_id=request.meal_plan_id,
+            rank_cohort=request.rank_cohort,
         )
         if not outcome.recorded:
             late_decision = self._fraud_policy.evaluate(
@@ -53,17 +62,26 @@ class ProgressService:
                 fraud_score=late_decision.score,
                 reason_codes=late_decision.reason_codes,
                 progress=self._repository.snapshot(request.user_id),
+                meal_plan=(
+                    self._repository.receipt_plan_snapshot(
+                        user_id=request.user_id,
+                        receipt_id=request.receipt.receipt_id,
+                        plan_id=request.meal_plan_id,
+                    ) if late_decision.status == ReceiptEventStatus.DUPLICATE else None
+                ),
             )
 
         reason_codes = list(decision.reason_codes)
         if not outcome.is_new_purchase_day:
             reason_codes.append("same_day_receipt_collapsed")
+        reason_codes.extend(outcome.meal_plan_reason_codes)
 
         return ReceiptProgressResponse(
             status=ReceiptEventStatus.VERIFIED,
             fraud_score=decision.score,
             reason_codes=reason_codes,
             progress=self._repository.snapshot(request.user_id),
+            meal_plan=outcome.meal_plan,
         )
 
     def get_progress(self, user_id: str) -> ProgressSnapshot:

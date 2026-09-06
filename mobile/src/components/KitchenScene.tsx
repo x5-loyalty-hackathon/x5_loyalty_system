@@ -2,7 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
-import type { KitchenProduct } from '../data/demo';
+import type { KitchenProduct } from '../domain/kitchen';
 import { color } from '../theme/tokens';
 
 /** Высота полосы по умолчанию — как в макете экрана «после чека». */
@@ -83,9 +83,9 @@ export function KitchenScene({
           <Text style={styles.speechText}>{speech}</Text>
         </View>
       ) : null}
-      <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
+      {onMenuPress ? <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
         <Text style={styles.menuText}>≡</Text>
-      </Pressable>
+      </Pressable> : null}
       <Image
         source={MASCOT[pose].source}
         resizeMode="contain"
@@ -105,7 +105,7 @@ export function KitchenScene({
 const styles = StyleSheet.create({
   band: { backgroundColor: color.cream, overflow: 'hidden' },
   art: { position: 'absolute', ...ART },
-  // Домовой стоит на полу: привязан к низу полосы, как в макете.
+  // Домовой стоит на нарисованном полу; шторка проходит поверх него.
 
   /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */
   sprite: { position: 'absolute' },

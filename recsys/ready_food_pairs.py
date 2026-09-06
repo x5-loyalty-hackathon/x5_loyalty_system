@@ -53,8 +53,8 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any
 
-from app.contracts import ReadyMealOption
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.contracts import ReadyMealOption
+from recsys.experimental.recipes import RECIPES_BY_ID
 
 CATALOG_PATH = Path(__file__).with_name("data") / "ready_food_catalog.json"
 

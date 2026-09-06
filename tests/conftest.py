@@ -21,3 +21,11 @@ def ml_engine():
     from recsys.model import MLRecommendationEngine
 
     return MLRecommendationEngine()
+
+
+@pytest.fixture(scope="session")
+def experimental_ml_engine():
+    """Original offline scorer; never substitute it for the API 1.2 fixture."""
+    from recsys.experimental.model import MLRecommendationEngine
+
+    return MLRecommendationEngine()

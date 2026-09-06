@@ -22,14 +22,14 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Callable, Iterable, Protocol
 
-from app.recommender import DeterministicMockEngine
-from app.safety import SafetyPolicy
-from app.service import EFFORT_FIRST, RecommendationService
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import EFFORT_FIRST, RecommendationService
 from recsys.benchmark import TOP_K, _build_request, stable_seed
-from recsys.inventory import generate_inventory
-from recsys.profiles import SyntheticProfile, generate_population
+from recsys.experimental.inventory import generate_inventory
+from recsys.experimental.profiles import SyntheticProfile, generate_population
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
+from recsys.experimental.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
 from recsys.response_models import (
     EconomicResponder,

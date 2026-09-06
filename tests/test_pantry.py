@@ -6,12 +6,12 @@ from datetime import timedelta
 
 import pytest
 
-from app.contracts import IngredientSource, RecommendationRequest
-from app.recommender import DeterministicMockEngine
-from app.safety import SafetyPolicy
-from app.service import EFFORT_FIRST, RecommendationService
+from recsys.experimental.contracts import IngredientSource, RecommendationRequest
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import EFFORT_FIRST, RecommendationService
 from recsys.benchmark import Arm, run_benchmark
-from recsys.pantry import (
+from recsys.experimental.pantry import (
     CATEGORY_HALF_LIFE_DAYS,
     DISABLED_PANTRY,
     PantryPolicy,
@@ -19,8 +19,8 @@ from recsys.pantry import (
     estimate_pantry,
     survival_probability,
 )
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.experimental.profiles import generate_population
+from recsys.experimental.recipes import RECIPES
 from recsys.regimes import REGIMES
 from recsys.response_models import RuleBasedResponder, UserAction
 from recsys.true_pantry import TRUE_HALF_LIFE_DAYS, household_speed, true_pantry

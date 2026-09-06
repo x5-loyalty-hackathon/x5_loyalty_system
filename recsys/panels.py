@@ -6,7 +6,7 @@ Every experiment so far rebuilt its own population from a seed. That looked
 reproducible and was not, for two reasons measured on this codebase:
 
 **A shared generator stream couples every profile to every other one.**
-``recsys.profiles.generate_population`` walks one ``random.Random`` across the
+``recsys.experimental.profiles.generate_population`` walks one ``random.Random`` across the
 whole population, and the number of draws per profile is not constant — the
 saved-recipe draw is sized by the catalog. Growing the catalog from 37 to 47
 recipes gave **137 of 160 profiles a completely different basket**, starting at
@@ -31,7 +31,7 @@ Nothing is sequential, so a profile depends on neither ``n`` nor on any other
 profile, and adding a user or a recipe changes nothing else in the panel.
 
 *A pinned saved-recipe pool.* Panels pin the draw to
-``recsys.catalog_freeze.baseline_catalog()``, so a candidate recipe entering
+``recsys.experimental.catalog_freeze.baseline_catalog()``, so a candidate recipe entering
 the catalog cannot alter the panel it is about to be measured on.
 
 *Splits by user identity, not by position.* ``split_of`` hashes the user id, so
@@ -50,15 +50,15 @@ from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
 from pathlib import Path
 
-from app.contracts import InventoryProduct, Receipt, UserProfile
+from recsys.experimental.contracts import InventoryProduct, Receipt, UserProfile
 from recsys._seeds import stable_seed
-from recsys.catalog_freeze import baseline_catalog, recipe_content_hash
-from recsys.inventory import (
+from recsys.experimental.catalog_freeze import baseline_catalog, recipe_content_hash
+from recsys.experimental.inventory import (
     DEFAULT_INVENTORY_ASSUMPTIONS,
     InventoryAssumptions,
     generate_inventory,
 )
-from recsys.profiles import ARCHETYPES, DEFAULT_NOW, SyntheticProfile, generate_profile
+from recsys.experimental.profiles import ARCHETYPES, DEFAULT_NOW, SyntheticProfile, generate_profile
 from recsys.regimes import NEUTRAL_REGIME, Regime
 
 #: Bump when generation semantics change in a way that invalidates stored
@@ -67,7 +67,7 @@ from recsys.regimes import NEUTRAL_REGIME, Regime
 #: to prevent.
 #:
 #: v1 — first materialised generator. Includes the fix that keeps history
-#: strictly before ``now`` (see ``recsys.profiles.MIN_HISTORY_AGE_DAYS``);
+#: strictly before ``now`` (see ``recsys.experimental.profiles.MIN_HISTORY_AGE_DAYS``);
 #: numbers published before it, including ``docs/benchmark-report.md`` and
 #: ``docs/sensitivity-report.md``, came from the pre-fix generator and are not
 #: comparable to panel-based numbers at the third decimal.
@@ -83,7 +83,7 @@ DEFAULT_PANEL_SEED = 20260905
 #: test split is not read until a decision is final.
 SPLIT_WEIGHTS: dict[str, int] = {"train": 60, "validation": 20, "test": 20}
 
-#: Disjoint index ranges per cohort. ``recsys.profiles.generate_profile`` names
+#: Disjoint index ranges per cohort. ``recsys.experimental.profiles.generate_profile`` names
 #: a user ``synthetic_<archetype>_<index>``, so the index is the identity: two
 #: cohorts sharing an index range produce *different people under the same id*.
 #: Measured before this existed: the "new users" probe collided with 56 of the

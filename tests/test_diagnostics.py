@@ -1,4 +1,4 @@
-from app.recommender import DeterministicMockEngine
+from recsys.experimental.recommender import DeterministicMockEngine
 from recsys.diagnostics import (
     MIN_STRATUM_SIZE,
     Stratum,
@@ -8,7 +8,7 @@ from recsys.diagnostics import (
     pearson,
     stratified_signal,
 )
-from recsys.model import FEATURE_NAMES
+from recsys.experimental.model import FEATURE_NAMES
 
 SMALL = 8
 

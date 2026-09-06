@@ -1,8 +1,13 @@
 # Эксперимент 1 — качество самого ранкера
 
+> Исследовательский материал ML-ветки, сохранённый при интеграции 06.09.2026.
+> Код стенда использует `recsys.experimental`; приведённые числа и предложения
+> не являются результатами или принятыми контрактами мобильного API 1.2.
+> [Границы и актуальные пути](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/experiment/vxofi/recsys/experimental/README.md).
+
 Сгенерирован `python -m recsys.experiment1_ranker_quality`. Eval A/B: панель `development/train`, 603 пользователей × 3 уровня дефицита = 1809 наблюдений, 101 с.
 
-Вопрос эксперимента: на одинаковых кандидатах, до `app.service`, какой скорер лучше отделяет желаемое от нежелательного? См. `docs/research/recsys/experiment-plan-ranker-service-catalog.md`, «Эксперимент 1».
+Вопрос эксперимента: на одинаковых кандидатах, до `recsys.experimental.service`, какой скорер лучше отделяет желаемое от нежелательного? См. `docs/research/recsys/experiment-plan-ranker-service-catalog.md`, «Эксперимент 1».
 
 **Бэкенд градиентного бустинга в этом прогоне: `catboost`.**
 
@@ -13,15 +18,15 @@
 | Ранкер | Что это |
 |---|---|
 | `coverage` | `CoverageHeuristicEngine` — без обучения, сортировка по (coverage desc, missing_count asc) |
-| `ml` | `recsys.model.MLRecommendationEngine`, `include_effort_features=True`, как в проде |
+| `ml` | `recsys.experimental.model.MLRecommendationEngine`, `include_effort_features=True`, как в проде |
 | `catboost` | тот же X/y конвейер, что и `ml`, классификатор — `catboost` |
-| `oracle` | непрерывный аналог `oracle_relevant`/`_combined_affinity` — потолок ранжирования **при этих признаках**, не абсолютный (self-referential, см. ADR-003) |
+| `oracle` | непрерывный аналог `oracle_relevant`/`_combined_affinity` — потолок ранжирования **при этих признаках**, не абсолютный (self-referential, см. EXP-003) |
 
 ---
 
 ## A. Желание приготовить (precision@k против `oracle_relevant`)
 
-`engine.rank(request)` вызывается напрямую, минуя `RecommendationService`. `inventory_snapshot` не гейтит эту секцию — только `current_receipt` и `purchase_history`. Метка — `recsys.evaluation.oracle_relevant`, self-referential относительно `recsys.model` (см. ADR-003): читайте числа как *относительное* сравнение рангов, не как абсолютную релевантность.
+`engine.rank(request)` вызывается напрямую, минуя `RecommendationService`. `inventory_snapshot` не гейтит эту секцию — только `current_receipt` и `purchase_history`. Метка — `recsys.experimental.evaluation.oracle_relevant`, self-referential относительно `recsys.experimental.model` (см. EXP-003): читайте числа как *относительное* сравнение рангов, не как абсолютную релевантность.
 
 | Уровень дефицита | база релевантности | precision@3 coverage | precision@3 ml | precision@3 catboost | precision@3 oracle |
 |---|---|---|---|---|---|
@@ -41,9 +46,9 @@
 
 ---
 
-## ADR-003-диагностика: AUC внутри равного missing_count
+## EXP-003-диагностика: AUC внутри равного missing_count
 
-Общий AUC против AUC, усреднённого по стратам одинакового `missing_count` (страты с `n < 30` помечены как нечитаемые, как в `recsys.diagnostics`). Малый разрыв «общий − внутри» означает, что ранкер несёт сигнал сверх того, что и так знает `missing_count` — то есть сверх того, что `app.service.RankingPolicy` уже применяет первым ключом.
+Общий AUC против AUC, усреднённого по стратам одинакового `missing_count` (страты с `n < 30` помечены как нечитаемые, как в `recsys.diagnostics`). Малый разрыв «общий − внутри» означает, что ранкер несёт сигнал сверх того, что и так знает `missing_count` — то есть сверх того, что `recsys.experimental.service.RankingPolicy` уже применяет первым ключом.
 
 ### низкий
 
@@ -139,11 +144,10 @@
 
 ## Угрозы валидности
 
-- **`oracle_relevant` self-referential.** Он выведен из тех же правил архетипа, что и обучающая метка `_label_for_pair` (`recsys.model`), — см. паспорт метрики 0.19 и ADR-003. Precision@k и AUC-диагностика здесь показывают, кто лучше воспроизводит эту конкретную синтетическую метку, не независимо измеренную релевантность.
+- **`oracle_relevant` self-referential.** Он выведен из тех же правил архетипа, что и обучающая метка `_label_for_pair` (`recsys.experimental.model`), — см. паспорт метрики 0.19 и EXP-003. Precision@k и AUC-диагностика здесь показывают, кто лучше воспроизводит эту конкретную синтетическую метку, не независимо измеренную релевантность.
 - **`oracle`-ранкер — не абсолютный потолок.** Он не видит `discovery_acceptance` (параметр архетипа, недоступный как признак запроса), поэтому его непрерывный скор — упрощение ветки новизны/знакомости `oracle_relevant`, а не её точное воспроизведение.
 - **Уровни дефицита выбраны нами.** Три точки (`no_product_at_all`/`out_of_stock` низкий/база/высокий), откалиброванные в `recsys.sensitivity.DIALS`, двигаются вместе как одна ось «дефицит полки», а не крест 3×3 — раздельный эффект каждой ручки уже есть в `docs/sensitivity-report.md`.
 - **Eval B не проверяет исключения пользователя.** Считается только физическая доступность продукта (`_valid_products`), не `excluded_categories`/`excluded_ingredient_ids` — это отдельный фильтр сервиса, не про наличие в магазине.
 - **CatBoost/GBM обучается один раз на seed 20260905**, как и `ml`; отчёт не проверяет чувствительность к сиду обучения классификатора (только к сиду генерации панели корзин, через уровни дефицита и 9 миров).
 - **Eval C заведомо меньше по масштабу**, чем A/B (5×30 против 603 пользователей панели) — воронка там дороже (4 симулятора на каждую пару рука/мир/пользователь). Числа раздела C менее устойчивы, чем A/B, и заявлены только как sanity-check.
 - **Это не оценка продукта**, как и весь остальной стенд — устойчивость вывода на синтетике, не прогноз аплифта на реальных пользователях.
-

@@ -41,16 +41,16 @@ import statistics
 from collections import Counter
 from dataclasses import dataclass, field
 
-from app.contracts import (
+from recsys.experimental.contracts import (
     IngredientSource,
     ModelRecommendation,
     Recipe,
     RecommendationMode,
     RecommendationRequest,
 )
-from app.recommender import DeterministicMockEngine, RecommendationEngine
-from app.safety import SafetyPolicy
-from app.service import (
+from recsys.experimental.recommender import DeterministicMockEngine, RecommendationEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import (
     BLENDED,
     EFFORT_FIRST,
     RELEVANCE_FIRST,
@@ -58,15 +58,15 @@ from app.service import (
     RecommendationService,
 )
 from recsys._seeds import stable_seed
-from recsys.inventory import (
+from recsys.experimental.inventory import (
     DEFAULT_INVENTORY_ASSUMPTIONS,
     InventoryAssumptions,
     generate_inventory,
 )
-from recsys.pantry import DISABLED_PANTRY, PantryPolicy
-from recsys.profiles import ARCHETYPES, SyntheticProfile, generate_population
+from recsys.experimental.pantry import DISABLED_PANTRY, PantryPolicy
+from recsys.experimental.profiles import ARCHETYPES, SyntheticProfile, generate_population
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
+from recsys.experimental.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
 from recsys.true_pantry import true_pantry
 from recsys.response_models import (
@@ -567,7 +567,7 @@ def pantry_arms() -> tuple[Arm, ...]:
     items per card), but a wrong belief strands them mid-recipe. Whether the
     trade is worth taking is what these arms measure.
     """
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.model import MLRecommendationEngine
 
     ml = MLRecommendationEngine()
     heuristic = DeterministicMockEngine()
@@ -613,7 +613,7 @@ def default_arms() -> tuple[Arm, ...]:
     Both factors are crossed on purpose: without the policy axis a run only
     shows that the models tie, without showing *why* they tie.
     """
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.model import MLRecommendationEngine
 
     ml = MLRecommendationEngine()
     # Effort features zeroed: the policy is supposed to supply the effort term,

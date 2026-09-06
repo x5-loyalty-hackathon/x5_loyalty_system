@@ -1,11 +1,11 @@
 """The "simple coverage score" candidate for experiment 1.
 
-Not ``app.recommender.DeterministicMockEngine`` — that heuristic blends in a
+Not ``recsys.experimental.recommender.DeterministicMockEngine`` — that heuristic blends in a
 history-overlap term, so it already carries a personalization signal and
 cannot stand in for "no learning, no personalization, just buy what's
 closest to done". This engine is that literal baseline: no training, no
 purchase history, ranked purely by
-``(coverage desc, missing_count asc)`` from ``recsys.model.compute_features``.
+``(coverage desc, missing_count asc)`` from ``recsys.experimental.model.compute_features``.
 
 Exists so experiment 1 (``docs/research/recsys/experiment-plan-ranker-service-catalog.md``,
 "Эксперимент 1") has a floor to compare the trained rankers against.
@@ -13,8 +13,8 @@ Exists so experiment 1 (``docs/research/recsys/experiment-plan-ranker-service-ca
 
 from __future__ import annotations
 
-from app.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
-from recsys.model import compute_features, compute_user_stats
+from recsys.experimental.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
+from recsys.experimental.model import compute_features, compute_user_stats
 
 #: Coverage is already 0..1; missing_count rarely exceeds this, so the
 #: secondary term stays a tiebreak and never inverts the primary coverage

@@ -6,7 +6,7 @@ implements. Three separate evaluations, deliberately kept apart (plan §0):
 
 ``run_eval_ab``
     Eval A (want-to-cook, before store availability: ``engine.rank(request)``
-    called directly, judged by ``recsys.evaluation.oracle_relevant``) and
+    called directly, judged by ``recsys.experimental.evaluation.oracle_relevant``) and
     Eval B (share of the same candidates that are actually purchasable in
     the live ``inventory_snapshot``, via
     ``RecommendationService._valid_products``) computed together in one pass
@@ -29,22 +29,22 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from app.contracts import Recipe, RecommendationRequest
-from app.safety import SafetyPolicy
-from app.service import EFFORT_FIRST, RecommendationService
+from recsys.experimental.contracts import Recipe, RecommendationRequest
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import EFFORT_FIRST, RecommendationService
 from recsys.benchmark import PRIMARY_METRIC, Arm, RandomEngine, run_benchmark
-from recsys.catalog_freeze import baseline_catalog
+from recsys.experimental.catalog_freeze import baseline_catalog
 from recsys.catboost_model import GRADIENT_BOOSTER_BACKEND, CatBoostRecommendationEngine
 from recsys.coverage_heuristic_engine import CoverageHeuristicEngine
 from recsys.diagnostics import Stratum, StratifiedSignal, auc, pearson
-from recsys.evaluation import oracle_relevant
-from recsys.inventory import (
+from recsys.experimental.evaluation import oracle_relevant
+from recsys.experimental.inventory import (
     DEFAULT_INVENTORY_ASSUMPTIONS,
     InventoryAssumptions,
 )
-from recsys.model import MLRecommendationEngine, compute_features, compute_user_stats
+from recsys.experimental.model import MLRecommendationEngine, compute_features, compute_user_stats
 from recsys.oracle_ranking_engine import OracleRankingEngine
-from recsys.pantry import DISABLED_PANTRY, available_ingredient_ids
+from recsys.experimental.pantry import DISABLED_PANTRY, available_ingredient_ids
 from recsys.panels import experiment_panels
 from recsys.regimes import REGIMES
 
@@ -319,7 +319,7 @@ def build_report(
     )
     w("")
     w(
-        "Вопрос эксперимента: на одинаковых кандидатах, до `app.service`, какой "
+        "Вопрос эксперимента: на одинаковых кандидатах, до `recsys.experimental.service`, какой "
         "скорер лучше отделяет желаемое от нежелательного? См. "
         "`docs/research/recsys/experiment-plan-ranker-service-catalog.md`, "
         "«Эксперимент 1»."
@@ -344,7 +344,7 @@ def build_report(
     w("| Ранкер | Что это |")
     w("|---|---|")
     w("| `coverage` | `CoverageHeuristicEngine` — без обучения, сортировка по (coverage desc, missing_count asc) |")
-    w("| `ml` | `recsys.model.MLRecommendationEngine`, `include_effort_features=True`, как в проде |")
+    w("| `ml` | `recsys.experimental.model.MLRecommendationEngine`, `include_effort_features=True`, как в проде |")
     w(f"| `catboost` | тот же X/y конвейер, что и `ml`, классификатор — `{GRADIENT_BOOSTER_BACKEND}` |")
     w("| `oracle` | непрерывный аналог `oracle_relevant`/`_combined_affinity` — потолок ранжирования **при этих признаках**, не абсолютный (self-referential, см. ADR-003) |")
     w("")
@@ -355,8 +355,8 @@ def build_report(
     w(
         "`engine.rank(request)` вызывается напрямую, минуя `RecommendationService`. "
         "`inventory_snapshot` не гейтит эту секцию — только `current_receipt` и "
-        "`purchase_history`. Метка — `recsys.evaluation.oracle_relevant`, "
-        "self-referential относительно `recsys.model` (см. ADR-003): читайте "
+        "`purchase_history`. Метка — `recsys.experimental.evaluation.oracle_relevant`, "
+        "self-referential относительно `recsys.experimental.model` (см. ADR-003): читайте "
         "числа как *относительное* сравнение рангов, не как абсолютную релевантность."
     )
     w("")
@@ -399,7 +399,7 @@ def build_report(
         "`missing_count` (страты с `n < 30` помечены как нечитаемые, как в "
         "`recsys.diagnostics`). Малый разрыв «общий − внутри» означает, что "
         "ранкер несёт сигнал сверх того, что и так знает `missing_count` — "
-        "то есть сверх того, что `app.service.RankingPolicy` уже применяет "
+        "то есть сверх того, что `recsys.experimental.service.RankingPolicy` уже применяет "
         "первым ключом."
     )
     w("")
@@ -512,7 +512,7 @@ def build_report(
     w("")
     w(
         "- **`oracle_relevant` self-referential.** Он выведен из тех же правил "
-        "архетипа, что и обучающая метка `_label_for_pair` (`recsys.model`), — "
+        "архетипа, что и обучающая метка `_label_for_pair` (`recsys.experimental.model`), — "
         "см. паспорт метрики 0.19 и ADR-003. Precision@k и AUC-диагностика "
         "здесь показывают, кто лучше воспроизводит эту конкретную "
         "синтетическую метку, не независимо измеренную релевантность."

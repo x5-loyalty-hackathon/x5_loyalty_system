@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import random
 
-from app.contracts import RecommendationRequest
-from recsys.catalog_freeze import baseline_catalog, candidate_catalog, recipe_content_hash
-from recsys.inventory import generate_inventory
-from recsys.model import (
+from recsys.experimental.contracts import RecommendationRequest
+from recsys.experimental.catalog_freeze import baseline_catalog, candidate_catalog, recipe_content_hash
+from recsys.experimental.inventory import generate_inventory
+from recsys.experimental.model import (
     AVAILABILITY_FEATURE_NAMES,
     FEATURE_NAMES,
     TRAINING_INDEX_OFFSET,
@@ -20,8 +20,8 @@ from recsys.model import (
     compute_features,
 )
 from recsys.panels import COHORT_INDEX_OFFSET, PanelSpec, build_panel
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.experimental.profiles import generate_population
+from recsys.experimental.recipes import RECIPES
 
 
 def _request(profile, inventory, catalog):

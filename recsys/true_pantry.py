@@ -1,6 +1,6 @@
 """What the shopper *actually* has at home — the world's answer, not ours.
 
-``recsys.pantry`` estimates stock from purchase history. This module decides
+``recsys.experimental.pantry`` estimates stock from purchase history. This module decides
 the truth, and the two must be kept apart or the bench measures nothing.
 
 Why this exists
@@ -18,7 +18,7 @@ estimate, the bench rewards overconfidence.
 Design
 ------
 Ground truth uses a **different mechanism** than the estimator on purpose. If
-the world consumed food at exactly the half-lives ``recsys.pantry`` assumes,
+the world consumed food at exactly the half-lives ``recsys.experimental.pantry`` assumes,
 the estimator would be perfectly calibrated by construction and we would again
 be grading our own homework. Here the world:
 
@@ -39,12 +39,12 @@ import random
 from dataclasses import dataclass
 from datetime import datetime
 
-from app.contracts import RecommendationRequest
+from recsys.experimental.contracts import RecommendationRequest
 from recsys._seeds import stable_seed
 from recsys.catalog import ingredient_category
 
 #: How long a purchase really lasts, by category. Shorter than the estimator's
-#: ``recsys.pantry.CATEGORY_HALF_LIFE_DAYS`` — the gap is the modelling error
+#: ``recsys.experimental.pantry.CATEGORY_HALF_LIFE_DAYS`` — the gap is the modelling error
 #: we want the bench to punish.
 TRUE_HALF_LIFE_DAYS: dict[str, float] = {
     "pantry": 40.0,

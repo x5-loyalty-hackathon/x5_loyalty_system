@@ -8,16 +8,16 @@ compatible?
 
 This is a catalog-*capacity* question, deliberately upstream of ranking:
 every measurement below uses the full ``request.recipe_catalog`` (currently
-``recsys.recipes.RECIPES``, 37 recipes), never a ranked top-k. Changing which
+``recsys.experimental.recipes.RECIPES``, 37 recipes), never a ranked top-k. Changing which
 model or ``RankingPolicy`` is shipped cannot fix a catalog that has nothing
 reachable to offer in the first place, and this script never touches either.
 
 Two missing-ingredient counts, on purpose
 ------------------------------------------
-- **Abstract** (``recsys.model.compute_features``'s ``_missing_count``) --
+- **Abstract** (``recsys.experimental.model.compute_features``'s ``_missing_count``) --
   recipe ingredients minus what is already in the receipt, full stop. Never
   looks at ``inventory_snapshot``. This is what a ranker sees.
-- **Constrained** -- mirrors ``app.service.RecommendationService._assemble_recipe``:
+- **Constrained** -- mirrors ``recsys.experimental.service.RecommendationService._assemble_recipe``:
   an ingredient only counts as "missing but buyable" if it has at least one
   ``valid_products`` hit on the live inventory snapshot (same
   ``SafetyPolicy.evaluate_product`` gate the real service uses, reused here via
@@ -33,8 +33,8 @@ Panel and split
 One panel, generated once, deterministically, the way the other two
 experiments running in parallel in their own worktrees do (see
 ``docs/research/recsys/experiment-plan-ranker-service-catalog.md`` S:0):
-``recsys.profiles.generate_population(N, seed=DEFAULT_SEED)`` plus
-``recsys.inventory.generate_inventory`` under a fixed ``random.Random`` per
+``recsys.experimental.profiles.generate_population(N, seed=DEFAULT_SEED)`` plus
+``recsys.experimental.inventory.generate_inventory`` under a fixed ``random.Random`` per
 (profile, deficit level). Split into train/held-out by parity of the numeric
 suffix already embedded in ``user.user_id`` (``synthetic_<archetype>_<index>``)
 -- deterministic, independent of any shared state file (three experiments run
@@ -45,7 +45,7 @@ so the fix is not graded on the same baskets that pointed at it.
 
 Deficit levels
 --------------
-``recsys.inventory`` ships module constants (``P_NO_PRODUCT_AT_ALL``,
+``recsys.experimental.inventory`` ships module constants (``P_NO_PRODUCT_AT_ALL``,
 ``P_OUT_OF_STOCK``) rather than an injectable settings object at this commit
 (a sibling experiment is adding one in its own worktree; this script does not
 depend on unmerged work). Three deficit scenarios are swept by monkeypatching
@@ -74,16 +74,16 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
-import recsys.inventory as inventory_module
-from app.contracts import FulfillmentOption, Recipe, RecommendationRequest
-from app.recommender import DeterministicMockEngine
-from app.safety import SafetyPolicy
-from app.service import RecommendationService
-from recsys.evaluation import oracle_relevant
-from recsys.model import compute_features
+import recsys.experimental.inventory as inventory_module
+from recsys.experimental.contracts import FulfillmentOption, Recipe, RecommendationRequest
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import RecommendationService
+from recsys.experimental.evaluation import oracle_relevant
+from recsys.experimental.model import compute_features
 from recsys.panels import DEFICIT_LEVELS, experiment_panels
-from recsys.profiles import SyntheticProfile
-from recsys.recipes import RECIPES as CURRENT_RECIPES
+from recsys.experimental.profiles import SyntheticProfile
+from recsys.experimental.recipes import RECIPES as CURRENT_RECIPES
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-3-catalog-coverage-report.md")
 
@@ -138,7 +138,7 @@ def build_panel() -> dict[str, dict[str, list[tuple[SyntheticProfile, list]]]]:
 
 
 #: ``_inventory_for`` used to live here. It monkeypatched
-#: ``recsys.inventory``'s module constants — which does nothing, because
+#: ``recsys.experimental.inventory``'s module constants — which does nothing, because
 #: ``DEFAULT_INVENTORY_ASSUMPTIONS`` is built once at import — *and* mixed the
 #: level label into the RNG seed. So the three "deficit levels" were three
 #: independent draws at base deficit: measured 108/107/111 products for
@@ -368,7 +368,7 @@ def diagnose_gaps(
 
 #: Old (pre-experiment) catalog frozen by recipe_id, so "new recipe" below
 #: means "not present before this experiment" regardless of any future edits
-#: to ``recsys.recipes``. Kept as a literal list of ids (not a git diff)
+#: to ``recsys.experimental.recipes``. Kept as a literal list of ids (not a git diff)
 #: because the two catalogs must be comparable long after this script runs.
 NEW_RECIPE_IDS: frozenset[str] = frozenset(
     {
@@ -521,7 +521,7 @@ def build_report(
     w(
         f"Сгенерирован `python -m recsys.experiment3_catalog_coverage`. Панель — "
         f"{N_PROFILES} синтетических пользователей "
-        f"(`recsys.profiles.generate_population(seed={DEFAULT_SEED})`), разбита по чётности "
+        f"(`recsys.experimental.profiles.generate_population(seed={DEFAULT_SEED})`), разбита по чётности "
         f"числового суффикса `user_id` **до** любых измерений: train={n_train} "
         f"(поиск пробелов), held-out={n_held_out} (проверка после расширения)."
     )
@@ -540,7 +540,7 @@ def build_report(
     w("")
     w(
         "- **Без ограничений магазина** («абстрактный») — "
-        "`recsys.model.compute_features`'s `_missing_count`: рецепт минус то, что "
+        "`recsys.experimental.model.compute_features`'s `_missing_count`: рецепт минус то, что "
         "уже в чеке. Не смотрит в `inventory_snapshot` вообще — это то, что видит "
         "ранкер."
     )
@@ -885,7 +885,7 @@ def build_report(
     )
     w(
         "- **`InventoryAssumptions` не переиспользован** — на зафиксированном "
-        "коммите этого ворктри `recsys.inventory.generate_inventory` ещё не "
+        "коммите этого ворктри `recsys.experimental.inventory.generate_inventory` ещё не "
         "принимает объект допущений (это добавляет параллельный эксперимент в "
         "своём ворктри); дефицит здесь применён через временную подмену "
         "модульных констант `P_NO_PRODUCT_AT_ALL`/`P_OUT_OF_STOCK` вокруг "
@@ -919,7 +919,7 @@ def build_report(
     )
     w(
         "- **Синтетическая панель** — как и весь остальной стенд, корзины и "
-        "инвентарь синтетические (`recsys.profiles`/`recsys.inventory`), не "
+        "инвентарь синтетические (`recsys.experimental.profiles`/`recsys.experimental.inventory`), не "
         "наблюдения. Числа выше показывают устойчивость вывода на этой "
         "симуляции, не прогноз реального покрытия ассортимента X5."
     )

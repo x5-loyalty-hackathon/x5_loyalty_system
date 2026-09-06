@@ -5,12 +5,12 @@ from __future__ import annotations
 import pytest
 
 from recsys.benchmark import Arm, RandomEngine, run_benchmark
-from recsys.inventory import (
+from recsys.experimental.inventory import (
     DEFAULT_INVENTORY_ASSUMPTIONS,
     InventoryAssumptions,
     generate_inventory,
 )
-from recsys.profiles import ARCHETYPES
+from recsys.experimental.profiles import ARCHETYPES
 from recsys.regimes import NEUTRAL_REGIME, REGIMES
 from recsys.response_models import EconomicResponder, RuleBasedResponder
 from recsys.sensitivity import (

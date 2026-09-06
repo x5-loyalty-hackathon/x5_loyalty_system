@@ -1,5 +1,11 @@
 """The recommendation model adapter.
 
+Integrated from recsys-benchmark@02132c8 under API 1.2. Explicit HOME,
+required-only missing counts and prepared-food boundaries are retained.
+Experimental serving policies live in recsys.experimental, never app.service.
+Numerical observations in inherited comments belong to the source experiments,
+not measurements of this integration. See docs/integration-handoff.md.
+
 ``MLRecommendationEngine`` implements the exact ``RecommendationEngine``
 Protocol from ``app/recommender.py`` (``rank(request) -> list[ModelRecommendation]``)
 so it's a drop-in replacement for ``DeterministicMockEngine`` — same input,
@@ -100,6 +106,7 @@ def _receipt_ingredient_ids(request: RecommendationRequest) -> set[str]:
     return {
         ingredient_id
         for item in request.current_receipt.items
+        if not item.is_prepared_food
         for ingredient_id in item.ingredient_ids
     }
 
@@ -119,6 +126,7 @@ def _history_ingredient_ids(request: RecommendationRequest) -> set[str]:
         ingredient_id
         for receipt in request.purchase_history
         for item in receipt.items
+        if not item.is_prepared_food
         for ingredient_id in item.ingredient_ids
     }
 
@@ -235,9 +243,10 @@ def compute_features(
     and passes it in. Callers that omit it get the same numbers, just slower.
     """
     stats = user_stats if user_stats is not None else compute_user_stats(request)
-    # With the default disabled policy this is exactly today's receipt, so
-    # nothing changes until a caller opts in.
-    receipt_ids = available_ingredient_ids(request, policy=pantry_policy)
+    # Current overlap is receipt-only; explicit HOME affects missing count.
+    receipt_ids = _receipt_ingredient_ids(request)
+    # Explicit HOME is retained from API 1.2; an inferred pantry remains opt-in.
+    available_ids = available_ingredient_ids(request, policy=pantry_policy)
     history_ingredient_ids = _history_ingredient_ids(request)
 
     ingredient_ids = {i.ingredient_id for i in recipe.ingredients}
@@ -245,8 +254,9 @@ def compute_features(
     total = max(len(recipe.ingredients), 1)
 
     current_hits = len(ingredient_ids & receipt_ids)
-    covered_ids = receipt_ids
-    missing_ids = ingredient_ids - covered_ids
+    covered_ids = available_ids
+    required_ids = {i.ingredient_id for i in recipe.ingredients if i.required}
+    missing_ids = required_ids - covered_ids
     ingredient_history_hits = len(ingredient_ids & history_ingredient_ids)
 
     coverage = min(current_hits / total, 1.0)
@@ -345,7 +355,7 @@ def compute_features(
 
 
 #: Features that describe how much work a recipe is, rather than how much the
-#: user would like it. ``app.service.RankingPolicy`` already orders on exactly
+#: user would like it. The experimental ``RankingPolicy`` orders on exactly
 #: this quantity, so a model that also encodes it is duplicating the pipeline's
 #: own work — measured at r = -0.71 between ``model_score`` and missing count
 #: (see ``docs/benchmark-report.md``).
@@ -363,7 +373,7 @@ EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
 #: mixes "would they want this" with "can they buy it here", which
 #: ``docs/research/recsys/evaluation-protocol.md`` requires to be measured
 #: apart. Availability belongs to ``app.service``, which already applies it on
-#: live inventory. Same shape of defect as the effort double-count in ADR-002.
+#: live inventory. Same shape of defect as the effort double-count in EXP-002.
 AVAILABILITY_FEATURE_NAMES: frozenset[str] = frozenset({"markdown_supply_signal"})
 
 
@@ -407,7 +417,7 @@ def _label_for_pair(
     # recipe with six or more missing ingredients was ever labelled relevant, so
     # the model learned effort and nothing else (measured AUC 0.53 within
     # equal-effort strata). Whether a basket is affordable today is the job of
-    # ``app.service.RankingPolicy`` and the availability filter, which already
+    # the service-side selector and the availability filter, which already
     # do it on live inventory. This label answers only "would this person want
     # this dish".
     #
@@ -452,7 +462,8 @@ def _train_classifier(
 
     rng = random.Random(seed)
     training_profiles = generate_population(
-        n_profiles, seed=seed, index_offset=TRAINING_INDEX_OFFSET
+        n_profiles, seed=seed, index_offset=TRAINING_INDEX_OFFSET,
+        saved_recipe_pool=recipe_catalog,
     )
     X: list[list[float]] = []
     y: list[float] = []
@@ -503,9 +514,9 @@ class MLRecommendationEngine:
     ) -> None:
         """``include_effort_features=False`` trains a preference-only ranker.
 
-        Use it with a ranking policy that supplies the effort term itself
-        (``app.service.BLENDED``), so effort is accounted for once instead of
-        twice. The default keeps the shipped behaviour.
+        This switch comes from offline comparisons in
+        ``recsys.experimental.service``. API 1.2 retains effort features and
+        the accepted missing-first selector; no alternative policy is enabled.
 
         ``include_availability_features`` defaults to False — see
         ``AVAILABILITY_FEATURE_NAMES`` for why a preference model must not read
@@ -555,8 +566,7 @@ class MLRecommendationEngine:
             )
             score = self._classifier.predict_proba(
                 _feature_vector(
-                    features,
-                    include_effort=self._include_effort,
+                    features, include_effort=self._include_effort,
                     include_availability=self._include_availability,
                 )
             )

@@ -245,6 +245,15 @@ def _generate_receipt(
     )
 
 
+def _sample_home_ingredients(rng: random.Random) -> set[str]:
+    """Explicit demo input, not pantry inferred by the serving model."""
+    pool = INGREDIENTS_BY_CATEGORY["pantry"] + INGREDIENTS_BY_CATEGORY["grain"]
+    count = rng.choice([0, 1, 1, 2, 2, 3])
+    if count == 0 or not pool:
+        return set()
+    return set(rng.sample(list(pool), k=min(count, len(pool))))
+
+
 def _sample_saved_recipes(
     rng: random.Random,
     params: ArchetypeParams,
@@ -354,6 +363,7 @@ def generate_profile(
         radius_km=round(rng.uniform(*params.radius_km_range), 1),
         excluded_categories=excluded_categories,
         excluded_ingredient_ids=excluded_ingredient_ids,
+        home_ingredient_ids=_sample_home_ingredients(rng),
         saved_recipe_ids=_sample_saved_recipes(rng, params, saved_recipe_pool),
         history_categories=sorted(set(history_categories)),
         preferred_brands=preferred_brands,

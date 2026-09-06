@@ -10,17 +10,17 @@ import random
 
 import pytest
 
-from app.contracts import ModelRecommendation, RecommendationRequest
+from recsys.experimental.contracts import ModelRecommendation, RecommendationRequest
 from recsys.catboost_model import (
     GRADIENT_BOOSTER_AVAILABLE,
     CatBoostRecommendationEngine,
 )
 from recsys.coverage_heuristic_engine import CoverageHeuristicEngine
-from recsys.inventory import generate_inventory
-from recsys.model import FEATURE_NAMES, MLRecommendationEngine, _feature_vector, compute_features
+from recsys.experimental.inventory import generate_inventory
+from recsys.experimental.model import FEATURE_NAMES, MLRecommendationEngine, _feature_vector, compute_features
 from recsys.oracle_ranking_engine import OracleRankingEngine
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.experimental.profiles import generate_population
+from recsys.experimental.recipes import RECIPES
 
 SEED = 20260905
 
@@ -75,7 +75,7 @@ def all_engines():
 
 class TestProtocolCompliance:
     """``rank()`` must satisfy the exact ``RecommendationEngine`` Protocol
-    used by ``app.service`` (and by every other consumer in this repo)."""
+    used by ``recsys.experimental.service`` (and by every other consumer in this repo)."""
 
     def test_all_four_engines_expose_rank(self, all_engines) -> None:
         for name, engine in all_engines.items():
@@ -127,7 +127,7 @@ class TestDeterminism:
         second = [(r.recipe_id, r.score) for r in engine.rank(request)]
         assert first == second
 
-    def test_ml_engine_is_deterministic_given_the_same_seed(self, request_fixture) -> None:
+    def test_experimental_ml_engine_is_deterministic_given_the_same_seed(self, request_fixture) -> None:
         _, request = request_fixture
         a = MLRecommendationEngine(seed=555, training_profiles=40).rank(request)
         b = MLRecommendationEngine(seed=555, training_profiles=40).rank(request)
@@ -198,7 +198,7 @@ class TestFeatureVectorShape:
         """Same X shape for both classifiers, per the experiment plan's
         requirement that only the classifier differs, not the data."""
         from recsys.catboost_model import _train_booster
-        from recsys.model import _train_classifier
+        from recsys.experimental.model import _train_classifier
 
         booster = _train_booster(seed=1, n_profiles=5, recipe_catalog=list(RECIPES))
         logreg = _train_classifier(seed=1, n_profiles=5, recipe_catalog=list(RECIPES))

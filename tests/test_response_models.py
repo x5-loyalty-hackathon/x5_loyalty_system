@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from app.contracts import (
+from recsys.experimental.contracts import (
     IngredientRecommendation,
     IngredientSource,
     ProductOption,
@@ -21,8 +21,8 @@ from app.contracts import (
     SafetyStatus,
     UserProfile,
 )
-from recsys.profiles import ARCHETYPES, SyntheticProfile
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.profiles import ARCHETYPES, SyntheticProfile
+from recsys.experimental.recipes import RECIPES_BY_ID
 from recsys.response_models import (
     CONVERTING_ACTIONS,
     DEFAULT_RESPONDERS,

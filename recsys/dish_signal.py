@@ -44,9 +44,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from app.contracts import Receipt, ReceiptItem
+from recsys.experimental.contracts import Receipt, ReceiptItem
 from recsys.ready_food_pairs import pairs_for_plu
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES_BY_ID
 
 #: Category marking a receipt line as a prepared meal rather than an
 #: ingredient. Deliberately NOT added to ``recsys.catalog.CATEGORIES``: a
@@ -56,7 +56,7 @@ from recsys.recipes import RECIPES_BY_ID
 READY_MEAL_CATEGORY = "ready_meal"
 
 #: How long a taste observation stays at full weight, in days. Far longer than
-#: the pantry half-lives in ``recsys.pantry``: those model whether food is
+#: the pantry half-lives in ``recsys.experimental.pantry``: those model whether food is
 #: physically gone, this models whether a preference still holds. Liking borsch
 #: does not expire in five days.
 TASTE_HALF_LIFE_DAYS = 60.0
@@ -179,7 +179,7 @@ def dish_signal(
 
     Only receipts strictly before ``now`` contribute: this is a feature, and a
     feature that reads the future is a leak. The same discipline
-    ``recsys.profiles`` now enforces on history generation.
+    ``recsys.experimental.profiles`` now enforces on history generation.
     """
     usable = [r for r in receipts if r.purchased_at <= now]
     dishes = observed_dishes(usable)
@@ -219,7 +219,7 @@ def dish_signal(
 
 #: Feature names this module contributes, in the order ``dish_features``
 #: returns them. Kept next to the function so a caller adding them to
-#: ``recsys.model.FEATURE_NAMES`` cannot get the order wrong.
+#: ``recsys.experimental.model.FEATURE_NAMES`` cannot get the order wrong.
 DISH_FEATURE_NAMES: tuple[str, ...] = (
     "same_dish_ready_affinity",
     "dish_type_affinity",

@@ -1,6 +1,6 @@
-"""Gradient-boosted challenger to ``recsys.model.MLRecommendationEngine``.
+"""Gradient-boosted challenger to ``recsys.experimental.model.MLRecommendationEngine``.
 
-Reuses ``recsys.model``'s exact training pipeline — the same
+Reuses ``recsys.experimental.model``'s exact training pipeline — the same
 ``compute_features``/``_feature_vector``/``_label_for_pair``/``generate_population``
 calls, the same synthetic profiles, the same labels — so the *only*
 difference from the shipped logistic-regression ranker is the classifier.
@@ -19,9 +19,9 @@ from __future__ import annotations
 
 import random
 
-from app.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
+from recsys.experimental.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
 from recsys.catalog import CATEGORIES
-from recsys.model import (
+from recsys.experimental.model import (
     MLRecommendationEngine,
     _feature_vector,
     _history_categories,
@@ -29,8 +29,8 @@ from recsys.model import (
     compute_features,
     compute_user_stats,
 )
-from recsys.pantry import DISABLED_PANTRY, PantryPolicy
-from recsys.profiles import generate_population
+from recsys.experimental.pantry import DISABLED_PANTRY, PantryPolicy
+from recsys.experimental.profiles import generate_population
 
 # Three cases, not two. The fallback chain used to stop at scikit-learn and
 # let ImportError escape when neither library was installed, which made
@@ -84,9 +84,9 @@ def _make_booster(seed: int):
 
 
 def _train_booster(*, seed: int, n_profiles: int, recipe_catalog: list) -> object:
-    """Mirrors ``recsys.model._train_classifier`` row for row, on purpose:
+    """Mirrors ``recsys.experimental.model._train_classifier`` row for row, on purpose:
     see module docstring for why the datasets must be identical."""
-    from recsys.inventory import generate_inventory
+    from recsys.experimental.inventory import generate_inventory
 
     rng = random.Random(seed)
     training_profiles = generate_population(n_profiles, seed=seed)
@@ -136,7 +136,7 @@ class CatBoostRecommendationEngine:
         training_profiles: int = 300,
         pantry_policy: PantryPolicy = DISABLED_PANTRY,
     ) -> None:
-        from recsys.recipes import RECIPES
+        from recsys.experimental.recipes import RECIPES
 
         self._recipe_catalog_for_training = list(recipe_catalog or RECIPES)
         self._pantry_policy = pantry_policy

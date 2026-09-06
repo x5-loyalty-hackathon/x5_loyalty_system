@@ -3,7 +3,7 @@
 The document is a review surface: it is what someone reads to check the recipes
 themselves — ingredient lists, what is seasoning, which dishes X5 already sells
 ready-made and for how much. It is generated rather than written so it cannot
-drift from ``recsys.recipes`` the way a hand-maintained list would.
+drift from ``recsys.experimental.recipes`` the way a hand-maintained list would.
 
 Usage::
 
@@ -23,7 +23,7 @@ from recsys.ready_food_pairs import (
     RECIPES_WITHOUT_READY_FOOD_PAIR,
     SNAPSHOT_IDS,
 )
-from recsys.recipes import QUICK_RECIPE_MINUTES, RECIPES
+from recsys.experimental.recipes import QUICK_RECIPE_MINUTES, RECIPES
 
 OUTPUT_PATH = Path("docs/recipe-catalog.md")
 

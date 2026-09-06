@@ -9,7 +9,7 @@
  * Раскладка детерминирована: один и тот же список продуктов всегда даёт одну
  * и ту же картинку.
  */
-import type { KitchenProduct } from './demo';
+import type { KitchenProduct } from '../domain/kitchen';
 import { spriteForIngredient, spriteForSlotSize, type ProductSprite } from './productSprites';
 import { visibleSlots, type KitchenSlot } from './kitchenSlots';
 

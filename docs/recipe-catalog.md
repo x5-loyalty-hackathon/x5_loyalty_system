@@ -1,8 +1,13 @@
 # Каталог рецептов
 
+> Исследовательский материал ML-ветки, сохранённый при интеграции 06.09.2026.
+> Код стенда использует `recsys.experimental`; приведённые числа и предложения
+> не являются результатами или принятыми контрактами мобильного API 1.2.
+> [Границы и актуальные пути](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/experiment/vxofi/recsys/experimental/README.md).
+
 **47 рецептов**, из них 12 добавлены под собранную базу готовой еды. У 29 есть готовый аналог с реальным PLU, у 18 — нет.
 
-Файл сгенерирован из `recsys/recipes.py` и `recsys/ready_food_pairs.py`. Правится не он, а код.
+Файл сгенерирован из `recsys/experimental/recipes.py` и `recsys/ready_food_pairs.py`. Правится не он, а код.
 
 ---
 

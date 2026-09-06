@@ -1,6 +1,6 @@
 """Rebuild ``recsys/data/availability_reference.json`` from a collected snapshot.
 
-``recsys.inventory.P_NO_PRODUCT_AT_ALL = 0.08`` — "8% of the time the shop does
+``recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL = 0.08`` — "8% of the time the shop does
 not carry the item at all" — was invented. Nobody measured it, and it turned
 out to matter more than anything else in the pipeline: it sits underneath a
 multiplicative veto, so a recipe with six required ingredients survives with
@@ -112,7 +112,7 @@ def extract(db_path: Path) -> dict[str, Any]:
             }
             for chain, values in sorted(by_chain.items())
         },
-        #: The quantity ``recsys.inventory.P_NO_PRODUCT_AT_ALL`` claims to be.
+        #: The quantity ``recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL`` claims to be.
         "observed_not_carried_median": round(1 - statistics.median(shares), 4),
         "invented_constant": 0.08,
         "stores": stores,

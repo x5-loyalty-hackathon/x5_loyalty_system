@@ -1,5 +1,10 @@
 # Три эксперимента: ранкер, сервисная логика, каталог
 
+> Исследовательский материал ML-ветки, сохранённый при интеграции 06.09.2026.
+> Код стенда использует `recsys.experimental`; приведённые числа и предложения
+> не являются результатами или принятыми контрактами мобильного API 1.2.
+> [Границы и актуальные пути](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/experiment/vxofi/recsys/experimental/README.md).
+
 Статус: proposed. Отвечает на вопрос «чего именно не хватает: нечего
 рекомендовать, плохо выбираем из имеющегося, или теряем качество при
 обработке выдачи» — сейчас `docs/benchmark-report.md` и `docs/sensitivity-report.md`
@@ -13,7 +18,7 @@
 база) и в `docs/.sensitivity-state.json` как `arm_cooks_per_user` для
 `ml/effort` на базовой настройке. Это `BenchmarkResult.arm_means("cooks_per_user")`
 (см. `recsys/benchmark.py:CellOutcome.cooks_per_user`) — **не** precision и
-**не** метрика ADR-003.
+**не** метрика EXP-003.
 
 Явно:
 
@@ -27,20 +32,20 @@
   поведенческой симуляции (`recsys.response_models`: `rule_based`,
   `probabilistic`, `economic`; `oracle_selfref` **исключён** из
   `arm_means(independent_only=True)`, он структурно предвзят). Оракул
-  (`recsys.evaluation.oracle_relevant`) участвует в другой метрике —
-  precision@k из ADR-003 (0.89 vs база 0.43) — и меряет желание, а не
+  (`recsys.experimental.evaluation.oracle_relevant`) участвует в другой метрике —
+  precision@k из EXP-003 (0.89 vs база 0.43) — и меряет желание, а не
   готовку. Эти два числа нельзя путать: precision@k оценивает ранжирование
   до сервисной логики, `cooks_per_user` — итог всего конвейера плюс модель
   поведения.
 - **Ограничения на оракул** (для precision@k, раз уж он упоминается в
   экспериментах ниже) — `oracle_relevant` не гейтит на осуществимость
-  (снято в ADR-003), гейтит только на `time_limit_minutes` архетипа
+  (снято в EXP-003), гейтит только на `time_limit_minutes` архетипа
   (недоступен как признак модели). Он выведен из тех же правил архетипа,
   что и обучающая метка `_label_for_pair`, поэтому self-referential
-  относительно `recsys.model` — использовать как *относительный* инструмент
+  относительно `recsys.experimental.model` — использовать как *относительный* инструмент
   сравнения рангов, не как независимую истину.
 - **Условия, при которых посчитано 0.19** — политика `EFFORT_FIRST`
-  (`app.service.DEFAULT_RANKING_POLICY`), `PantryPolicy.disabled()`,
+  (`recsys.experimental.service.DEFAULT_RANKING_POLICY`), `PantryPolicy.disabled()`,
   `DEFAULT_INVENTORY_ASSUMPTIONS`, `REGIMES[:9]` (9 из 27 миров), 80
   пользователей/мир, seed `20260905`.
 
@@ -54,14 +59,14 @@
 
 ### Общая методология для всех трёх экспериментов
 
-- **Одна и та же панель тестовых корзин.** `recsys.profiles.generate_population(N, seed=20260905, archetypes=...)`
-  плюс `recsys.inventory.generate_inventory(...)` с фиксированным
+- **Одна и та же панель тестовых корзин.** `recsys.experimental.profiles.generate_population(N, seed=20260905, archetypes=...)`
+  плюс `recsys.experimental.inventory.generate_inventory(...)` с фиксированным
   `random.Random` — воспроизводится детерминированно каждым экспериментом
   независимо (не через общий файл состояния — три эксперимента идут
   параллельно в разных worktree, шаринг файла означал бы гонку). Любой
   агент, реализующий один из трёх планов, обязан использовать этот же seed
   и этот же способ генерации, чтобы панели совпадали побитово.
-- **Несколько уровней дефицита.** Использовать `recsys.inventory.InventoryAssumptions`
+- **Несколько уровней дефицита.** Использовать `recsys.experimental.inventory.InventoryAssumptions`
   с уровнями `no_product_at_all` и `out_of_stock` на `{низкий, база, высокий}`
   — теми же значениями, что уже откалиброваны в `recsys/sensitivity.py`
   (`DIALS["no_product_at_all"]`, `DIALS["out_of_stock"]`), чтобы результат не
@@ -81,7 +86,7 @@
 
 ## Эксперимент 1 — качество самого ранкера
 
-**Вопрос:** на одинаковых кандидатах, до `app.service`, какой скорер лучше
+**Вопрос:** на одинаковых кандидатах, до `recsys.experimental.service`, какой скорер лучше
 отделяет желаемое от нежелательного?
 
 ### Кандидаты (4 ранкера, единый интерфейс `RecommendationEngine.rank`)
@@ -91,11 +96,11 @@
    `compute_features`. Это не `DeterministicMockEngine` (тот подмешивает
    history-overlap эвристику) — нужен отдельный `CoverageHeuristicEngine`,
    чтобы «простой скор» был буквально тем, что описано в задании.
-2. **Логрег** — существующий `recsys.model.MLRecommendationEngine`
+2. **Логрег** — существующий `recsys.experimental.model.MLRecommendationEngine`
    (`include_effort_features=True`, как в проде).
 3. **CatBoost** — новый `CatBoostRecommendationEngine`, тот же
    `FEATURE_NAMES`/`_feature_vector`/`_label_for_pair` конвейер обучения из
-   `recsys/model.py` (одинаковые X/y, чтобы разница была в классификаторе, а
+   `recsys/experimental/model.py` (одинаковые X/y, чтобы разница была в классификаторе, а
    не в данных), но `catboost.CatBoostClassifier` вместо
    `recsys._logistic.LogisticRegression`. Добавить как опциональную
    зависимость (по образцу `[project.optional-dependencies].ml` в
@@ -113,7 +118,7 @@
 
 ### Два раздельных евала
 
-**A. Желание приготовить** (`recsys.evaluation`-стиль, минуя доступность
+**A. Желание приготовить** (`recsys.experimental.evaluation`-стиль, минуя доступность
 конкретного магазина): precision@k и AUC внутри равного effort
 (`recsys.diagnostics.stratified_signal`-стиль) каждого из 4 ранкеров против
 `oracle_relevant`, на **одинаковых кандидатах** (`engine.rank(request)`
@@ -138,7 +143,7 @@
 ### Метрики и репорт
 
 precision@k, AUC внутри равного `missing_count` (диагностика на утечку
-effort, как в ADR-003), lift над `base_relevance_rate`, доля (B), и для
+effort, как в EXP-003), lift над `base_relevance_rate`, доля (B), и для
 CatBoost/логрег — согласие с оракулом по рангам (например, Spearman/win-rate
 топ-3 против оракульного топ-3). Прогнать на всех уровнях дефицита (см.
 общую методологию). Отчёт: `docs/research/recsys/experiment-1-ranker-quality-report.md`.
@@ -148,7 +153,7 @@ CatBoost/логрег — согласие с оракулом по рангам
 ## Эксперимент 2 — влияние сервисной логики
 
 **Вопрос:** зафиксировав `model_score`, что меняет именно обработка выдачи
-в `app.service`?
+в `recsys.experimental.service`?
 
 ### Фиксация модели
 
@@ -163,13 +168,13 @@ CatBoost/логрег — согласие с оракулом по рангам
    `MODEL_ORDER = RankingPolicy(name="model_order", model_weight=1.0, effort_first=False)`
    — чистая сортировка по `model_score`, без гейта на effort.
 2. **Текущая пересортировка по доступности.** `EFFORT_FIRST` как есть
-   (`app.service.DEFAULT_RANKING_POLICY`) — шипанное поведение.
+   (`recsys.experimental.service.DEFAULT_RANKING_POLICY`) — шипанное поведение.
 3. **Исключение невыполнимых с сохранением порядка модели.** Сейчас
    `RecommendationService.recommend` не отбрасывает рецепты по
    `missing_count` вообще (только по `no_safe_product`/`no_common_fulfillment`/
    безопасности) — нужен новый шаг: после сборки отбросить рецепты с
    `missing_count > FEASIBILITY_MISSING_CAP` (предложить константу, например
-   равную `app.service.MAX_EFFORT_MISSING_COUNT = 8`, либо меньше — обосновать
+   равную `recsys.experimental.service.MAX_EFFORT_MISSING_COUNT = 8`, либо меньше — обосновать
    выбор в отчёте, например по p75 `missing_count` на панели), затем
    отсортировать выживших по `MODEL_ORDER`. Реализовать как параметр
    `RankingPolicy` (`feasibility_missing_cap: int | None = None`) плюс фильтр
@@ -204,7 +209,7 @@ CatBoost/логрег — согласие с оракулом по рангам
 **Вопрос:** для скольких корзин каталог вообще может предложить что-то
 приемлемое, до и после расширения?
 
-### Шаг 1 — измерить текущее покрытие (37 рецептов, `recsys.recipes.RECIPES`)
+### Шаг 1 — измерить текущее покрытие (37 рецептов, `recsys.experimental.recipes.RECIPES`)
 
 На панели корзин (см. общую методологию) посчитать долю корзин, где
 существует хотя бы один рецепт с 0 / ≤1 / ≤2 недостающими ингредиентами —
@@ -227,7 +232,7 @@ CatBoost/логрег — согласие с оракулом по рангам
 Из шага 1 выявить, какие категории/сочетания ингредиентов чаще всего
 оставляют корзину без покрытия (например, недостаёт рецептов с рыбой,
 недостаёт быстрых рецептов ≤4 ингредиентов и т.п.). Добавить в
-`recsys/recipes.py` новые рецепты, закрывающие именно эти пробелы (следуя
+`recsys/experimental/recipes.py` новые рецепты, закрывающие именно эти пробелы (следуя
 существующему стилю модуля: hand-curated, ссылки на `recsys.catalog`,
 обязательный/`is_seasoning` для докупки, `dish_type`/`cuisine` где уместно).
 Обновить `docs/recipe-catalog.md` через `python -m recsys.generate_recipe_doc`.

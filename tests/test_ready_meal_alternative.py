@@ -6,18 +6,18 @@ from datetime import datetime, timezone
 
 import pytest
 
-from app.contracts import (
+from recsys.experimental.contracts import (
     Receipt,
     ReceiptItem,
     ReadyMealOption,
     RecommendationRequest,
     UserProfile,
 )
-from app.recommender import DeterministicMockEngine
-from app.safety import SafetyPolicy
-from app.service import RecommendationService
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import RecommendationService
 from recsys.ready_food_pairs import PAIRS_BY_RECIPE_ID, ready_meal_options
-from recsys.recipes import RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES_BY_ID
 
 NOW = datetime(2026, 9, 5, 12, 0, tzinfo=timezone.utc)
 

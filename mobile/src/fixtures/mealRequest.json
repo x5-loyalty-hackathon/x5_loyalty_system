@@ -1,0 +1,290 @@
+{
+  "user": {
+    "user_id": "user_mobile_12",
+    "radius_km": 0.75,
+    "home_ingredient_ids": [],
+    "saved_recipe_ids": [],
+    "history_categories": [
+      "dairy",
+      "vegetable",
+      "meat",
+      "pantry"
+    ],
+    "preferred_brands": [],
+    "preferred_meal_route": "cook"
+  },
+  "shopping_context": {
+    "anchor_type": "home",
+    "anchor_id": "demo-home",
+    "radius_km": 0.75,
+    "preferred_store_ids": [
+      "store_17"
+    ],
+    "selected_store_id": null
+  },
+  "current_receipt": {
+    "receipt_id": "mobile-history-2026-09-04",
+    "purchased_at": "2026-09-04T10:00:00+03:00",
+    "store_id": "store_17",
+    "items": [
+      {
+        "sku_id": "pasta_home",
+        "name": "Спагетти",
+        "category": "pantry",
+        "ingredient_ids": [
+          "pasta"
+        ],
+        "quantity": 1,
+        "unit_price": 89.99
+      },
+      {
+        "sku_id": "mince_home",
+        "name": "Фарш индейки",
+        "category": "meat",
+        "ingredient_ids": [
+          "mince"
+        ],
+        "quantity": 1,
+        "unit_price": 239.99
+      },
+      {
+        "sku_id": "tomato_home",
+        "name": "Помидоры",
+        "category": "vegetable",
+        "ingredient_ids": [
+          "tomato"
+        ],
+        "quantity": 1,
+        "unit_price": 159.9
+      },
+      {
+        "sku_id": "cheese_home",
+        "name": "Сыр",
+        "category": "dairy",
+        "ingredient_ids": [
+          "cheese"
+        ],
+        "quantity": 1,
+        "unit_price": 219.9
+      }
+    ]
+  },
+  "purchase_history": [],
+  "recipe_catalog": [
+    {
+      "recipe_id": "spaghetti_bolognese",
+      "meal_intent_id": "bolognese",
+      "title": "Спагетти болоньезе",
+      "verified": true,
+      "preparation_minutes": 35,
+      "ingredients": [
+        {
+          "ingredient_id": "pasta",
+          "name": "Спагетти",
+          "category": "pantry",
+          "required": true
+        },
+        {
+          "ingredient_id": "mince",
+          "name": "Фарш индейки",
+          "category": "meat",
+          "required": true
+        },
+        {
+          "ingredient_id": "tomato",
+          "name": "Помидоры",
+          "category": "vegetable",
+          "required": true
+        },
+        {
+          "ingredient_id": "onion",
+          "name": "Лук репчатый",
+          "category": "vegetable",
+          "required": true
+        },
+        {
+          "ingredient_id": "cheese",
+          "name": "Сыр",
+          "category": "dairy",
+          "required": true
+        },
+        {
+          "ingredient_id": "basil",
+          "name": "Базилик",
+          "category": "herbs",
+          "required": false
+        }
+      ]
+    },
+    {
+      "recipe_id": "pasta_tomatoes",
+      "meal_intent_id": "tomato_pasta",
+      "title": "Паста с томатами",
+      "verified": true,
+      "preparation_minutes": 20,
+      "ingredients": [
+        {
+          "ingredient_id": "pasta",
+          "name": "Спагетти",
+          "category": "pantry",
+          "required": true
+        },
+        {
+          "ingredient_id": "tomato",
+          "name": "Помидоры",
+          "category": "vegetable",
+          "required": true
+        },
+        {
+          "ingredient_id": "cheese",
+          "name": "Сыр",
+          "category": "dairy",
+          "required": false
+        }
+      ]
+    },
+    {
+      "recipe_id": "chicken_soup",
+      "meal_intent_id": "chicken_soup",
+      "title": "Куриный суп",
+      "verified": true,
+      "preparation_minutes": 45,
+      "ingredients": [
+        {
+          "ingredient_id": "chicken",
+          "name": "Курица",
+          "category": "meat",
+          "required": true
+        },
+        {
+          "ingredient_id": "carrot",
+          "name": "Морковь",
+          "category": "vegetable",
+          "required": true
+        },
+        {
+          "ingredient_id": "onion",
+          "name": "Лук репчатый",
+          "category": "vegetable",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "inventory_snapshot": [
+    {
+      "sku_id": "onion_01",
+      "name": "Лук репчатый, 500 г",
+      "category": "vegetable",
+      "ingredient_ids": [
+        "onion"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 49.9,
+      "original_price": 49.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 10,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ]
+    },
+    {
+      "sku_id": "onion_sale",
+      "name": "Лук репчатый, 500 г — уценка",
+      "category": "vegetable",
+      "ingredient_ids": [
+        "onion"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 29.9,
+      "original_price": 49.9,
+      "is_markdown": true,
+      "safety_eligible": true,
+      "available_quantity": 3,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ],
+      "expires_at": "2026-09-05T23:00:00+03:00"
+    },
+    {
+      "sku_id": "chicken_01",
+      "name": "Филе куриное, 500 г",
+      "category": "meat",
+      "ingredient_ids": [
+        "chicken"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 299.9,
+      "original_price": 299.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 10,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ]
+    },
+    {
+      "sku_id": "carrot_01",
+      "name": "Морковь, 500 г",
+      "category": "vegetable",
+      "ingredient_ids": [
+        "carrot"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 59.9,
+      "original_price": 59.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 10,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ]
+    },
+    {
+      "sku_id": "ready_bolognese",
+      "name": "Спагетти болоньезе готовые, 300 г",
+      "category": "prepared_food",
+      "ingredient_ids": [
+        "pasta",
+        "mince",
+        "tomato",
+        "onion",
+        "cheese"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 249.9,
+      "original_price": 249.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 3,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ],
+      "meal_intent_ids": [
+        "bolognese"
+      ],
+      "contained_categories": [
+        "pantry",
+        "meat",
+        "vegetable",
+        "dairy"
+      ],
+      "is_prepared_food": true,
+      "expires_at": "2026-09-05T23:00:00+03:00"
+    }
+  ],
+  "requested_mode": null,
+  "now": "2026-09-05T12:00:00+03:00",
+  "limit": 3
+}

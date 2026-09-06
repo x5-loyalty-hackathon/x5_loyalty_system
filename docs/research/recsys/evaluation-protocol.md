@@ -1,5 +1,10 @@
 # Протокол оценки
 
+> Исследовательский материал ML-ветки, сохранённый при интеграции 06.09.2026.
+> Код стенда использует `recsys.experimental`; приведённые числа и предложения
+> не являются результатами или принятыми контрактами мобильного API 1.2.
+> [Границы и актуальные пути](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/experiment/vxofi/recsys/experimental/README.md).
+
 Статус: proposed. Действует с момента принятия — числа, полученные до него,
 остаются в отчётах как история, но не сравниваются с новыми напрямую.
 
@@ -33,8 +38,8 @@ seed заново.
 
 | Объект | Где | Отпечаток |
 |---|---|---|
-| Базовый каталог, 37 рецептов | `recsys.catalog_freeze.BASELINE_RECIPE_IDS` | `dda665585c844cfc` |
-| Пул кандидатов, 10 рецептов | `recsys.catalog_freeze.CANDIDATE_RECIPE_IDS` | — |
+| Базовый каталог, 37 рецептов | `recsys.experimental.catalog_freeze.BASELINE_RECIPE_IDS` | `dda665585c844cfc` |
+| Пул кандидатов, 10 рецептов | `recsys.experimental.catalog_freeze.CANDIDATE_RECIPE_IDS` | — |
 | Версия генератора | `recsys.panels.GENERATOR_VERSION` | v1 |
 | Каталог обучения модели | `MLRecommendationEngine.training_catalog_hash` | `dda665585c844cfc` (= базовый) |
 | Панель development, 1000 польз. | `recsys/data/panels/development/` | профили `ff70fa0e0903a6bb`, инвентарь `0380815daee91a6f` |
@@ -147,12 +152,12 @@ validation 73 / test 77**.
 ### 4.1 Ранкер
 
 **precision@3 на независимых метках.** Знаменатель — карточки (3 на
-пользователя), усреднение по пользователям. Оценка — до `app.service`, на
+пользователя), усреднение по пользователям. Оценка — до `recsys.experimental.service`, на
 выходе `engine.rank()`.
 
 **«Независимых» — ключевое слово, и сейчас таких меток нет.**
-`recsys.evaluation.oracle_relevant` выведен из тех же правил архетипа, что и
-обучающая метка `recsys.model._label_for_pair`. Совпадение с ним измеряет
+`recsys.experimental.evaluation.oracle_relevant` выведен из тех же правил архетипа, что и
+обучающая метка `recsys.experimental.model._label_for_pair`. Совпадение с ним измеряет
 воспроизведение правила, а не релевантность. Отсюда 100% у CatBoost: модель
 восстановила правило, из которого её метка и порождена.
 
@@ -164,7 +169,7 @@ validation 73 / test 77**.
 - **precision@3 как метрика ранкера не считается измеренной**, пока нет
   независимого набора (§5);
 - сопровождающая диагностика обязательна: AUC внутри страт равного
-  `missing_count` и разрыв «общий − внутри» (ADR-003). Разрыв показывает,
+  `missing_count` и разрыв «общий − внутри» (EXP-003). Разрыв показывает,
   сколько точности держится на `missing_count`, который `RankingPolicy` и так
   применяет первым ключом.
 
@@ -282,7 +287,7 @@ validation 73 / test 77**.
 вещи.
 
 **Развёртка по дефициту заработала.** Эксперименты 2 и 3 применяли уровни
-дефицита через monkeypatch модульных констант `recsys.inventory`, которые
+дефицита через monkeypatch модульных констант `recsys.experimental.inventory`, которые
 `generate_inventory` давно не читает — она берёт поля из
 `DEFAULT_INVENTORY_ASSUMPTIONS`, собранного один раз при импорте. У
 эксперимента 2 это давало три одинаковых столбца, что было заметно. У

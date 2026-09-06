@@ -20,7 +20,7 @@ from recsys.ready_food_pairs import (
     pairs_by_chain,
     pairs_for_plu,
 )
-from recsys.recipes import RECIPES, RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES, RECIPES_BY_ID
 from recsys.sku_mapping import INGREDIENT_SKU_MAPPINGS
 
 # Recipes added because the September 2026 ready-food snapshot showed a

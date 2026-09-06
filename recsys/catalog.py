@@ -178,10 +178,9 @@ BRANDS: tuple[str, ...] = (
     "Первым делом",
 )
 
-#: Real per-unit price distribution from 2.8M X5 receipt lines, rebuilt by
-#: ``python -m recsys.calibrate_prices``. See that module for what it does and
-#: does not establish — the dataset's product ids are hashed, so this is a
-#: distribution anchor, never per-ingredient truth.
+#: Aggregate price reference from recsys-benchmark@c28b613. Its calibration
+#: script/data remain on that branch; this JSON is not live SKU pricing.
+#: See docs/integration-handoff.md for what is and is not reproduced here.
 PRICE_REFERENCE: dict = json.loads(
     (Path(__file__).with_name("data") / "price_reference.json").read_text(
         encoding="utf-8"
@@ -191,21 +190,17 @@ PRICE_REFERENCE: dict = json.loads(
 REFERENCE_MEDIAN_PRICE_RUB: float = PRICE_REFERENCE["percentiles_rub"]["50"]
 
 #: How far ``BASE_PRICE_RUB`` sits above the 2018–2019 reference. This is an
-#: *observed* ratio, not an inflation figure we assert: the catalog was written
-#: for 2026 by hand, and the calibration found it landed ~2.4x above the real
-#: 2018–2019 median, which is the right order for seven years of Russian food
-#: inflation. ``tests/test_price_calibration.py`` fails if the catalog drifts
-#: out of the band, so the two cannot silently diverge.
+#: comparison band inherited from the source experiment, not a measured
+#: inflation estimate or an integration quality gate.
 PRICE_ERA_MULTIPLIER_BAND: tuple[float, float] = (1.8, 3.0)
 
 # Per-unit full price (₽) for one ingredient, for a 2026 Moscow basket.
 #
 # These are still hand-written per item — no dataset maps "молоко" to a price,
 # because the transaction dump's product ids are hashed. What they are not any
-# more is unanchored: as a set they are calibrated against PRICE_REFERENCE
-# above, and the recommendation response marks every price derived from them as
-# an estimate (``ProductOption.price_is_estimate``) so it is never confused
-# with the observed ready-meal prices it is shown next to.
+# more is unanchored: the source experiment compares the aggregate distribution
+# to PRICE_REFERENCE. API 1.2 has no price_is_estimate field: generated stock
+# and the mobile fixture are explicitly synthetic, not observed store offers.
 BASE_PRICE_RUB: dict[str, float] = {
     "milk": 89.0,
     "cottage_cheese": 129.0,

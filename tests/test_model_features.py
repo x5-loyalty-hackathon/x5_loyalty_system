@@ -8,17 +8,17 @@ from datetime import datetime, timezone
 
 import pytest
 
-from app.contracts import RecommendationRequest
+from recsys.experimental.contracts import RecommendationRequest
 from recsys.benchmark import _build_request
-from recsys.inventory import generate_inventory
-from recsys.model import (
+from recsys.experimental.inventory import generate_inventory
+from recsys.experimental.model import (
     FEATURE_NAMES,
     MLRecommendationEngine,
     compute_features,
     compute_user_stats,
 )
-from recsys.profiles import generate_population
-from recsys.recipes import RECIPES
+from recsys.experimental.profiles import generate_population
+from recsys.experimental.recipes import RECIPES
 
 NOW = datetime(2026, 9, 5, 12, 0, tzinfo=timezone.utc)
 RECIPE_LIST = list(RECIPES)

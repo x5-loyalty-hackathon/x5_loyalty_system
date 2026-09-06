@@ -10,7 +10,7 @@ Two measurements establish that, and both live here so the claim in
 
 ``effort_confound``
     How strongly each model feature tracks ``missing_count`` — the quantity
-    ``app.service.RankingPolicy`` already sorts on.
+    ``recsys.experimental.service.RankingPolicy`` already sorts on.
 
 ``stratified_signal``
     Whether ``model_score`` still separates relevant from irrelevant recipes
@@ -30,13 +30,13 @@ import statistics
 from collections import defaultdict
 from dataclasses import dataclass
 
-from app.recommender import RecommendationEngine
+from recsys.experimental.recommender import RecommendationEngine
 from recsys.benchmark import _build_request
-from recsys.inventory import generate_inventory
-from recsys.model import FEATURE_NAMES, compute_features
-from recsys.profiles import generate_population
+from recsys.experimental.inventory import generate_inventory
+from recsys.experimental.model import FEATURE_NAMES, compute_features
+from recsys.experimental.profiles import generate_population
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
+from recsys.experimental.recipes import RECIPES
 
 DEFAULT_PROFILES = 60
 DEFAULT_SEED = 11
@@ -172,13 +172,13 @@ def stratified_signal(
 ) -> StratifiedSignal:
     """Does ``model_score`` rank correctly once effort is held fixed?
 
-    Relevance labels come from ``recsys.evaluation.oracle_relevant``. That
+    Relevance labels come from ``recsys.experimental.evaluation.oracle_relevant``. That
     oracle is self-referential for the trained model — but here it works *for*
     the argument rather than against it: if even a friendly judge shows no
     within-stratum separation, the model genuinely carries nothing the ranking
     policy does not already have.
     """
-    from recsys.evaluation import oracle_relevant
+    from recsys.experimental.evaluation import oracle_relevant
 
     by_stratum: dict[int, tuple[list[float], list[bool]]] = defaultdict(
         lambda: ([], [])
@@ -216,8 +216,8 @@ def main() -> int:
     import sys
 
     sys.stdout.reconfigure(encoding="utf-8")
-    from app.recommender import DeterministicMockEngine
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.recommender import DeterministicMockEngine
+    from recsys.experimental.model import MLRecommendationEngine
 
     print("=== feature correlation with missing_count (what the policy sorts on) ===")
     for name, value in sorted(

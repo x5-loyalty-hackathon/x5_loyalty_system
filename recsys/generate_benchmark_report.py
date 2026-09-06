@@ -89,8 +89,8 @@ def win_rate_by_dial(comparison: Comparison, dial: str) -> dict[str, float]:
 
 
 def _diagnostic_engines():
-    from app.recommender import DeterministicMockEngine
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.recommender import DeterministicMockEngine
+    from recsys.experimental.model import MLRecommendationEngine
 
     return (
         ("`ml` (как в проде)", MLRecommendationEngine()),
@@ -267,7 +267,7 @@ def build(
     w("")
     w(
         "Корреляция каждой фичи модели с `missing_count` — то есть с величиной, "
-        "по которой `app.service.RankingPolicy` и так сортирует первым ключом:"
+        "по которой `recsys.experimental.service.RankingPolicy` и так сортирует первым ключом:"
     )
     w("")
     w("| Фича | corr с missing_count |")
@@ -358,7 +358,7 @@ def build(
     w(
         "Если рука выигрывает только у одного симулятора — это свойство "
         "симулятора, а не руки. `oracle_selfref` показан отдельно: он происходит "
-        "от тех же правил архетипов, на которых обучалась `recsys.model`, то есть "
+        "от тех же правил архетипов, на которых обучалась `recsys.experimental.model`, то есть "
         "у ML-рук там структурное преимущество, которого нет больше нигде."
     )
     w("")

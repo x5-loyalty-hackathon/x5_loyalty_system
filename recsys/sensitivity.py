@@ -36,8 +36,8 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Callable
 
-from app.recommender import DeterministicMockEngine
-from app.service import EFFORT_FIRST, RELEVANCE_FIRST
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.service import EFFORT_FIRST, RELEVANCE_FIRST
 from recsys.benchmark import (
     PRIMARY_METRIC,
     Arm,
@@ -45,8 +45,8 @@ from recsys.benchmark import (
     RandomEngine,
     run_benchmark,
 )
-from recsys.inventory import DEFAULT_INVENTORY_ASSUMPTIONS, InventoryAssumptions
-from recsys.profiles import ARCHETYPES, ArchetypeTable
+from recsys.experimental.inventory import DEFAULT_INVENTORY_ASSUMPTIONS, InventoryAssumptions
+from recsys.experimental.profiles import ARCHETYPES, ArchetypeTable
 from recsys.regimes import REGIMES, Regime
 from recsys.response_models import (
     EconomicResponder,
@@ -187,7 +187,7 @@ DIALS: tuple[Dial, ...] = (
 
 def sensitivity_arms() -> tuple[Arm, ...]:
     """Enough arms to evaluate every claim, few enough to sweep cheaply."""
-    from recsys.model import MLRecommendationEngine
+    from recsys.experimental.model import MLRecommendationEngine
 
     ml = MLRecommendationEngine()
     return (

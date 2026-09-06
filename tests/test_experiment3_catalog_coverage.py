@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.contracts import FulfillmentOption, RecommendationRequest
+from recsys.experimental.contracts import FulfillmentOption, RecommendationRequest
 from recsys.catalog import BASE_PRICE_RUB, INGREDIENTS
 from recsys.experiment3_catalog_coverage import (
     DEFICIT_LEVELS,
@@ -23,7 +23,7 @@ from recsys.experiment3_catalog_coverage import (
     old_catalog,
     stable_seed,
 )
-from recsys.recipes import RECIPES, RECIPES_BY_ID
+from recsys.experimental.recipes import RECIPES, RECIPES_BY_ID
 from recsys.sku_mapping import INGREDIENT_SKU_MAPPINGS
 
 

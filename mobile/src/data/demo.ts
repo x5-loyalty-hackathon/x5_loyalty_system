@@ -1,3 +1,4 @@
+/** Legacy design reference only; API 1.2 screens do not import this catalog. */
 export type DemoRecipeMode = 'current' | 'repeat' | 'explore';
 
 export interface DemoIngredient {

@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 
 from app.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
-from recsys.model import FEATURE_NAMES
+from app.recommender import DeterministicMockEngine
+from recsys.model import FEATURE_NAMES, compute_features
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLE_REQUEST = json.loads(
@@ -72,3 +73,32 @@ def test_classifier_learned_a_non_degenerate_weight_per_feature(ml_engine) -> No
     weights = ml_engine._classifier.weights
     assert len(weights) == len(FEATURE_NAMES)
     assert sum(abs(w) for w in weights) > 0.5
+
+
+def test_prepared_food_does_not_count_as_raw_receipt_coverage(ml_engine) -> None:
+    payload = json.loads(json.dumps(EXAMPLE_REQUEST))
+    payload["current_receipt"]["items"] = [
+        {
+            "sku_id": "ready-omelette",
+            "name": "Готовый омлет",
+            "category": "prepared_food",
+            "ingredient_ids": ["egg", "milk", "tomato"],
+            "quantity": 1,
+            "unit_price": 250,
+            "is_prepared_food": True,
+        }
+    ]
+    request = RecommendationRequest.model_validate(payload)
+    omelette = next(
+        recipe
+        for recipe in request.recipe_catalog
+        if recipe.recipe_id == "vegetable_omelette"
+    )
+
+    assert compute_features(request, omelette)["coverage"] == 0
+    mock_result = {
+        item.recipe_id: item for item in DeterministicMockEngine().rank(request)
+    }
+    model_result = {item.recipe_id: item for item in ml_engine.rank(request)}
+    assert mock_result["vegetable_omelette"].mode == RecommendationMode.EXPLORE
+    assert model_result["vegetable_omelette"].mode == RecommendationMode.EXPLORE

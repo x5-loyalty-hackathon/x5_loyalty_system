@@ -1,4 +1,4 @@
-"""Experiment 2 — how much of the outcome is ``app.service``, not the model.
+"""Experiment 2 — how much of the outcome is ``recsys.experimental.service``, not the model.
 
 See ``docs/research/recsys/experiment-plan-ranker-service-catalog.md``
 ("Эксперимент 2 — влияние сервисной логики") for the full spec this
@@ -14,7 +14,7 @@ candidates: reorder them, drop some, or leave them alone. That is a different
 question from experiment 1 ("is the ranker any good"): here the ranker is
 fixed and only the service-side handling of its output changes.
 
-Four variants (``app.service`` policies; see that module's docstrings for
+Four variants (``recsys.experimental.service`` policies; see that module's docstrings for
 each one's own rationale):
 
 1. ``MODEL_ORDER``            — pure model order, no effort gating at all.
@@ -26,7 +26,7 @@ each one's own rationale):
 Because the ranking-policy difference only shows up *after* assembly, this
 runs ``RecommendationService.recommend()`` directly for every (deficit level,
 regime, user, arm) cell — unlike experiment 1, which compares raw
-``engine.rank()`` output before ``app.service`` ever touches it.
+``engine.rank()`` output before ``recsys.experimental.service`` ever touches it.
 
 Deviations from the plan, stated up front (see also "Угрозы валидности" in
 the generated report):
@@ -34,11 +34,11 @@ the generated report):
 * Deficit levels reuse the *same calibrated low/base/high numbers* as
   ``recsys.sensitivity.DIALS`` (``no_product_at_all``: 0.02/0.08/0.35,
   ``out_of_stock``: 0.02/0.10/0.35), built as
-  ``recsys.inventory.InventoryAssumptions`` instances and passed to
+  ``recsys.experimental.inventory.InventoryAssumptions`` instances and passed to
   ``generate_inventory(..., assumptions=...)`` — the same mechanism
   ``recsys.sensitivity`` and ``recsys.benchmark`` already use. An earlier
   version of this script tried to reach the same effect by monkeypatching
-  ``recsys.inventory``'s module-level ``P_NO_PRODUCT_AT_ALL``/``P_OUT_OF_STOCK``
+  ``recsys.experimental.inventory``'s module-level ``P_NO_PRODUCT_AT_ALL``/``P_OUT_OF_STOCK``
   constants; that does nothing, because ``DEFAULT_INVENTORY_ASSUMPTIONS`` is
   an ``InventoryAssumptions()`` instance built once at import time — its
   fields are frozen at construction, not re-read from the module globals on
@@ -47,7 +47,7 @@ the generated report):
 * ``recsys.benchmark.Arm``/``run_benchmark`` is built around simulated user
   *actions* (``UserAction.BUY`` etc. via ``recsys.response_models``), which
   this experiment does not need — it judges the served list directly with
-  ``recsys.evaluation.oracle_relevant``. ``Arm`` is reused as-is for naming
+  ``recsys.experimental.evaluation.oracle_relevant``. ``Arm`` is reused as-is for naming
   one engine+policy configuration; the run loop and aggregation here are
   purpose-built rather than forced through ``run_benchmark``/``CellOutcome``,
   which have no field for "relevant" or "missing_count" per card.
@@ -62,9 +62,9 @@ import time
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-from app.contracts import RecommendationRequest, RecipeRecommendation
-from app.safety import SafetyPolicy
-from app.service import (
+from recsys.experimental.contracts import RecommendationRequest, RecipeRecommendation
+from recsys.experimental.safety import SafetyPolicy
+from recsys.experimental.service import (
     BLENDED,
     EFFORT_FIRST,
     FEASIBILITY_MISSING_CAP,
@@ -73,12 +73,12 @@ from app.service import (
     RecommendationService,
 )
 from recsys.benchmark import Arm
-from recsys.catalog_freeze import baseline_catalog
-from recsys.evaluation import oracle_relevant
-from recsys.model import MLRecommendationEngine
+from recsys.experimental.catalog_freeze import baseline_catalog
+from recsys.experimental.evaluation import oracle_relevant
+from recsys.experimental.model import MLRecommendationEngine
 from recsys.paired_stats import PairedResult, paired_compare
 from recsys.panels import DEFICIT_LEVELS, experiment_panels
-from recsys.profiles import SyntheticProfile
+from recsys.experimental.profiles import SyntheticProfile
 from recsys.ready_food_pairs import ready_meal_options
 
 OUTPUT_PATH = Path("docs/research/recsys/experiment-2-service-logic-report.md")
@@ -511,7 +511,7 @@ def build_report(
     w("")
     w(
         "**Вопрос:** зафиксировав `model_score`, что меняет именно обработка "
-        "выдачи в `app.service`? Это не эксперимент про качество ранкера "
+        "выдачи в `recsys.experimental.service`? Это не эксперимент про качество ранкера "
         "(см. эксперимент 1) — здесь ранкер один и тот же, отличается только "
         "то, что `RecommendationService`/`RankingPolicy` делают с уже "
         "посчитанными кандидатами: пересортировать, отбросить или не трогать."
@@ -560,7 +560,7 @@ def build_report(
         "(до сортировки и обрезки) кандидатам на этой же панели "
         "(`REGIMES[:9]`, 80 польз./мир, seed 20260905): p50=4, **p75=6**, "
         "p90=8, максимум 11. Осознанно ниже `MAX_EFFORT_MISSING_COUNT` (8, "
-        "константа шкалы «максимального усилия» в `app.service`) — цель "
+        "константа шкалы «максимального усилия» в `recsys.experimental.service`) — цель "
         "этого варианта не подрезать хвост, а отсечь дороже-докупаемую "
         "четверть *уже собираемых* рецептов как нереалистичную к покупке "
         "сегодня."
@@ -672,7 +672,7 @@ def build_report(
         "0.02/база/0.35), тем же способом, что `recsys.sensitivity`/"
         "`recsys.benchmark` уже используют. Более ранняя версия скрипта "
         "пыталась достичь того же через monkeypatch модульных констант "
-        "`recsys.inventory.P_NO_PRODUCT_AT_ALL`/`P_OUT_OF_STOCK` — это не "
+        "`recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL`/`P_OUT_OF_STOCK` — это не "
         "работает, потому что `DEFAULT_INVENTORY_ASSUMPTIONS` строится один "
         "раз при импорте модуля и не перечитывает глобальные константы при "
         "каждом вызове; три «уровня дефицита» в той версии считали одно и "
@@ -685,10 +685,10 @@ def build_report(
     )
     w(
         "- **`oracle_relevant` не знает про режим (`Regime`).** Он читает "
-        "`recsys.profiles.ARCHETYPES` напрямую (глобальные, не "
+        "`recsys.experimental.profiles.ARCHETYPES` напрямую (глобальные, не "
         "изменённые дилами новизны/промо/повтора), тогда как сами "
         "популяции генерируются через `regime.archetypes()`. Это "
-        "унаследованное от `recsys.evaluation`/`recsys.response_models."
+        "унаследованное от `recsys.experimental.evaluation`/`recsys.response_models."
         "OracleResponder` свойство, не что-то специфичное для этого "
         "эксперимента — но означает, что «релевантность» здесь мягче "
         "реагирует на дилы `novelty`/`promo`/`repeat`, чем сама генерация "
@@ -698,7 +698,7 @@ def build_report(
         "- **`oracle_relevant` не гейтит на осуществимость** (см. паспорт "
         "метрики 0.19 в плане экспериментов) — он же используется как "
         "относительный инструмент сравнения рангов, self-referential "
-        "относительно `recsys.model`, не независимая истина о желании "
+        "относительно `recsys.experimental.model`, не независимая истина о желании "
         "готовить."
     )
     w(

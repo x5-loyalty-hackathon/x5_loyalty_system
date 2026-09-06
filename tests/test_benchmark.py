@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from app.recommender import DeterministicMockEngine
-from app.service import BLENDED, EFFORT_FIRST, RELEVANCE_FIRST
+from recsys.experimental.recommender import DeterministicMockEngine
+from recsys.experimental.service import BLENDED, EFFORT_FIRST, RELEVANCE_FIRST
 from recsys.benchmark import (
     PRIMARY_METRIC,
     Arm,

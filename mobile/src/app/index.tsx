@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
 import { KitchenScene } from '../components/KitchenScene';
 import { KitchenSheet } from '../components/KitchenSheet';
-import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
+import { Choice, ActionNotice, PrimaryAction, flowStyles as ui } from '../components/FlowControls';
 import { recipeDetails } from '../fixtures/recipeDetails';
 import { matchingSteps } from '../domain/mealFlow';
 import { useDemo } from '../state/DemoContext';
@@ -49,13 +49,17 @@ export default function KitchenScreen() {
                 : <Text style={ui.text}>Для этого состава инструкция ещё не подключена.</Text>}
               <Text style={ui.text}>Demo-инструкция. Окончание готовки не означает, что вся упаковка продукта закончилась.</Text>
               <ActionNotice />
-              <Choice label="Я приготовил" disabled={busy} onPress={() => void finish()} />
               <View style={ui.choices}><Choice label="Вернуться к плану" disabled={busy}
                 onPress={() => { pauseCooking(); router.push('/products'); }} /></View>
+              <View style={styles.cta}>
+                <PrimaryAction label="Я приготовил" tone="done" disabled={busy} onPress={() => void finish()} />
+              </View>
             </> : <>
               <Text style={ui.title}>Что поесть?</Text>
               <Text style={ui.text}>Начните с блюда перед сборкой заказа.</Text>
-              <Choice label="Подобрать для доставки" disabled={busy} onPress={() => enter(true)} />
+              <View style={styles.cta}>
+                <PrimaryAction label="Подобрать блюдо" disabled={busy} onPress={() => enter(true)} />
+              </View>
               <View style={ui.choices}>
                 <Choice label="Из недавних покупок →" disabled={busy} onPress={() => enter(false)} />
               </View>
@@ -87,5 +91,6 @@ const styles = StyleSheet.create({
   stage: { flex: 1, overflow: 'hidden' },
   sheetWrap: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   content: { paddingHorizontal: 16, paddingBottom: 24 },
+  cta: { marginTop: 4, marginBottom: 10 },
   item: { borderBottomWidth: 1, borderBottomColor: color.line, paddingVertical: 6 },
 });

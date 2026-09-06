@@ -9,11 +9,11 @@ import { Choice, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { explain, modeText, warningText } from '../domain/copy';
-import type { Anchor, RecommendationMode } from '../api/types';
+import type { RecommendationMode } from '../api/types';
 
-const anchors: Array<[Anchor, string]> = [
-  ['home', 'У дома'], ['work', 'У работы'], ['current_location', 'Рядом'], ['custom', 'Моё место'],
-];
+// Выбор точки убран с экрана: пока корзина не уходит в доставку X5, он ничего
+// не решает для пользователя. `anchor_type` по-прежнему уходит в запросе —
+// поле контракта, от него зависят расстояния до магазинов.
 export default function RecipesScreen() {
   const router = useRouter();
   const { response, health, recipesStatus, recipesError, query, loadRecipes, selectMeal, busy } = useDemo();
@@ -28,10 +28,6 @@ export default function RecipesScreen() {
             <Choice key={mode} label={modeText[mode]} selected={query.mode === mode} disabled={busy}
               onPress={() => void loadRecipes({ mode })} />)}
         </View>
-        <View style={ui.choices}>{anchors.map(([anchor, label]) =>
-          <Choice key={anchor} label={label} selected={query.anchor === anchor} disabled={busy}
-            onPress={() => void loadRecipes({ anchor, storeId: null })} />)}</View>
-        <Text style={ui.text}>До 750 м от выбранного места. Места, расстояния и покупки синтетические; геолокация не запрашивается.</Text>
         <View style={[styles.domovoiHint, { marginHorizontal: 0 }]}>
           <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.hintMascot} />
           <Text style={styles.hintText}>

@@ -27,7 +27,26 @@ export const flowStyles = StyleSheet.create({
   text: { color: color.body, fontSize: 13, lineHeight: 19, marginVertical: 5 },
   title: { color: color.ink, fontWeight: '700', fontSize: 17, marginBottom: 8 },
 });
+/**
+ * Главное действие экрана. `Choice` — это выбор из равнозначных вариантов, и
+ * когда им же оформляют «дальше», ни один вариант не читается как основной.
+ */
+export function PrimaryAction({ label, tone = 'go', disabled = false, onPress }: {
+  label: string; tone?: 'go' | 'done'; disabled?: boolean; onPress: () => void;
+}) {
+  return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
+    style={[styles.primary, tone === 'done' && styles.primaryDone, disabled && styles.disabled]}>
+    <Text style={styles.primaryLabel}>{label}</Text>
+  </Pressable>;
+}
+
 const styles = StyleSheet.create({
+  primary: {
+    minHeight: 54, borderRadius: 16, backgroundColor: color.red,
+    alignItems: 'center', justifyContent: 'center', paddingHorizontal: 18,
+  },
+  primaryDone: { backgroundColor: color.green },
+  primaryLabel: { color: color.white, fontSize: 16, fontWeight: '700' },
   choice: { paddingHorizontal: 14, paddingVertical: 12, borderRadius: 16, borderWidth: 1,
     borderColor: color.line, backgroundColor: color.white, minHeight: 44 },
   selected: { backgroundColor: color.ink, borderColor: color.ink },

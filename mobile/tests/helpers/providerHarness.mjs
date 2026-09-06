@@ -7,8 +7,9 @@ import ts from 'typescript';
 import * as mealFlow from '../../src/domain/mealFlow.ts';
 import * as fixtures from '../../src/fixtures/recommendationRequest.ts';
 import * as kitchen from '../../src/domain/kitchen.ts';
+import * as commerce from '../../src/domain/commerce.ts';
 
-export function providerHarness(api) {
+export function providerHarness(api, commerceHost) {
   const slots = [];
   let cursor = 0;
   const react = {
@@ -25,6 +26,7 @@ export function providerHarness(api) {
   const modules = {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx }, '../api/endpoints': api,
     '../fixtures/recommendationRequest': fixtures, '../domain/mealFlow': mealFlow, '../domain/kitchen': kitchen,
+    '../domain/commerce': commerce,
   };
   const source = readFileSync(new URL('../../src/state/DemoContext.tsx', import.meta.url), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: {
@@ -34,5 +36,5 @@ export function providerHarness(api) {
   runInNewContext(compiled, { exports, require: (id) => {
     assert.ok(id in modules, `Unexpected import: ${id}`); return modules[id];
   } });
-  return () => { cursor = 0; return exports.DemoProvider({ children: null }).props.value; };
+  return () => { cursor = 0; return exports.DemoProvider({ children: null, commerceHost }).props.value; };
 }

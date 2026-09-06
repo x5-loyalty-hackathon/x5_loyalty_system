@@ -6,8 +6,9 @@ import type {
 } from '../api/types';
 import { DEMO_NOW, DEFAULT_DEMO_PROFILE, DEMO_PROFILES } from '../fixtures/recommendationRequest';
 import { kitchenProducts, mergeKitchenProducts, purchasedKitchenProducts } from '../domain/kitchen';
+import { getCommerceHost, type CommerceHost } from '../domain/commerce';
 import {
-  acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, receiptNotice, rewardText,
+  acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, purchaseGroups, receiptNotice, rewardText,
 } from '../domain/mealFlow';
 
 type AsyncStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -17,7 +18,7 @@ type DecorationAction = { kind: 'goal'; itemId: string | null } | { kind: 'apply
 interface DecorationFailure { action: DecorationAction; message: string }
 const initialQuery: Query = { mode: null, anchor: 'home', storeId: null };
 const emptyBasket = { products: [], total: 0, savings: 0, error: 'Сначала выберите блюдо.' };
-function useDemoState() {
+function useDemoState(commerceHost?: CommerceHost) {
   const [profile, setProfile] = useState(DEFAULT_DEMO_PROFILE);
   const profileRef = useRef(DEFAULT_DEMO_PROFILE);
   // A generation also distinguishes A → B → A: user ID alone cannot reject
@@ -81,7 +82,7 @@ function useDemoState() {
     profileRef.current = next; setProfile(next);
     busyRef.current = false; setBusy(false);
     queryRef.current = initialQuery; setQuery(initialQuery);
-    clearSelection(); setRoute('cook'); setFulfillment('next_visit'); setMarkdown(false);
+    clearSelection(); setRoute('cook'); setFulfillment('delivery'); setMarkdown(true);
     setKitchenItems(kitchenProducts(next.currentReceipt.items)); kitchenReceipts.current = new Set();
     setEquipped({});
     setBook([]); setResponse(null); setHealth(null); setRecipesStatus('idle'); setRecipesError(null);
@@ -96,7 +97,8 @@ function useDemoState() {
     const next = { ...queryRef.current, ...changes };
     queryRef.current = next; setQuery(next);
     const token = gate.current.next();
-    clearSelection(); setResponse(null); setRecipesError(null); setRecipesStatus('loading');
+    // Browsing/reloading recommendations must not delete the current cart/task.
+    setCooking(false); setResponse(null); setRecipesError(null); setRecipesStatus('loading');
     try {
       const [nextHealth, result, saved] = await Promise.all([
         api.getHealth(), api.getRecommendations(next.mode, next.anchor, next.storeId, activeProfile),
@@ -113,8 +115,8 @@ function useDemoState() {
 
   const startEntry = (next: FulfillmentOption) => {
     if (busyRef.current) return;
-    // Starting a new scenario must not inherit the previous locked plan's route.
-    setFulfillment(next);
+    // The existing draft keeps its fulfillment until another meal is chosen.
+    if (!selectedMeal) setFulfillment(next);
     void loadRecipes({ mode: null, storeId: null });
   };
 
@@ -211,6 +213,12 @@ function useDemoState() {
     if (busyRef.current || recipesStatus !== 'ready') return;
     const meal = response?.recommendations.find((item) => item.meal_id === mealId);
     if (!meal) return;
+    if (selectedMeal?.meal_id === mealId && plan?.status !== 'completed') {
+      // Preserve the draft, but allow a refreshed server offer after expiration
+      // or a definitive rejection. Never replace an uncertain in-flight task.
+      if (!pendingPlan.current) { setSelectedMeal(meal); setActionError(null); }
+      return;
+    }
     // Уценка предлагается всегда: сбрасывать флаг на каждый выбор блюда нельзя,
     // иначе уценённые товары исчезают из плана.
     clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route);
@@ -222,11 +230,15 @@ function useDemoState() {
   const basket = selectedMeal
     ? makeBasket(selectedMeal, route, fulfillment, markdown, choices) : emptyBasket;
   const editable = !busy && !pendingPlan.current;
+  const readyProduct = selectedMeal?.ready_variant?.fulfillment_options.includes(fulfillment)
+    ? purchaseGroups(selectedMeal, 'ready', fulfillment, markdown)[0]?.options[0] ?? null : null;
   const chooseRoute = (next: MealRoute) => {
     if (busyRef.current || pendingPlan.current || !selectedMeal?.available_routes.includes(next)) return;
-    setRoute(next); setChoices({}); setActionError(null);
     const variant = next === 'cook' ? selectedMeal.cook_variant : selectedMeal.ready_variant;
-    if (!variant?.fulfillment_options.includes(fulfillment)) setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
+    if (!variant?.fulfillment_options.includes(fulfillment)) {
+      setActionError('Этот вариант недоступен для выбранного способа получения.'); return;
+    }
+    setRoute(next); setChoices({}); setActionError(null);
   };
   const chooseFulfillment = (next: FulfillmentOption) => {
     if (busyRef.current || pendingPlan.current) return;
@@ -242,10 +254,8 @@ function useDemoState() {
    * отметить, хотя вариант там всего один.
    */
   const takeReadyMeal = () => {
-    const sku = selectedMeal?.ready_variant?.product_options[0]?.sku_id;
-    if (!sku || !selectedMeal?.available_routes.includes('ready')) return false;
-    chooseRoute('ready');
-    chooseProduct('ready', sku);
+    if (renderSession !== session.current || busyRef.current || pendingPlan.current || !readyProduct) return false;
+    setRoute('ready'); setChoices({ ready: readyProduct.sku_id }); setActionError(null);
     return true;
   };
   const chooseProduct = (group: string, skuId: string) => {
@@ -272,6 +282,7 @@ function useDemoState() {
     const result = await api.saveMealPlan(pendingPlan.current.request);
     if (!isCurrent()) return;
     if (!['created', 'duplicate'].includes(result.status) || !result.plan) {
+      if (result.status === 'rejected') { pendingPlan.current = null; setPlan(null); }
       throw new Error('Сервер отклонил план. Выберите блюдо заново.');
     }
     setPlan(result.plan);
@@ -293,15 +304,14 @@ function useDemoState() {
     if (!canCompleteCook(saved)) throw new Error('Сначала соберите продукты.');
     setCooking(true);
   });
-  const canConfirmPurchase = Boolean(plan?.selected_product_ids.length
-    && plan.status !== 'cancelled' && (plan.status === 'saved' || pendingReceipt.current));
-  const confirmPurchase = () => run(async (isCurrent) => {
-    if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала сохраните план.');
-    if (!canConfirmPurchase) throw new Error('Покупка уже подтверждена. Нового чека для этого плана не требуется.');
-    const pending = pendingPlan.current;
-    // Retain the exact attempted event even if its successful response is lost.
-    // Completion on save (post-checkout ready) is not a purchase made by this UI.
-    const receipt = pendingReceipt.current ?? makeDemoReceipt(pending.request, pending.products, DEMO_NOW);
+  const canConfirmPurchase = Boolean(plan?.selected_product_ids.length && plan.status === 'saved');
+  const acceptPurchase = async (
+    receipt: ReturnType<typeof makeDemoReceipt>, pending: PendingPlan,
+    isCurrent: () => boolean,
+  ) => {
+    if (receipt.user_id !== pending.request.user_id || receipt.meal_plan_id !== pending.request.plan_id) {
+      throw new Error('Подтверждение покупки относится к другому покупателю или заданию.');
+    }
     pendingReceipt.current = receipt;
     const result = await api.submitReceipt(receipt);
     if (!isCurrent()) return;
@@ -310,12 +320,52 @@ function useDemoState() {
     // Business rejection/review throws before kitchen display is changed.
     const message = receiptNotice(result);
     if (!kitchenReceipts.current.has(receipt.receipt.receipt_id)) {
-      const purchased = purchasedKitchenProducts(selectedMeal, pending.request.selected_route, pending.products);
+      // A partial/unrelated receipt is not evidence that the entire cart arrived.
+      const received = pending.products.filter((p) => receipt.receipt.items.some((item) => item.sku_id === p.sku_id));
+      const purchased = purchasedKitchenProducts(selectedMeal!, pending.request.selected_route, received);
       kitchenReceipts.current.add(receipt.receipt.receipt_id);
       setKitchenItems((current) => mergeKitchenProducts(current, purchased));
     }
     // Keep the locked basket for retries; cooking never deletes whole packs.
     setNotice(`${message} ${rewardText(result.meal_plan)}`);
+  };
+  // Synthetic driver retained for API/regression tests, never used by game buttons.
+  const confirmPurchase = () => run(async (isCurrent) => {
+    if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала выберите задание.');
+    if (!canConfirmPurchase) throw new Error('Покупка уже подтверждена. Нового чека для этого плана не требуется.');
+    const pending = pendingPlan.current;
+    await acceptPurchase(pendingReceipt.current ?? makeDemoReceipt(pending.request, pending.products, DEMO_NOW), pending, isCurrent);
+  });
+  const checkout = () => run(async (isCurrent, userId) => {
+    if (basket.error || !basket.products.length) throw new Error(basket.error ?? 'Докупать нечего — готовка доступна на Кухне.');
+    if (plan && plan.status !== 'saved') throw new Error('Покупка уже учтена. Продолжите на Кухне.');
+    // Recover the exact event first, including kitchen display. Re-saving a plan
+    // can already return collected/completed after a lost receipt response.
+    if (pendingReceipt.current && pendingPlan.current) {
+      await acceptPurchase(pendingReceipt.current, pendingPlan.current, isCurrent); return;
+    }
+    // Check integration before activating a task; standalone browsing is not checkout.
+    const host = commerceHost ?? getCommerceHost();
+    const saved = await persistPlan(isCurrent, userId);
+    if (!saved || !isCurrent()) return;
+    if (saved.status !== 'saved') {
+      setNotice(`Покупка уже учтена. Продолжите на Кухне. ${rewardText(saved)}`); return;
+    }
+    const pending = pendingPlan.current!;
+    const result = await host.openCheckout({
+      checkoutId: pending.request.plan_id,
+      plan: { ...pending.request, selected_product_ids: [...pending.request.selected_product_ids] },
+      products: pending.products.map((p) => ({ ...p, fulfillment_options: [...p.fulfillment_options] })),
+    });
+    if (!isCurrent()) return;
+    if (result.status === 'cancelled') {
+      // Explicit host cancellation means no order was placed. Preserve the draft
+      // but allow editing and a new immutable task on the next checkout attempt.
+      pendingPlan.current = null; setPlan(null);
+      setNotice('Оформление отменено. Выбранные товары остались в корзине.'); return;
+    }
+    if (result.status !== 'purchased' || !result.receipt) throw new Error('Приложение не подтвердило покупку.');
+    await acceptPurchase(result.receipt, pending, isCurrent);
   });
   const confirmCooking = () => run(async (isCurrent, userId) => {
     if (!plan || (!canCompleteCook(plan) && plan.status !== 'completed')) throw new Error('Сначала соберите продукты.');
@@ -337,19 +387,19 @@ function useDemoState() {
     decoration, decorationStatus, decorationError, decorationBusy, decorationFailedAction,
     loadHomeDecoration, chooseDecorationGoal, applyDecoration, retryHomeDecoration,
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
-    route, chooseRoute, takeReadyMeal, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
+    route, chooseRoute, takeReadyMeal, readyProduct, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
     cooking, startCooking, pauseCooking, savePlanAndCook, kitchenItems,
     equipped,
     toggleUpgrade: (upgradeId: string) =>
       setEquipped((current) => ({ ...current, [upgradeId]: !current[upgradeId] })),
-    actionError, notice, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
+    actionError, notice, checkout, canConfirmPurchase, confirmPurchase, confirmCooking, progress, progressStatus, progressError, loadProgress,
   };
 }
 type DemoValue = ReturnType<typeof useDemoState>;
 const DemoCtx = createContext<DemoValue | null>(null);
-export function DemoProvider({ children }: { children: React.ReactNode }) {
-  return <DemoCtx.Provider value={useDemoState()}>{children}</DemoCtx.Provider>;
+export function DemoProvider({ children, commerceHost }: { children: React.ReactNode; commerceHost?: CommerceHost }) {
+  return <DemoCtx.Provider value={useDemoState(commerceHost)}>{children}</DemoCtx.Provider>;
 }
 export function useDemo(): DemoValue {
   const value = useContext(DemoCtx);

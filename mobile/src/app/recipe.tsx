@@ -20,7 +20,7 @@ function sourceTone(source: keyof typeof sourceText): string {
 
 export default function RecipeScreen() {
   const router = useRouter();
-  const { selectedMeal: meal, route, takeReadyMeal, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
+  const { selectedMeal: meal, route, takeReadyMeal, readyProduct, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Выберите блюдо" />
     <Choice label="К предложениям" onPress={() => router.replace('/recipes')} /></SafeAreaView>;
   const cook = meal.cook_variant;
@@ -95,7 +95,7 @@ export default function RecipeScreen() {
           onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
       </View>
       {meal.available_routes.includes('ready') ? <View style={styles.ctaAlt}>
-        <PrimaryAction label="Купить готовое" tone="alt" disabled={busy}
+        <PrimaryAction label="Купить готовое" tone="alt" disabled={!editable || !readyProduct}
           onPress={() => { if (takeReadyMeal()) router.push('/products'); }} />
       </View> : null}
     </View>

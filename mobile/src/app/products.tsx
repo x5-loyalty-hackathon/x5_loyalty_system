@@ -8,24 +8,23 @@ import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowContro
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { money } from '../domain/copy';
-import { canCompleteCook, purchaseGroups } from '../domain/mealFlow';
+import { purchaseGroups } from '../domain/mealFlow';
 
 export default function ProductsScreen() {
   const router = useRouter();
   const {
     selectedMeal: meal, route, fulfillment, markdown,
-    choices, chooseProduct, chooseRoute, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
-    busy, editable, loadRecipes,
+    choices, chooseProduct, chooseRoute, takeReadyMeal, readyProduct, basket, plan, checkout,
+    busy, editable,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
     <View style={ui.panel}><Text style={ui.text}>Сначала выберите блюдо. Отдельного каталога случайных товаров здесь нет.</Text>
       <Choice label="Что поесть?" onPress={() => router.replace('/recipes')} /></View>
     <BottomNav active="kitchen" /></SafeAreaView>;
   const groups = purchaseGroups(meal, route, fulfillment, markdown);
-  const stores = route === 'cook' ? meal.cook_variant?.store_selection : null;
-  const variant = route === 'cook' ? meal.cook_variant : meal.ready_variant;
-  const ready = route === 'cook' ? meal.ready_variant?.product_options[0] : null;
-  const hasPlan = Boolean(plan);
+  const ready = route === 'cook' ? readyProduct : null;
+  const checkoutDisabled = busy || Boolean(basket.error) || !basket.products.length
+    || Boolean(plan && plan.status !== 'saved');
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
     <AppHeader title="Мой план" subtitle={meal.title} />
     <ScrollView contentContainerStyle={styles.scroll}>
@@ -39,7 +38,7 @@ export default function ProductsScreen() {
             <Text style={styles.readyUnit}>{Math.round(ready.distance_km * 1000)} м · {ready.store_id}</Text>
             <Text style={styles.readyName} numberOfLines={2}>{ready.name}</Text>
           </View>
-          <Pressable style={styles.readyAdd} disabled={!editable} onPress={() => chooseRoute('ready')}>
+          <Pressable style={styles.readyAdd} disabled={!editable} onPress={() => takeReadyMeal()}>
             <Text style={styles.readyAddText}>Взять</Text>
           </Pressable>
         </View>
@@ -92,25 +91,20 @@ export default function ProductsScreen() {
       </View>)}
 
       {!groups.length && !basket.error
-        ? <Text style={styles.note}>Докупать нечего. Сохраните план и подтвердите готовку.</Text> : null}
+        ? <Text style={styles.note}>Докупать нечего. Можно готовить на Кухне.</Text> : null}
       {basket.error ? <Text style={styles.error}>{basket.error}</Text> : null}
       <View style={{ paddingHorizontal: 16, marginTop: 8 }}><ActionNotice /></View>
     </ScrollView>
 
     <View style={styles.basketBar}>
       <Text style={styles.basketHint}>
-        {!hasPlan ? 'Оплатить и получить 20 XP'
-          : canConfirmPurchase ? 'Подтвердите покупку · 20 XP'
-          : canCompleteCook(plan) ? 'Куплено — можно готовить'
-          : plan?.reward?.status === 'awarded' ? `Начислено ${plan.reward.xp} XP` : 'План сохранён'}
+        {plan?.status === 'collected' ? 'Куплено — готовка на Кухне'
+          : plan?.status === 'completed' ? 'Задание выполнено'
+          : !basket.products.length && !basket.error ? 'Всё есть — готовка на Кухне' : 'К оформлению'}
       </Text>
-      <Pressable style={[styles.basket, busy && styles.basketOff]} disabled={busy}
-        onPress={() => {
-          if (!hasPlan) { void savePlan(); return; }
-          if (canConfirmPurchase) { void confirmPurchase(); return; }
-          if (canCompleteCook(plan)) { if (startCooking()) router.push('/'); return; }
-          router.push('/profile');
-        }}>
+      <Pressable style={[styles.basket, checkoutDisabled && styles.basketOff]} disabled={checkoutDisabled}
+        accessibilityRole="button" accessibilityLabel="К оформлению"
+        onPress={() => void checkout()}>
         <View style={styles.basketIcon} />
         <Text style={styles.basketText}>{money(basket.total)}</Text>
       </Pressable>

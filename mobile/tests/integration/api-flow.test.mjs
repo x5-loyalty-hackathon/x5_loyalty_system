@@ -13,6 +13,56 @@ import { endpointHarness } from '../helpers/endpointHarness.mjs';
 import { kitchenProducts } from '../../src/domain/kitchen.ts';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
+
+for (const route of ['cook', 'ready']) {
+  test(`host checkout → real API: ${route}, cancellation and lost response do not duplicate purchases/XP`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    let cancel = true, opened = 0, loseReceipt = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseReceipt) { loseReceipt = false; throw new Error('response lost'); }
+        return result;
+      },
+    }, { openCheckout: async ({ plan, products }) => {
+      opened++;
+      return cancel ? { status: 'cancelled' } : { status: 'purchased', receipt: makeDemoReceipt(plan, products, DEMO_NOW) };
+    } });
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(render().editable, true);
+    const before = await body('GET', `/api/v1/progress/${DEMO_USER_ID}`);
+    assert.equal(before.verified_receipts, 0); assert.equal(before.avatar_xp, 0);
+    cancel = false;
+    assert.equal(await render().checkout(), false);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(opened, 2, 'retrying accepted receipt never reopens commerce checkout');
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen, 'lost response retry restores kitchen too');
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(opened, 2);
+  });
+}
 const python = process.env.X5_TEST_PYTHON ?? (existsSync(`${root}.venv/bin/python`) ? `${root}.venv/bin/python` : 'python3');
 const engine = process.env.X5_TEST_ENGINE ?? 'mock';
 assert.ok(['mock', 'model'].includes(engine), 'X5_TEST_ENGINE must be mock or model');

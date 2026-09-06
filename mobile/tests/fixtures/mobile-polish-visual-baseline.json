@@ -1,16 +1,26 @@
 {
-  "source_commit": "72410ac575018808ca8051fae733c8422100a04c",
+  "source_commit": "30005a6e31f127f7abb6e9e1e815438263b19893",
   "policy": "Visual/layout/navigation changes require vxofi approval. Do not refresh hashes just to make a test pass.",
   "approved_overrides": {
-    "src/app/profile.tsx": {
-      "git_blob_sha1": "311d8022b575110e73eb099171e857a19b6e7870",
-      "approved_on": "2026-09-06",
-      "reason": "vxofi approved UI1: demo selector only at bottom of Profile, explicitly labelled demonstration-only; no other layout changes."
+    "src/app/index.tsx": {
+      "git_blob_sha1": "fccfc9e1950d6ebf986bc4e174eda72a2b924cda",
+      "approved_on": "2026-09-07",
+      "reason": "Approved 07.09: existing task action opens cooking on Kitchen or ready progress; unsaved draft remains reachable. No layout/style changes."
     },
-    "src/components/DemoProfileSelector.tsx": {
-      "git_blob_sha1": "2b0807233d97e33e93429c77a296621aa73be54e",
-      "approved_on": "2026-09-06",
-      "reason": "UI1: synthetic demo buyers, not real accounts; explicit demonstration-only heading."
+    "src/app/products.tsx": {
+      "git_blob_sha1": "643ea195330eb44c375be1355e2c044d6b884797",
+      "approved_on": "2026-09-07",
+      "reason": "Approved 07.09: existing CTA hands off host checkout, never save/receipt/cook cycle; matching ready SKU and truthful captions. No layout/style changes."
+    },
+    "src/app/recipe.tsx": {
+      "git_blob_sha1": "0b900ae671ac7293861678134c121500bb62c44a",
+      "approved_on": "2026-09-07",
+      "reason": "Approved 07.09: keep colleague ready button; disable when locked or no compatible SKU. No layout/style changes."
+    },
+    "src/app/profile.tsx": {
+      "git_blob_sha1": "4e50b05223b242414a19c948e08b1fc09d7fcce7",
+      "approved_on": "2026-09-07",
+      "reason": "Approved 07.09: truthful cook/ready XP and purchase-day cap caption. Demo selector and layout preserved."
     }
   },
   "git_blob_sha1": {
@@ -66,17 +76,17 @@
     "assets/products/veg-basket.png": "04e04a26650c82d4d1d887df7517e2a92e7f6656",
     "assets/splash-icon.png": "03d6f6b6c6727954aec1d8206222769afd178d8d",
     "src/app/_layout.tsx": "1a987a2bf4c0f2b2abb34287b58b1dddfaf4fc85",
-    "src/app/index.tsx": "c6b1d441a39c30f51e6af76642565ebc30ea1557",
+    "src/app/index.tsx": "8029ded4c864e9228c114585d4e90ea0a5172195",
     "src/app/kitchen-style.tsx": "42663a3d59d4ee2ec3ea7553d4da70f98616e030",
-    "src/app/products.tsx": "8cdb4532512034ff429c5b73ac4fc6a317e5b4e5",
-    "src/app/profile.tsx": "f8b7bbe11063aeb8584ec050d706198a5521dfa4",
-    "src/app/recipe.tsx": "eb63a7ab18e5c2c5dd51f078e30e1b829ae3d109",
-    "src/app/recipes.tsx": "0d3325e2383c4a01fae9ca5da844ba4e2ea628e2",
+    "src/app/products.tsx": "50e0e750f2b4b8a77fecf19c8ba18c67141c9e3b",
+    "src/app/profile.tsx": "703a50438772098f4e714bee0da7d51960bda5f6",
+    "src/app/recipe.tsx": "87f2917d205737908494bfb9a3f61376d12e7fe2",
+    "src/app/recipes.tsx": "c12da27f261095f4aa12cdb242f2350aac7c707c",
     "src/components/AppHeader.tsx": "535d105ae0612361e98ce217a3dca5d479a7a5eb",
     "src/components/BottomNav.tsx": "b7cf54fb3448976d10c15f757f6987ef88aab2f3",
-    "src/components/FlowControls.tsx": "e1261b3daad699c5d0046b46ead9cbe1d1ed690d",
+    "src/components/FlowControls.tsx": "6fecf1d8401e573aa8d40020506bcdaaf7470bcd",
     "src/components/KitchenScene.tsx": "9735428e1e829d250b9e4ac1dfbd5bc75d18a3b8",
-    "src/components/KitchenSheet.tsx": "47726d25eb90b564c4fdb7896c3ea4f43b6ce0ba",
+    "src/components/KitchenSheet.tsx": "1e11f28d73f3543f794a080b595e9cbcebcaf316",
     "src/components/PhotoStub.tsx": "7bf30741a985f80986412eccc0b973dbca850598",
     "src/data/demo.ts": "85ace328a695e0f8c33d91c141791e482b4b0b94",
     "src/data/kitchenLayers.ts": "bb22d075816d1a91583b168c49ed2a70d3c5bdc1",
@@ -84,6 +94,7 @@
     "src/data/kitchenSlots.ts": "69a2b18e5bce71145183367ec314b86eec84f505",
     "src/data/kitchenUpgrades.ts": "0e0be0f712439f47b28a13ec772c3fdbefa59916",
     "src/data/productSprites.ts": "bb346b8536c8539d9f36cc426ad48736a3bf394e",
-    "src/theme/tokens.ts": "f18c90a1d0e3448bb70f75e921ab34df70c38fa9"
+    "src/theme/tokens.ts": "f18c90a1d0e3448bb70f75e921ab34df70c38fa9",
+    "src/components/DemoProfileSelector.tsx": "2b0807233d97e33e93429c77a296621aa73be54e"
   }
 }

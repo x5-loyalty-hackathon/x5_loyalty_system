@@ -36,6 +36,13 @@ class ProgressService:
                 fraud_score=decision.score,
                 reason_codes=decision.reason_codes,
                 progress=self._repository.snapshot(request.user_id),
+                meal_plan=(
+                    self._repository.receipt_plan_snapshot(
+                        user_id=request.user_id,
+                        receipt_id=request.receipt.receipt_id,
+                        plan_id=request.meal_plan_id,
+                    ) if decision.status == ReceiptEventStatus.DUPLICATE else None
+                ),
             )
 
         outcome = self._repository.record_receipt(
@@ -55,6 +62,13 @@ class ProgressService:
                 fraud_score=late_decision.score,
                 reason_codes=late_decision.reason_codes,
                 progress=self._repository.snapshot(request.user_id),
+                meal_plan=(
+                    self._repository.receipt_plan_snapshot(
+                        user_id=request.user_id,
+                        receipt_id=request.receipt.receipt_id,
+                        plan_id=request.meal_plan_id,
+                    ) if late_decision.status == ReceiptEventStatus.DUPLICATE else None
+                ),
             )
 
         reason_codes = list(decision.reason_codes)

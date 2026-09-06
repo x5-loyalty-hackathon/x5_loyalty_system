@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Protocol
 
+from pydantic import Field
+
 from app.contracts import (
     BasketStoreOption,
     BasketStoreSelection,
@@ -47,6 +49,12 @@ MODE_ORDER = (
 
 class SavedRecipeProvider(Protocol):
     def saved_recipe_ids(self, user_id: str) -> tuple[str, ...]: ...
+
+
+class _LegacyShoppingContext(ShoppingContext):
+    """Validated legacy adapter; the new HTTP shopping context stays <=20 km."""
+
+    radius_km: float = Field(gt=0, le=100)
 
 
 class RecommendationService:
@@ -610,14 +618,15 @@ class RecommendationService:
                 )
                 continue
 
-            missing_count += 1
+            missing_count += int(ingredient.required)
             product_options = [self._to_product_option(item) for item in valid_products]
             source = product_options[0].source
             has_markdown = has_markdown or source == IngredientSource.MARKDOWN
             ingredient_fulfillment = set().union(
                 *(item.fulfillment_options for item in product_options)
             )
-            common_fulfillment &= ingredient_fulfillment
+            if ingredient.required:
+                common_fulfillment &= ingredient_fulfillment
             if not common_fulfillment:
                 return None, "no_common_fulfillment"
 
@@ -661,7 +670,7 @@ class RecommendationService:
     def _shopping_context(request: RecommendationRequest) -> ShoppingContext:
         if request.shopping_context is not None:
             return request.shopping_context
-        return ShoppingContext(radius_km=request.user.radius_km)
+        return _LegacyShoppingContext(radius_km=request.user.radius_km)
 
     def _select_basket_store(
         self,
@@ -690,6 +699,24 @@ class RecommendationService:
                     distance_by_store.get(product.store_id, product.distance_km),
                     product.distance_km,
                 )
+        if not coverage_by_store:
+            return None
+
+        # A fully stocked store is not feasible if no single fulfillment mode
+        # can deliver its mandatory basket. Exclude it before preference/distance
+        # selection, keeping partial stores only as informational alternatives.
+        for store_id in list(coverage_by_store):
+            if coverage_by_store[store_id] != required_ids:
+                continue
+            common = set(FulfillmentOption)
+            for ingredient_id in required_ids:
+                common &= set().union(*(
+                    product.fulfillment_options
+                    for product in product_options_by_ingredient[ingredient_id]
+                    if product.store_id == store_id
+                ))
+            if not common:
+                del coverage_by_store[store_id]
         if not coverage_by_store:
             return None
 

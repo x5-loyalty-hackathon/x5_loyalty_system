@@ -108,6 +108,7 @@ class InMemoryStateRepository:
         self._lock = RLock()
         self._users: dict[str, UserProgressRecord] = {}
         self._receipt_owners: dict[str, str] = {}
+        self._receipt_plan_ids: dict[str, set[str]] = {}
         self._referral_inviter_by_invitee: dict[str, str] = {}
         self._meal_plans: dict[str, MealPlanRecord] = {}
         self._saved_recipe_ids_by_user: dict[str, set[str]] = {}
@@ -116,6 +117,7 @@ class InMemoryStateRepository:
         with self._lock:
             self._users.clear()
             self._receipt_owners.clear()
+            self._receipt_plan_ids.clear()
             self._referral_inviter_by_invitee.clear()
             self._meal_plans.clear()
             self._saved_recipe_ids_by_user.clear()
@@ -178,6 +180,20 @@ class InMemoryStateRepository:
         with self._lock:
             return self._receipt_owners.get(receipt_id)
 
+    def receipt_plan_snapshot(
+        self, *, user_id: str, receipt_id: str, plan_id: str | None,
+    ) -> MealPlanSnapshot | None:
+        """Recover only a server-associated, owned plan; never replay evidence."""
+        with self._lock:
+            if self._receipt_owners.get(receipt_id) != user_id:
+                return None
+            if plan_id not in self._receipt_plan_ids.get(receipt_id, set()):
+                return None
+            plan = self._meal_plans.get(plan_id)
+            if plan is None or plan.user_id != user_id:
+                return None
+            return self._meal_plan_snapshot(plan)
+
     def record_receipt(
         self,
         *,
@@ -224,6 +240,7 @@ class InMemoryStateRepository:
                 plan_snapshot = self._meal_plan_snapshot(plan)
                 plan = None
             if plan is not None and plan.status != MealPlanStatus.COMPLETED:
+                self._receipt_plan_ids.setdefault(receipt.receipt_id, set()).add(plan.plan_id)
                 receipt_product_ids = {item.sku_id for item in receipt.items}
                 plan.collected_product_ids.update(
                     plan.selected_product_ids & receipt_product_ids

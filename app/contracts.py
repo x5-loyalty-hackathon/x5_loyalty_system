@@ -304,7 +304,8 @@ class BasketStoreOption(ApiModel):
 class BasketStoreSelection(ApiModel):
     anchor_type: ShoppingAnchorType
     anchor_id: str | None = None
-    radius_km: float = Field(gt=0, le=20)
+    # The response also describes legacy UserProfile radii up to 100 km.
+    radius_km: float = Field(gt=0, le=100)
     selected_store_id: str = Field(min_length=1)
     reason_codes: list[str] = Field(min_length=1)
     options: list[BasketStoreOption] = Field(min_length=1)

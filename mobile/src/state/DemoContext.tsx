@@ -236,6 +236,18 @@ function useDemoState() {
     if (busyRef.current || pendingPlan.current) return;
     setMarkdown(next); setChoices({}); setActionError(null);
   };
+  /**
+   * «Купить готовое» одним действием: маршрут, выбранный товар и готовая
+   * корзина. Иначе человек попадал на план, где готовое блюдо ещё нужно
+   * отметить, хотя вариант там всего один.
+   */
+  const takeReadyMeal = () => {
+    const sku = selectedMeal?.ready_variant?.product_options[0]?.sku_id;
+    if (!sku || !selectedMeal?.available_routes.includes('ready')) return false;
+    chooseRoute('ready');
+    chooseProduct('ready', sku);
+    return true;
+  };
   const chooseProduct = (group: string, skuId: string) => {
     if (busyRef.current || pendingPlan.current) return;
     setChoices((current) => ({ ...current, [group]: skuId })); setActionError(null);
@@ -325,7 +337,7 @@ function useDemoState() {
     decoration, decorationStatus, decorationError, decorationBusy, decorationFailedAction,
     loadHomeDecoration, chooseDecorationGoal, applyDecoration, retryHomeDecoration,
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
-    route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
+    route, chooseRoute, takeReadyMeal, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
     cooking, startCooking, pauseCooking, savePlanAndCook, kitchenItems,
     equipped,

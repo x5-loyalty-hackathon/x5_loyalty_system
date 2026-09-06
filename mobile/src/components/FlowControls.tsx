@@ -32,10 +32,11 @@ export const flowStyles = StyleSheet.create({
  * когда им же оформляют «дальше», ни один вариант не читается как основной.
  */
 export function PrimaryAction({ label, tone = 'go', disabled = false, onPress }: {
-  label: string; tone?: 'go' | 'done'; disabled?: boolean; onPress: () => void;
+  label: string; tone?: 'go' | 'done' | 'alt'; disabled?: boolean; onPress: () => void;
 }) {
   return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
-    style={[styles.primary, tone === 'done' && styles.primaryDone, disabled && styles.disabled]}>
+    style={[styles.primary, tone === 'done' && styles.primaryDone, tone === 'alt' && styles.primaryAlt,
+      disabled && styles.disabled]}>
     <Text style={styles.primaryLabel}>{label}</Text>
   </Pressable>;
 }
@@ -46,6 +47,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center', paddingHorizontal: 18,
   },
   primaryDone: { backgroundColor: color.green },
+  /** Альтернативный путь: равнозначное действие, но не основное. */
+  primaryAlt: { backgroundColor: color.ink },
   primaryLabel: { color: color.white, fontSize: 16, fontWeight: '700' },
   choice: { paddingHorizontal: 14, paddingVertical: 12, borderRadius: 16, borderWidth: 1,
     borderColor: color.line, backgroundColor: color.white, minHeight: 44 },

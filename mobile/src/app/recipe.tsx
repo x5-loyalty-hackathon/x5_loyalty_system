@@ -20,7 +20,7 @@ function sourceTone(source: keyof typeof sourceText): string {
 
 export default function RecipeScreen() {
   const router = useRouter();
-  const { selectedMeal: meal, route, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
+  const { selectedMeal: meal, route, takeReadyMeal, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Выберите блюдо" />
     <Choice label="К предложениям" onPress={() => router.replace('/recipes')} /></SafeAreaView>;
   const cook = meal.cook_variant;
@@ -89,9 +89,15 @@ export default function RecipeScreen() {
       </View>
     </ScrollView>
     <View style={styles.ctaBar}>
-      <PrimaryAction label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары и способ получения'}
-        tone={readyToCook ? 'done' : 'go'} disabled={busy}
-        onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
+      <View style={styles.ctaMain}>
+        <PrimaryAction label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары'}
+          tone={readyToCook ? 'done' : 'go'} disabled={busy}
+          onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
+      </View>
+      {meal.available_routes.includes('ready') ? <View style={styles.ctaAlt}>
+        <PrimaryAction label="Купить готовое" tone="alt" disabled={busy}
+          onPress={() => { if (takeReadyMeal()) router.push('/products'); }} />
+      </View> : null}
     </View>
     <BottomNav active="recipes" />
   </View></SafeAreaView>;
@@ -133,9 +139,12 @@ const styles = StyleSheet.create({
   lead: { color: color.body, fontSize: 14, lineHeight: 20, marginBottom: 16 },
   rowDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
   ctaBar: {
-    paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12,
+    flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12,
     backgroundColor: color.white, borderTopWidth: 1, borderTopColor: color.line,
   },
+  /** Основное действие шире альтернативы: они равнозначны, но не равны. */
+  ctaMain: { flex: 3 },
+  ctaAlt: { flex: 2 },
   ingredients: { gap: 8, marginBottom: 24 },
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 11,

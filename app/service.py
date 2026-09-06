@@ -92,12 +92,34 @@ RELEVANCE_FIRST = RankingPolicy(
 #: docs/research/recsys/experiment-2-service-logic-report.md (variant 1).
 MODEL_ORDER = RankingPolicy(name="model_order", model_weight=1.0, effort_first=False)
 
-#: Chosen empirically as the 75th percentile of ``missing_count`` over the
-#: standard basket panel (``REGIMES[:9]``, 80 users/regime, seed 20260905) —
-#: see docs/research/recsys/experiment-2-service-logic-report.md. Deliberately
+#: Chosen empirically as the 75th percentile of ``missing_count`` over every
+#: assembled candidate (before sorting and truncation) on the development
+#: panel at the *base* deficit level — ``recsys.panels.experiment_panels
+#: ("train")["база"]``, 603 users — see
+#: docs/research/recsys/experiment-2-service-logic-report.md. Deliberately
 #: below MAX_EFFORT_MISSING_COUNT (8): the point of this cap is to reject the
 #: costliest quarter of *assemblable* recipes as not realistically buyable
 #: today, not merely to clip an extreme tail.
+#:
+#: The cap is calibrated at one deficit level but applied at all of them, and
+#: the level moves the distribution a lot. Re-measured 2026-09-06 over the
+#: frozen baseline catalog:
+#:
+#:     низкий   p50=5  p75=7  p90=9  max=17
+#:     база     p50=4  p75=6  p90=8  max=14   <- the cap comes from this row
+#:     высокий  p50=3  p75=4  p90=5  max=9
+#:
+#: So 6 rejects roughly the top quarter at base, bites harder than p75 at low
+#: deficit, and is nearly inert at high deficit, where the shelf has already
+#: removed the expensive candidates. That is a defensible choice, but it is a
+#: choice about the base world, not a universal constant.
+#:
+#: This block previously attributed the number to "``REGIMES[:9]``, 80
+#: users/regime": experiment 2 runs on panels, which by
+#: ``recsys.panels.experiment_panels``'s own design never sweep behavioural
+#: worlds at all. The percentiles reproduce exactly on the panel, so the value
+#: was right and only its provenance was wrong — copied from experiment 1's
+#: passport and never corrected.
 FEASIBILITY_MISSING_CAP = 6
 
 #: Exclude the infeasible, keep the model's order for what's left — distinct

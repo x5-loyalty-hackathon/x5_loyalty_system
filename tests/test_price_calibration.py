@@ -29,6 +29,10 @@ def test_reference_came_from_a_real_and_large_sample() -> None:
     assert PRICE_REFERENCE["usable_unit_prices"] > 1_000_000
     assert PRICE_REFERENCE["era"] == "2018-2019"
     assert "Retail Hero" in PRICE_REFERENCE["source"]
+    assert PRICE_REFERENCE["price_basis"] == (
+        "receipt line total divided by product_quantity; purchase-unit price only, "
+        "without weight normalization"
+    )
     percentiles = PRICE_REFERENCE["percentiles_rub"]
     ordered = [percentiles[key] for key in ("10", "25", "50", "75", "90", "99")]
     assert ordered == sorted(ordered)

@@ -8,7 +8,7 @@ the comparison and an observed one on the other is a problem worth fixing.
 
 This script grounds the invented side. It reads the X5 Retail Hero transaction
 dump in ``data/kaggle/x5_retail_hero/raw/purchases.csv`` (4.4 GB, not
-committed) and derives the real per-unit price distribution from
+committed) and derives the price of one **purchased unit** from
 ``trn_sum_from_iss / product_quantity``, writing a small percentile summary
 next to the ready-food catalog.
 
@@ -20,6 +20,11 @@ What this does and does not buy us:
 * It does **not** give per-ingredient truth. ``product_id`` and every category
   level in that dataset are hashed (``c3d3a8e8c6``), so "молоко" cannot be tied
   to a row. The reference is a distribution anchor, nothing more.
+* It does **not** normalize a purchase into grams or kilograms. ``netto`` lives
+  in a separate, hashed product table and does not establish that
+  ``product_quantity`` uses the same unit for every product. The reference can
+  therefore check a synthetic **package-price** scale, never recipe cost per
+  gram or kilogram.
 * The dump is from 2018–2019, so it is not directly comparable to a 2026 price.
   ``recsys.catalog`` records the observed ratio rather than pretending the eras
   match.
@@ -78,6 +83,10 @@ def summarize(prices: list[float], rows_read: int) -> dict:
     return {
         "source": "X5 Retail Hero (Kaggle) purchases.csv",
         "era": "2018-2019",
+        "price_basis": (
+            "receipt line total divided by product_quantity; purchase-unit "
+            "price only, without weight normalization"
+        ),
         "rows_read": rows_read,
         "usable_unit_prices": len(prices),
         "percentiles_rub": {

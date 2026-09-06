@@ -1,6 +1,7 @@
 {
  "source": "X5 Retail Hero (Kaggle) purchases.csv",
  "era": "2018-2019",
+ "price_basis": "receipt line total divided by product_quantity; purchase-unit price only, without weight normalization",
  "rows_read": 3000000,
  "usable_unit_prices": 2775798,
  "percentiles_rub": {

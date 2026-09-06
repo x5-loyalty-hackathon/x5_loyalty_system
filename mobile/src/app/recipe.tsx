@@ -11,6 +11,13 @@ import { explain, money, sourceText, warningText } from '../domain/copy';
 import { recipeDetails } from '../fixtures/recipeDetails';
 import { matchingSteps } from '../domain/mealFlow';
 
+/** Цвет статуса ингредиента: что уже есть — зелёным, что покупать — акцентом. */
+function sourceTone(source: keyof typeof sourceText): string {
+  if (source === 'receipt' || source === 'home') return color.green;
+  if (source === 'unavailable') return color.muted;
+  return color.orange;
+}
+
 export default function RecipeScreen() {
   const router = useRouter();
   const { selectedMeal: meal, route, chooseRoute, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
@@ -40,20 +47,31 @@ export default function RecipeScreen() {
       </View>
       <View style={styles.body}>
         <Text style={styles.title}>{meal.title}</Text>
-        <Text style={ui.text}>{explain(meal.reason_codes)}</Text>
-        <Text style={ui.text}>{explain(meal.route_reason_codes)}</Text>
+        <View style={styles.chips}>
+          {cook?.preparation_minutes ? <View style={styles.chip}>
+            <Text style={styles.chipText}>{cook.preparation_minutes} мин</Text></View> : null}
+          {route === 'cook' && cook ? <View style={[styles.chip, cook.missing_count ? styles.chipWarn : styles.chipOk]}>
+            <Text style={[styles.chipText, { color: cook.missing_count ? color.orange : color.green }]}>
+              {cook.missing_count ? `докупить ${cook.missing_count}` : 'всё есть'}</Text></View> : null}
+          {route === 'ready' ? <View style={[styles.chip, styles.chipOk]}>
+            <Text style={[styles.chipText, { color: color.green }]}>без готовки</Text></View> : null}
+        </View>
+        <Text style={styles.lead}>{[explain(meal.reason_codes), explain(meal.route_reason_codes)]
+          .filter(Boolean).join(' ')}</Text>
         <View style={ui.choices}>{meal.available_routes.map((option) =>
           <Choice key={option} label={option === 'cook' ? 'Приготовить' : 'Нет времени — без готовки'}
             selected={route === option} disabled={!editable} onPress={() => chooseRoute(option)} />)}</View>
         {route === 'cook' && cook ? <>
-          <Text style={ui.text}>{cook.preparation_minutes ? `${cook.preparation_minutes} мин · ` : ''}Докупить: {cook.missing_count}</Text>
           <Text style={styles.hint}>Недавний чек не гарантирует наличие продуктов дома. В этой версии поправка «закончилось» ещё не подключена.</Text>
           <Text style={styles.sectionTitle}>Ингредиенты</Text>
           <View style={styles.ingredients}>{cook.ingredients.map((item) =>
-            <View style={styles.row} key={item.ingredient_id}><View style={styles.rowCopy}>
-              <Text style={styles.rowTitle}>{item.name}{item.required ? '' : ' · необязательно'}</Text>
-              <Text style={styles.rowMeta}>{sourceText[item.source]}</Text>
-            </View></View>)}</View>
+            <View style={[styles.row, item.source === 'unavailable' && styles.rowNeeded]} key={item.ingredient_id}>
+              <View style={[styles.rowDot, { backgroundColor: sourceTone(item.source) }]} />
+              <View style={styles.rowCopy}>
+                <Text style={styles.rowTitle}>{item.name}{item.required ? '' : ' · необязательно'}</Text>
+                <Text style={[styles.rowMeta, { color: sourceTone(item.source) }]}>{sourceText[item.source]}</Text>
+              </View>
+            </View>)}</View>
           <Choice label={saved ? '♥ В книге рецептов' : '♡ Сохранить рецепт'} disabled={busy || saved} onPress={() => void saveToBook()} />
           <Text style={styles.hint}>Книга сохраняется на demo-сервере. Сохранение не даёт XP.</Text>
           <Text style={styles.sectionTitle}>Как приготовить</Text>
@@ -112,6 +130,10 @@ const styles = StyleSheet.create({
   sectionMeta: { color: color.muted, fontSize: 12, fontWeight: '600' },
   hint: { color: color.muted, fontSize: 12, lineHeight: 17.4, marginBottom: 12 },
 
+  chipOk: { backgroundColor: color.greenSoft },
+  chipWarn: { backgroundColor: '#FFF1E6' },
+  lead: { color: color.body, fontSize: 14, lineHeight: 20, marginBottom: 16 },
+  rowDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
   ingredients: { gap: 8, marginBottom: 24 },
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 11,

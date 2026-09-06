@@ -4,7 +4,14 @@ from dataclasses import dataclass, field
 from datetime import date
 from threading import RLock
 
-from app.contracts import PrivateRank, ProgressSnapshot, Receipt
+from app.contracts import (
+    KitchenItem,
+    KitchenSnapshot,
+    PrivateRank,
+    ProgressSnapshot,
+    RecipeCompletionStatus,
+    Receipt,
+)
 
 
 XP_PER_PURCHASE_DAY = 10
@@ -22,6 +29,7 @@ class UserProgressRecord:
     markdown_savings: float = 0.0
     rescue_items: float = 0.0
     referral_rewards: int = 0
+    kitchen: dict[str, KitchenItem] = field(default_factory=dict)
 
     @property
     def avatar_xp(self) -> int:
@@ -45,6 +53,12 @@ class ReferralAwardOutcome:
     existing_inviter: str | None
 
 
+@dataclass(frozen=True)
+class RecipeCompletionOutcome:
+    status: RecipeCompletionStatus
+    reason_codes: tuple[str, ...]
+
+
 class InMemoryStateRepository:
     """Demo-only state. Replace with a persistent adapter without changing APIs."""
 
@@ -53,12 +67,14 @@ class InMemoryStateRepository:
         self._users: dict[str, UserProgressRecord] = {}
         self._receipt_owners: dict[str, str] = {}
         self._referral_inviter_by_invitee: dict[str, str] = {}
+        self._recipe_completion_owners: dict[str, str] = {}
 
     def reset(self) -> None:
         with self._lock:
             self._users.clear()
             self._receipt_owners.clear()
             self._referral_inviter_by_invitee.clear()
+            self._recipe_completion_owners.clear()
 
     def get_receipt_owner(self, receipt_id: str) -> str | None:
         with self._lock:
@@ -90,6 +106,15 @@ class InMemoryStateRepository:
                 record.recipes_completed += 1
 
             for item in receipt.items:
+                for ingredient_id in item.ingredient_ids:
+                    current = record.kitchen.get(ingredient_id)
+                    record.kitchen[ingredient_id] = KitchenItem(
+                        ingredient_id=ingredient_id,
+                        name=item.name,
+                        quantity=(current.quantity if current else 0) + item.quantity,
+                    )
+
+            for item in receipt.items:
                 if not item.is_markdown:
                     continue
                 record.rescue_items += item.quantity
@@ -101,6 +126,50 @@ class InMemoryStateRepository:
                 recorded=True,
                 existing_owner=None,
                 is_new_purchase_day=is_new_purchase_day,
+            )
+
+    def kitchen_snapshot(self, user_id: str) -> KitchenSnapshot:
+        with self._lock:
+            record = self._get_or_create(user_id)
+            return KitchenSnapshot(
+                user_id=user_id,
+                items=sorted(record.kitchen.values(), key=lambda item: item.ingredient_id),
+            )
+
+    def complete_recipe(
+        self,
+        *,
+        completion_id: str,
+        user_id: str,
+        recipe_id: str,
+        ingredient_ids: set[str],
+    ) -> RecipeCompletionOutcome:
+        """Consume known pantry items and award recipe XP once per event id."""
+        with self._lock:
+            owner = self._recipe_completion_owners.get(completion_id)
+            if owner == user_id:
+                return RecipeCompletionOutcome(
+                    RecipeCompletionStatus.DUPLICATE, ("recipe_completion_already_processed",)
+                )
+            if owner is not None:
+                return RecipeCompletionOutcome(
+                    RecipeCompletionStatus.REJECTED, ("recipe_completion_claimed_by_another_user",)
+                )
+            record = self._get_or_create(user_id)
+            missing = sorted(ingredient_ids - set(record.kitchen))
+            if missing:
+                return RecipeCompletionOutcome(
+                    RecipeCompletionStatus.NOT_READY,
+                    ("kitchen_ingredients_missing",),
+                )
+            for ingredient_id in ingredient_ids:
+                # The synthetic kitchen tracks presence, not recipe grams.
+                # One completion consumes the observed balance for each input.
+                del record.kitchen[ingredient_id]
+            self._recipe_completion_owners[completion_id] = user_id
+            record.recipes_completed += 1
+            return RecipeCompletionOutcome(
+                RecipeCompletionStatus.COMPLETED, ("recipe_completed",)
             )
 
     def get_referral_inviter(self, invitee_user_id: str) -> str | None:

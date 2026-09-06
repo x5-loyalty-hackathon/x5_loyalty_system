@@ -1,11 +1,17 @@
 import os
 
+from fastapi import HTTPException
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.contracts import (
     HealthResponse,
+    KitchenSnapshot,
     ProgressSnapshot,
+    RecipeCompletionRequest,
+    RecipeCompletionResponse,
+    RecipeDetails,
     RecommendationRequest,
     RecommendationResponse,
     ReceiptProgressRequest,
@@ -14,6 +20,7 @@ from app.contracts import (
     ReferralEvaluationResponse,
 )
 from app.fraud import ReceiptFraudPolicy, ReferralFraudPolicy
+from app.mock_recipes import MOCK_RECIPE_DETAILS
 from app.progress import ProgressService
 from app.recommender import DeterministicMockEngine, RecommendationEngine
 from app.referral import ReferralService
@@ -99,6 +106,41 @@ def process_receipt(
 )
 def get_progress(user_id: str) -> ProgressSnapshot:
     return progress_service.get_progress(user_id)
+
+
+@app.get(
+    "/api/v1/kitchen/{user_id}",
+    response_model=KitchenSnapshot,
+)
+def get_kitchen(user_id: str) -> KitchenSnapshot:
+    return progress_service.get_kitchen(user_id)
+
+
+@app.post(
+    "/api/v1/events/recipes/completed",
+    response_model=RecipeCompletionResponse,
+)
+def complete_recipe(request: RecipeCompletionRequest) -> RecipeCompletionResponse:
+    recipe = MOCK_RECIPE_DETAILS.get(request.recipe_id)
+    if recipe is None:
+        raise HTTPException(status_code=404, detail="recipe not found in PoC catalog")
+    if request.ingredient_ids != recipe.ingredient_ids:
+        raise HTTPException(
+            status_code=422,
+            detail="ingredient_ids must match the synthetic recipe definition",
+        )
+    return progress_service.complete_recipe(request)
+
+
+@app.get(
+    "/api/v1/recipes/{recipe_id}",
+    response_model=RecipeDetails,
+)
+def get_recipe_details(recipe_id: str) -> RecipeDetails:
+    recipe = MOCK_RECIPE_DETAILS.get(recipe_id)
+    if recipe is None:
+        raise HTTPException(status_code=404, detail="recipe not found in PoC catalog")
+    return recipe
 
 
 @app.post(

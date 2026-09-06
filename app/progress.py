@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from app.contracts import (
+    KitchenSnapshot,
     ProgressSnapshot,
+    RecipeCompletionRequest,
+    RecipeCompletionResponse,
     ReceiptEventStatus,
     ReceiptProgressRequest,
     ReceiptProgressResponse,
@@ -68,3 +71,22 @@ class ProgressService:
 
     def get_progress(self, user_id: str) -> ProgressSnapshot:
         return self._repository.snapshot(user_id)
+
+    def get_kitchen(self, user_id: str) -> KitchenSnapshot:
+        return self._repository.kitchen_snapshot(user_id)
+
+    def complete_recipe(
+        self, request: RecipeCompletionRequest
+    ) -> RecipeCompletionResponse:
+        outcome = self._repository.complete_recipe(
+            completion_id=request.completion_id,
+            user_id=request.user_id,
+            recipe_id=request.recipe_id,
+            ingredient_ids=request.ingredient_ids,
+        )
+        return RecipeCompletionResponse(
+            status=outcome.status,
+            reason_codes=list(outcome.reason_codes),
+            kitchen=self._repository.kitchen_snapshot(request.user_id),
+            progress=self._repository.snapshot(request.user_id),
+        )

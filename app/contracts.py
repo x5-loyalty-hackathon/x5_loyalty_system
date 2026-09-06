@@ -298,6 +298,63 @@ class ReceiptProgressResponse(ApiModel):
     progress: ProgressSnapshot
 
 
+class KitchenItem(ApiModel):
+    """One synthetic pantry balance derived from verified receipt lines."""
+
+    ingredient_id: str = Field(min_length=1)
+    name: str = Field(min_length=1)
+    quantity: float = Field(gt=0)
+    unit: str = "шт."
+
+
+class KitchenSnapshot(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    user_id: str
+    #: Explicit until receipts are matched to a real SKU and package size.
+    data_source: str = "synthetic_from_verified_receipts"
+    items: list[KitchenItem]
+
+
+class RecipeCompletionStatus(StrEnum):
+    COMPLETED = "completed"
+    DUPLICATE = "duplicate"
+    NOT_READY = "not_ready"
+    REJECTED = "rejected"
+
+
+class RecipeCompletionRequest(ApiModel):
+    completion_id: str = Field(min_length=1)
+    user_id: str = Field(min_length=1)
+    recipe_id: str = Field(min_length=1)
+    ingredient_ids: set[str] = Field(min_length=1)
+    completed_at: datetime
+
+
+class RecipeCompletionResponse(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    status: RecipeCompletionStatus
+    reason_codes: list[str]
+    kitchen: KitchenSnapshot
+    progress: ProgressSnapshot
+
+
+class RecipeStep(ApiModel):
+    title: str = Field(min_length=1)
+    minutes: int = Field(gt=0, le=240)
+
+
+class RecipeDetails(ApiModel):
+    contract_version: str = CONTRACT_VERSION
+    recipe_id: str
+    title: str
+    preparation_minutes: int = Field(gt=0)
+    servings: int = Field(ge=1, le=12)
+    description: str
+    #: PoC-defined required pantry inputs; synthetic, never a live SKU mapping.
+    ingredient_ids: set[str] = Field(min_length=1)
+    steps: list[RecipeStep] = Field(min_length=1)
+
+
 class ReferralEvaluationRequest(ApiModel):
     inviter_user_id: str = Field(min_length=1)
     invitee_user_id: str = Field(min_length=1)

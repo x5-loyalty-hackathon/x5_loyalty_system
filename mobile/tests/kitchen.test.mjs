@@ -81,8 +81,35 @@ test('kitchen handle also works without a drag', () => {
   const handle = harness.render({ onChange: (next) => { expanded = next; } });
   assert.equal(handle.accessibilityRole, 'button');
   assert.equal(handle.accessibilityState.expanded, false);
-  handle.onPress();
+  // Тап приходит тем же обработчиком, что и перетаскивание: на вебе Pressable
+  // и PanResponder на одном элементе отбирают жест друг у друга.
+  handle.onStartShouldSetPanResponder();
+  handle.onPanResponderGrant();
+  handle.onPanResponderRelease({}, { dy: 0, dx: 0, vy: 0 });
   assert.equal(expanded, true);
+});
+
+test('base kitchen is rendered from replaceable grid-aligned layers', () => {
+  const source = readFileSync(new URL('../src/data/kitchenLayers.ts', import.meta.url), 'utf8');
+  const compiled = ts.transpileModule(source, { compilerOptions: {
+    module: ts.ModuleKind.CommonJS,
+  } }).outputText;
+  const exports = {};
+  runInNewContext(compiled, { exports, require: (id) => {
+    if (id === './kitchenSlots') return { BAND_OFFSET_X: -39, CELL: 4 };
+    assert.ok(id.endsWith('.png'), `Unexpected import: ${id}`);
+    assert.ok(readFileSync(new URL(`../src/data/${id}`, import.meta.url)).length);
+    return id;
+  } });
+
+  assert.deepEqual(Array.from(exports.KITCHEN_BASE_LAYERS, (layer) => layer.id), [
+    'wall', 'floor', 'window', 'stove', 'cabinets', 'shelves', 'shelf-decor',
+    'window-decor', 'counter-decor', 'textile-decor',
+  ]);
+  assert.deepEqual(
+    { ...exports.kitchenLayerRect(exports.KITCHEN_BASE_LAYERS[4]) },
+    { left: 97, top: 248, width: 332, height: 204 },
+  );
 });
 
 test('kitchen receipt list keeps unknown art IDs and deduplicates without stock claims', () => {

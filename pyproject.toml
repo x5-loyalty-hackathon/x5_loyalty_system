@@ -44,4 +44,4 @@ testpaths = ["tests"]
 include = ["app*", "recsys*"]
 
 [tool.setuptools.package-data]
-recsys = ["data/*.json"]
+recsys = ["data/*.json", "data/foodru/*.json", "data/foodru/*.csv", "data/foodru/*.txt"]

@@ -2,11 +2,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { color } from '../theme/tokens';
 
-type NavKey = 'kitchen' | 'recipes' | 'catalog' | 'profile';
+type NavKey = 'kitchen' | 'recipes' | 'profile';
+// «Мой план» отдельной вкладкой нет: экран принадлежит выбранному блюду и
+// пустует, пока блюдо не выбрано. Вход в план — с кухни и из карточки рецепта.
 const items: Array<{ key: NavKey; label: string; glyph: string; route?: '/' | '/recipes' | '/products' | '/profile' }> = [
   { key: 'kitchen', label: 'Кухня', glyph: '■', route: '/' },
   { key: 'recipes', label: 'Рецепты', glyph: '▤', route: '/recipes' },
-  { key: 'catalog', label: 'Мой план', glyph: '▦', route: '/products' },
   { key: 'profile', label: 'Профиль', glyph: '●', route: '/profile' },
 ];
 

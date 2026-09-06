@@ -16,7 +16,12 @@ import io
 import sys
 from pathlib import Path
 
-from recsys.catalog import BASE_PRICE_RUB, PRICE_REFERENCE, REFERENCE_MEDIAN_PRICE_RUB
+from recsys.catalog import (
+    BASE_PRICE_RUB,
+    PRICE_REFERENCE,
+    REFERENCE_MEDIAN_PRICE_RUB,
+    observed_price_era_multiplier,
+)
 from recsys.ready_food_pairs import (
     PAIRS_BY_RECIPE_ID,
     READY_FOOD_CATALOG,
@@ -43,6 +48,10 @@ NO_PAIR_REASON = {
     "greek_salad": "ноль совпадений в снимке",
     "apple_pie": "по названию ловится только слойка с яблоком — ложный матч",
     "carrot_fritters": "по названию ловится «оладушек куриный» — ложный матч",
+    "buckwheat_with_mushrooms": (
+        "гречка в снимке есть, но ни одного варианта с грибами — "
+        "только с маслом, индейкой или печенью"
+    ),
     "chicken_vegetable_stew": "аналоги есть в снимке, но не в Москве",
     "braised_pork_with_vegetables": "слишком общее блюдо, готового эквивалента нет",
     "chicken_cucumber_salad": "слишком общее блюдо, готового эквивалента нет",
@@ -80,13 +89,18 @@ def build() -> str:
 
     w("# Каталог рецептов")
     w("")
+    w("> Исследовательский материал ML-ветки, сохранённый при интеграции 06.09.2026.")
+    w("> Код стенда использует `recsys.experimental`; приведённые числа и предложения")
+    w("> не являются результатами или принятыми контрактами мобильного API 1.3.")
+    w("> [Границы и актуальные пути](../recsys/experimental/README.md).")
+    w("")
     w(
         f"**{len(RECIPES)} рецептов**, из них {len(NEW_FOR_READY_FOOD)} добавлены под собранную базу готовой "
         f"еды. У {len(PAIRS_BY_RECIPE_ID)} есть готовый аналог с реальным PLU, "
         f"у {len(RECIPES_WITHOUT_READY_FOOD_PAIR)} — нет."
     )
     w("")
-    w("Файл сгенерирован из `recsys/recipes.py` и `recsys/ready_food_pairs.py`. Правится не он, а код.")
+    w("Файл сгенерирован из `recsys/experimental/recipes.py` и `recsys/ready_food_pairs.py`. Правится не он, а код.")
     w("")
     w("---")
     w("")
@@ -127,10 +141,11 @@ def build() -> str:
     w("")
     sample = f"{PRICE_REFERENCE['usable_unit_prices']:,}".replace(",", " ")
     w(
-        f"Цены корзины — **оценка**, помеченная в API как `price_is_estimate`. Они "
+        f"Цены корзины — **оценка**; `price_is_estimate` относится к исследовательской "
+        f"схеме, в HTTP API 1.3 такого поля нет. Они "
         f"откалиброваны по {sample} реальных строк чеков X5 "
         f"({PRICE_REFERENCE['era']}, медиана {REFERENCE_MEDIAN_PRICE_RUB} ₽) с наблюдённым "
-        f"коэффициентом ×2.4 на 2026 год."
+        f"коэффициентом ×{observed_price_era_multiplier():.2f} на 2026 год."
     )
     w("")
     w(

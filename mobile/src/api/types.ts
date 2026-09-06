@@ -65,6 +65,15 @@ export interface ProgressSnapshot {
     cohort: 'cooking_households' | 'ready_heavy'; position: number; cohort_size: number; percentile: number;
   };
 }
+export interface HomeDecorationItem {
+  item_id: string; title: string; description: string;
+  unlock_level: number; required_xp: number; unlocked: boolean;
+}
+export interface HomeDecorationSnapshot {
+  user_id: string; avatar_xp: number; avatar_level: number;
+  goal_item_id: string | null; applied_item_id: string;
+  items: HomeDecorationItem[];
+}
 export interface PlanRequest {
   offer_id: string;
   plan_id: string; user_id: string; meal_id: string; selected_route: MealRoute;

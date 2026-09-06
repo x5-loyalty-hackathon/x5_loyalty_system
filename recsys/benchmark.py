@@ -65,6 +65,7 @@ from recsys.experimental.inventory import (
 )
 from recsys.experimental.pantry import DISABLED_PANTRY, PantryPolicy
 from recsys.experimental.profiles import ARCHETYPES, SyntheticProfile, generate_population
+from recsys.experimental.catalog_freeze import recipe_content_hash
 from recsys.ready_food_pairs import ready_meal_options
 from recsys.experimental.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
@@ -314,6 +315,10 @@ class BenchmarkResult:
     seed: int
     inventory_assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS
     responder_names: tuple[str, ...] = field(default_factory=tuple)
+    # Source fix 0bf8240: expose the evaluated catalog without changing the
+    # existing live-catalog default. Compare with engine.training_catalog_hash;
+    # matching train/eval defaults is a separate evaluation-method decision.
+    recipe_catalog_hash: str = ""
 
     def cell(self, arm: str, regime: str, responder: str) -> CellOutcome | None:
         for cell in self.cells:
@@ -556,6 +561,7 @@ def run_benchmark(
         seed=seed,
         inventory_assumptions=inventory_assumptions,
         responder_names=tuple(r.name for r in responders),
+        recipe_catalog_hash=recipe_content_hash(recipe_catalog),
     )
 
 

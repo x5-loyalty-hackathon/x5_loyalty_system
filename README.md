@@ -68,6 +68,8 @@ recommender предлагает персональный приём пищи с
   дни, маржинальный guardrail и правила остановки;
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
   компактное описание согласованной концепции;
+- [Метрики для будущих дашбордов](docs/metrics-api.md) — read-only summary/daily,
+  формулы частоты, знаменатели и ограничения синтетических данных;
 - [Technical design](docs/technical-design.md) — API, границы модели и safety;
 - [ML/Recsys & Evaluation](docs/research/recsys/ml-recsys-overview.md) —
   продуктовая гипотеза, схема recommender, ограничения и критерии проверки

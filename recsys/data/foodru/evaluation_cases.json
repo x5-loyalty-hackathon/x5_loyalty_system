@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "label_origin": "agent_review_of_source_titles_and_ingredients",
+  "independent_human_evaluation": false,
+  "sampling": "Seed 20260907; 20 baseline matched and 20 baseline review, unique normalized product names; selected before v2 changes. Diagnostic development sample, not a holdout.",
+  "baseline_commit": "cf140c7",
+  "pairs": [
+    {
+      "product_key": "pyaterochka:4410980",
+      "recipe_id": "foodru_106570",
+      "product_name": "Блинчики с ветчиной и сыром Пятёрочка Кафе 160г",
+      "recipe_title": "Блины с ветчиной и сыром",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4422195",
+      "recipe_id": "foodru_127388",
+      "product_name": "Сэндвич двойной с лососем и творожным сыром Перекрёсток Select, 185г",
+      "recipe_title": "Тосты с творожным сыром и лососем",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4455459",
+      "recipe_id": "foodru_230179",
+      "product_name": "Каша на молоке из пшена и риса Перекрёсток Select, 250г",
+      "recipe_title": "Рисово-пшенная каша",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4425837",
+      "recipe_id": "foodru_46251",
+      "product_name": "Пирог Осетинский с картофелем и сыром Перекрёсток Select, 200г",
+      "recipe_title": "Осетинский пирог с картошкой и сыром",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "pyaterochka:4459748",
+      "recipe_id": "foodru_11974",
+      "product_name": "Тортилья с курицей и хашбрауном Пятёрочка Кафе, 240г",
+      "recipe_title": "Тортилья с курицей и хашбрауном",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "pyaterochka:4369485",
+      "recipe_id": "foodru_180468",
+      "product_name": "Суп Том-Ям с курицей Пятёрочка Кафе 250г",
+      "recipe_title": "Суп том ям с курицей",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4441218",
+      "recipe_id": "foodru_203589",
+      "product_name": "Соус Медово-Горчичный Перекрёсток Select, 30г",
+      "recipe_title": "Медово-горчичный соус",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4457364",
+      "recipe_id": "foodru_83449",
+      "product_name": "Каша рисовая на кокосовом молоке Перекрёсток Select 250г",
+      "recipe_title": "Рисовая каша на кокосовом молоке",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4441233",
+      "recipe_id": "foodru_128262",
+      "product_name": "Салат из свеклы с чесноком Перекрёсток Select 170г",
+      "recipe_title": "Свекольный салат с чесноком",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "pyaterochka:4445984",
+      "recipe_id": "foodru_60152",
+      "product_name": "Салат Цезарь с курицей Пятёрочка Кафе, 160г",
+      "recipe_title": "Классический салат «Цезарь» с курицей",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4364436",
+      "recipe_id": "foodru_121430",
+      "product_name": "Салат с куриным филе и картофелем пай Перекрёсток Select, 200г",
+      "recipe_title": "Салат с картофелем пай",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4461200",
+      "recipe_id": "foodru_3047",
+      "product_name": "Борщ с говядиной замороженный Перекрёсток Select, 270г",
+      "recipe_title": "Борщ с говядиной",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4405772",
+      "recipe_id": "foodru_159841",
+      "product_name": "Капуста с морковью по-корейски Перекрёсток Select, 200г",
+      "recipe_title": "Морковка и капуста по-корейски",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4451160",
+      "recipe_id": "foodru_4589",
+      "product_name": "Шримп-ролл Перекрёсток Select, 220г",
+      "recipe_title": "Роллы с креветками",
+      "baseline_status": "matched",
+      "label": null,
+      "rationale": "Шримп-ролл может означать ролл в лепёшке или суши; одного названия товара недостаточно."
+    },
+    {
+      "product_key": "pyaterochka:78030124",
+      "recipe_id": "foodru_74239",
+      "product_name": "Багет чесночный 158г",
+      "recipe_title": "Чесночный хлеб",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4444017",
+      "recipe_id": "foodru_121494",
+      "product_name": "Макароны с сыром и зеленью Перекрёсток Select, 200г",
+      "recipe_title": "Спагетти с сыром и зеленью",
+      "baseline_status": "matched",
+      "label": false,
+      "rationale": "У товара явно названа зелень, но в перечне ингредиентов рецепта её нет, несмотря на заголовок."
+    },
+    {
+      "product_key": "pyaterochka:78034778",
+      "recipe_id": "foodru_143288",
+      "product_name": "Самса с говядиной 95г",
+      "recipe_title": "Самса с говядиной",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4453530",
+      "recipe_id": "foodru_67633",
+      "product_name": "Блины домашние замороженные Перекрёсток Select, 400г",
+      "recipe_title": "Классические блинчики",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:3405758",
+      "recipe_id": "foodru_71513",
+      "product_name": "Блины С Пылу с Жару с курицей, 360г",
+      "recipe_title": "Домашние блины с курицей",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4438649",
+      "recipe_id": "foodru_88695",
+      "product_name": "Суп куриный с фрикадельками Перекрёсток Select, 280г",
+      "recipe_title": "Суп с куриными фрикадельками",
+      "baseline_status": "matched",
+      "label": true,
+      "rationale": "Название и основной состав совместимы для кулинарного аналога PoC."
+    },
+    {
+      "product_key": "perekrestok:4429868",
+      "recipe_id": "foodru_31508",
+      "product_name": "Кутабы с сыром и помидорами Перекрёсток Select, 150г",
+      "recipe_title": "Кутабы с сыром",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "В рецепте нет помидоров, явно названных у товара."
+    },
+    {
+      "product_key": "perekrestok:4417712",
+      "recipe_id": "foodru_252660",
+      "product_name": "Соус Лёгкий майонезный 30% Зелёная Линия, 200г",
+      "recipe_title": "Паровки под сырно-майонезным соусом с зеленью",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Готовые паровки с соусом не соответствуют отдельному соусу."
+    },
+    {
+      "product_key": "perekrestok:4458637",
+      "recipe_id": "foodru_87898",
+      "product_name": "Сэндвич-ролл с креветкой в соусе Свит Чили Перекрёсток Select, 170г",
+      "recipe_title": "Окунь, запеченный в соусе свит чили",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Окунь не соответствует сэндвич-роллу с креветками."
+    },
+    {
+      "product_key": "perekrestok:4427468",
+      "recipe_id": "foodru_235063",
+      "product_name": "Бефстроганов Слимкафе из курицы с грибами-овощами, 250г",
+      "recipe_title": "Бефстроганов из курицы с грибами",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Тот же бефстроганов из курицы с грибами; лук присутствует, бренд не определяет состав."
+    },
+    {
+      "product_key": "pyaterochka:4467077",
+      "recipe_id": "foodru_165795",
+      "product_name": "Соус Ткемали фруктово-овощной ФЭГ, 240г",
+      "recipe_title": "Курица с соусом ткемали",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Рецепт курицы с готовым ткемали не является рецептом соуса ткемали."
+    },
+    {
+      "product_key": "perekrestok:4437462",
+      "recipe_id": "foodru_101164",
+      "product_name": "Мясо по-французски с курицей и шампиньонами Перекрёсток Select, 190г",
+      "recipe_title": "Мясо по-французски из куриного бедра с шампиньонами",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Куриное бедро — допустимое уточнение неспецифицированной курицы; сырная запеканка с грибами соответствует названию."
+    },
+    {
+      "product_key": "perekrestok:4473639",
+      "recipe_id": "foodru_418",
+      "product_name": "Мини-сырники Звёздное Соло творожные Перекрёсток Select, 120г",
+      "recipe_title": "Сырники из творога",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Мини и бренд не меняют базовый состав творожных сырников."
+    },
+    {
+      "product_key": "perekrestok:4440025",
+      "recipe_id": "foodru_126165",
+      "product_name": "Галеты из брокколи постные замороженные Зелёная Линия, 300г",
+      "recipe_title": "Постные галеты",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Сладкая галета с яблоками не соответствует галетам из брокколи."
+    },
+    {
+      "product_key": "pyaterochka:4315310",
+      "recipe_id": "foodru_167",
+      "product_name": "Салат Деревенский с курицей и фасолью Пятёрочка Кафе",
+      "recipe_title": "Салат с курицей и фасолью",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Деревенский — общее название; явно названные курица и фасоль присутствуют."
+    },
+    {
+      "product_key": "perekrestok:4372373",
+      "recipe_id": "foodru_108719",
+      "product_name": "Паста с куриным филе и соусом песто Перекрёсток Select, 250 г",
+      "recipe_title": "Паста с соусом песто",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "В составе пасты нет курицы."
+    },
+    {
+      "product_key": "perekrestok:4431738",
+      "recipe_id": "foodru_54492",
+      "product_name": "Спринг-роллы Bibigo с кимчи замороженные, 250г",
+      "recipe_title": "Классические спринг-роллы",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Нет кимчи, явно названного у товара."
+    },
+    {
+      "product_key": "perekrestok:4410398",
+      "recipe_id": "foodru_76435",
+      "product_name": "Клаб Сэндвич двойной с бужениной Перекрёсток Select, 180г",
+      "recipe_title": "Тост с бужениной",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Совместимые хлеб и буженина; размер и число слоёв не определяют состав PoC."
+    },
+    {
+      "product_key": "perekrestok:4453705",
+      "recipe_id": "foodru_29042",
+      "product_name": "Каша пшенная с тыквой и корицей Перекрёсток Select, 250г",
+      "recipe_title": "Пшенная каша с тыквой",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Нет корицы, дополнительно присутствует изюм."
+    },
+    {
+      "product_key": "pyaterochka:4377199",
+      "recipe_id": "foodru_156338",
+      "product_name": "Шницель куриный с картофельным пюре Пятёрочка Кафе 250г",
+      "recipe_title": "Куриный шницель с пюре и маринованными огурчиками",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Куриный шницель и картофельное пюре присутствуют; маринованные огурцы подаются отдельно."
+    },
+    {
+      "product_key": "perekrestok:4445379",
+      "recipe_id": "foodru_122304",
+      "product_name": "Блины с малиной клубникой и заварным кремом Перекрёсток Select, 180г",
+      "recipe_title": "Нежный заварной крем с малиной",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Крем не является блинами; нет клубники."
+    },
+    {
+      "product_key": "pyaterochka:4431755",
+      "recipe_id": "foodru_223447",
+      "product_name": "Булочка Рустик пшеничная замороженная п/ф, 65г",
+      "recipe_title": "Фаршированные пшеничные булочки",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Фаршированная булочка с колбасой не соответствует простой пшеничной булочке."
+    },
+    {
+      "product_key": "perekrestok:4454938",
+      "recipe_id": "foodru_121566",
+      "product_name": "Снекмени Ветчина и сыр замороженные Sибирская коллекция, 220г",
+      "recipe_title": "Салат с сыром и ветчиной",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Салат не соответствует снекменям."
+    },
+    {
+      "product_key": "perekrestok:3463949",
+      "recipe_id": "foodru_58012",
+      "product_name": "Паста Санта Бремор Антарктик криль сливочно-чесночный из морепродуктов, 150г",
+      "recipe_title": "Сливочная паста с морепродуктами",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Намазка из криля не соответствует макаронам с морепродуктами."
+    },
+    {
+      "product_key": "perekrestok:4435181",
+      "recipe_id": "foodru_238773",
+      "product_name": "Клаб Сэндвич двойной с курицей и беконом Перекрёсток Select, 200г",
+      "recipe_title": "Хрустящий сэндвич с куриным филе и беконом",
+      "baseline_status": "review",
+      "label": true,
+      "rationale": "Названные курица и бекон присутствуют в сэндвиче; Клаб/двойной — форма подачи."
+    },
+    {
+      "product_key": "perekrestok:4454935",
+      "recipe_id": "foodru_145757",
+      "product_name": "Снекмени Классические замороженные Sибирская коллекция, 220г",
+      "recipe_title": "Сибирская закуска",
+      "baseline_status": "review",
+      "label": false,
+      "rationale": "Черемша со сметаной не соответствует снекменям."
+    }
+  ]
+}

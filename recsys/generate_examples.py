@@ -82,6 +82,9 @@ def generate_examples(seed: int = SEED) -> list[dict]:
     rng = random.Random(seed + 1)
     engine = MLRecommendationEngine()
     service = RecommendationService(engine=engine, safety_policy=SafetyPolicy())
+    # Showcase the live request catalog, including recipes outside the frozen
+    # training catalog. This is API output for inspection, not a quality metric
+    # or a claim that training and evaluation use identical catalogs (0bf8240).
     recipe_catalog = list(RECIPES)
 
     records: list[dict] = []

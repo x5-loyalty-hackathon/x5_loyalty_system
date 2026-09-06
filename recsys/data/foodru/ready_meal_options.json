@@ -1,0 +1,2686 @@
+[
+  {
+    "chain": "perekrestok",
+    "plu": "2157530",
+    "name": "Лазанья мясная Золотой Петушок, 370г",
+    "recipe_ids": [
+      "foodru_31347"
+    ],
+    "price": 279.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3273892",
+    "name": "Блины С Пылу с Жару с творогом, 360г",
+    "recipe_ids": [
+      "foodru_530"
+    ],
+    "price": 159.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3403377",
+    "name": "Блины С Пылу с Жару без начинки, 360г",
+    "recipe_ids": [
+      "foodru_67633"
+    ],
+    "price": 119.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3405758",
+    "name": "Блины С Пылу с Жару с курицей, 360г",
+    "recipe_ids": [
+      "foodru_71513"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3426375",
+    "name": "Блины С Пылу с Жару с ветчиной и сыром, 360г",
+    "recipe_ids": [
+      "foodru_106570"
+    ],
+    "price": 159.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3633258",
+    "name": "Блины Сибирская Коллекция Handmade с малиной, 400г",
+    "recipe_ids": [
+      "foodru_109049"
+    ],
+    "price": 398.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3662908",
+    "name": "Блины Сибирская Коллекция с мясом, 400г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 423.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "3681003",
+    "name": "Каша молочная рисовая Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_2019"
+    ],
+    "price": 167.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4034848",
+    "name": "Чебурек с мясом замороженный Маркет, 180г",
+    "recipe_ids": [
+      "foodru_119219"
+    ],
+    "price": 68.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4111251",
+    "name": "Блинчики Сибирская коллекция с творогом замороженные, 400г",
+    "recipe_ids": [
+      "foodru_530"
+    ],
+    "price": 499.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4120448",
+    "name": "Паста Перекрёсток Select Болоньезе, 250г",
+    "recipe_ids": [
+      "foodru_2310"
+    ],
+    "price": 204.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4133217",
+    "name": "Салат Оливье Перекрёсток Select, 500г",
+    "recipe_ids": [
+      "foodru_59226"
+    ],
+    "price": 509.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4147834",
+    "name": "Сырники жареные Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 282.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4147835",
+    "name": "Сырники с изюмом Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_49996"
+    ],
+    "price": 324.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4147836",
+    "name": "Сырники с курагой Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_158004"
+    ],
+    "price": 329.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4155363",
+    "name": "Паста Арабьята Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_249954"
+    ],
+    "price": 359.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4175863",
+    "name": "Вок с говядиной Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_16567"
+    ],
+    "price": 356.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4175864",
+    "name": "Вок с курицей Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_46099"
+    ],
+    "price": 339.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4200603",
+    "name": "Сырники жареные Перекрёсток Select, 110г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 154.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4215386",
+    "name": "Блинчики с лососем и творожным сыром Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_75962"
+    ],
+    "price": 379.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4225649",
+    "name": "Салат Цезарь Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_43911"
+    ],
+    "price": 314.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4268960",
+    "name": "Салат Цезарь с креветками Перекрёсток Select, 190г",
+    "recipe_ids": [
+      "foodru_1373"
+    ],
+    "price": 336.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4276196",
+    "name": "Поке с креветками и соусом Альтерно Перекрёсток Select, 210г",
+    "recipe_ids": [
+      "foodru_25630"
+    ],
+    "price": 257.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4279853",
+    "name": "Блинчики Останкино с мясом замороженные, 350г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 139.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4280526",
+    "name": "Том Ям с морепродуктами Шеф Перекрёсток, 370г",
+    "recipe_ids": [
+      "foodru_271604"
+    ],
+    "price": 428.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4310836",
+    "name": "Круассан с ветчиной и сыром Перекрёсток Select, 115г",
+    "recipe_ids": [
+      "foodru_182413"
+    ],
+    "price": 289.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4332829",
+    "name": "Бефстроганов с картофельным пюре Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_198108"
+    ],
+    "price": 298.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4340914",
+    "name": "Борщ Фросток замороженный, 1кг",
+    "recipe_ids": [
+      "foodru_1381"
+    ],
+    "price": 579.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4358607",
+    "name": "Сэндвич с ветчиной и сыром моцарелла Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_386"
+    ],
+    "price": 303.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4359664",
+    "name": "Том ям Фросток с креветками замороженный, 300г",
+    "recipe_ids": [
+      "foodru_2775"
+    ],
+    "price": 329.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4359667",
+    "name": "Суп Фросток Харчо замороженный 300г",
+    "recipe_ids": [
+      "foodru_84176"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4361185",
+    "name": "Суп Фросток Солянка мясная замороженный, 300г",
+    "recipe_ids": [
+      "foodru_199350"
+    ],
+    "price": 359.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4364436",
+    "name": "Салат с куриным филе и картофелем пай Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_121430"
+    ],
+    "price": 339.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4364442",
+    "name": "Салат с тунцом и картофелем Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_57970"
+    ],
+    "price": 251.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4372008",
+    "name": "Соус Клубничный Перекрёсток Select, 35г",
+    "recipe_ids": [
+      "foodru_54759"
+    ],
+    "price": 39.98,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4372009",
+    "name": "Соус Малиновый Перекрёсток Select, 35г",
+    "recipe_ids": [
+      "foodru_55871"
+    ],
+    "price": 39.98,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4376942",
+    "name": "Онигири с креветками белоногими Перекрёсток Select, 110г",
+    "recipe_ids": [
+      "foodru_65577"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4396956",
+    "name": "Чебупели Горячая Штучка с ветчиной и сыром, 240г",
+    "recipe_ids": [
+      "foodru_241058"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4396957",
+    "name": "Чебупели Горячая Штучка сочные с мясом, 240г",
+    "recipe_ids": [
+      "foodru_1488"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4401912",
+    "name": "Удон с курицей и овощами Перекрёсток Select, 215г",
+    "recipe_ids": [
+      "foodru_11915"
+    ],
+    "price": 243.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4402241",
+    "name": "Морковь По-Корейски Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_68524"
+    ],
+    "price": 99.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4402242",
+    "name": "Морковь По-Корейски Перекрёсток Select 500г",
+    "recipe_ids": [
+      "foodru_68524"
+    ],
+    "price": 194.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4402245",
+    "name": "Спаржа с морковью по-корейски Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_55726"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4403475",
+    "name": "Котлеты Сочные из индейки жареные Перекрёсток Select, 240г",
+    "recipe_ids": [
+      "foodru_29072"
+    ],
+    "price": 331.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4405772",
+    "name": "Капуста с морковью по-корейски Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_159841"
+    ],
+    "price": 174.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4405773",
+    "name": "Спаржа По-Корейски Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_143562"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4406507",
+    "name": "Салат Крабовый Перекрёсток Select, 180г",
+    "recipe_ids": [
+      "foodru_2643"
+    ],
+    "price": 188.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4407905",
+    "name": "Блинчики с творогом Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_530"
+    ],
+    "price": 156.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4410402",
+    "name": "Оладьи печеночные жареные Перекрёсток Select, 280г",
+    "recipe_ids": [
+      "foodru_2973"
+    ],
+    "price": 352.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4414705",
+    "name": "Свекольник на кефире Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_42494"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4416810",
+    "name": "Картофель отварной с укропом Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_156898"
+    ],
+    "price": 174.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4422195",
+    "name": "Сэндвич двойной с лососем и творожным сыром Перекрёсток Select, 185г",
+    "recipe_ids": [
+      "foodru_127388"
+    ],
+    "price": 439.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4424332",
+    "name": "Вок Dostaевский курица терияки с гречневой лапшой замороженный, 320г",
+    "recipe_ids": [
+      "foodru_16563"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4424333",
+    "name": "Вок Dostaевский курица терияки-удон замороженный, 320г",
+    "recipe_ids": [
+      "foodru_45858"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4424334",
+    "name": "Вок Dostaевский курица терияки-рис замороженный, 320г",
+    "recipe_ids": [
+      "foodru_45909"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4424335",
+    "name": "Вок Dostaевский со свининой и лапшой удон замороженный, 320г",
+    "recipe_ids": [
+      "foodru_16558"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4425837",
+    "name": "Пирог Осетинский с картофелем и сыром Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_46251"
+    ],
+    "price": 309.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4428532",
+    "name": "Соус Чили Сладкий Перекрёсток Select, 30г",
+    "recipe_ids": [
+      "foodru_231680"
+    ],
+    "price": 39.98,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4428799",
+    "name": "Конвертики с курицей сыром и томатами Перекрёсток Select, 140г",
+    "recipe_ids": [
+      "foodru_271364"
+    ],
+    "price": 299.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4436507",
+    "name": "Блинчики с ветчиной и сыром Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_106570"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4436606",
+    "name": "Котлеты из куриной грудки Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_1352"
+    ],
+    "price": 220.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4437080",
+    "name": "Блинчики с ветчиной и сыром Перекрёсток Select, 240г",
+    "recipe_ids": [
+      "foodru_106570"
+    ],
+    "price": 310.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4437243",
+    "name": "Клаб Сэндвич двойной с ветчиной и сыром Перекрёсток Select, 190г",
+    "recipe_ids": [
+      "foodru_1981"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4437477",
+    "name": "Блинчики с мясом Перекрёсток Select, 240г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 309.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4437971",
+    "name": "Борщ с говядиной Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_3047"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4438005",
+    "name": "Блинчики с мясом Перекрёсток Select 160г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 198.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4438329",
+    "name": "Блинчики с мясом Перекрёсток Select, 400г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 469.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4438507",
+    "name": "Салат Оливье Перекрёсток Select 170г",
+    "recipe_ids": [
+      "foodru_59226"
+    ],
+    "price": 254.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4438510",
+    "name": "Салат Оливье с говядиной Перекрёсток Select 170г",
+    "recipe_ids": [
+      "foodru_2160"
+    ],
+    "price": 299.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4438649",
+    "name": "Суп куриный с фрикадельками Перекрёсток Select, 280г",
+    "recipe_ids": [
+      "foodru_88695"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4439261",
+    "name": "Филе минтая под маринадом Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_144862"
+    ],
+    "price": 309.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4441218",
+    "name": "Соус Медово-Горчичный Перекрёсток Select, 30г",
+    "recipe_ids": [
+      "foodru_203589"
+    ],
+    "price": 39.98,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4441220",
+    "name": "Соус Сальса Перекрёсток Select, 30г",
+    "recipe_ids": [
+      "foodru_706"
+    ],
+    "price": 39.98,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4441233",
+    "name": "Салат из свеклы с чесноком Перекрёсток Select 170г",
+    "recipe_ids": [
+      "foodru_128262"
+    ],
+    "price": 167.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4441234",
+    "name": "Плов с курицей Перекрёсток Select 200г",
+    "recipe_ids": [
+      "foodru_1447"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4441235",
+    "name": "Плов с курицей Перекрёсток Select, 500г",
+    "recipe_ids": [
+      "foodru_1447"
+    ],
+    "price": 409.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4442431",
+    "name": "Суп-лапша грибная Перекрёсток Select 250г",
+    "recipe_ids": [
+      "foodru_112852"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4442610",
+    "name": "Харчо Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_84176"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4443041",
+    "name": "Салат из свёклы с черносливом Перекрёсток Select, 170г",
+    "recipe_ids": [
+      "foodru_166031"
+    ],
+    "price": 194.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4443645",
+    "name": "Салат Коул Слоу капустный Перекрёсток Select, 170г",
+    "recipe_ids": [
+      "foodru_244050"
+    ],
+    "price": 194.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4443654",
+    "name": "Салат из морской капусты с крабовыми палочками Перекрёсток Select, 170г",
+    "recipe_ids": [
+      "foodru_122887"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4443937",
+    "name": "Сырники запечённые Перекрёсток Select 220г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 279.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4443973",
+    "name": "Сырники запечённые Перекрёсток Select, 110г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4444017",
+    "name": "Макароны с сыром и зеленью Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_121494"
+    ],
+    "price": 194.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4444865",
+    "name": "Уха по-фински Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_112822"
+    ],
+    "price": 309.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4445378",
+    "name": "Блинчики с маковой начинкой Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_131731"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4445448",
+    "name": "Блинчики с бананом и шоколадно-ореховой пастой Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_247253"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4445540",
+    "name": "Пюре картофельное Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_31893"
+    ],
+    "price": 164.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4445541",
+    "name": "Пюре картофельное Перекрёсток Select, 400г",
+    "recipe_ids": [
+      "foodru_31893"
+    ],
+    "price": 259.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4446146",
+    "name": "Запеканка творожная с вишней Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_57940"
+    ],
+    "price": 299.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4446262",
+    "name": "Оладьи на кефире жареные Перекрёсток Select 130г",
+    "recipe_ids": [
+      "foodru_1484"
+    ],
+    "price": 118.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4446267",
+    "name": "Котлета По-Киевски Перекрёсток Select, 300г",
+    "recipe_ids": [
+      "foodru_1354"
+    ],
+    "price": 419.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4446876",
+    "name": "Салат Дачный Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_216658"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4447366",
+    "name": "Филе куриной грудки запечённое с томатами под сыром Перекрёсток Select, 150г",
+    "recipe_ids": [
+      "foodru_137741"
+    ],
+    "price": 369.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4448422",
+    "name": "Каша овсяная на молоке Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_29047"
+    ],
+    "price": 114.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4448423",
+    "name": "Каша пшённая на молоке Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_29044"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4448946",
+    "name": "Котлеты домашние с говядиной Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_29070"
+    ],
+    "price": 369.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4450545",
+    "name": "Омлет Классический Перекрёсток Select, 150г",
+    "recipe_ids": [
+      "foodru_44097"
+    ],
+    "price": 174.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4450751",
+    "name": "Суп Куриный с домашней лапшой Перекрёсток Select 270г",
+    "recipe_ids": [
+      "foodru_59525"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4450946",
+    "name": "Шарики сырные из моцареллы Перекрёсток Select, 130г",
+    "recipe_ids": [
+      "foodru_11296"
+    ],
+    "price": 359.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4451160",
+    "name": "Шримп-ролл Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_4589"
+    ],
+    "price": 369.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4451555",
+    "name": "Блинчики Сытный Край с мясом замороженные, 380г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 399.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4451764",
+    "name": "Котлеты куриные на пару Перекрёсток Select, 120г",
+    "recipe_ids": [
+      "foodru_140973"
+    ],
+    "price": 204.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4452074",
+    "name": "Сырники без сахара замороженные  Перекресток Select, 330г",
+    "recipe_ids": [
+      "foodru_77935"
+    ],
+    "price": 349.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4452075",
+    "name": "Сырники классические замороженные Перекрёсток Select, 330г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 349.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4452232",
+    "name": "Лазанья Болоньезе замороженная Перекрёсток Select, 200г",
+    "recipe_ids": [
+      "foodru_31341"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4452460",
+    "name": "Борщ овощной Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_87556"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4452960",
+    "name": "Котлеты куриные на пару Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_140973"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453530",
+    "name": "Блины домашние замороженные Перекрёсток Select, 400г",
+    "recipe_ids": [
+      "foodru_67633"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453596",
+    "name": "Сырники без сахара запечённые Перекрёсток Select, 110г",
+    "recipe_ids": [
+      "foodru_77935"
+    ],
+    "price": 164.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453780",
+    "name": "Каша пшённая молочная с тыквой замороженная Перекрёсток Select, 230г",
+    "recipe_ids": [
+      "foodru_156311"
+    ],
+    "price": 189.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453782",
+    "name": "Лапша вок с куриным филе и овощами замороженная Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_156324"
+    ],
+    "price": 319.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453783",
+    "name": "Спагетти Карбонара замороженные Перекрёсток Select, 230г",
+    "recipe_ids": [
+      "foodru_2127"
+    ],
+    "price": 269.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453850",
+    "name": "Гратен картофельный с курицей замороженный Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_256167"
+    ],
+    "price": 389.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453972",
+    "name": "Салат Сельдь под шубой Перекрёсток Select 300г",
+    "recipe_ids": [
+      "foodru_44074"
+    ],
+    "price": 261.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4453977",
+    "name": "Оладьи куриные Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_2950"
+    ],
+    "price": 329.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4454139",
+    "name": "Рулетики из баклажанов с ореховой начинкой Перекрёсток Select 140г",
+    "recipe_ids": [
+      "foodru_129309"
+    ],
+    "price": 329.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4454519",
+    "name": "Фрикадельки мясные с томатами и гречкой замороженные Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_250473"
+    ],
+    "price": 289.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4455459",
+    "name": "Каша на молоке из пшена и риса Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_230179"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4455573",
+    "name": "Суп из щавеля Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_43608"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4455671",
+    "name": "Гречка отварная со сливочным маслом Перекрёсток Select 170г",
+    "recipe_ids": [
+      "foodru_199764"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4456296",
+    "name": "Филе индейки гриль Перекрёсток Select, 150г",
+    "recipe_ids": [
+      "foodru_87127"
+    ],
+    "price": 339.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4456667",
+    "name": "Голень куриная с хрустящей корочкой замороженная Перекрёсток Select, 400г",
+    "recipe_ids": [
+      "foodru_229276"
+    ],
+    "price": 449.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4457226",
+    "name": "Сырники Шоколадные замороженные Перекрёсток Select, 280г",
+    "recipe_ids": [
+      "foodru_93854"
+    ],
+    "price": 349.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4457274",
+    "name": "Шашлык куриный гриль Перекрёсток Select, 230г",
+    "recipe_ids": [
+      "foodru_213349"
+    ],
+    "price": 278.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4457364",
+    "name": "Каша рисовая на кокосовом молоке Перекрёсток Select 250г",
+    "recipe_ids": [
+      "foodru_83449"
+    ],
+    "price": 269.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4457542",
+    "name": "Скрэмбл с сосиской Перекрёсток Select, 155г",
+    "recipe_ids": [
+      "foodru_246653"
+    ],
+    "price": 124.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4457939",
+    "name": "Наггетсы куриные замороженные Перекрёсток Select, 240г",
+    "recipe_ids": [
+      "foodru_2588"
+    ],
+    "price": 349.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4458084",
+    "name": "Блинчики с картофелем и грибами Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_94859"
+    ],
+    "price": 134.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4458239",
+    "name": "Бейгл с форелью и сливочным сыром Перекрёсток Select, 160г",
+    "recipe_ids": [
+      "foodru_219590"
+    ],
+    "price": 389.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4458568",
+    "name": "Суп овощной на курином бульоне Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_268831"
+    ],
+    "price": 99.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4459718",
+    "name": "Овощи гриль Перекрёсток Select, 240г",
+    "recipe_ids": [
+      "foodru_35814"
+    ],
+    "price": 389.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4459822",
+    "name": "Вафли Творожные бельгийские замороженные Перекрёсток Select, 260г",
+    "recipe_ids": [
+      "foodru_95828"
+    ],
+    "price": 379.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4460347",
+    "name": "Суп Гаспачо томатный Перекрёсток Select, 250г",
+    "recipe_ids": [
+      "foodru_20018"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4461035",
+    "name": "Суп Том Ям с морепродуктами замороженный Перекрёсток Select 370г",
+    "recipe_ids": [
+      "foodru_52580"
+    ],
+    "price": 429.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4461200",
+    "name": "Борщ с говядиной замороженный Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_3047"
+    ],
+    "price": 159.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4461201",
+    "name": "Суп Куриный с домашней лапшой замороженный Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_59525"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4461608",
+    "name": "Стрипсы куриные замороженные Перекрёсток Select, 170г",
+    "recipe_ids": [
+      "foodru_2588"
+    ],
+    "price": 249.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4461936",
+    "name": "Суп гороховый с копчёностями Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_104520"
+    ],
+    "price": 178.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4462257",
+    "name": "Салат из свежей капусты с огурцом Перекрёсток Select 130г",
+    "recipe_ids": [
+      "foodru_184185"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4463237",
+    "name": "Борщ Перекрёсток Select, 270г",
+    "recipe_ids": [
+      "foodru_1381"
+    ],
+    "price": 164.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4464484",
+    "name": "Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",
+    "recipe_ids": [
+      "foodru_1488"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4464537",
+    "name": "Чебупели Горячая штучка с ветчиной и сыром готовые замороженные, 240г",
+    "recipe_ids": [
+      "foodru_241058"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4465268",
+    "name": "Суп Рамен с курицей Перекрёсток Select, 300г",
+    "recipe_ids": [
+      "foodru_147761"
+    ],
+    "price": 359.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4468012",
+    "name": "Сырники творожные с варёной сгущенкой Перекрёсток Select, 120г",
+    "recipe_ids": [
+      "foodru_271148"
+    ],
+    "price": 164.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4468013",
+    "name": "Сырники творожные с вишней Перекрёсток Select, 120г",
+    "recipe_ids": [
+      "foodru_133141"
+    ],
+    "price": 164.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4469128",
+    "name": "Морковь по-корейски Перекрёсток Select, 350г",
+    "recipe_ids": [
+      "foodru_68524"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4469129",
+    "name": "Спаржа по-корейски Перекрёсток Select, 350г",
+    "recipe_ids": [
+      "foodru_143562"
+    ],
+    "price": 349.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4469392",
+    "name": "Крем-суп Грибной Перекрёсток Select, 300г",
+    "recipe_ids": [
+      "foodru_25632"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "perekrestok",
+    "plu": "4470181",
+    "name": "Салат Цезарь с курицей Перекрёсток Select, 220г",
+    "recipe_ids": [
+      "foodru_60152"
+    ],
+    "price": 299.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "2087559",
+    "name": "Пицца Красная Цена Колбаса 300г",
+    "recipe_ids": [
+      "foodru_20111"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "3273891",
+    "name": "Блины с мясом С Пылу с Жару 360г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 134.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "3273892",
+    "name": "Блины с творогом С Пылу с Жару 360г",
+    "recipe_ids": [
+      "foodru_530"
+    ],
+    "price": 149.99,
+    "dish_type": "Блины",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "3474487",
+    "name": "Слойка с сосиской замороженная п/ф 90г",
+    "recipe_ids": [
+      "foodru_2015"
+    ],
+    "price": 45.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "3607223",
+    "name": "Хачапури с сыром и ветчиной замороженное п/ф 140г",
+    "recipe_ids": [
+      "foodru_145330"
+    ],
+    "price": 59.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "3993220",
+    "name": "Блинчики с мясом Красная цена 420г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 99.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4117906",
+    "name": "Багет чесночный замороженный п/ф",
+    "recipe_ids": [
+      "foodru_74239"
+    ],
+    "price": 76.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4122150",
+    "name": "Булочка с сырной начинкой замороженная п/ф 115г",
+    "recipe_ids": [
+      "foodru_115229"
+    ],
+    "price": 39.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4129597",
+    "name": "Чиабатта замороженная п/ф",
+    "recipe_ids": [
+      "foodru_1563"
+    ],
+    "price": 29.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4168788",
+    "name": "Морс клюквенный Пятёрочка Кафе 0.5л",
+    "recipe_ids": [
+      "foodru_1360"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4168789",
+    "name": "Морс облепиховый Пятёрочка Кафе 500мл",
+    "recipe_ids": [
+      "foodru_11862"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4191428",
+    "name": "Оладьи По-домашнему Пятёрочка Кафе 160г",
+    "recipe_ids": [
+      "foodru_235474"
+    ],
+    "price": 99.99,
+    "dish_type": "Оладьи",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4191429",
+    "name": "Плов с курицей Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_1447"
+    ],
+    "price": 169.99,
+    "dish_type": "Основное блюдо",
+    "cuisine": "Узбекская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4216694",
+    "name": "Каша Овсяная на молоке Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_29047"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4216695",
+    "name": "Каша Рисовая на молоке Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_2019"
+    ],
+    "price": 119.99,
+    "dish_type": "Каша",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4260436",
+    "name": "Каша пшенная на молоке Пятёрочка Кафе, 200г",
+    "recipe_ids": [
+      "foodru_29044"
+    ],
+    "price": 109.99,
+    "dish_type": "Каша",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4278636",
+    "name": "Пирог домашний с творожной начинкой замороженный п/ф 100г",
+    "recipe_ids": [
+      "foodru_2764"
+    ],
+    "price": 39.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4279168",
+    "name": "Шаурма с курицей Пятёрочка Кафе",
+    "recipe_ids": [
+      "foodru_17305"
+    ],
+    "price": 199.99,
+    "dish_type": "Сэндвич-ролл",
+    "cuisine": "Восточная"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4279833",
+    "name": "Салат Фаворит с бужениной и шампиньонами Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_267969"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4279853",
+    "name": "Блинчики Останкино с мясом замороженные 350г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 134.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4292794",
+    "name": "Суп куриный с домашней лапшой Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_59525"
+    ],
+    "price": 119.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4292795",
+    "name": "Суп гороховый с копченостями Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_104520"
+    ],
+    "price": 139.99,
+    "dish_type": "Суп",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4317626",
+    "name": "Салат сельдь под шубой Пятёрочка Кафе 500г",
+    "recipe_ids": [
+      "foodru_44074"
+    ],
+    "price": 299.99,
+    "dish_type": "Салат",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4322017",
+    "name": "Салат сельдь под шубой Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_44074"
+    ],
+    "price": 189.99,
+    "dish_type": "Салат",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4323838",
+    "name": "Тефтели с пастой фузилли в томатном соусе Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_131384"
+    ],
+    "price": 169.99,
+    "dish_type": "Основное блюдо",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4335075",
+    "name": "Лапша Удон с кальмарами и креветками Пятёрочка Кафе",
+    "recipe_ids": [
+      "foodru_208192"
+    ],
+    "price": 299.99,
+    "dish_type": "Основное блюдо",
+    "cuisine": "Японская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4337338",
+    "name": "Самса с говядиной замороженная п/ф 110г",
+    "recipe_ids": [
+      "foodru_143288"
+    ],
+    "price": 49.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4342673",
+    "name": "Пирожок с капустой замороженный п/ф",
+    "recipe_ids": [
+      "foodru_1736"
+    ],
+    "price": 29.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4343383",
+    "name": "Салат Фунчоза По-Корейски Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_242720"
+    ],
+    "price": 139.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4353542",
+    "name": "Кутабы с сыром и зеленью Пятёрочка Кафе 150г",
+    "recipe_ids": [
+      "foodru_73328"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4355855",
+    "name": "Блинчики без начинки Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_67633"
+    ],
+    "price": 99.99,
+    "dish_type": "Блины",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4362366",
+    "name": "Запеканка Вкус & Польза творожная с черной смородиной 200г",
+    "recipe_ids": [
+      "foodru_171922"
+    ],
+    "price": 189.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4362581",
+    "name": "Сырнички Вкус & Польза с вишней 120г",
+    "recipe_ids": [
+      "foodru_172949"
+    ],
+    "price": 119.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4362983",
+    "name": "Манты с мясом Пятёрочка Кафе 240г",
+    "recipe_ids": [
+      "foodru_42998"
+    ],
+    "price": 209.99,
+    "dish_type": "Основное блюдо",
+    "cuisine": "Азиатская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4364663",
+    "name": "Фарфале с горбушей в сливочном соусе Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_158239"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4364665",
+    "name": "Паста Карбонара Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_2127"
+    ],
+    "price": 199.99,
+    "dish_type": "Паста",
+    "cuisine": "Итальянская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4368756",
+    "name": "Рулетики из ветчины с сыром Пятёрочка Кафе 150г",
+    "recipe_ids": [
+      "foodru_98"
+    ],
+    "price": 189.99,
+    "dish_type": "Закуска",
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4369485",
+    "name": "Суп Том-Ям с курицей Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_180468"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4374555",
+    "name": "Мясо по-французски с запечённым картофелем Пятёрочка Кафе, 250г",
+    "recipe_ids": [
+      "foodru_50168"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4380044",
+    "name": "Хачапури с сыром замороженное п/ф 100г",
+    "recipe_ids": [
+      "foodru_1427"
+    ],
+    "price": 49.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4382734",
+    "name": "Спаржа по-корейски Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_143562"
+    ],
+    "price": 139.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4384701",
+    "name": "Салат Оливье Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_59226"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4384702",
+    "name": "Салат свекольный Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_77596"
+    ],
+    "price": 139.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4384742",
+    "name": "Бефстроганов с картофельным пюре  Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_198108"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4385455",
+    "name": "Сэндвич с ветчиной Пятёрочка Кафе, 185г",
+    "recipe_ids": [
+      "foodru_268824"
+    ],
+    "price": 159.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4386762",
+    "name": "Салат с курицей и шампиньонами Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_2564"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4389473",
+    "name": "Пирожки с картофелем и луком замороженный п/ф 75г",
+    "recipe_ids": [
+      "foodru_63375"
+    ],
+    "price": 35.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4391322",
+    "name": "Пицца Пепперони охлажденная Graf Ewgraf 300г",
+    "recipe_ids": [
+      "foodru_1524"
+    ],
+    "price": 359.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4392992",
+    "name": "Блинчики Останкино с куриным мясом замороженные 350г",
+    "recipe_ids": [
+      "foodru_166790"
+    ],
+    "price": 139.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4394800",
+    "name": "Салат Морковь со спаржей по-корейски Пятёрочка Кафе 400г",
+    "recipe_ids": [
+      "foodru_89008"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4394801",
+    "name": "Салат Морковь по-корейски Пятёрочка Кафе 400г",
+    "recipe_ids": [
+      "foodru_68524"
+    ],
+    "price": 119.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4405210",
+    "name": "Хумус Классический Пятёрочка Кафе, 200г",
+    "recipe_ids": [
+      "foodru_1465"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4407312",
+    "name": "Шарики Papa Boba из тапиоки для бабл-ти замороженные, 200г",
+    "recipe_ids": [
+      "foodru_218391"
+    ],
+    "price": 133.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4409830",
+    "name": "Наггетсы Мираторг куриные с сыром замороженные 250г",
+    "recipe_ids": [
+      "foodru_43966"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4410803",
+    "name": "Наггетсы Мираторг Классические куриные запеченные замороженные 250г",
+    "recipe_ids": [
+      "foodru_2588"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4410980",
+    "name": "Блинчики с ветчиной и сыром Пятёрочка Кафе 160г",
+    "recipe_ids": [
+      "foodru_106570"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4410981",
+    "name": "Блинчики с мясом Пятёрочка Кафе 160г",
+    "recipe_ids": [
+      "foodru_15241"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4410982",
+    "name": "Блинчики с яблоком и корицей Пятёрочка Кафе 160г",
+    "recipe_ids": [
+      "foodru_226493"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4416812",
+    "name": "Салат с копченой курицей и морковью по-корейски Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_90609"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4417805",
+    "name": "Котлеты куриные Пятёрочка Кафе 220г",
+    "recipe_ids": [
+      "foodru_1352"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4419105",
+    "name": "Аджика Global Village По-домашнему 200г",
+    "recipe_ids": [
+      "foodru_178091"
+    ],
+    "price": 109.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4420773",
+    "name": "Сэндвич с бужениной Пятёрочка Кафе, 190г",
+    "recipe_ids": [
+      "foodru_76435"
+    ],
+    "price": 189.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4423901",
+    "name": "Сырники классические Пятёрочка Кафе 220г",
+    "recipe_ids": [
+      "foodru_411"
+    ],
+    "price": 179.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4427823",
+    "name": "Салат с кальмаром Пятёрочка Кафе 180г",
+    "recipe_ids": [
+      "foodru_1422"
+    ],
+    "price": 189.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4427825",
+    "name": "Салат Коул Слоу капустный Пятёрочка Кафе 180г",
+    "recipe_ids": [
+      "foodru_244050"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4435105",
+    "name": "Салат Капуста По-Корейски Пятёрочка Кафе 200г",
+    "recipe_ids": [
+      "foodru_228239"
+    ],
+    "price": 119.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4435156",
+    "name": "Макароны по-флотски Пятёрочка Кафе, 220г",
+    "recipe_ids": [
+      "foodru_1432"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4436497",
+    "name": "Ролл Калифорния Пятёрочка Кафе 230г",
+    "recipe_ids": [
+      "foodru_25691"
+    ],
+    "price": 259.99,
+    "dish_type": "Роллы",
+    "cuisine": "Японская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4445984",
+    "name": "Салат Цезарь с курицей Пятёрочка Кафе, 160г",
+    "recipe_ids": [
+      "foodru_60152"
+    ],
+    "price": 239.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4449822",
+    "name": "Сэндвич с тунцом Пятёрочка Кафе, 185г",
+    "recipe_ids": [
+      "foodru_16182"
+    ],
+    "price": 169.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4452801",
+    "name": "Минтай жареный под маринадом Пятёрочка Кафе, 250г",
+    "recipe_ids": [
+      "foodru_144862"
+    ],
+    "price": 219.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4454442",
+    "name": "Сырники творожные охлаждённые Вкус & Польза, 120г",
+    "recipe_ids": [
+      "foodru_418"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4459402",
+    "name": "Блины омлетные с сыром Пятёрочка Кафе, 160г",
+    "recipe_ids": [
+      "foodru_157224"
+    ],
+    "price": 189.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4459416",
+    "name": "Гречка с овощами Вкус & Польза, 220г",
+    "recipe_ids": [
+      "foodru_3168"
+    ],
+    "price": 149.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4459593",
+    "name": "Шаурма с филе грудки куриной Вкус & Польза, 200г",
+    "recipe_ids": [
+      "foodru_17305"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4459748",
+    "name": "Тортилья с курицей и хашбрауном Пятёрочка Кафе, 240г",
+    "recipe_ids": [
+      "foodru_11974"
+    ],
+    "price": 229.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4464484",
+    "name": "Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",
+    "recipe_ids": [
+      "foodru_1488"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4464537",
+    "name": "Чебупели с ветчиной и сыром готовые замороженные Горячая штучка, 240г",
+    "recipe_ids": [
+      "foodru_241058"
+    ],
+    "price": 129.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4468406",
+    "name": "Паста Болоньезе Пятерочка Кафе, 250г",
+    "recipe_ids": [
+      "foodru_2310"
+    ],
+    "price": 209.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "4468409",
+    "name": "Паста ветчина и грибы Пятёрочка Кафе 250г",
+    "recipe_ids": [
+      "foodru_333"
+    ],
+    "price": 199.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78006169",
+    "name": "Хачапури с сыром и ветчиной",
+    "recipe_ids": [
+      "foodru_145330"
+    ],
+    "price": 65.99,
+    "dish_type": null,
+    "cuisine": "Грузинская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78006242",
+    "name": "Слойка с сосиской 75г",
+    "recipe_ids": [
+      "foodru_2015"
+    ],
+    "price": 49.99,
+    "dish_type": null,
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78030124",
+    "name": "Багет чесночный 158г",
+    "recipe_ids": [
+      "foodru_74239"
+    ],
+    "price": 75.99,
+    "dish_type": "Выпечка",
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78030362",
+    "name": "Булочка с сырной начинкой, 104г",
+    "recipe_ids": [
+      "foodru_115229"
+    ],
+    "price": 45.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78030792",
+    "name": "Чиабатта пшеничная 100г",
+    "recipe_ids": [
+      "foodru_265325"
+    ],
+    "price": 29.99,
+    "dish_type": "Выпечка",
+    "cuisine": "Итальянская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78033558",
+    "name": "Пирог домашний с творожной начинкой 96г",
+    "recipe_ids": [
+      "foodru_2764"
+    ],
+    "price": 39.99,
+    "dish_type": null,
+    "cuisine": "Русская"
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78034705",
+    "name": "Пирожок с капустой 65г",
+    "recipe_ids": [
+      "foodru_1736"
+    ],
+    "price": 29.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78034778",
+    "name": "Самса с говядиной 95г",
+    "recipe_ids": [
+      "foodru_143288"
+    ],
+    "price": 55.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78035713",
+    "name": "Хачапури с сыром 85г",
+    "recipe_ids": [
+      "foodru_1427"
+    ],
+    "price": 45.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78036082",
+    "name": "Булочка с корицей 80г",
+    "recipe_ids": [
+      "foodru_68354"
+    ],
+    "price": 55.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78036169",
+    "name": "Пирожок с картофелем и луком 75г",
+    "recipe_ids": [
+      "foodru_63375"
+    ],
+    "price": 35.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78037254",
+    "name": "Маффин с шоколадом 200г",
+    "recipe_ids": [
+      "foodru_116062"
+    ],
+    "price": 89.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78037518",
+    "name": "Шарлотка, 90г",
+    "recipe_ids": [
+      "foodru_199"
+    ],
+    "price": 55.99,
+    "dish_type": null,
+    "cuisine": null
+  },
+  {
+    "chain": "pyaterochka",
+    "plu": "78038445",
+    "name": "Мини-пицца Пепперони, 165г",
+    "recipe_ids": [
+      "foodru_229302"
+    ],
+    "price": 89.99,
+    "dish_type": null,
+    "cuisine": null
+  }
+]

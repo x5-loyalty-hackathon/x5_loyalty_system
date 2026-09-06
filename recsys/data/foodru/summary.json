@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "matcher_version": "foodru-name-v1",
+  "catalog_sha256": "3c849c15bd6af71e378993706f21bb845625ef6f6cfac15b7b8ffba741b0e609",
+  "recipe_snapshot_sha256": "cec7f9d195f1242546062019fb28f1a7e704556aaa9d311a01bb400572c04174",
+  "snapshot_ids": [
+    "2026-09-04T22:52:34+00:00",
+    "2026-09-04T23:38:22+00:00"
+  ],
+  "city": "Москва",
+  "products": 601,
+  "recipes": 844,
+  "status_counts": {
+    "matched": 244,
+    "review": 355,
+    "unmatched": 2
+  },
+  "matched_unique_recipes": 176,
+  "recipes_with_rating": 493,
+  "recipes_with_reviews": 219,
+  "reviews_collected": 694,
+  "review_completeness": {
+    "not_exposed": 625,
+    "complete": 206,
+    "partial": 13
+  },
+  "collection_errors": 0
+}

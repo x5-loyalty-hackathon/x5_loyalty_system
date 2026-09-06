@@ -1,8 +1,10 @@
 from app.recommender import DeterministicMockEngine
+from recsys.catalog_freeze import baseline_catalog
 from recsys.diagnostics import (
     MIN_STRATUM_SIZE,
     Stratum,
     StratifiedSignal,
+    _samples,
     auc,
     effort_confound,
     pearson,
@@ -36,6 +38,18 @@ def test_effort_confound_scores_every_model_feature() -> None:
     confound = effort_confound(n_profiles=SMALL)
     assert set(confound) == set(FEATURE_NAMES)
     assert all(-1.0 <= value <= 1.0 for value in confound.values())
+
+
+def test_diagnostics_measure_the_catalog_the_model_trains_on() -> None:
+    """The within-effort AUC in ADR-003 is decisive, so its catalog must match.
+
+    ``_samples`` used to walk the live ``recsys.recipes.RECIPES`` (47) while
+    the model under diagnosis fits on ``baseline_catalog()`` (37).
+    """
+    _, _, recipes = next(iter(_samples(2, seed=1)))
+    assert [r.recipe_id for r in recipes] == [
+        r.recipe_id for r in baseline_catalog()
+    ]
 
 
 def test_thin_and_single_class_strata_are_not_read() -> None:

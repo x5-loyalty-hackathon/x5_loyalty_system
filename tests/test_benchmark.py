@@ -17,14 +17,18 @@ from recsys.benchmark import (
     stable_seed,
     verdict,
 )
-from recsys.regimes import REGIMES
+from recsys.catalog_freeze import baseline_catalog, recipe_content_hash
+from recsys.regimes import BALANCED_SAMPLE_9
 from recsys.response_models import (
     EconomicResponder,
     RuleBasedResponder,
     UserAction,
 )
 
-SMALL_REGIMES = REGIMES[:3]
+#: Three cheap worlds for harness tests. Taken from the balanced design rather
+#: than ``REGIMES[:3]`` so even the test fixture is not silently pinned to one
+#: corner of the grid.
+SMALL_REGIMES = BALANCED_SAMPLE_9[:3]
 RESPONDERS = (RuleBasedResponder(), EconomicResponder())
 
 
@@ -260,3 +264,28 @@ def test_verdict_states_its_own_limits() -> None:
     assert "not a forecast" in text
     assert "not a p-value" in text
     assert "per simulator" in text
+
+
+def test_the_bench_defaults_to_the_catalog_the_model_trains_on() -> None:
+    """A stand that ranks recipes no arm was fitted on measures two things.
+
+    ``run_benchmark`` used to default to the live ``recsys.recipes.RECIPES``
+    (47) while ``MLRecommendationEngine`` fits on ``baseline_catalog()`` (37),
+    so ten of the recipes in every headline run were unseen at training time
+    and the resulting number mixed a generalisation gap into a ranking claim.
+    """
+    result = _run(
+        (Arm(name="mock", engine=DeterministicMockEngine(), ranking_policy=EFFORT_FIRST),)
+    )
+    assert result.recipe_catalog_hash == recipe_content_hash(baseline_catalog())
+
+
+def test_an_explicit_catalog_still_overrides_the_default() -> None:
+    """The freeze is a default, not a cage: catalog experiments still pass one."""
+    smaller = baseline_catalog()[:5]
+    result = _run(
+        (Arm(name="mock", engine=DeterministicMockEngine(), ranking_policy=EFFORT_FIRST),),
+        recipes=smaller,
+    )
+    assert result.recipe_catalog_hash == recipe_content_hash(smaller)
+    assert result.recipe_catalog_hash != recipe_content_hash(baseline_catalog())

@@ -28,8 +28,8 @@ from app.service import EFFORT_FIRST, RecommendationService
 from recsys.benchmark import TOP_K, _build_request, stable_seed
 from recsys.inventory import generate_inventory
 from recsys.profiles import SyntheticProfile, generate_population
+from recsys.catalog_freeze import baseline_catalog
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
 from recsys.response_models import (
     EconomicResponder,
@@ -175,7 +175,10 @@ def collect_cards(*, users_per_regime: int = 40, seed: int = 20260905, regimes: 
     """Generate cards with the explicit shipped arm: heuristic/effort."""
     arm_name = "heuristic/effort"
     service = RecommendationService(engine=DeterministicMockEngine(), safety_policy=SafetyPolicy(), ranking_policy=EFFORT_FIRST)
-    recipes = list(RECIPES)
+    # Frozen baseline, for the same reason recsys.benchmark uses it: this audit
+    # reports agreement rates that are compared against bench numbers, and the
+    # two have to be measured over the same catalog to be comparable at all.
+    recipes = baseline_catalog()
     recipe_by_id = {recipe.recipe_id: recipe for recipe in recipes}
     meals = ready_meal_options(recipe_by_id)
     cards: list[AuditCard] = []

@@ -65,8 +65,8 @@ from recsys.inventory import (
 )
 from recsys.pantry import DISABLED_PANTRY, PantryPolicy
 from recsys.profiles import ARCHETYPES, SyntheticProfile, generate_population
+from recsys.catalog_freeze import baseline_catalog, recipe_content_hash
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
 from recsys.regimes import REGIMES, Regime
 from recsys.true_pantry import true_pantry
 from recsys.response_models import (
@@ -314,6 +314,11 @@ class BenchmarkResult:
     seed: int
     inventory_assumptions: InventoryAssumptions = DEFAULT_INVENTORY_ASSUMPTIONS
     responder_names: tuple[str, ...] = field(default_factory=tuple)
+    #: Which catalog this run actually ranked, so "was this measured on the
+    #: same recipes the model trained on?" is answerable from the result
+    #: instead of assumed. ``MLRecommendationEngine.training_catalog_hash`` is
+    #: the other half of that pair, and the two are comparable directly.
+    recipe_catalog_hash: str = ""
 
     def cell(self, arm: str, regime: str, responder: str) -> CellOutcome | None:
         for cell in self.cells:
@@ -435,7 +440,14 @@ def run_benchmark(
 
     Deterministic given ``(arms, regimes, responders, users_per_regime, seed)``.
     """
-    recipe_catalog = list(recipes if recipes is not None else RECIPES)
+    # The frozen baseline, not the live catalog: MLRecommendationEngine trains
+    # on baseline_catalog() by default (see its docstring on why promoting a
+    # recipe into training is a deliberate act). Defaulting the bench to
+    # recsys.recipes.RECIPES meant the headline numbers were measured on 47
+    # recipes while the model under test had been fitted on 37, so ten of the
+    # recipes being ranked were ones no arm had trained on -- a train/serve
+    # skew inside the very stand that decides whether the model works.
+    recipe_catalog = list(recipes if recipes is not None else baseline_catalog())
     recipe_lookup = {r.recipe_id: r for r in recipe_catalog}
     meals = ready_meal_options(recipe_lookup)
     service_by_arm = {
@@ -556,6 +568,7 @@ def run_benchmark(
         seed=seed,
         inventory_assumptions=inventory_assumptions,
         responder_names=tuple(r.name for r in responders),
+        recipe_catalog_hash=recipe_content_hash(recipe_catalog),
     )
 
 

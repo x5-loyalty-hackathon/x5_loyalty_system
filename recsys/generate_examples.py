@@ -55,6 +55,12 @@ def generate_examples(seed: int = SEED) -> list[dict]:
     rng = random.Random(seed + 1)
     engine = MLRecommendationEngine()
     service = RecommendationService(engine=engine, safety_policy=SafetyPolicy())
+    # The live catalog on purpose, unlike recsys.benchmark/diagnostics/llm_audit,
+    # which were moved to the frozen baseline so their numbers stay comparable.
+    # These examples are a showcase, not a measurement: production serves the
+    # model whatever catalog the request carries, including recipes added after
+    # the model was fitted, so a demo drawn from the full catalog is the honest
+    # picture of what the API returns. Nothing here is quoted as a metric.
     recipe_catalog = list(RECIPES)
     # Real Moscow PLUs for the "or buy it ready" side of each offer.
     ready_meals = ready_meal_options(recipe.recipe_id for recipe in recipe_catalog)

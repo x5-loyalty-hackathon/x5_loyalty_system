@@ -35,8 +35,8 @@ from recsys.benchmark import _build_request
 from recsys.inventory import generate_inventory
 from recsys.model import FEATURE_NAMES, compute_features
 from recsys.profiles import generate_population
+from recsys.catalog_freeze import baseline_catalog
 from recsys.ready_food_pairs import ready_meal_options
-from recsys.recipes import RECIPES
 
 DEFAULT_PROFILES = 60
 DEFAULT_SEED = 11
@@ -135,7 +135,11 @@ class StratifiedSignal:
 
 
 def _samples(n_profiles: int, seed: int):
-    recipes = list(RECIPES)
+    # Frozen baseline, matching what MLRecommendationEngine trains on. The
+    # within-effort AUC this module reports is the decisive number in ADR-003,
+    # and measuring it over ten recipes the model never trained on would mix a
+    # generalisation gap into a claim about label quality.
+    recipes = baseline_catalog()
     meals = ready_meal_options([r.recipe_id for r in recipes])
     rng = random.Random(seed)
     for profile in generate_population(n_profiles, seed=seed):

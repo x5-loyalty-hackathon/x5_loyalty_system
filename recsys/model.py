@@ -81,6 +81,16 @@ FEATURE_NAMES: tuple[str, ...] = (
     #: it a brand-new user is indistinguishable from a rare shopper, because
     #: the fallback cadence is a constant that looks exactly like data.
     "history_is_known",
+    # --- item content, independent of any purchase history -----------------
+    # Every feature above compares this recipe to the user's *purchases*.
+    # This one compares it to recipes the user *saved* — a content-based
+    # signal (ingredient-set overlap with liked items) rather than a
+    # collaborative one, the way a content-based recommender complements
+    # collaborative filtering. It is the only feature that can say anything
+    # for a user with zero purchase-history overlap, as long as they saved
+    # one similar dish — the cold-start gap collaborative signals structurally
+    # cannot close. See ``_content_affinity``.
+    "content_affinity",
 )
 
 MISSING_COST_NORMALIZER_RUB = 500.0
@@ -130,6 +140,35 @@ def _history_ingredient_ids(request: RecommendationRequest) -> set[str]:
         if not item.is_prepared_food
         for ingredient_id in item.ingredient_ids
     }
+
+
+def _jaccard(a: set[str], b: set[str]) -> float:
+    union = a | b
+    return len(a & b) / len(union) if union else 0.0
+
+
+def _content_affinity(request: RecommendationRequest, recipe: Recipe) -> float:
+    """Ingredient-set similarity to the user's *saved* recipes — content-based,
+    not collaborative: it never reads ``purchase_history``. Best (max) Jaccard
+    overlap over the catalog's saved recipes; 0.0 with nothing saved yet.
+
+    This is deliberately independent of ``ingredient_affinity``/
+    ``history_affinity``, which both compare a candidate to what the user has
+    *bought*. A user who saved one dish they liked but has not yet purchased
+    anything toward it gets no signal from either — this is the one feature
+    that can personalize them anyway.
+    """
+    saved_ids = request.user.saved_recipe_ids
+    if not saved_ids:
+        return 0.0
+    candidate_ids = {i.ingredient_id for i in recipe.ingredients}
+    best = 0.0
+    for other in request.recipe_catalog:
+        if other.recipe_id == recipe.recipe_id or other.recipe_id not in saved_ids:
+            continue
+        other_ids = {i.ingredient_id for i in other.ingredients}
+        best = max(best, _jaccard(candidate_ids, other_ids))
+    return best
 
 
 def _avg_receipt_total(request: RecommendationRequest) -> float:
@@ -365,6 +404,7 @@ def compute_features(
     missing_cost = sum(BASE_PRICE_RUB.get(i, 150.0) for i in missing_ids)
     missing_cost_norm = min(missing_cost / MISSING_COST_NORMALIZER_RUB, 2.0)
     markdown_signal = _markdown_supply_signal(request, missing_ids)
+    content_affinity = _content_affinity(request, recipe)
 
     return {
         "coverage": coverage,
@@ -383,6 +423,7 @@ def compute_features(
         "missing_vs_basket": missing_vs_basket,
         "prep_vs_cadence": prep_vs_cadence,
         "history_is_known": 1.0 if stats.has_history else 0.0,
+        "content_affinity": content_affinity,
         # not used as model input, only for mode/reason-code derivation and
         # oracle judgment below
         "_combined_affinity": combined_affinity,
@@ -414,12 +455,18 @@ EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
 #: live inventory. Same shape of defect as the effort double-count in EXP-002.
 AVAILABILITY_FEATURE_NAMES: frozenset[str] = frozenset({"markdown_supply_signal"})
 
+#: Content-based feature(s) — see ``_content_affinity``. Suppressed by
+#: default (``include_content=False``) so today's shipped model is unchanged;
+#: opt in via ``MLRecommendationEngine(use_content_affinity=True)``.
+CONTENT_FEATURE_NAMES: frozenset[str] = frozenset({"content_affinity"})
+
 
 def _feature_vector(
     features: dict[str, float],
     *,
     include_effort: bool = True,
     include_availability: bool = False,
+    include_content: bool = False,
 ) -> list[float]:
     """Feature row, optionally with whole groups zeroed.
 
@@ -432,6 +479,8 @@ def _feature_vector(
         suppressed |= EFFORT_FEATURE_NAMES
     if not include_availability:
         suppressed |= AVAILABILITY_FEATURE_NAMES
+    if not include_content:
+        suppressed |= CONTENT_FEATURE_NAMES
     return [
         0.0 if name in suppressed else features[name] for name in FEATURE_NAMES
     ]
@@ -495,6 +544,7 @@ def _train_classifier(
     recipe_catalog: list[Recipe],
     include_effort: bool = True,
     include_availability: bool = False,
+    include_content: bool = False,
     idf_weights: dict[str, float] | None = None,
 ) -> LogisticRegression:
     from recsys.inventory import generate_inventory  # local import: no import-time cycle
@@ -530,6 +580,7 @@ def _train_classifier(
                     features,
                     include_effort=include_effort,
                     include_availability=include_availability,
+                    include_content=include_content,
                 )
             )
             y.append(_label_for_pair(rng, features=features, archetype_name=profile.archetype, recipe=recipe))
@@ -551,8 +602,18 @@ class MLRecommendationEngine:
         include_availability_features: bool = False,
         pantry_policy: PantryPolicy = DISABLED_PANTRY,
         use_ingredient_idf: bool = False,
+        use_content_affinity: bool = False,
     ) -> None:
         """``include_effort_features=False`` trains a preference-only ranker.
+
+        ``use_content_affinity=True`` adds ``content_affinity`` — ingredient-
+        set similarity to the user's *saved* recipes, independent of purchase
+        history — to what the model is trained and scored on. Untested
+        hypothesis: the content-based half of a hybrid recommender, proposed
+        to close the cold-start gap every purchase-history-driven feature here
+        structurally cannot (see ``_content_affinity``, ``docs/research/recsys/
+        llm-intent-eval.md`` §12.2). Default ``False`` keeps today's shipped
+        behaviour unchanged.
 
         ``use_ingredient_idf=True`` switches ``ingredient_affinity`` to the
         IDF-weighted overlap in ``ingredient_idf`` (computed over this
@@ -591,6 +652,7 @@ class MLRecommendationEngine:
         )
         self._include_effort = include_effort_features
         self._include_availability = include_availability_features
+        self._include_content = use_content_affinity
         self._pantry_policy = pantry_policy
         self._idf_weights = (
             ingredient_idf(self._recipe_catalog_for_training) if use_ingredient_idf else None
@@ -601,6 +663,7 @@ class MLRecommendationEngine:
             recipe_catalog=self._recipe_catalog_for_training,
             include_effort=include_effort_features,
             include_availability=include_availability_features,
+            include_content=self._include_content,
             idf_weights=self._idf_weights,
         )
 
@@ -621,6 +684,7 @@ class MLRecommendationEngine:
                 _feature_vector(
                     features, include_effort=self._include_effort,
                     include_availability=self._include_availability,
+                    include_content=self._include_content,
                 )
             )
             score = max(0.0, min(1.0, score))

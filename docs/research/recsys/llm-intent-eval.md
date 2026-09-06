@@ -291,6 +291,34 @@ python -m recsys.llm_intent_eval --live --provider deepseek --ranking-policy eff
 в том, даёт ли это дополнительный выигрыш над уже работающим `k=5`
 категорийным `similar`, или разница в пределах шума на панели в 208 человек.
 
+## 12.2 `--model-variant content_affinity`: контентный сигнал по самим рецептам
+
+Все признаки в `recsys.model.compute_features` (`ingredient_affinity`,
+`history_affinity`, ...) сравнивают кандидата с тем, что пользователь
+**купил**. У этого класса сигналов структурная дыра: пользователь без
+пересечения по покупкам не получает персонализации вообще, даже если у него
+уже есть явный сигнал вкуса — сохранённый рецепт. Это ровно то, что у
+Spotify/Яндекс.Музыки закрывает контентный сигнал (аудио-эмбеддинг трека) —
+здесь его аналог: `content_affinity` = пересечение по составу ингредиентов
+(Jaccard) с рецептами, которые пользователь **сохранил** (`saved_recipe_ids`),
+максимум по всем сохранённым. Ноль, если ничего не сохранено; никогда не
+читает `purchase_history`.
+
+Новый признак в `FEATURE_NAMES`, подавляется группой `CONTENT_FEATURE_NAMES`
+(тот же паттерн, что уже есть у `EFFORT_FEATURE_NAMES`/
+`AVAILABILITY_FEATURE_NAMES`) — по умолчанию `include_content=False`, вектор
+признаков не меняется байт-в-байт для всех существующих прогонов.
+`MLRecommendationEngine(use_content_affinity=True)` включает его и для
+обучения, и для инференса.
+
+```powershell
+python -m recsys.llm_intent_eval --live --provider deepseek --ranking-policy effort_first --model-variant content_affinity --replicates 3 --output reports/intent-deepseek-effort-first-content-v3.5.json
+```
+
+Гипотеза не проверена live. Только продакшн-мир (как и `ingredient_idf`) —
+`recsys.experimental.model` не тронут, экономим время; если гипотеза
+подтвердится, зеркалить туда же, как уже сделано для `recsys.inventory`.
+
 ## 0. Почему v3, а не просто повторный прогон v2
 
 `intent-v2` жил только в незакоммиченном `git stash` и импортировал

@@ -3,7 +3,7 @@ from pathlib import Path
 
 from app.contracts import ModelRecommendation, RecommendationMode, RecommendationRequest
 from app.recommender import DeterministicMockEngine
-from recsys.model import FEATURE_NAMES, MLRecommendationEngine, compute_features, ingredient_idf
+from recsys.model import FEATURE_NAMES, MLRecommendationEngine, compute_features, ingredient_idf, _content_affinity, _feature_vector
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLE_REQUEST = json.loads(
@@ -142,3 +142,46 @@ def test_engine_with_ingredient_idf_trains_and_ranks(ml_engine) -> None:
     # Opt-out (default) must be entirely unaffected by this feature existing.
     assert ml_engine._idf_weights is None
     assert idf_engine._idf_weights is not None
+
+
+def test_content_affinity_is_zero_with_nothing_saved() -> None:
+    request = RecommendationRequest.model_validate(
+        {**EXAMPLE_REQUEST, "user": {**EXAMPLE_REQUEST["user"], "saved_recipe_ids": []}}
+    )
+    for recipe in request.recipe_catalog:
+        assert _content_affinity(request, recipe) == 0.0
+
+
+def test_content_affinity_rewards_ingredient_overlap_with_saved_recipes() -> None:
+    # EXAMPLE_REQUEST saves cottage_cheese_bake (cottage_cheese, flour, egg).
+    request = RecommendationRequest.model_validate(EXAMPLE_REQUEST)
+    omelette = next(r for r in request.recipe_catalog if r.recipe_id == "vegetable_omelette")  # shares "egg"
+    chicken = next(r for r in request.recipe_catalog if r.recipe_id == "chicken_and_vegetables")  # shares nothing
+    saved = next(r for r in request.recipe_catalog if r.recipe_id == "cottage_cheese_bake")
+
+    assert _content_affinity(request, chicken) == 0.0
+    assert 0.0 < _content_affinity(request, omelette) < 1.0
+    # A recipe never scores its own overlap with itself, even if saved.
+    assert _content_affinity(request, saved) == 0.0
+
+
+def test_content_affinity_is_suppressed_unless_include_content() -> None:
+    features = {name: 0.5 for name in FEATURE_NAMES}
+    off = _feature_vector(features, include_content=False)
+    on = _feature_vector(features, include_content=True)
+    assert off[FEATURE_NAMES.index("content_affinity")] == 0.0
+    assert on[FEATURE_NAMES.index("content_affinity")] == 0.5
+
+
+def test_engine_with_content_affinity_trains_and_ranks(ml_engine) -> None:
+    content_engine = MLRecommendationEngine(
+        recipe_catalog=ml_engine._recipe_catalog_for_training, use_content_affinity=True
+    )
+    request = RecommendationRequest.model_validate(EXAMPLE_REQUEST)
+    results = content_engine.rank(request)
+    assert results
+    for item in results:
+        assert 0.0 <= item.score <= 1.0
+    # Opt-out (default) must be entirely unaffected by this feature existing.
+    assert ml_engine._include_content is False
+    assert content_engine._include_content is True

@@ -1030,8 +1030,14 @@ def _build_production_study(
     # docs/research/recsys/llm-intent-eval.md §10: down-weight ingredients
     # common across the whole catalog (salt, onion, egg...) in
     # ingredient_affinity, so matching on them stops reading as taste-specific
-    # personalization. Opt-in, off by default (recsys.model.MLRecommendationEngine).
-    model = AppMLRecommendationEngine(use_ingredient_idf=model_variant == "ingredient_idf")
+    # personalization. "content_affinity" (§12.2) adds a content-based
+    # feature scored against the user's *saved* recipes, independent of
+    # purchase history. Both opt-in, off by default
+    # (recsys.model.MLRecommendationEngine).
+    model = AppMLRecommendationEngine(
+        use_ingredient_idf=model_variant == "ingredient_idf",
+        use_content_affinity=model_variant == "content_affinity",
+    )
     ranked_service = AppRecommendationService(engine=model, safety_policy=AppSafetyPolicy())
     random_service = AppRecommendationService(
         engine=_ProductionRandomEngine(seed=seed), safety_policy=AppSafetyPolicy()
@@ -1381,10 +1387,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--model-variant",
-        choices=("default", "ingredient_idf"),
+        choices=("default", "ingredient_idf", "content_affinity"),
         default="default",
-        help="ingredient_idf is the untested hypothesis from "
-        "docs/research/recsys/llm-intent-eval.md §10; production world only.",
+        help="ingredient_idf and content_affinity are untested hypotheses "
+        "from docs/research/recsys/llm-intent-eval.md §10 and §12.2; "
+        "production world only.",
     )
     parser.add_argument(
         "--similar-k",

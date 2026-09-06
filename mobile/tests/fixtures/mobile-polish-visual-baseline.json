@@ -1,6 +1,18 @@
 {
-  "source_commit": "30064927a384f9f07d5616e0afa906a5524a9365",
+  "source_commit": "72410ac575018808ca8051fae733c8422100a04c",
   "policy": "Visual/layout/navigation changes require vxofi approval. Do not refresh hashes just to make a test pass.",
+  "approved_overrides": {
+    "src/app/profile.tsx": {
+      "git_blob_sha1": "311d8022b575110e73eb099171e857a19b6e7870",
+      "approved_on": "2026-09-06",
+      "reason": "vxofi approved UI1: demo selector only at bottom of Profile, explicitly labelled demonstration-only; no other layout changes."
+    },
+    "src/components/DemoProfileSelector.tsx": {
+      "git_blob_sha1": "2b0807233d97e33e93429c77a296621aa73be54e",
+      "approved_on": "2026-09-06",
+      "reason": "UI1: synthetic demo buyers, not real accounts; explicit demonstration-only heading."
+    }
+  },
   "git_blob_sha1": {
     "assets/android-icon-background.png": "5ffefc5bb57a3d7b39ec6ff4e96979226522cc49",
     "assets/android-icon-foreground.png": "3a9e5016dca4804f37ba410ba49e70055e1ccad2",
@@ -56,10 +68,10 @@
     "src/app/_layout.tsx": "1a987a2bf4c0f2b2abb34287b58b1dddfaf4fc85",
     "src/app/index.tsx": "c6b1d441a39c30f51e6af76642565ebc30ea1557",
     "src/app/kitchen-style.tsx": "42663a3d59d4ee2ec3ea7553d4da70f98616e030",
-    "src/app/products.tsx": "3b9968fecaa9e5967e37dec429edde35bd88bfe3",
+    "src/app/products.tsx": "8cdb4532512034ff429c5b73ac4fc6a317e5b4e5",
     "src/app/profile.tsx": "f8b7bbe11063aeb8584ec050d706198a5521dfa4",
-    "src/app/recipe.tsx": "07f5608389741bde88103b8daad698f7aa6dde74",
-    "src/app/recipes.tsx": "a2bf72ab02dfb9caeecc622ad01d7c29154f294f",
+    "src/app/recipe.tsx": "eb63a7ab18e5c2c5dd51f078e30e1b829ae3d109",
+    "src/app/recipes.tsx": "0d3325e2383c4a01fae9ca5da844ba4e2ea628e2",
     "src/components/AppHeader.tsx": "535d105ae0612361e98ce217a3dca5d479a7a5eb",
     "src/components/BottomNav.tsx": "b7cf54fb3448976d10c15f757f6987ef88aab2f3",
     "src/components/FlowControls.tsx": "e1261b3daad699c5d0046b46ead9cbe1d1ed690d",

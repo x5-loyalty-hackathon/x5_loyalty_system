@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
+import { DemoProfileSelector } from '../components/DemoProfileSelector';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { levelShare } from '../domain/mealFlow';
@@ -97,6 +98,7 @@ export default function ProfileScreen() {
               </Text>
             </>
           )}
+          <DemoProfileSelector />
         </ScrollView>
         <BottomNav active="profile" />
       </View>

@@ -120,6 +120,25 @@ class SavedRecipeOutcome:
     saved_recipe_ids: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class MetricsPlanRecord:
+    user_id: str
+    route: MealRoute
+    created_at: datetime
+    completed_at: datetime | None
+    awarded_xp: int
+
+
+@dataclass(frozen=True)
+class MetricsStateSnapshot:
+    """Detached analytical inputs; never calls progress/plan snapshot writers."""
+
+    receipts: tuple[tuple[str, Receipt], ...]
+    offers: tuple[tuple[str, datetime], ...]
+    plans: tuple[MetricsPlanRecord, ...]
+    receipt_cohorts: dict[str, RankCohort]
+
+
 class InMemoryStateRepository:
     """Demo-only state. Replace with a persistent adapter without changing APIs."""
 
@@ -146,6 +165,32 @@ class InMemoryStateRepository:
             self._meal_plans.clear()
             self._saved_recipe_ids_by_user.clear()
             self._home_decoration_by_user.clear()
+
+    def metrics_snapshot(self) -> MetricsStateSnapshot:
+        """One consistent copy under the ledger lock, without registering users."""
+        with self._lock:
+            return MetricsStateSnapshot(
+                receipts=tuple(
+                    (self._receipt_owners[receipt_id], receipt.model_copy(deep=True))
+                    for receipt_id, receipt in self._verified_receipts.items()
+                ),
+                offers=tuple(
+                    (offer.user_id, offer.issued_at)
+                    for offer in self._meal_offers.values()
+                ),
+                plans=tuple(
+                    MetricsPlanRecord(
+                        user_id=plan.user_id, route=plan.selected_route,
+                        created_at=plan.created_at, completed_at=plan.completed_at,
+                        awarded_xp=plan.awarded_xp,
+                    )
+                    for plan in self._meal_plans.values()
+                ),
+                receipt_cohorts={
+                    user_id: user.rank_cohort for user_id, user in self._users.items()
+                    if user.verified_receipts > 0
+                },
+            )
 
     def home_decoration(self, user_id: str) -> HomeDecorationSnapshot:
         with self._lock:

@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "matcher_version": "foodru-name-v1",
+  "schema_version": 2,
+  "matcher_version": "foodru-name-v2",
   "catalog_sha256": "3c849c15bd6af71e378993706f21bb845625ef6f6cfac15b7b8ffba741b0e609",
   "recipe_snapshot_sha256": "cec7f9d195f1242546062019fb28f1a7e704556aaa9d311a01bb400572c04174",
   "snapshot_ids": [
@@ -11,11 +11,11 @@
   "products": 601,
   "recipes": 844,
   "status_counts": {
-    "matched": 244,
-    "review": 355,
+    "matched": 266,
+    "review": 333,
     "unmatched": 2
   },
-  "matched_unique_recipes": 176,
+  "matched_unique_recipes": 191,
   "recipes_with_rating": 493,
   "recipes_with_reviews": 219,
   "reviews_collected": 694,
@@ -24,5 +24,7 @@
     "complete": 206,
     "partial": 13
   },
-  "collection_errors": 0
+  "collection_errors": 0,
+  "recipes_with_mixed_ingredient_groups": 21,
+  "matched_products_with_excluded_serving": 66
 }

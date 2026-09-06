@@ -2,6 +2,7 @@
 
 import json
 import gzip
+import hashlib
 import io
 from pathlib import Path
 from types import SimpleNamespace
@@ -9,6 +10,8 @@ from types import SimpleNamespace
 import pytest
 
 from recsys.offline.foodru import Fetcher, build
+from recsys.offline.foodru_composition import proxy_ingredients, split_composition
+from recsys.offline.foodru_evaluate import evaluate, metrics
 from recsys.offline.foodru_matching import NameIndex, match_product, tokens
 from recsys.offline.foodru_parser import RecipeParseError, parse_recipe
 
@@ -121,6 +124,47 @@ def test_packaging_brands_and_inflections_do_not_prevent_good_match():
 
 
 @pytest.mark.parametrize("meal,title,ingredients", [
+    ("Чебуреки со свининой и говядиной", "Чебуреки с фаршем из свинины и говядины", ["Свино-говяжий фарш", "Мука"]),
+    ("Блины пшеничные", "Блины из пшеничной муки", ["Пшеничная мука", "Молоко"]),
+    ("Курица терияки на рисе", "Нежная курочка терияки с рисом", ["Курица", "Рис", "Соус терияки"]),
+    ("Винегрет овощной с маслом", "Винегрет с овощами на оливковом масле", ["Картошка", "Свекла", "Оливковое масло"]),
+    ("Лапша с курицей терияки Asiatique, 280г", "Курица терияки с лапшой", ["Куриное филе", "Лапша", "Терияки"]),
+    ("Хашбраун картофельный", "Хашбраун (картофельные оладьи)", ["Картошка", "Мука"]),
+])
+def test_reported_false_rejections_are_fixed(meal, title, ingredients):
+    assert match_product(product(meal), NameIndex([recipe(title, ingredients)]))["status"] == "matched"
+
+
+def test_ingredient_roles_keep_filling_dough_and_sauce_but_separate_serving():
+    source = recipe("Круассан с ветчиной и сыром", [])
+    source["ingredients"] = [
+        {"name": "Мука", "group": "Для теста"},
+        {"name": "Ветчина", "group": "Для начинки"},
+        {"name": "Сыр", "group": "Для соуса"},
+        {"name": "Кофе", "group": "Для подачи"},
+    ]
+    composition = split_composition(source)
+    assert [x["name"] for x in proxy_ingredients(source, composition)] == ["Мука", "Ветчина", "Сыр"]
+    assert composition["excluded_serving_indices"] == [3]
+
+
+def test_mixed_serving_and_sauce_group_is_not_silently_dropped_or_copied():
+    source = recipe("Спаржа по-корейски", ["Спаржа"])
+    source["ingredients"] += [{"name": "Соевый соус", "group": "Для заправки и подачи"},
+                              {"name": "Рис", "group": "Для заправки и подачи"}]
+    match = match_product(product("Спаржа по-корейски"), NameIndex([source]))
+    assert match["status"] == "review"
+    assert "mixed_ingredient_group" in match["candidates"][0]["review_reasons"]
+
+
+def test_title_cannot_confirm_an_ingredient_absent_from_recipe():
+    source = recipe("Макароны с сыром и зеленью", ["Макароны", "Сыр"])
+    match = match_product(product("Макароны с сыром и зеленью"), NameIndex([source]))
+    assert match["status"] == "review"
+    assert match["candidates"][0]["missing_recipe_ingredients"] == ["herbs"]
+
+
+@pytest.mark.parametrize("meal,title,ingredients", [
     ("Сэндвич-ролл Цезарь с креветками", "Салат Цезарь с креветками", ["Креветки", "Салат"]),
     ("Плов с говядиной", "Плов с курицей", ["Курица", "Рис"]),
     ("Котлета куриная с картофельным пюре", "Котлета куриная", ["Курица", "Яйцо"]),
@@ -142,11 +186,76 @@ def test_packaging_brands_and_inflections_do_not_prevent_good_match():
     ("Салат Морковь по-корейски", "Салат с корейской морковью", ["Корейская морковь", "Куриная грудка"]),
     ("Салат сырный", "ПП салат с сыром", ["Сыр", "Куриное филе"]),
     ("Вок курица терияки-рис", "Рисовая лапша с курицей и овощами в соусе терияки", ["Рисовая лапша", "Куриное филе", "Соус терияки"]),
+    ("Бульмени с мясом", "Фарш для пельменей", ["Говядина", "Свинина"]),
+    ("Икра Санта Бремор классическая", "Икра из овощей", ["Кабачок", "Морковь"]),
+    ("Шримп-ролл", "Роллы с креветками", ["Креветки", "Рис", "Нори"]),
+    ("Биточек куриный со спагетти в томатном соусе", "Котлеты куриные в томатном соусе", ["Куриный фарш", "Томатная паста"]),
+    ("Курица терияки с рисом и овощами", "Курица терияки с рисом", ["Курица", "Рис", "Терияки", "Черный перец молотый"]),
+    ("Мини багет", "Чиабатта", ["Пшеничная мука", "Вода"]),
 ])
 def test_false_friends_never_copy_ingredients(meal, title, ingredients):
     match = match_product(product(meal), NameIndex([recipe(title, ingredients)]))
     assert match["status"] != "matched"
     assert match["recipe_id"] is None
+
+
+def test_tomatoes_served_alongside_cannot_confirm_tomato_filling():
+    source = recipe("Кутабы с сыром", ["Мука", "Сыр"])
+    source["ingredients"].append({"name": "Помидор", "group": "Для подачи"})
+    match = match_product(product("Кутабы с сыром и помидорами"), NameIndex([source]))
+    assert match["status"] == "review"
+    assert "tomato" in match["candidates"][0]["missing_recipe_ingredients"]
+
+
+def test_explicit_herb_garnish_is_kept_in_proxy():
+    source = recipe("Макароны с сыром и зеленью", ["Макароны", "Сыр"])
+    source["ingredients"].append({"name": "Зелень", "group": "Для подачи"})
+    match = match_product(product("Макароны с сыром и зеленью"), NameIndex([source]))
+    assert match["status"] == "matched"
+    assert match["candidates"][0]["composition"]["included_named_serving_indices"] == [2]
+
+
+def test_tomatoes_elsewhere_do_not_confirm_a_tomato_sauce():
+    source = recipe("Голубцы в сметанном соусе", [])
+    source["ingredients"] = [{"name": "Мясной фарш", "group": "Для блюда"},
+                             {"name": "Помидор", "group": "Для блюда"},
+                             {"name": "Сметана", "group": "Для соуса"}]
+    match = match_product(product("Голубцы в томатно-сметанном соусе"), NameIndex([source]))
+    assert match["status"] == "review"
+    assert "named_sauce_component_unconfirmed" in match["candidates"][0]["review_reasons"]
+
+
+@pytest.mark.parametrize("title", ["Голубцы в томатном соусе", "Голубцы в томатно-сметанном соусе"])
+def test_served_sourcream_cannot_confirm_a_sourcream_sauce(title):
+    source = recipe(title, ["Мясной фарш", "Капуста", "Помидоры"])
+    source["ingredients"].append({"name": "Сметана", "group": "Для подачи"})
+    match = match_product(product("Голубцы в томатно-сметанном соусе"), NameIndex([source]))
+    assert match["status"] == "review"
+    assert "named_sauce_component_unconfirmed" in match["candidates"][0]["review_reasons"]
+
+
+def test_quality_metrics_count_errors_and_exclude_uncertain_labels():
+    rows = [{"label": label, "prediction": prediction} for label, prediction in
+            [(True, True), (True, False), (False, True), (False, False), (None, True)]]
+    assert metrics(rows, "prediction") == {"tp": 1, "fp": 1, "tn": 1, "fn": 1,
+        "labelled_pairs": 4, "sample_precision": .5, "sample_recall": .5}
+    assert metrics([], "prediction")["sample_precision"] is None
+
+
+def test_snapshot_separates_serving_without_erasing_cooking_ingredients():
+    snapshot = Path(__file__).resolve().parents[1] / "recsys/data/foodru"
+    recipes = {r["recipe_id"]: r for r in json.loads((snapshot / "recipes.json").read_text())["recipes"]}
+    products = {f"{p['chain']}:{p['plu']}": p for p in
+                json.loads((snapshot / "enriched_catalog.json").read_text())["products"]}
+    for key, serving in [("perekrestok:4310836", "Кофе"), ("perekrestok:4372008", "Мороженое")]:
+        enriched = products[key]
+        assert serving not in {i["name"] for i in enriched["assumed_ingredients"]}
+        assert serving in {i["name"] for i in enriched["excluded_serving_ingredients"]}
+        source = recipes[enriched["foodru_match"]["recipe_id"]]
+        assert serving in {i["name"] for i in source["ingredients"]}
+    # Tea is used to cook the sprats: role, not a drink-name blacklist, matters.
+    assert any("чай" in i["name"].lower()
+               for i in products["perekrestok:4261613"]["assumed_ingredients"])
 
 
 def test_build_preserves_all_products_and_exports_only_accepted_pairs(tmp_path):
@@ -168,6 +277,23 @@ def test_build_preserves_all_products_and_exports_only_accepted_pairs(tmp_path):
     build(args)
     assert (tmp_path / "matches.json").read_bytes() == before
     assert json.loads(catalog_path.read_text()) == catalog
+
+
+def test_evaluation_binds_results_to_current_files_and_rejects_stale_inputs(tmp_path):
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_text(json.dumps({"products": [product("Сырники")]}))
+    (tmp_path / "recipes.json").write_text(json.dumps({"recipes": [recipe("Сырники", ["Творог"])]}))
+    build(SimpleNamespace(catalog=catalog_path, output=tmp_path, overrides=None))
+    baseline = json.loads((tmp_path / "matches.json").read_text())
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    cases = {"label_origin": "test", "sampling": "test", "pairs": [
+        {"product_key": "perekrestok:42", "recipe_id": "foodru_1", "label": True}]}
+    report = evaluate(tmp_path, catalog_path, baseline, summary, cases)
+    assert report["matches_sha256"] == hashlib.sha256((tmp_path / "matches.json").read_bytes()).hexdigest()
+    assert report["current_pair_metrics"]["tp"] == 1
+    catalog_path.write_text(catalog_path.read_text() + "\n")
+    with pytest.raises(ValueError, match="Input changed since build"):
+        evaluate(tmp_path, catalog_path, baseline, summary, cases)
 
 
 def test_unknown_override_does_not_silently_match_to_missing_recipe(tmp_path):
@@ -223,7 +349,11 @@ def test_committed_snapshot_has_no_dangling_pairs_and_preserves_original_product
         assert all(c["recipe_id"] in recipes_by_id for c in match["candidates"])
         if match["status"] == "matched":
             accepted_keys.add((product["chain"], product["plu"]))
-            assert enriched_product["assumed_ingredients"] == recipes_by_id[match["recipe_id"]]["ingredients"]
+            source = recipes_by_id[match["recipe_id"]]
+            composition = enriched_product["ingredient_provenance"]["composition"]
+            assert enriched_product["assumed_ingredients"] == [source["ingredients"][i] for i in composition["included_indices"]]
+            assert not composition["unresolved_indices"]
+            assert set(composition["included_indices"]).isdisjoint(composition["excluded_serving_indices"])
         else:
             assert match["recipe_id"] is None
             assert enriched_product["assumed_ingredients"] is None

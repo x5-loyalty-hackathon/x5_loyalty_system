@@ -27,14 +27,14 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from recsys.offline.foodru_matching import NameIndex, match_product
+from recsys.offline.foodru_composition import proxy_ingredients, split_composition
+from recsys.offline.foodru_matching import VERSION, NameIndex, clean_product_name, composition_for_product, match_product, tokens
 from recsys.offline.foodru_parser import parse_recipe
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CATALOG = ROOT / "recsys/data/ready_food_catalog.json"
 DEFAULT_OUTPUT = ROOT / "recsys/data/foodru"
 DEFAULT_CACHE = ROOT / "artifacts/foodru/cache"
-VERSION = "foodru-name-v1"
 
 
 def now() -> str:
@@ -213,18 +213,23 @@ def build(args: argparse.Namespace) -> None:
     enriched, options = [], []
     for product, match in zip(catalog["products"], matches):
         recipe = by_id.get(match["recipe_id"])
+        composition = composition_for_product(recipe, tokens(clean_product_name(product["name"]))) if recipe else None
+        if composition and composition["unresolved_indices"]:
+            raise ValueError(f"Override requires ingredient-group review: {match['chain']}:{match['plu']}")
         enriched.append({**product, "foodru_match": match,
-                         "assumed_ingredients": recipe["ingredients"] if recipe else None,
+                         "assumed_ingredients": proxy_ingredients(recipe, composition) if recipe else None,
+                         "excluded_serving_ingredients": [recipe["ingredients"][i] for i in composition["excluded_serving_indices"]] if recipe else None,
                          "ingredient_provenance": {
                              "kind": "recipe_name_proxy", "manufacturer_verified": False,
                              "recipe_id": recipe["recipe_id"], "source_url": recipe["source_url"],
                              "quantities_scope": "whole_recipe_not_retail_package",
+                             "composition": composition,
                          } if recipe else None})
         if recipe:
             options.append({"chain": product["chain"], "plu": product["plu"], "name": product["name"],
                             "recipe_ids": [recipe["recipe_id"]], "price": product["median_price_rub"],
                             "dish_type": product.get("dish_type"), "cuisine": product.get("cuisine")})
-    common = {"schema_version": 1, "matcher_version": VERSION,
+    common = {"schema_version": 2, "matcher_version": VERSION,
               "catalog_sha256": hashlib.sha256(catalog_bytes).hexdigest(),
               "recipe_snapshot_sha256": hashlib.sha256((args.output / "recipes.json").read_bytes()).hexdigest(),
               "snapshot_ids": catalog.get("snapshot_ids", []), "city": catalog.get("city")}
@@ -243,16 +248,20 @@ def build(args: argparse.Namespace) -> None:
                "reviews_collected": sum(len(r["reviews"]) for r in recipes),
                "review_completeness": dict(Counter(r["reviews_status"] for r in recipes)),
                "collection_errors": len(snapshot.get("errors", []))}
+    summary["recipes_with_mixed_ingredient_groups"] = sum(bool(split_composition(r)["unresolved_indices"]) for r in recipes)
+    summary["matched_products_with_excluded_serving"] = sum(bool(p["excluded_serving_ingredients"]) for p in enriched)
     write_json(args.output / "summary.json", summary)
     with (args.output / "review.csv").open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.writer(stream, lineterminator="\n")
-        writer.writerow(["chain", "plu", "product_name", "status", "rank", "recipe_id", "recipe_title", "score", "missing_components", "extra_components", "review_reasons", "source_url"])
+        writer.writerow(["chain", "plu", "product_name", "status", "rank", "recipe_id", "recipe_title", "score", "missing_components", "extra_components", "missing_recipe_ingredients", "mixed_ingredient_groups", "review_reasons", "source_url"])
         for match in matches:
             for rank, candidate in enumerate(match["candidates"], 1):
                 writer.writerow([match["chain"], match["plu"], match["name"], match["status"], rank,
                                  candidate["recipe_id"], candidate["title"], candidate["score"],
                                  ", ".join(candidate["missing_named_components"]),
                                  ", ".join(candidate["extra_recipe_components"]),
+                                 ", ".join(candidate["missing_recipe_ingredients"]),
+                                 ", ".join(candidate["composition"]["mixed_groups"]),
                                  ", ".join(candidate["review_reasons"]), candidate["source_url"]])
             if not match["candidates"]:
                 writer.writerow([match["chain"], match["plu"], match["name"], match["status"]])

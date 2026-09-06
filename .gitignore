@@ -61,6 +61,13 @@ x5_ready_food_collector/data/
 # Notebooks
 .ipynb_checkpoints/
 
+# Local LLM response cache and raw live-run dumps (recsys.llm_intent_eval,
+# recsys.llm_audit) — regenerable from the cache/seed, megabytes per run, not
+# meant to accumulate in every clone. See
+# docs/research/recsys/llm-intent-eval.md for how to reproduce a report.
+.cache/
+reports/
+
 # Materialised evaluation panels: ~6 MB of gzipped profiles and inventories,
 # rebuilt by `python -m recsys.panels`. The manifests next to them ARE
 # committed — they carry the generator version, the catalog hash and the

@@ -11,7 +11,7 @@
 
 1. **own** — ранжируем каталог с настоящей историей/предпочтениями `P`.
 2. **shuffled** — тот же сегодняшний чек (триггер рекомендации не меняем),
-   но `purchase_history`, `saved_recipe_ids`, `home_ingredient_ids`,
+   но `purchase_history`, `saved_recipe_ids`,
    `preferred_brands`, `history_categories` берём у случайно сопоставленного
    другого профиля `Q`. Радиус и исключения (это настройки аккаунта, не
    история) остаются свои.

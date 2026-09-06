@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.contracts import (
     FulfillmentOption,
     IngredientRecommendation,
@@ -7,6 +9,7 @@ from app.contracts import (
     InventoryProduct,
     ModelRecommendation,
     ProductOption,
+    ReadyMealOption,
     Recipe,
     RecipeIngredient,
     RecipeRecommendation,
@@ -16,11 +19,100 @@ from app.contracts import (
 )
 from app.recommender import RecommendationEngine
 from app.safety import SafetyPolicy
+from recsys.pantry import DISABLED_PANTRY, PantryPolicy, estimate_pantry
 
 
 NO_RESERVATION_WARNING = (
     "Markdown availability is best-effort: the item is not reserved."
 )
+
+#: Missing-ingredient count at which a recipe is treated as maximally effortful
+#: when a policy needs to put effort on a 0..1 scale.
+MAX_EFFORT_MISSING_COUNT = 8
+
+
+@dataclass(frozen=True)
+class RankingPolicy:
+    """How assembled candidates are ordered before the response is truncated.
+
+    This is a product decision that was previously implicit in one ``sort``
+    call, and it turned out to dominate the model entirely: ordering by
+    ``missing_count`` first makes ``model_score`` a tiebreaker, so a trained
+    ranker and a random one return the same top-3 for most users (measured in
+    ``docs/benchmark-report.md``). Making the policy an object means the choice
+    can be stated, compared between arms and defended, instead of being a line
+    nobody re-reads.
+
+    ``model_weight`` is the share of the blended score that comes from the
+    recommender; the rest comes from how little the user has to buy.
+    """
+
+    name: str
+    model_weight: float = 0.0
+    #: When True, order strictly by missing_count and use the score only to
+    #: break ties. This is the behaviour the service shipped with.
+    effort_first: bool = True
+    #: When set, ``RecommendationService.recommend`` drops any assembled
+    #: candidate with ``missing_count`` above this before sorting at all —
+    #: a hard feasibility gate, applied once, upstream of whatever this
+    #: policy's own ``sort_key`` does with what's left. ``None`` (the
+    #: default) changes nothing for existing policies: this field exists so
+    #: a policy can *also* say "and don't even show the unrealistic ones",
+    #: independently of how it orders the realistic ones.
+    feasibility_missing_cap: int | None = None
+
+    def sort_key(self, item: RecipeRecommendation) -> tuple:
+        if self.effort_first:
+            return (item.missing_count, -item.model_score, item.recipe_id)
+        effort_score = 1.0 - min(item.missing_count, MAX_EFFORT_MISSING_COUNT) / (
+            MAX_EFFORT_MISSING_COUNT
+        )
+        blended = (
+            self.model_weight * item.model_score
+            + (1.0 - self.model_weight) * effort_score
+        )
+        return (-round(blended, 6), item.missing_count, item.recipe_id)
+
+
+#: Ship-as-is: easiest-to-cook first, relevance only as a tiebreaker.
+EFFORT_FIRST = RankingPolicy(name="effort_first", model_weight=0.0, effort_first=True)
+
+#: Equal say to relevance and effort.
+BLENDED = RankingPolicy(name="blended", model_weight=0.5, effort_first=False)
+
+#: Relevance dominates; effort still breaks ties.
+RELEVANCE_FIRST = RankingPolicy(
+    name="relevance_first", model_weight=0.9, effort_first=False
+)
+
+#: Pure model order, no effort gating at all — "what the ranker alone would
+#: have shown", before any service-side reshuffling by missing_count. Unlike
+#: RELEVANCE_FIRST (model_weight=0.9), effort does not even break a near-tie:
+#: model_score is the entire key. See
+#: docs/research/recsys/experiment-2-service-logic-report.md (variant 1).
+MODEL_ORDER = RankingPolicy(name="model_order", model_weight=1.0, effort_first=False)
+
+#: Chosen empirically as the 75th percentile of ``missing_count`` over the
+#: standard basket panel (``REGIMES[:9]``, 80 users/regime, seed 20260905) —
+#: see docs/research/recsys/experiment-2-service-logic-report.md. Deliberately
+#: below MAX_EFFORT_MISSING_COUNT (8): the point of this cap is to reject the
+#: costliest quarter of *assemblable* recipes as not realistically buyable
+#: today, not merely to clip an extreme tail.
+FEASIBILITY_MISSING_CAP = 6
+
+#: Exclude the infeasible, keep the model's order for what's left — distinct
+#: from both EFFORT_FIRST ("reorder everything by effort") and BLENDED
+#: ("blend effort into the score"): this variant never lets effort influence
+#: order among the survivors, it only uses it as a yes/no gate beforehand.
+#: See docs/research/recsys/experiment-2-service-logic-report.md (variant 3).
+FEASIBLE_MODEL_ORDER = RankingPolicy(
+    name="feasible_model_order",
+    model_weight=1.0,
+    effort_first=False,
+    feasibility_missing_cap=FEASIBILITY_MISSING_CAP,
+)
+
+DEFAULT_RANKING_POLICY = EFFORT_FIRST
 
 
 class RecommendationService:
@@ -29,9 +121,13 @@ class RecommendationService:
         *,
         engine: RecommendationEngine,
         safety_policy: SafetyPolicy,
+        ranking_policy: RankingPolicy = DEFAULT_RANKING_POLICY,
+        pantry_policy: PantryPolicy = DISABLED_PANTRY,
     ) -> None:
         self._engine = engine
         self._safety_policy = safety_policy
+        self._ranking_policy = ranking_policy
+        self._pantry_policy = pantry_policy
 
     def recommend(self, request: RecommendationRequest) -> RecommendationResponse:
         recipes = {recipe.recipe_id: recipe for recipe in request.recipe_catalog}
@@ -77,9 +173,21 @@ class RecommendationService:
                 continue
             recommendations.append(assembled)
 
-        recommendations.sort(
-            key=lambda item: (item.missing_count, -item.model_score, item.recipe_id)
-        )
+        cap = self._ranking_policy.feasibility_missing_cap
+        if cap is not None:
+            feasible: list[RecipeRecommendation] = []
+            for item in recommendations:
+                if item.missing_count > cap:
+                    filtered_candidates += 1
+                    response_warnings.append(
+                        f"recipe {item.recipe_id} filtered: "
+                        f"missing_count_exceeds_cap:{cap}"
+                    )
+                    continue
+                feasible.append(item)
+            recommendations = feasible
+
+        recommendations.sort(key=self._ranking_policy.sort_key)
 
         return RecommendationResponse(
             user_id=request.user.user_id,
@@ -98,10 +206,12 @@ class RecommendationService:
     ) -> tuple[RecipeRecommendation | None, str | None]:
         if not recipe.verified:
             return None, "recipe_not_verified"
-        receipt_ingredient_ids = {
-            ingredient_id
-            for item in request.current_receipt.items
-            for ingredient_id in item.ingredient_ids
+        pantry = estimate_pantry(request, policy=self._pantry_policy)
+        threshold = self._pantry_policy.confidence_threshold
+        at_home = {
+            ingredient_id: estimate
+            for ingredient_id, estimate in pantry.items()
+            if estimate.is_observed or estimate.probability >= threshold
         }
         ingredients: list[IngredientRecommendation] = []
         missing_count = 0
@@ -118,24 +228,21 @@ class RecommendationService:
             ):
                 return None, f"ingredient_excluded:{ingredient.ingredient_id}"
 
-            if ingredient.ingredient_id in receipt_ingredient_ids:
+            estimate = at_home.get(ingredient.ingredient_id)
+            if estimate is not None:
                 ingredients.append(
                     IngredientRecommendation(
                         ingredient_id=ingredient.ingredient_id,
                         name=ingredient.name,
                         category=ingredient.category,
-                        source=IngredientSource.RECEIPT,
-                    )
-                )
-                continue
-
-            if ingredient.ingredient_id in request.user.home_ingredient_ids:
-                ingredients.append(
-                    IngredientRecommendation(
-                        ingredient_id=ingredient.ingredient_id,
-                        name=ingredient.name,
-                        category=ingredient.category,
-                        source=IngredientSource.HOME,
+                        source=(
+                            IngredientSource.RECEIPT
+                            if estimate.is_observed
+                            else IngredientSource.PANTRY_LIKELY
+                        ),
+                        pantry_probability=(
+                            None if estimate.is_observed else estimate.probability
+                        ),
                     )
                 )
                 continue
@@ -179,6 +286,9 @@ class RecommendationService:
             )
 
         warnings = [NO_RESERVATION_WARNING] if has_markdown else []
+        ready_meal_options = self._ready_meal_options(
+            recipe_id=recipe.recipe_id, request=request
+        )
         return (
             RecipeRecommendation(
                 recipe_id=recipe.recipe_id,
@@ -193,8 +303,37 @@ class RecommendationService:
                     SafetyStatus.ADJUSTED if warnings else SafetyStatus.APPROVED
                 ),
                 warnings=warnings,
+                ready_meal_alternative=ready_meal_options[0] if ready_meal_options else None,
+                ready_meal_option_count=len(ready_meal_options),
             ),
             None,
+        )
+
+    @staticmethod
+    def _ready_meal_options(
+        *,
+        recipe_id: str,
+        request: RecommendationRequest,
+    ) -> list[ReadyMealOption]:
+        """Prepared counterparts for one recipe, cheapest first.
+
+        Options without a price sort last rather than being dropped: a known
+        counterpart with an unknown price is still worth showing, it just
+        cannot lead the "or buy it ready for N ₽" offer.
+        """
+        options = [
+            option
+            for option in request.ready_meal_options
+            if recipe_id in option.recipe_ids
+        ]
+        return sorted(
+            options,
+            key=lambda option: (
+                option.price is None,
+                option.price if option.price is not None else 0.0,
+                option.chain,
+                option.plu,
+            ),
         )
 
     def _valid_products(
@@ -242,4 +381,5 @@ class RecommendationService:
             ),
             expires_at=product.expires_at,
             fulfillment_options=product.fulfillment_options,
+            price_is_estimate=product.price_is_estimate,
         )

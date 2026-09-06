@@ -1,0 +1,1911 @@
+{
+ "c_00ae4f920732": {
+  "user_id": "synthetic_routine_0373",
+  "recipe_id": "herring_under_fur_coat",
+  "archetype": "routine",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_027b0c6adce5": {
+  "user_id": "synthetic_routine_0673",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_0307fdb1e448": {
+  "user_id": "synthetic_value_0892",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "value",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_061f998e66b3": {
+  "user_id": "synthetic_value_0800",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_086821e24798": {
+  "user_id": "synthetic_value_0903",
+  "recipe_id": "vinegret",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 9
+ },
+ "c_0b66fae2e047": {
+  "user_id": "synthetic_time_limited_0322",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "time_limited",
+  "sources": [
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_0eca649ab4b2": {
+  "user_id": "synthetic_routine_0103",
+  "recipe_id": "greek_salad",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 8
+ },
+ "c_0f2d69e9f4b7": {
+  "user_id": "synthetic_time_limited_0487",
+  "recipe_id": "carrot_fritters",
+  "archetype": "time_limited",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_0f656679175c": {
+  "user_id": "synthetic_routine_0373",
+  "recipe_id": "olivier_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_105e15deba75": {
+  "user_id": "synthetic_routine_0444",
+  "recipe_id": "cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_10a0671c076c": {
+  "user_id": "synthetic_value_0864",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "value",
+  "sources": [
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_1281a0ed1ef1": {
+  "user_id": "synthetic_explorer_0556",
+  "recipe_id": "apple_pie",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_12e8aaf18d35": {
+  "user_id": "synthetic_value_0350",
+  "recipe_id": "bliny",
+  "archetype": "value",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_1355561d1db5": {
+  "user_id": "synthetic_routine_0880",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_143430088b2d": {
+  "user_id": "synthetic_explorer_0674",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_158dac27ccb1": {
+  "user_id": "synthetic_time_limited_0704",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_1b2a6043e1e5": {
+  "user_id": "synthetic_value_0823",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_1d8c246074dc": {
+  "user_id": "synthetic_value_0628",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_1db197c1ecc0": {
+  "user_id": "synthetic_routine_0699",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_1ebca4beff21": {
+  "user_id": "synthetic_explorer_0760",
+  "recipe_id": "chicken_pilaf",
+  "archetype": "explorer",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 9
+ },
+ "c_1fc3e382ec85": {
+  "user_id": "synthetic_value_0316",
+  "recipe_id": "carrot_fritters",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_21700d7fea2e": {
+  "user_id": "synthetic_time_limited_0536",
+  "recipe_id": "carrot_fritters",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_2177924389a3": {
+  "user_id": "synthetic_value_0588",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_22a8d71180cb": {
+  "user_id": "synthetic_time_limited_0715",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_231352a9ab23": {
+  "user_id": "synthetic_explorer_0417",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "explorer",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_23dcd83d065b": {
+  "user_id": "synthetic_value_0958",
+  "recipe_id": "olivier_salad",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_249f8ff35706": {
+  "user_id": "synthetic_routine_0352",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_2520639b9b1c": {
+  "user_id": "synthetic_value_0864",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_253b4696cdc8": {
+  "user_id": "synthetic_value_0486",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_27aca2559e0c": {
+  "user_id": "synthetic_routine_0280",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_3221a63d39d1": {
+  "user_id": "synthetic_explorer_0647",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_32aa27451172": {
+  "user_id": "synthetic_value_0276",
+  "recipe_id": "grilled_chicken_skewers",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 9
+ },
+ "c_33a84211a396": {
+  "user_id": "synthetic_value_0164",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_347671f7612e": {
+  "user_id": "synthetic_value_0525",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_349e1b782c18": {
+  "user_id": "synthetic_value_0682",
+  "recipe_id": "grilled_chicken_skewers",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_359c104a67d2": {
+  "user_id": "synthetic_time_limited_0133",
+  "recipe_id": "bliny",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_372bf2ebfe2d": {
+  "user_id": "synthetic_time_limited_0843",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_3743a08b003d": {
+  "user_id": "synthetic_value_0525",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_383210b2ebb2": {
+  "user_id": "synthetic_routine_0551",
+  "recipe_id": "meat_french_style",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_394611f04dcb": {
+  "user_id": "synthetic_routine_0153",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_3a29f3e35a46": {
+  "user_id": "synthetic_time_limited_0144",
+  "recipe_id": "syrniki",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_3cca4920bac1": {
+  "user_id": "synthetic_value_0823",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "ml"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_3eebf770b199": {
+  "user_id": "synthetic_value_0445",
+  "recipe_id": "carrot_fritters",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_3f14d805468f": {
+  "user_id": "synthetic_time_limited_0408",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_40b213ccb2eb": {
+  "user_id": "synthetic_routine_0551",
+  "recipe_id": "solyanka",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 9
+ },
+ "c_41d158765fe0": {
+  "user_id": "synthetic_time_limited_0736",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_4352662ede01": {
+  "user_id": "synthetic_routine_0271",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_44a4049ce230": {
+  "user_id": "synthetic_routine_0237",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_4587dee82d82": {
+  "user_id": "synthetic_time_limited_0144",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_4704f8a37ab8": {
+  "user_id": "synthetic_routine_0026",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_4ad55841f423": {
+  "user_id": "synthetic_routine_0057",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_4e2b86fadf84": {
+  "user_id": "synthetic_time_limited_0612",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_4fbf62130248": {
+  "user_id": "synthetic_routine_0272",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_515fc67543cc": {
+  "user_id": "synthetic_value_0873",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_535c00af4a23": {
+  "user_id": "synthetic_time_limited_0139",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_588d558fc021": {
+  "user_id": "synthetic_routine_0271",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_590139d7cd7a": {
+  "user_id": "synthetic_value_0483",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_5ac813b1c108": {
+  "user_id": "synthetic_value_0579",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_5c07ef1f8c8d": {
+  "user_id": "synthetic_time_limited_0861",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_5d734968bf79": {
+  "user_id": "synthetic_value_0488",
+  "recipe_id": "grilled_chicken_skewers",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 9
+ },
+ "c_5dd20959fba7": {
+  "user_id": "synthetic_time_limited_0661",
+  "recipe_id": "homemade_chicken_nuggets",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_5fe4eda04332": {
+  "user_id": "synthetic_routine_0373",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_61edd3651bca": {
+  "user_id": "synthetic_routine_0460",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_64052b696527": {
+  "user_id": "synthetic_explorer_0674",
+  "recipe_id": "hummus",
+  "archetype": "explorer",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_6489971597d6": {
+  "user_id": "synthetic_time_limited_0715",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_68be56a30543": {
+  "user_id": "synthetic_routine_0917",
+  "recipe_id": "herring_under_fur_coat",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_69a11f069f3f": {
+  "user_id": "synthetic_routine_0809",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_6a45bcf158f6": {
+  "user_id": "synthetic_value_0903",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_6c5f22f3a43b": {
+  "user_id": "synthetic_explorer_0950",
+  "recipe_id": "carrot_fritters",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_6e3b1f087517": {
+  "user_id": "synthetic_explorer_0679",
+  "recipe_id": "hummus",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_6ea007a9b647": {
+  "user_id": "synthetic_routine_0618",
+  "recipe_id": "korean_carrot",
+  "archetype": "routine",
+  "sources": [
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_6fabadda3733": {
+  "user_id": "synthetic_value_0682",
+  "recipe_id": "vinegret",
+  "archetype": "value",
+  "sources": [
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 9
+ },
+ "c_71667ff34c37": {
+  "user_id": "synthetic_value_0414",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_72a388871570": {
+  "user_id": "synthetic_routine_0176",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_72e2932adbb9": {
+  "user_id": "synthetic_routine_0961",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_73039be92f50": {
+  "user_id": "synthetic_value_0857",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 1
+ },
+ "c_74dd3187478b": {
+  "user_id": "synthetic_routine_0969",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_75ae7db44e73": {
+  "user_id": "synthetic_routine_0807",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_765734bdb703": {
+  "user_id": "synthetic_value_0483",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_7c5f80d16899": {
+  "user_id": "synthetic_value_0663",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_7ed84736095a": {
+  "user_id": "synthetic_routine_0673",
+  "recipe_id": "syrniki",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_7f632294e03c": {
+  "user_id": "synthetic_value_0032",
+  "recipe_id": "chicken_pilaf",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_8293737a0fcb": {
+  "user_id": "synthetic_time_limited_0637",
+  "recipe_id": "syrniki",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_82bef5ec12a5": {
+  "user_id": "synthetic_routine_0150",
+  "recipe_id": "syrniki",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_83306c8a079b": {
+  "user_id": "synthetic_value_0445",
+  "recipe_id": "hummus",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_835a48390d77": {
+  "user_id": "synthetic_value_0682",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_83ac9e97bef6": {
+  "user_id": "synthetic_routine_0616",
+  "recipe_id": "hummus",
+  "archetype": "routine",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_840da242df43": {
+  "user_id": "synthetic_routine_0917",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_857009c0be07": {
+  "user_id": "synthetic_routine_0220",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_86327ba021b8": {
+  "user_id": "synthetic_time_limited_0523",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_86fe15f332d4": {
+  "user_id": "synthetic_routine_0984",
+  "recipe_id": "chicken_pilaf",
+  "archetype": "routine",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_871dba0ec6b3": {
+  "user_id": "synthetic_value_0225",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "value",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_8b112bbcae3b": {
+  "user_id": "synthetic_explorer_0002",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "explorer",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_8bce57948d85": {
+  "user_id": "synthetic_value_0445",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "value",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_8d7e58b33025": {
+  "user_id": "synthetic_explorer_0006",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_8fc5a752427d": {
+  "user_id": "synthetic_routine_0645",
+  "recipe_id": "homemade_chicken_nuggets",
+  "archetype": "routine",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_909a6eaa4a57": {
+  "user_id": "synthetic_routine_0366",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 1
+ },
+ "c_928c57a6aabd": {
+  "user_id": "synthetic_value_0326",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_92c7a5e5d40f": {
+  "user_id": "synthetic_time_limited_0991",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_9311ffa056d2": {
+  "user_id": "synthetic_routine_0708",
+  "recipe_id": "meat_french_style",
+  "archetype": "routine",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_94984b882b15": {
+  "user_id": "synthetic_value_0350",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "value",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_9593765a1c46": {
+  "user_id": "synthetic_value_0925",
+  "recipe_id": "carrot_fritters",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_98a6c14e1d4e": {
+  "user_id": "synthetic_routine_0040",
+  "recipe_id": "korean_carrot",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 7
+ },
+ "c_9953ad5f5d1e": {
+  "user_id": "synthetic_value_0958",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_9a526803c758": {
+  "user_id": "synthetic_value_0350",
+  "recipe_id": "greek_salad",
+  "archetype": "value",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_a058f652fb0c": {
+  "user_id": "synthetic_explorer_0556",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "ml"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_a177c340161b": {
+  "user_id": "synthetic_explorer_0364",
+  "recipe_id": "vinegret",
+  "archetype": "explorer",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 10
+ },
+ "c_a199ea78866b": {
+  "user_id": "synthetic_routine_0413",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_a547efaeb2dc": {
+  "user_id": "synthetic_routine_0352",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_a5c0a5fbc17d": {
+  "user_id": "synthetic_explorer_0147",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_a6357e0df1a4": {
+  "user_id": "synthetic_value_0485",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "value",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_aa7a5c0928f7": {
+  "user_id": "synthetic_time_limited_0814",
+  "recipe_id": "pea_soup_with_smoked_meats",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_abfd8e570d62": {
+  "user_id": "synthetic_time_limited_0490",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_af63b76b592e": {
+  "user_id": "synthetic_routine_0308",
+  "recipe_id": "carrot_fritters",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_afa1e665a88f": {
+  "user_id": "synthetic_explorer_0674",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "explorer",
+  "sources": [
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_afde5d93d109": {
+  "user_id": "synthetic_explorer_0916",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "explorer",
+  "sources": [
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_b7d6a4c6e0aa": {
+  "user_id": "synthetic_routine_0880",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_b82a4f610454": {
+  "user_id": "synthetic_time_limited_0620",
+  "recipe_id": "vegetable_cheese_salad",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 5
+ },
+ "c_b8dced7eb12e": {
+  "user_id": "synthetic_routine_0389",
+  "recipe_id": "korean_carrot",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_b91aaca92fec": {
+  "user_id": "synthetic_time_limited_0704",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_bcc367800649": {
+  "user_id": "synthetic_time_limited_0680",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_bddf0617ac53": {
+  "user_id": "synthetic_time_limited_0133",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "time_limited",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_bf4ee5785574": {
+  "user_id": "synthetic_value_0121",
+  "recipe_id": "carrot_fritters",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_c1e45fd1be03": {
+  "user_id": "synthetic_value_0466",
+  "recipe_id": "beef_pilaf",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 8
+ },
+ "c_c311c889fe96": {
+  "user_id": "synthetic_routine_0413",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_c3af604fefee": {
+  "user_id": "synthetic_routine_0543",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_c479d2903e0c": {
+  "user_id": "synthetic_time_limited_0843",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 3
+ },
+ "c_c4a68e78c580": {
+  "user_id": "synthetic_routine_0176",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_c573d5cc79f0": {
+  "user_id": "synthetic_routine_0072",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_c69e26be7c85": {
+  "user_id": "synthetic_explorer_0916",
+  "recipe_id": "pumpkin_cream_soup",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 7
+ },
+ "c_c79ab5c0d2f2": {
+  "user_id": "synthetic_routine_0201",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_c97c9da2215f": {
+  "user_id": "synthetic_explorer_0364",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_cb3939bce51e": {
+  "user_id": "synthetic_explorer_0658",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "explorer",
+  "sources": [
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_cc872e7e1d1c": {
+  "user_id": "synthetic_value_0878",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_cca42a5126b1": {
+  "user_id": "synthetic_routine_0807",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_cd2324d4db97": {
+  "user_id": "synthetic_value_0276",
+  "recipe_id": "homemade_chicken_nuggets",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_d0a52f2a0f7a": {
+  "user_id": "synthetic_time_limited_0322",
+  "recipe_id": "grilled_chicken_skewers",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 8
+ },
+ "c_d3840e95b090": {
+  "user_id": "synthetic_time_limited_0133",
+  "recipe_id": "carrot_fritters",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 1
+ },
+ "c_d4a9bff0748d": {
+  "user_id": "synthetic_routine_0938",
+  "recipe_id": "apple_pie",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_d58057e37222": {
+  "user_id": "synthetic_routine_0444",
+  "recipe_id": "vegetable_omelette",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 9
+ },
+ "c_d6512729bc6f": {
+  "user_id": "synthetic_routine_0689",
+  "recipe_id": "chicken_and_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 2
+ },
+ "c_d88f7e576cec": {
+  "user_id": "synthetic_routine_0375",
+  "recipe_id": "chicken_cucumber_salad",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_d8c339d2d7a4": {
+  "user_id": "synthetic_routine_0444",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_dbbce0b8a14e": {
+  "user_id": "synthetic_value_0808",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_e0a9d8678b27": {
+  "user_id": "synthetic_explorer_0998",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_e0d195c36e07": {
+  "user_id": "synthetic_routine_0938",
+  "recipe_id": "carrot_fritters",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_e2c8f1a20721": {
+  "user_id": "synthetic_routine_0917",
+  "recipe_id": "chicken_potato_soup",
+  "archetype": "routine",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 8
+ },
+ "c_e3325dcd48e7": {
+  "user_id": "synthetic_explorer_0364",
+  "recipe_id": "pea_soup_with_smoked_meats",
+  "archetype": "explorer",
+  "sources": [
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 10
+ },
+ "c_e3cf782bd413": {
+  "user_id": "synthetic_time_limited_0096",
+  "recipe_id": "pasta_tomato",
+  "archetype": "time_limited",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 5
+ },
+ "c_e5c48637bdee": {
+  "user_id": "synthetic_explorer_0658",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_e9a311812bf1": {
+  "user_id": "synthetic_value_0400",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_eb8de153f612": {
+  "user_id": "synthetic_routine_0983",
+  "recipe_id": "syrniki",
+  "archetype": "routine",
+  "sources": [
+   "catboost"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ },
+ "c_ec8815717c0e": {
+  "user_id": "synthetic_value_0690",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 6
+ },
+ "c_ecc27f755db9": {
+  "user_id": "synthetic_routine_0981",
+  "recipe_id": "braised_pork_with_vegetables",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 4
+ },
+ "c_ecc6bcbf60df": {
+  "user_id": "synthetic_value_0071",
+  "recipe_id": "korean_carrot",
+  "archetype": "value",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_f04994bd7b1f": {
+  "user_id": "synthetic_routine_0884",
+  "recipe_id": "healthy_cottage_cheese_bake",
+  "archetype": "routine",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 3
+ },
+ "c_f668fe1f64e7": {
+  "user_id": "synthetic_explorer_0417",
+  "recipe_id": "homemade_chicken_nuggets",
+  "archetype": "explorer",
+  "sources": [
+   "catboost",
+   "coverage",
+   "oracle"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_fa9ba5e09200": {
+  "user_id": "synthetic_time_limited_0490",
+  "recipe_id": "meat_french_style",
+  "archetype": "time_limited",
+  "sources": [
+   "coverage"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 6
+ },
+ "c_fb3dbddc1e36": {
+  "user_id": "synthetic_value_0485",
+  "recipe_id": "oatmeal_with_banana",
+  "archetype": "value",
+  "sources": [
+   "catboost",
+   "coverage",
+   "ml",
+   "oracle",
+   "random"
+  ],
+  "oracle_relevant": true,
+  "missing_count": 2
+ },
+ "c_ff5962e67c9c": {
+  "user_id": "synthetic_routine_0529",
+  "recipe_id": "cheese_tomato_toast",
+  "archetype": "routine",
+  "sources": [
+   "ml",
+   "random"
+  ],
+  "oracle_relevant": false,
+  "missing_count": 4
+ }
+}

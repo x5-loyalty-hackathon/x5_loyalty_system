@@ -1,0 +1,36 @@
+{
+ "spec": {
+  "name": "probe_shifted_availability",
+  "n_users": 200,
+  "seed": 20260905,
+  "regime": "novelty=mid/promo=mid/repeat=mid",
+  "assumptions": {
+   "no_product_at_all": 0.35,
+   "within_radius": 0.7,
+   "safety_ineligible": 0.05,
+   "out_of_stock": 0.35,
+   "markdown_offered": 0.5,
+   "markdown_already_expired": 0.1,
+   "price_level": 1.0
+  },
+  "now": "2026-09-03T18:00:00+03:00",
+  "cohort": "base"
+ },
+ "generator_version": 1,
+ "saved_recipe_pool_hash": "dda665585c844cfc",
+ "profiles_checksum": "777fc3a7219aabf3",
+ "inventories_checksum": "a77ebbc98956279f",
+ "n_profiles": 200,
+ "n_products": 15777,
+ "archetype_counts": {
+  "time_limited": 24,
+  "routine": 94,
+  "explorer": 36,
+  "value": 46
+ },
+ "split_counts": {
+  "train": 125,
+  "validation": 35,
+  "test": 40
+ }
+}

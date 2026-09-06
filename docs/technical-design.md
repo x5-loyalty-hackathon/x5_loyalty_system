@@ -102,7 +102,7 @@ class RecommendationEngine(Protocol):
 Backend затем:
 
 1. находит рецепт в переданном каталоге;
-2. вычисляет покрытие текущим чеком и явными `home_ingredient_ids`;
+2. вычисляет покрытие текущим чеком;
 3. фильтрует inventory по safety/radius/availability;
 4. прикладывает markdown и full-price options только к ингредиентам рецепта;
 5. исключает recipe candidate с обязательным недоступным ингредиентом;

@@ -1,0 +1,5942 @@
+[
+ {
+  "card_id": "c_00ae4f920732",
+  "title": "Сельдь под шубой",
+  "prep_minutes": 90,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Укроп",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Майонез",
+   "Морковь",
+   "Перец чёрный молотый",
+   "Свёкла",
+   "Сельдь солёная"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 585,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Анчоусы",
+    "Колбаса варёная",
+    "Паста кунжутная тахини",
+    "Петрушка",
+    "Свинина",
+    "Сливочное масло",
+    "Творог",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_027b0c6adce5",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Огурцы",
+   "Сметана",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 505,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Базилик",
+    "Говядина",
+    "Лапша пшеничная",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_0307fdb1e448",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лавровый лист",
+   "Перец чёрный горошком",
+   "Перец чёрный молотый",
+   "Укроп"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Куриное филе",
+   "Лук",
+   "Морковь",
+   "Паприка",
+   "Соль"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 512,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.3,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Анчоусы",
+    "Говядина",
+    "Гречка",
+    "Куркума",
+    "Молоко",
+    "Сезонные фрукты",
+    "Томаты"
+   ]
+  }
+ },
+ {
+  "card_id": "c_061f998e66b3",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 597,
+  "context": {
+   "top_categories": [
+    "grain",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Бананы",
+    "Горох сухой",
+    "Картофель",
+    "Макароны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_086821e24798",
+  "title": "Винегрет",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Горошек зелёный консервированный",
+   "Капуста квашеная",
+   "Картофель",
+   "Лук",
+   "Морковь",
+   "Огурцы солёные",
+   "Растительное масло",
+   "Свёкла",
+   "Укроп"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 646,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.6,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Анчоусы",
+    "Горох сухой",
+    "Колбаса варёная",
+    "Макароны",
+    "Сезонные фрукты"
+   ]
+  }
+ },
+ {
+  "card_id": "c_0b66fae2e047",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 656,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "meat"
+   ],
+   "mean_basket_size": 4.3,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Колбаса варёная",
+    "Молоко",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_0eca649ab4b2",
+  "title": "Греческий салат",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Средиземноморская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Лук",
+   "Огурцы",
+   "Оливки",
+   "Оливковое масло",
+   "Орегано",
+   "Томаты",
+   "Фета"
+  ],
+  "missing_count": 8,
+  "missing_cost_rub": 1469,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Бананы",
+    "Кабачок",
+    "Капуста квашеная",
+    "Картофель",
+    "Кефир",
+    "Колбаса варёная",
+    "Сливочное масло",
+    "Стручковая фасоль",
+    "Сыр плавленый"
+   ]
+  }
+ },
+ {
+  "card_id": "c_0f2d69e9f4b7",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Морковь",
+   "Мука",
+   "Соль",
+   "Яйца"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 267,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.7,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Молоко",
+    "Свинина",
+    "Фета",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_0f656679175c",
+  "title": "Салат Оливье",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Колбаса варёная",
+   "Укроп",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Горошек зелёный консервированный",
+   "Картофель",
+   "Майонез",
+   "Морковь",
+   "Огурцы солёные",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 647,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Анчоусы",
+    "Колбаса варёная",
+    "Паста кунжутная тахини",
+    "Петрушка",
+    "Свинина",
+    "Сливочное масло",
+    "Творог",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_105e15deba75",
+  "title": "Творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Сахар ванильный",
+   "Сметана",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Разрыхлитель",
+   "Сахар",
+   "Творог"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 335,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Картофель",
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Оливки",
+    "Сметана",
+    "Стручковая фасоль",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_10a0671c076c",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Соль",
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 838,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Анчоусы",
+    "Гречка",
+    "Корица",
+    "Лимон",
+    "Сезонные фрукты",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1281a0ed1ef1",
+  "title": "Яблочный пирог",
+  "prep_minutes": 60,
+  "servings": 6,
+  "dish_type": "Выпечка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Корица",
+   "Яблоки",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Мука",
+   "Разрыхлитель",
+   "Сахар",
+   "Сливочное масло"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 525,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "grain"
+   ],
+   "mean_basket_size": 7.2,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Анчоусы",
+    "Бананы",
+    "Лимон",
+    "Лук",
+    "Приправа для курицы",
+    "Рис",
+    "Сезонные фрукты",
+    "Яблоки",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_12e8aaf18d35",
+  "title": "Блины",
+  "prep_minutes": 30,
+  "servings": 4,
+  "dish_type": "Блины",
+  "cuisine": "Русская",
+  "already_have": [
+   "Молоко",
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Растительное масло",
+   "Сахар"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 279,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Молоко",
+    "Сливочное масло",
+    "Стручковая фасоль",
+    "Тыква",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1355561d1db5",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Картофель",
+   "Перец чёрный молотый",
+   "Укроп"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лавровый лист",
+   "Лук",
+   "Морковь",
+   "Паприка",
+   "Перец чёрный горошком",
+   "Соль"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 640,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Говядина",
+    "Гречка",
+    "Картофель",
+    "Кефир",
+    "Лапша пшеничная",
+    "Сыр"
+   ]
+  }
+ },
+ {
+  "card_id": "c_143430088b2d",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Бананы",
+   "Соль"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 131,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "grain"
+   ],
+   "mean_basket_size": 7.8,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Куриное филе",
+    "Лапша пшеничная",
+    "Панировочные сухари",
+    "Сливочное масло",
+    "Укроп",
+    "Фарш говяжий",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_158dac27ccb1",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Сыр"
+  ],
+  "to_buy": [
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 252,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 4.9,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Пармезан",
+    "Сливочное масло",
+    "Сыр",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1b2a6043e1e5",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 377,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Арахисовая паста",
+    "Картофель",
+    "Лимон",
+    "Лук",
+    "Паприка",
+    "Сыр",
+    "Фета",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1d8c246074dc",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 237,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.3,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Кабачок",
+    "Капуста квашеная",
+    "Колбаса варёная",
+    "Пармезан",
+    "Сыр плавленый",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1db197c1ecc0",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 418,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.3,
+   "visit_cadence_days": 2.8,
+   "basket_today": [
+    "Овощная смесь",
+    "Перец чили",
+    "Перец чёрный горошком",
+    "Свинина",
+    "Сметана"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1ebca4beff21",
+  "title": "Плов с курицей",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Узбекская",
+  "already_have": [],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Морковь",
+   "Перец чёрный молотый",
+   "Приправа для плова",
+   "Растительное масло",
+   "Рис",
+   "Соль",
+   "Чеснок"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 784,
+  "context": {
+   "top_categories": [
+    "grain",
+    "fruit",
+    "meat"
+   ],
+   "mean_basket_size": 7.8,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Говядина",
+    "Греческий йогурт",
+    "Лимон",
+    "Молоко",
+    "Огурцы солёные",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_1fc3e382ec85",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 134,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 5.7,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Курага",
+    "Куриное филе",
+    "Куркума",
+    "Лук",
+    "Сухарики",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_21700d7fea2e",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 142,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.6,
+   "basket_today": [
+    "Греческий йогурт",
+    "Картофель",
+    "Копчёности мясные",
+    "Лапша пшеничная",
+    "Сметана",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_2177924389a3",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Овсяные хлопья",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 332,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Капуста",
+    "Кефир",
+    "Котлеты-полуфабрикаты",
+    "Огурцы",
+    "Сливочное масло",
+    "Томатная паста",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_22a8d71180cb",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Хлеб"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 578,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "pantry"
+   ],
+   "mean_basket_size": 4.9,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Горошек зелёный консервированный",
+    "Греческий йогурт",
+    "Лапша пшеничная",
+    "Перец чёрный молотый",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_231352a9ab23",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 523,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 7.6,
+   "visit_cadence_days": 4.1,
+   "basket_today": [
+    "Багет",
+    "Лимон",
+    "Оливки",
+    "Панировочные сухари",
+    "Сельдь солёная",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_23dcd83d065b",
+  "title": "Салат Оливье",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Колбаса варёная",
+   "Огурцы солёные",
+   "Перец чёрный молотый",
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Горошек зелёный консервированный",
+   "Картофель",
+   "Майонез",
+   "Морковь",
+   "Укроп"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 442,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Бананы",
+    "Говядина",
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Огурцы солёные",
+    "Разрыхлитель",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_249f8ff35706",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Бананы"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Овсяные хлопья",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 223,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Бананы",
+    "Капуста",
+    "Макароны",
+    "Фарш говяжий",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_2520639b9b1c",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 298,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Анчоусы",
+    "Гречка",
+    "Корица",
+    "Лимон",
+    "Сезонные фрукты",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_253b4696cdc8",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Сыр"
+  ],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 341,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Багет",
+    "Говядина",
+    "Корень петрушки",
+    "Сезонные фрукты",
+    "Сливочное масло",
+    "Сыр",
+    "Фета",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_27aca2559e0c",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Сыр"
+  ],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 307,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Картофель",
+    "Лук",
+    "Молоко",
+    "Сливочное масло",
+    "Сыр",
+    "Сыр плавленый",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3221a63d39d1",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 360,
+  "context": {
+   "top_categories": [
+    "grain",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 8.2,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Греческий йогурт",
+    "Макароны",
+    "Овсяные хлопья",
+    "Огурцы солёные",
+    "Разрыхлитель",
+    "Сезонные фрукты",
+    "Сливочное масло",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_32aa27451172",
+  "title": "Шашлык из курицы",
+  "prep_minutes": 60,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Кавказская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Приправа для курицы"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Паприка",
+   "Перец чили",
+   "Растительное масло",
+   "Соль",
+   "Сушёные травы",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 800,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Котлеты-полуфабрикаты",
+    "Лапша пшеничная",
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Салат романо"
+   ]
+  }
+ },
+ {
+  "card_id": "c_33a84211a396",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 467,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.4,
+   "visit_cadence_days": 3.6,
+   "basket_today": [
+    "Барбарис сушёный",
+    "Бульонный кубик",
+    "Корень петрушки",
+    "Сельдь солёная",
+    "Сливки",
+    "Сыр",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_347671f7612e",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Овсяные хлопья"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 226,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 5.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Котлеты-полуфабрикаты",
+    "Овсяные хлопья",
+    "Сезонные фрукты",
+    "Сыр",
+    "Сыр плавленый",
+    "Томаты",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_349e1b782c18",
+  "title": "Шашлык из курицы",
+  "prep_minutes": 60,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Кавказская",
+  "already_have": [
+   "Перец чили",
+   "Перец чёрный молотый",
+   "Соль",
+   "Чеснок"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Паприка",
+   "Приправа для курицы",
+   "Растительное масло",
+   "Сушёные травы",
+   "Уксус"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 679,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "pantry",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Бананы",
+    "Болгарский перец",
+    "Капуста",
+    "Лавровый лист",
+    "Лук зелёный",
+    "Салат романо",
+    "Творог",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_359c104a67d2",
+  "title": "Блины",
+  "prep_minutes": 30,
+  "servings": 4,
+  "dish_type": "Блины",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Мука",
+   "Растительное масло",
+   "Сахар"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 314,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Морковь",
+    "Овсяные хлопья",
+    "Соус соевый",
+    "Стручковая фасоль",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_372bf2ebfe2d",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Молоко",
+   "Соль"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 171,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.8,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Молоко",
+    "Растительное масло",
+    "Сезонные фрукты",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3743a08b003d",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 327,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 5.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Котлеты-полуфабрикаты",
+    "Овсяные хлопья",
+    "Сезонные фрукты",
+    "Сыр",
+    "Сыр плавленый",
+    "Томаты",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_383210b2ebb2",
+  "title": "Мясо по-французски с картофелем",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Свинина",
+   "Сыр"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Майонез",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сушёные травы"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 476,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.2,
+   "basket_today": [
+    "Греческий йогурт",
+    "Кефир",
+    "Корень петрушки",
+    "Лапша пшеничная",
+    "Свинина",
+    "Сыр"
+   ]
+  }
+ },
+ {
+  "card_id": "c_394611f04dcb",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Томаты"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Хлеб"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 256,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.8,
+   "basket_today": [
+    "Болгарский перец",
+    "Кефир",
+    "Котлеты-полуфабрикаты",
+    "Рис",
+    "Томаты"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3a29f3e35a46",
+  "title": "Сырники",
+  "prep_minutes": 25,
+  "servings": 2,
+  "dish_type": "Сырники",
+  "cuisine": "Русская",
+  "already_have": [
+   "Сахар ванильный",
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Сахар",
+   "Творог"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 269,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Овсяные хлопья",
+    "Орехи",
+    "Сыр плавленый",
+    "Хлеб",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3cca4920bac1",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 237,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Арахисовая паста",
+    "Картофель",
+    "Лимон",
+    "Лук",
+    "Паприка",
+    "Сыр",
+    "Фета",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3eebf770b199",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 113,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Лимон",
+    "Лук зелёный",
+    "Овощная смесь",
+    "Панировочные сухари",
+    "Пармезан",
+    "Сезонные фрукты",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_3f14d805468f",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 260,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "egg"
+   ],
+   "mean_basket_size": 4.4,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Свёкла",
+    "Томаты",
+    "Фарш говяжий"
+   ]
+  }
+ },
+ {
+  "card_id": "c_40b213ccb2eb",
+  "title": "Солянка сборная мясная",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лавровый лист",
+   "Петрушка"
+  ],
+  "to_buy": [
+   "Колбаса варёная",
+   "Копчёности мясные",
+   "Лук",
+   "Огурцы солёные",
+   "Оливки",
+   "Перец чёрный горошком",
+   "Растительное масло",
+   "Соль",
+   "Томатная паста"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 1433,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.2,
+   "basket_today": [
+    "Греческий йогурт",
+    "Кефир",
+    "Корень петрушки",
+    "Лапша пшеничная",
+    "Свинина",
+    "Сыр"
+   ]
+  }
+ },
+ {
+  "card_id": "c_41d158765fe0",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Куриное филе",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Сметана",
+   "Соль"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 619,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.7,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Анчоусы",
+    "Нут",
+    "Овсяные хлопья",
+    "Оливковое масло",
+    "Творог",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4352662ede01",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 835,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.6,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Капуста",
+    "Колбаса варёная",
+    "Котлеты-полуфабрикаты",
+    "Морковь",
+    "Салат романо"
+   ]
+  }
+ },
+ {
+  "card_id": "c_44a4049ce230",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Куриное филе",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 135,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Анчоусы",
+    "Куриное филе",
+    "Панировочные сухари",
+    "Сельдь солёная",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4587dee82d82",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 530,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Овсяные хлопья",
+    "Орехи",
+    "Сыр плавленый",
+    "Хлеб",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4704f8a37ab8",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Соль"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 139,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Говядина",
+    "Капуста",
+    "Капуста квашеная",
+    "Куриное филе",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4ad55841f423",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Сыр"
+  ],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 325,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 3.1,
+   "basket_today": [
+    "Бананы",
+    "Картофель",
+    "Куриное филе",
+    "Морковь",
+    "Сезонные фрукты",
+    "Сыр",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4e2b86fadf84",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 396,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "egg"
+   ],
+   "mean_basket_size": 4.2,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Греческий йогурт",
+    "Сухарики",
+    "Сыр",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_4fbf62130248",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 493,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Капуста",
+    "Картофель",
+    "Петрушка",
+    "Сметана",
+    "Соус терияки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_515fc67543cc",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 483,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Бананы",
+    "Болгарский перец",
+    "Гречка",
+    "Пармезан",
+    "Перец душистый",
+    "Сметана",
+    "Сыр",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_535c00af4a23",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 405,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 4.3,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Овощная смесь",
+    "Панировочные сухари",
+    "Сметана",
+    "Томатная паста",
+    "Укроп",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_588d558fc021",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 599,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.6,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Капуста",
+    "Колбаса варёная",
+    "Котлеты-полуфабрикаты",
+    "Морковь",
+    "Салат романо"
+   ]
+  }
+ },
+ {
+  "card_id": "c_590139d7cd7a",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Куриное филе",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Сметана",
+   "Соль"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 720,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.6,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Корень петрушки",
+    "Панировочные сухари",
+    "Томаты",
+    "Тыква",
+    "Фета"
+   ]
+  }
+ },
+ {
+  "card_id": "c_5ac813b1c108",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 600,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "pantry"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Болгарский перец",
+    "Гречка",
+    "Лапша пшеничная",
+    "Майонез",
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Сливки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_5c07ef1f8c8d",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Творог",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 423,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 4.9,
+   "visit_cadence_days": 2.6,
+   "basket_today": [
+    "Бананы",
+    "Лавровый лист",
+    "Творог",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_5d734968bf79",
+  "title": "Шашлык из курицы",
+  "prep_minutes": 60,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Кавказская",
+  "already_have": [
+   "Перец чили",
+   "Сушёные травы"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Паприка",
+   "Перец чёрный молотый",
+   "Приправа для курицы",
+   "Растительное масло",
+   "Соль",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 795,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Анчоусы",
+    "Бананы",
+    "Изюм",
+    "Котлеты-полуфабрикаты",
+    "Лимон",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_5dd20959fba7",
+  "title": "Домашние куриные наггетсы",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Американская",
+  "already_have": [
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Панировочные сухари",
+   "Паприка",
+   "Растительное масло"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 493,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "meat"
+   ],
+   "mean_basket_size": 4.5,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Греческий йогурт",
+    "Сыр плавленый",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_5fe4eda04332",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 584,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Анчоусы",
+    "Колбаса варёная",
+    "Паста кунжутная тахини",
+    "Петрушка",
+    "Свинина",
+    "Сливочное масло",
+    "Творог",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_61edd3651bca",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Соль"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 102,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.4,
+   "visit_cadence_days": 3.1,
+   "basket_today": [
+    "Греческий йогурт",
+    "Котлеты-полуфабрикаты",
+    "Куриное филе",
+    "Яблоки",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_64052b696527",
+  "title": "Хумус",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Арабская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Зира",
+   "Лимон",
+   "Нут",
+   "Оливковое масло",
+   "Паприка",
+   "Паста кунжутная тахини",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 1508,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "grain"
+   ],
+   "mean_basket_size": 7.8,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Куриное филе",
+    "Лапша пшеничная",
+    "Панировочные сухари",
+    "Сливочное масло",
+    "Укроп",
+    "Фарш говяжий",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6489971597d6",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды",
+   "Яйца"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 492,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "pantry"
+   ],
+   "mean_basket_size": 4.9,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Горошек зелёный консервированный",
+    "Греческий йогурт",
+    "Лапша пшеничная",
+    "Перец чёрный молотый",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_68be56a30543",
+  "title": "Сельдь под шубой",
+  "prep_minutes": 90,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Свёкла",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Майонез",
+   "Морковь",
+   "Сельдь солёная",
+   "Укроп"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 582,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Пармезан",
+    "Перец чёрный молотый",
+    "Растительное масло",
+    "Свёкла",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_69a11f069f3f",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 338,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Греческий йогурт",
+    "Капуста",
+    "Разрыхлитель",
+    "Сельдь солёная",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6a45bcf158f6",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды",
+   "Яйца"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 671,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.6,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Анчоусы",
+    "Горох сухой",
+    "Колбаса варёная",
+    "Макароны",
+    "Сезонные фрукты"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6c5f22f3a43b",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 166,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 7.9,
+   "visit_cadence_days": 4.2,
+   "basket_today": [
+    "Багет",
+    "Говядина",
+    "Гречка",
+    "Котлеты-полуфабрикаты",
+    "Куриное филе",
+    "Перец душистый",
+    "Петрушка",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6e3b1f087517",
+  "title": "Хумус",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Арабская",
+  "already_have": [
+   "Лимон",
+   "Паприка"
+  ],
+  "to_buy": [
+   "Зира",
+   "Нут",
+   "Оливковое масло",
+   "Паста кунжутная тахини",
+   "Соль",
+   "Чеснок"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 1348,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "pantry"
+   ],
+   "mean_basket_size": 7.7,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Кефир",
+    "Корица",
+    "Лимон",
+    "Перец душистый",
+    "Свёкла",
+    "Сезонные фрукты",
+    "Соус Цезарь",
+    "Творог",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6ea007a9b647",
+  "title": "Морковь по-корейски",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Корейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Перец чили",
+   "Приправа для моркови по-корейски",
+   "Растительное масло",
+   "Сахар",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 612,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.3,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Болгарский перец",
+    "Говядина",
+    "Греческий йогурт",
+    "Колбаса варёная",
+    "Корень петрушки",
+    "Сливки",
+    "Фарш говяжий",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_6fabadda3733",
+  "title": "Винегрет",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Горошек зелёный консервированный",
+   "Капуста квашеная",
+   "Картофель",
+   "Лук",
+   "Морковь",
+   "Огурцы солёные",
+   "Растительное масло",
+   "Свёкла",
+   "Укроп"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 716,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "pantry",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Бананы",
+    "Болгарский перец",
+    "Капуста",
+    "Лавровый лист",
+    "Лук зелёный",
+    "Салат романо",
+    "Творог",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_71667ff34c37",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Овсяные хлопья"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 208,
+  "context": {
+   "top_categories": [
+    "grain",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.3,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Кефир",
+    "Овсяные хлопья",
+    "Оливковое масло",
+    "Сливочное масло",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_72a388871570",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Свинина"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Лук",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 344,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Нут",
+    "Перец чёрный горошком",
+    "Свинина",
+    "Сыр плавленый"
+   ]
+  }
+ },
+ {
+  "card_id": "c_72e2932adbb9",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лавровый лист",
+   "Перец чёрный горошком",
+   "Соль",
+   "Укроп"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Куриное филе",
+   "Лук",
+   "Морковь",
+   "Паприка",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 516,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Горох сухой",
+    "Пармезан",
+    "Сыр",
+    "Творог",
+    "Укроп",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_73039be92f50",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Кабачок",
+   "Куриное филе",
+   "Соль"
+  ],
+  "to_buy": [
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 1,
+  "missing_cost_rub": 92,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Кабачок",
+    "Куриное филе",
+    "Овсяные хлопья",
+    "Сыр",
+    "Укроп"
+   ]
+  }
+ },
+ {
+  "card_id": "c_74dd3187478b",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Ягоды",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 222,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 2.8,
+   "basket_today": [
+    "Анчоусы",
+    "Арахисовая паста",
+    "Горошек зелёный консервированный",
+    "Кефир",
+    "Овощная смесь",
+    "Пармезан",
+    "Сливки",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_75ae7db44e73",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 599,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Куриное филе",
+    "Сезонные фрукты",
+    "Сельдь солёная",
+    "Соус Цезарь",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_765734bdb703",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 553,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.6,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Корень петрушки",
+    "Панировочные сухари",
+    "Томаты",
+    "Тыква",
+    "Фета"
+   ]
+  }
+ },
+ {
+  "card_id": "c_7c5f80d16899",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Паприка",
+   "Перец чёрный горошком",
+   "Перец чёрный молотый",
+   "Укроп"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Куриное филе",
+   "Лавровый лист",
+   "Лук",
+   "Морковь",
+   "Соль"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 398,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.2,
+   "basket_today": [
+    "Багет",
+    "Зира",
+    "Мука",
+    "Творог",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_7ed84736095a",
+  "title": "Сырники",
+  "prep_minutes": 25,
+  "servings": 2,
+  "dish_type": "Сырники",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Сахар",
+   "Сахар ванильный",
+   "Соль",
+   "Творог"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 356,
+  "context": {
+   "top_categories": [
+    "meat",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Базилик",
+    "Говядина",
+    "Лапша пшеничная",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_7f632294e03c",
+  "title": "Плов с курицей",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Узбекская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Морковь",
+   "Приправа для плова",
+   "Растительное масло",
+   "Рис",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 761,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.3,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Копчёности мясные",
+    "Котлеты-полуфабрикаты",
+    "Сезонные фрукты",
+    "Томаты",
+    "Тыква",
+    "Фета",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_8293737a0fcb",
+  "title": "Сырники",
+  "prep_minutes": 25,
+  "servings": 2,
+  "dish_type": "Сырники",
+  "cuisine": "Русская",
+  "already_have": [
+   "Сахар ванильный",
+   "Творог",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Сахар",
+   "Соль"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 182,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Пармезан",
+    "Творог",
+    "Фета",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_82bef5ec12a5",
+  "title": "Сырники",
+  "prep_minutes": 25,
+  "servings": 2,
+  "dish_type": "Сырники",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Сахар",
+   "Сахар ванильный",
+   "Соль",
+   "Творог"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 316,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Макароны",
+    "Перец чили",
+    "Сезонные фрукты",
+    "Сельдь солёная",
+    "Стручковая фасоль",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_83306c8a079b",
+  "title": "Хумус",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Арабская",
+  "already_have": [
+   "Зира",
+   "Лимон",
+   "Соль"
+  ],
+  "to_buy": [
+   "Нут",
+   "Оливковое масло",
+   "Паприка",
+   "Паста кунжутная тахини",
+   "Чеснок"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 1218,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Лимон",
+    "Лук зелёный",
+    "Овощная смесь",
+    "Панировочные сухари",
+    "Пармезан",
+    "Сезонные фрукты",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_835a48390d77",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 246,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "pantry",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Бананы",
+    "Болгарский перец",
+    "Капуста",
+    "Лавровый лист",
+    "Лук зелёный",
+    "Салат романо",
+    "Творог",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_83ac9e97bef6",
+  "title": "Хумус",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Арабская",
+  "already_have": [
+   "Паприка"
+  ],
+  "to_buy": [
+   "Зира",
+   "Лимон",
+   "Нут",
+   "Оливковое масло",
+   "Паста кунжутная тахини",
+   "Соль",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 1433,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.5,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Капуста",
+    "Перец чили",
+    "Салат романо",
+    "Сезонные фрукты",
+    "Сливочное масло",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_840da242df43",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 531,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Пармезан",
+    "Перец чёрный молотый",
+    "Растительное масло",
+    "Свёкла",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_857009c0be07",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 276,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Бананы",
+    "Котлеты-полуфабрикаты",
+    "Огурцы солёные",
+    "Стручковая фасоль",
+    "Творог",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_86327ba021b8",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 235,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "egg"
+   ],
+   "mean_basket_size": 4.1,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Багет",
+    "Творог",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_86fe15f332d4",
+  "title": "Плов с курицей",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Узбекская",
+  "already_have": [
+   "Куриное филе",
+   "Рис"
+  ],
+  "to_buy": [
+   "Лук",
+   "Морковь",
+   "Перец чёрный молотый",
+   "Приправа для плова",
+   "Растительное масло",
+   "Соль",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 518,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Колбаса варёная",
+    "Куриное филе",
+    "Панировочные сухари",
+    "Пармезан",
+    "Рис",
+    "Сельдь солёная",
+    "Сливочное масло",
+    "Сыр",
+    "Фарш говяжий"
+   ]
+  }
+ },
+ {
+  "card_id": "c_871dba0ec6b3",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 901,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.6,
+   "basket_today": [
+    "Молоко",
+    "Мука",
+    "Нут",
+    "Перец чёрный горошком",
+    "Приправа для курицы",
+    "Свёкла",
+    "Стручковая фасоль",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_8b112bbcae3b",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лавровый лист",
+   "Паприка",
+   "Соль"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Куриное филе",
+   "Лук",
+   "Морковь",
+   "Перец чёрный горошком",
+   "Перец чёрный молотый",
+   "Укроп"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 733,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.1,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Кабачок",
+    "Майонез",
+    "Овощная смесь",
+    "Панировочные сухари",
+    "Рис",
+    "Соль"
+   ]
+  }
+ },
+ {
+  "card_id": "c_8bce57948d85",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 379,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Лимон",
+    "Лук зелёный",
+    "Овощная смесь",
+    "Панировочные сухари",
+    "Пармезан",
+    "Сезонные фрукты",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_8d7e58b33025",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Куриное филе",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Огурцы",
+   "Сметана"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 238,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 8.7,
+   "visit_cadence_days": 4.1,
+   "basket_today": [
+    "Говядина",
+    "Куриное филе",
+    "Оливковое масло",
+    "Перец чили",
+    "Салат романо",
+    "Сухарики",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_8fc5a752427d",
+  "title": "Домашние куриные наггетсы",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Американская",
+  "already_have": [
+   "Паприка"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Панировочные сухари",
+   "Растительное масло",
+   "Соль",
+   "Яйца"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 682,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.1,
+   "basket_today": [
+    "Гречка",
+    "Копчёности мясные",
+    "Оливки",
+    "Перец чёрный молотый",
+    "Сыр",
+    "Томаты черри",
+    "Фарш говяжий",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_909a6eaa4a57",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Бананы",
+   "Молоко",
+   "Соль"
+  ],
+  "to_buy": [
+   "Овсяные хлопья"
+  ],
+  "missing_count": 1,
+  "missing_cost_rub": 96,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.4,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Бананы",
+    "Говядина",
+    "Молоко",
+    "Орехи",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_928c57a6aabd",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Хлеб"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 348,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Молоко",
+    "Оливковое масло",
+    "Сметана",
+    "Творог",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_92c7a5e5d40f",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Ягоды",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 234,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Овощная смесь",
+    "Укроп",
+    "Яблоки",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_9311ffa056d2",
+  "title": "Мясо по-французски с картофелем",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Свинина",
+   "Соль"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Майонез",
+   "Перец чёрный молотый",
+   "Сушёные травы",
+   "Сыр"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 667,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.3,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Говядина",
+    "Котлеты-полуфабрикаты",
+    "Макароны",
+    "Свинина",
+    "Сливки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_94984b882b15",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Лук",
+   "Перец чёрный молотый",
+   "Свинина"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 574,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Молоко",
+    "Сливочное масло",
+    "Стручковая фасоль",
+    "Тыква",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_9593765a1c46",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Морковь",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука",
+   "Соль"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 108,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.1,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Гречка",
+    "Лук",
+    "Молоко",
+    "Морковь",
+    "Панировочные сухари",
+    "Пармезан",
+    "Рис",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_98a6c14e1d4e",
+  "title": "Морковь по-корейски",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Корейская",
+  "already_have": [
+   "Сахар",
+   "Соль"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Перец чили",
+   "Перец чёрный молотый",
+   "Приправа для моркови по-корейски",
+   "Растительное масло",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 672,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 7.2,
+   "visit_cadence_days": 3.1,
+   "basket_today": [
+    "Говядина",
+    "Гречка",
+    "Корень петрушки",
+    "Сахар",
+    "Сезонные фрукты",
+    "Сливочное масло",
+    "Тыква",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_9953ad5f5d1e",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 589,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.4,
+   "basket_today": [
+    "Бананы",
+    "Говядина",
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Огурцы солёные",
+    "Разрыхлитель",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_9a526803c758",
+  "title": "Греческий салат",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Средиземноморская",
+  "already_have": [
+   "Орегано"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Лук",
+   "Огурцы",
+   "Оливки",
+   "Оливковое масло",
+   "Томаты",
+   "Фета"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 1396,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "grain"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Молоко",
+    "Сливочное масло",
+    "Стручковая фасоль",
+    "Тыква",
+    "Хлеб",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a058f652fb0c",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лук",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Свинина",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 535,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "grain"
+   ],
+   "mean_basket_size": 7.2,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Анчоусы",
+    "Бананы",
+    "Лимон",
+    "Лук",
+    "Приправа для курицы",
+    "Рис",
+    "Сезонные фрукты",
+    "Яблоки",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a177c340161b",
+  "title": "Винегрет",
+  "prep_minutes": 50,
+  "servings": 4,
+  "dish_type": "Салат",
+  "cuisine": "Русская",
+  "already_have": [
+   "Горошек зелёный консервированный"
+  ],
+  "to_buy": [
+   "Капуста квашеная",
+   "Картофель",
+   "Лук",
+   "Морковь",
+   "Огурцы солёные",
+   "Перец чёрный молотый",
+   "Растительное масло",
+   "Свёкла",
+   "Соль",
+   "Укроп"
+  ],
+  "missing_count": 10,
+  "missing_cost_rub": 753,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.5,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Горошек зелёный консервированный",
+    "Лапша пшеничная",
+    "Лимон",
+    "Овощная смесь",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a199ea78866b",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 217,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Болгарский перец",
+    "Говядина",
+    "Горчица дижонская",
+    "Гречка",
+    "Лимон",
+    "Сахар",
+    "Фета",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a547efaeb2dc",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 884,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Бананы",
+    "Капуста",
+    "Макароны",
+    "Фарш говяжий",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a5c0a5fbc17d",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 286,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "pantry"
+   ],
+   "mean_basket_size": 8.3,
+   "visit_cadence_days": 4.2,
+   "basket_today": [
+    "Арахисовая паста",
+    "Говядина",
+    "Горошек зелёный консервированный",
+    "Греческий йогурт",
+    "Корень петрушки",
+    "Куриное филе",
+    "Фарш говяжий",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_a6357e0df1a4",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 434,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Бананы",
+    "Барбарис сушёный",
+    "Колбаса варёная",
+    "Котлеты-полуфабрикаты",
+    "Рис",
+    "Чеснок",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_aa7a5c0928f7",
+  "title": "Гороховый суп с копчёностями",
+  "prep_minutes": 70,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Горох сухой",
+   "Лук",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Копчёности мясные",
+   "Лавровый лист",
+   "Морковь",
+   "Растительное масло",
+   "Укроп"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 566,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 4.4,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Горох сухой",
+    "Кефир",
+    "Лимон",
+    "Лук",
+    "Молоко",
+    "Перец чёрный горошком"
+   ]
+  }
+ },
+ {
+  "card_id": "c_abfd8e570d62",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Соль",
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 692,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.7,
+   "visit_cadence_days": 2.3,
+   "basket_today": [
+    "Бананы",
+    "Котлеты-полуфабрикаты",
+    "Паприка",
+    "Свинина",
+    "Сметана",
+    "Сухарики"
+   ]
+  }
+ },
+ {
+  "card_id": "c_af63b76b592e",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука",
+   "Яйца"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 195,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Оливки",
+    "Сметана",
+    "Соус терияки",
+    "Сыр",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_afa1e665a88f",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Куриное филе",
+   "Лавровый лист",
+   "Соль",
+   "Укроп"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Морковь",
+   "Паприка",
+   "Перец чёрный горошком",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 388,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "fruit",
+    "grain"
+   ],
+   "mean_basket_size": 7.8,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Куриное филе",
+    "Лапша пшеничная",
+    "Панировочные сухари",
+    "Сливочное масло",
+    "Укроп",
+    "Фарш говяжий",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_afde5d93d109",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 447,
+  "context": {
+   "top_categories": [
+    "grain",
+    "fruit",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.0,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Бананы",
+    "Котлеты-полуфабрикаты",
+    "Куркума",
+    "Лимон",
+    "Морковь",
+    "Панировочные сухари",
+    "Свёкла"
+   ]
+  }
+ },
+ {
+  "card_id": "c_b7d6a4c6e0aa",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Сыр"
+  ],
+  "to_buy": [
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 207,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Говядина",
+    "Гречка",
+    "Картофель",
+    "Кефир",
+    "Лапша пшеничная",
+    "Сыр"
+   ]
+  }
+ },
+ {
+  "card_id": "c_b82a4f610454",
+  "title": "Овощной салат с сыром",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Томаты"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сыр"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 688,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 4.4,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Колбаса варёная",
+    "Салат романо",
+    "Томаты"
+   ]
+  }
+ },
+ {
+  "card_id": "c_b8dced7eb12e",
+  "title": "Морковь по-корейски",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Корейская",
+  "already_have": [
+   "Морковь",
+   "Перец чили",
+   "Приправа для моркови по-корейски"
+  ],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Растительное масло",
+   "Сахар",
+   "Соль",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 509,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.4,
+   "visit_cadence_days": 3.1,
+   "basket_today": [
+    "Бананы",
+    "Корень петрушки",
+    "Котлеты-полуфабрикаты",
+    "Морковь",
+    "Орегано",
+    "Сельдь солёная",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_b91aaca92fec",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 350,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 4.9,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Пармезан",
+    "Сливочное масло",
+    "Сыр",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_bcc367800649",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Лук",
+   "Перец чёрный молотый",
+   "Свинина",
+   "Соль"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 760,
+  "context": {
+   "top_categories": [
+    "grain",
+    "dairy",
+    "vegetable"
+   ],
+   "mean_basket_size": 4.0,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Сметана",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_bddf0617ac53",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 526,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Морковь",
+    "Овсяные хлопья",
+    "Соус соевый",
+    "Стручковая фасоль",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_bf4ee5785574",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 123,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Говядина",
+    "Нут",
+    "Сливки",
+    "Сливочное масло",
+    "Сыр",
+    "Тыква",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c1e45fd1be03",
+  "title": "Плов с говядиной",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Узбекская",
+  "already_have": [
+   "Барбарис сушёный",
+   "Говядина",
+   "Куркума",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Зира",
+   "Лук",
+   "Морковь",
+   "Перец чили",
+   "Растительное масло",
+   "Рис",
+   "Соль",
+   "Чеснок"
+  ],
+  "missing_count": 8,
+  "missing_cost_rub": 594,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Говядина",
+    "Лапша пшеничная",
+    "Приправа для моркови по-корейски",
+    "Соус Цезарь",
+    "Томаты черри",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c311c889fe96",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Болгарский перец",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Лук",
+   "Перец чёрный молотый",
+   "Свинина"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 595,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Болгарский перец",
+    "Говядина",
+    "Горчица дижонская",
+    "Гречка",
+    "Лимон",
+    "Сахар",
+    "Фета",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c3af604fefee",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Бананы",
+   "Молоко",
+   "Овсяные хлопья",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 311,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Паста кунжутная тахини",
+    "Перец чили",
+    "Свёкла",
+    "Сухарики",
+    "Фарш говяжий"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c479d2903e0c",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 431,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.8,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Молоко",
+    "Растительное масло",
+    "Сезонные фрукты",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c4a68e78c580",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Огурцы",
+   "Сметана",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 517,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Нут",
+    "Перец чёрный горошком",
+    "Свинина",
+    "Сыр плавленый"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c573d5cc79f0",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 430,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "fruit"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Кефир",
+    "Котлеты-полуфабрикаты",
+    "Молоко",
+    "Мёд",
+    "Свёкла",
+    "Сельдь солёная",
+    "Сыр плавленый",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c69e26be7c85",
+  "title": "Крем-суп из тыквы",
+  "prep_minutes": 35,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Куркума",
+   "Морковь"
+  ],
+  "to_buy": [
+   "Лук",
+   "Перец чёрный молотый",
+   "Растительное масло",
+   "Сливки",
+   "Соль",
+   "Тыква",
+   "Чеснок"
+  ],
+  "missing_count": 7,
+  "missing_cost_rub": 520,
+  "context": {
+   "top_categories": [
+    "grain",
+    "fruit",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.0,
+   "visit_cadence_days": 3.9,
+   "basket_today": [
+    "Бананы",
+    "Котлеты-полуфабрикаты",
+    "Куркума",
+    "Лимон",
+    "Морковь",
+    "Панировочные сухари",
+    "Свёкла"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c79ab5c0d2f2",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды",
+   "Яйца"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 679,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.7,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Колбаса варёная",
+    "Куриное филе",
+    "Оливковое масло",
+    "Сыр",
+    "Фета"
+   ]
+  }
+ },
+ {
+  "card_id": "c_c97c9da2215f",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе",
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 520,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.5,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Горошек зелёный консервированный",
+    "Лапша пшеничная",
+    "Лимон",
+    "Овощная смесь",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_cb3939bce51e",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 335,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 8.2,
+   "visit_cadence_days": 3.7,
+   "basket_today": [
+    "Бананы",
+    "Лапша пшеничная",
+    "Огурцы",
+    "Паприка",
+    "Салат романо",
+    "Сливки",
+    "Стручковая фасоль",
+    "Тыква",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_cc872e7e1d1c",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 678,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "meat"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Греческий йогурт",
+    "Молоко",
+    "Перец чили",
+    "Петрушка",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_cca42a5126b1",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Ягоды",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 212,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Куриное филе",
+    "Сезонные фрукты",
+    "Сельдь солёная",
+    "Соус Цезарь",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_cd2324d4db97",
+  "title": "Домашние куриные наггетсы",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Американская",
+  "already_have": [
+   "Панировочные сухари"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Паприка",
+   "Растительное масло",
+   "Соль",
+   "Яйца"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 516,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Котлеты-полуфабрикаты",
+    "Лапша пшеничная",
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Салат романо"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d0a52f2a0f7a",
+  "title": "Шашлык из курицы",
+  "prep_minutes": 60,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Кавказская",
+  "already_have": [
+   "Паприка",
+   "Соль",
+   "Чеснок"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Лук",
+   "Перец чили",
+   "Перец чёрный молотый",
+   "Приправа для курицы",
+   "Растительное масло",
+   "Сушёные травы",
+   "Уксус"
+  ],
+  "missing_count": 8,
+  "missing_cost_rub": 807,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "meat"
+   ],
+   "mean_basket_size": 4.3,
+   "visit_cadence_days": 2.5,
+   "basket_today": [
+    "Колбаса варёная",
+    "Молоко",
+    "Чеснок"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d3840e95b090",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Морковь",
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Мука"
+  ],
+  "missing_count": 1,
+  "missing_cost_rub": 63,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.6,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Морковь",
+    "Овсяные хлопья",
+    "Соус соевый",
+    "Стручковая фасоль",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d4a9bff0748d",
+  "title": "Яблочный пирог",
+  "prep_minutes": 60,
+  "servings": 6,
+  "dish_type": "Выпечка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Корица",
+   "Сливочное масло",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Мука",
+   "Разрыхлитель",
+   "Сахар",
+   "Яблоки"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 306,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.2,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Свинина",
+    "Сливочное масло",
+    "Сыр плавленый",
+    "Томаты",
+    "Фета",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d58057e37222",
+  "title": "Овощной омлет",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Омлет",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Соль",
+   "Стручковая фасоль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Лук",
+   "Молоко",
+   "Овощная смесь",
+   "Перец чёрный молотый",
+   "Петрушка",
+   "Сыр",
+   "Томаты",
+   "Укроп"
+  ],
+  "missing_count": 9,
+  "missing_cost_rub": 1139,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Картофель",
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Оливки",
+    "Сметана",
+    "Стручковая фасоль",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d6512729bc6f",
+  "title": "Курица с овощами",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Соль"
+  ],
+  "to_buy": [
+   "Кабачок",
+   "Куриное филе"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 408,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 6.8,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Курага",
+    "Лапша пшеничная",
+    "Приправа для моркови по-корейски",
+    "Свинина",
+    "Сезонные фрукты",
+    "Укроп",
+    "Фарш говяжий",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d88f7e576cec",
+  "title": "Салат с курицей и огурцом",
+  "prep_minutes": 15,
+  "servings": 2,
+  "dish_type": "Салат",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Куриное филе",
+   "Огурцы",
+   "Перец чёрный молотый",
+   "Сметана",
+   "Соль"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 592,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Анчоусы",
+    "Греческий йогурт",
+    "Гречка",
+    "Кефир",
+    "Молоко",
+    "Петрушка",
+    "Тыква",
+    "Фета",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_d8c339d2d7a4",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Ягоды",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 205,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.0,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Картофель",
+    "Колбаса варёная",
+    "Копчёности мясные",
+    "Оливки",
+    "Сметана",
+    "Стручковая фасоль",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_dbbce0b8a14e",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Греческий йогурт",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 321,
+  "context": {
+   "top_categories": [
+    "grain",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 6.3,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Бульонный кубик",
+    "Греческий йогурт",
+    "Морковь",
+    "Панировочные сухари",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e0a9d8678b27",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Хлеб"
+  ],
+  "to_buy": [
+   "Сыр",
+   "Томаты"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 354,
+  "context": {
+   "top_categories": [
+    "grain",
+    "fruit",
+    "meat"
+   ],
+   "mean_basket_size": 8.5,
+   "visit_cadence_days": 4.0,
+   "basket_today": [
+    "Пармезан",
+    "Сахар",
+    "Свинина",
+    "Свёкла",
+    "Хлеб",
+    "Яблоки",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e0d195c36e07",
+  "title": "Морковные оладьи",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Оладьи",
+  "cuisine": "Русская",
+  "already_have": [
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Мука"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 100,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "meat",
+    "dairy"
+   ],
+   "mean_basket_size": 7.2,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Свинина",
+    "Сливочное масло",
+    "Сыр плавленый",
+    "Томаты",
+    "Фета",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e2c8f1a20721",
+  "title": "Куриный суп с картофелем",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный горошком",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Куриное филе",
+   "Лавровый лист",
+   "Лук",
+   "Морковь",
+   "Паприка",
+   "Соль",
+   "Укроп"
+  ],
+  "missing_count": 8,
+  "missing_cost_rub": 672,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "meat"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Овсяные хлопья",
+    "Панировочные сухари",
+    "Пармезан",
+    "Перец чёрный молотый",
+    "Растительное масло",
+    "Свёкла",
+    "Фарш говяжий",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e3325dcd48e7",
+  "title": "Гороховый суп с копчёностями",
+  "prep_minutes": 70,
+  "servings": 4,
+  "dish_type": "Суп",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Горох сухой",
+   "Картофель",
+   "Копчёности мясные",
+   "Лавровый лист",
+   "Лук",
+   "Морковь",
+   "Перец чёрный молотый",
+   "Растительное масло",
+   "Соль",
+   "Укроп"
+  ],
+  "missing_count": 10,
+  "missing_cost_rub": 838,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "grain",
+    "vegetable"
+   ],
+   "mean_basket_size": 8.5,
+   "visit_cadence_days": 3.8,
+   "basket_today": [
+    "Бананы",
+    "Горошек зелёный консервированный",
+    "Лапша пшеничная",
+    "Лимон",
+    "Овощная смесь",
+    "Ягоды"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e3cf782bd413",
+  "title": "Паста с томатным соусом",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Паста",
+  "cuisine": "Итальянская",
+  "already_have": [
+   "Макароны",
+   "Перец чёрный молотый",
+   "Соль",
+   "Сыр"
+  ],
+  "to_buy": [
+   "Базилик",
+   "Растительное масло",
+   "Сахар",
+   "Томаты",
+   "Чеснок"
+  ],
+  "missing_count": 5,
+  "missing_cost_rub": 469,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.2,
+   "visit_cadence_days": 2.4,
+   "basket_today": [
+    "Арахисовая паста",
+    "Макароны",
+    "Сыр",
+    "Томатная паста",
+    "Яблоки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e5c48637bdee",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Бананы",
+   "Соль"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 171,
+  "context": {
+   "top_categories": [
+    "fruit",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 8.2,
+   "visit_cadence_days": 3.7,
+   "basket_today": [
+    "Бананы",
+    "Лапша пшеничная",
+    "Огурцы",
+    "Паприка",
+    "Салат романо",
+    "Сливки",
+    "Стручковая фасоль",
+    "Тыква",
+    "Хлеб"
+   ]
+  }
+ },
+ {
+  "card_id": "c_e9a311812bf1",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды",
+   "Яйца"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 516,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 6.5,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Кабачок",
+    "Молоко",
+    "Мука",
+    "Панировочные сухари",
+    "Сливки"
+   ]
+  }
+ },
+ {
+  "card_id": "c_eb8de153f612",
+  "title": "Сырники",
+  "prep_minutes": 25,
+  "servings": 2,
+  "dish_type": "Сырники",
+  "cuisine": "Русская",
+  "already_have": [
+   "Сахар ванильный",
+   "Соль"
+  ],
+  "to_buy": [
+   "Мука",
+   "Сахар",
+   "Творог",
+   "Яйца"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 401,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 7.5,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Лапша пшеничная",
+    "Огурцы солёные",
+    "Томаты",
+    "Фета",
+    "Шампиньоны"
+   ]
+  }
+ },
+ {
+  "card_id": "c_ec8815717c0e",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Лук",
+   "Перец чёрный молотый",
+   "Свинина",
+   "Соль"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 821,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "pantry"
+   ],
+   "mean_basket_size": 6.2,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Лимон",
+    "Огурцы",
+    "Сливки",
+    "Сливочное масло",
+    "Сыр"
+   ]
+  }
+ },
+ {
+  "card_id": "c_ecc27f755db9",
+  "title": "Тушёная свинина с овощами",
+  "prep_minutes": 40,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Лук",
+   "Перец чёрный молотый"
+  ],
+  "to_buy": [
+   "Болгарский перец",
+   "Кабачок",
+   "Свинина",
+   "Соль"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 750,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 6.6,
+   "visit_cadence_days": 3.0,
+   "basket_today": [
+    "Котлеты-полуфабрикаты",
+    "Лук",
+    "Мёд",
+    "Свёкла",
+    "Стручковая фасоль"
+   ]
+  }
+ },
+ {
+  "card_id": "c_ecc6bcbf60df",
+  "title": "Морковь по-корейски",
+  "prep_minutes": 20,
+  "servings": 2,
+  "dish_type": "Закуска",
+  "cuisine": "Корейская",
+  "already_have": [
+   "Перец чили",
+   "Перец чёрный молотый",
+   "Приправа для моркови по-корейски"
+  ],
+  "to_buy": [
+   "Морковь",
+   "Растительное масло",
+   "Сахар",
+   "Соль",
+   "Уксус",
+   "Чеснок"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 443,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "dairy",
+    "pantry"
+   ],
+   "mean_basket_size": 6.4,
+   "visit_cadence_days": 3.5,
+   "basket_today": [
+    "Кефир",
+    "Овощная смесь",
+    "Перец чили",
+    "Свёкла",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_f04994bd7b1f",
+  "title": "ПП творожная запеканка",
+  "prep_minutes": 40,
+  "servings": 4,
+  "dish_type": "Запеканка",
+  "cuisine": "Русская",
+  "already_have": [
+   "Яйца"
+  ],
+  "to_buy": [
+   "Греческий йогурт",
+   "Творог",
+   "Ягоды"
+  ],
+  "missing_count": 3,
+  "missing_cost_rub": 481,
+  "context": {
+   "top_categories": [
+    "meat",
+    "vegetable",
+    "dairy"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 2.7,
+   "basket_today": [
+    "Горох сухой",
+    "Корень петрушки",
+    "Молоко",
+    "Сливки",
+    "Сухарики",
+    "Фарш говяжий",
+    "Шампиньоны",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_f668fe1f64e7",
+  "title": "Домашние куриные наггетсы",
+  "prep_minutes": 30,
+  "servings": 2,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Американская",
+  "already_have": [
+   "Панировочные сухари",
+   "Паприка",
+   "Соль",
+   "Яйца"
+  ],
+  "to_buy": [
+   "Куриное филе",
+   "Растительное масло"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 315,
+  "context": {
+   "top_categories": [
+    "vegetable",
+    "grain",
+    "dairy"
+   ],
+   "mean_basket_size": 7.6,
+   "visit_cadence_days": 4.1,
+   "basket_today": [
+    "Багет",
+    "Лимон",
+    "Оливки",
+    "Панировочные сухари",
+    "Сельдь солёная",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_fa9ba5e09200",
+  "title": "Мясо по-французски с картофелем",
+  "prep_minutes": 60,
+  "servings": 4,
+  "dish_type": "Основное блюдо",
+  "cuisine": "Русская",
+  "already_have": [
+   "Перец чёрный молотый",
+   "Свинина"
+  ],
+  "to_buy": [
+   "Картофель",
+   "Лук",
+   "Майонез",
+   "Соль",
+   "Сушёные травы",
+   "Сыр"
+  ],
+  "missing_count": 6,
+  "missing_cost_rub": 581,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "grain",
+    "egg"
+   ],
+   "mean_basket_size": 4.7,
+   "visit_cadence_days": 2.3,
+   "basket_today": [
+    "Бананы",
+    "Котлеты-полуфабрикаты",
+    "Паприка",
+    "Свинина",
+    "Сметана",
+    "Сухарики"
+   ]
+  }
+ },
+ {
+  "card_id": "c_fb3dbddc1e36",
+  "title": "Овсяная каша с бананом",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Каша",
+  "cuisine": "Русская",
+  "already_have": [
+   "Бананы",
+   "Соль"
+  ],
+  "to_buy": [
+   "Молоко",
+   "Овсяные хлопья"
+  ],
+  "missing_count": 2,
+  "missing_cost_rub": 160,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "vegetable",
+    "grain"
+   ],
+   "mean_basket_size": 7.1,
+   "visit_cadence_days": 3.3,
+   "basket_today": [
+    "Бананы",
+    "Барбарис сушёный",
+    "Колбаса варёная",
+    "Котлеты-полуфабрикаты",
+    "Рис",
+    "Чеснок",
+    "Ягоды",
+    "Яйца"
+   ]
+  }
+ },
+ {
+  "card_id": "c_ff5962e67c9c",
+  "title": "Тосты с сыром и помидором",
+  "prep_minutes": 10,
+  "servings": 2,
+  "dish_type": "Сэндвич",
+  "cuisine": "Европейская",
+  "already_have": [],
+  "to_buy": [
+   "Перец чёрный молотый",
+   "Сыр",
+   "Томаты",
+   "Хлеб"
+  ],
+  "missing_count": 4,
+  "missing_cost_rub": 502,
+  "context": {
+   "top_categories": [
+    "dairy",
+    "meat",
+    "vegetable"
+   ],
+   "mean_basket_size": 6.9,
+   "visit_cadence_days": 2.9,
+   "basket_today": [
+    "Горошек зелёный консервированный",
+    "Куриное филе",
+    "Макароны",
+    "Молоко",
+    "Морковь",
+    "Нут",
+    "Салат романо",
+    "Сельдь солёная"
+   ]
+  }
+ }
+]

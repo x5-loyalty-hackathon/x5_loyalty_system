@@ -24,6 +24,7 @@ from recsys.inventory import generate_inventory
 from recsys.model import MLRecommendationEngine
 from recsys.profiles import ARCHETYPES, generate_profile
 from recsys.reason_codes import text as reason_text
+from recsys.ready_food_pairs import ready_meal_options
 from recsys.recipes import RECIPES
 
 OUTPUT_PATH = Path(__file__).parent / "examples" / "sample_recommendations.json"
@@ -55,6 +56,8 @@ def generate_examples(seed: int = SEED) -> list[dict]:
     engine = MLRecommendationEngine()
     service = RecommendationService(engine=engine, safety_policy=SafetyPolicy())
     recipe_catalog = list(RECIPES)
+    # Real Moscow PLUs for the "or buy it ready" side of each offer.
+    ready_meals = ready_meal_options(recipe.recipe_id for recipe in recipe_catalog)
 
     records: list[dict] = []
     for profile in _sample_profiles(seed):
@@ -70,6 +73,7 @@ def generate_examples(seed: int = SEED) -> list[dict]:
             purchase_history=profile.purchase_history,
             recipe_catalog=recipe_catalog,
             inventory_snapshot=inventory,
+            ready_meal_options=ready_meals,
             now=profile.now,
             limit=3,
         )
@@ -80,7 +84,6 @@ def generate_examples(seed: int = SEED) -> list[dict]:
                 "archetype": profile.archetype,
                 "radius_km": profile.user.radius_km,
                 "current_receipt_items": [item.name for item in profile.current_receipt.items],
-                "home_ingredients": sorted(profile.user.home_ingredient_ids),
                 "saved_recipes": sorted(profile.user.saved_recipe_ids),
                 "history_receipt_count": len(profile.purchase_history),
                 "response": json.loads(response.model_dump_json()),
@@ -105,6 +108,14 @@ def _print_human_summary(records: list[dict]) -> None:
                 f"(score={rec['model_score']}, missing={rec['missing_count']})"
             )
             print(f"     ingredients: {sources}")
+            alternative = rec.get("ready_meal_alternative")
+            if alternative:
+                price = alternative["price"]
+                print(
+                    f"     or ready-made: {alternative['name']}"
+                    f" — {price} RUB ({alternative['chain']} PLU {alternative['plu']},"
+                    f" {rec['ready_meal_option_count']} option(s))"
+                )
             print(f"     why: {reasons}")
         print()
 

@@ -1,30 +1,35 @@
 {
   "schema_version": 2,
   "matcher_version": "foodru-name-v2",
+  "overrides_sha256": "8d8fda952cd7ba357f4984a8d81657d3b9f208eaa09870a63b53129ea0846adf",
   "catalog_sha256": "3c849c15bd6af71e378993706f21bb845625ef6f6cfac15b7b8ffba741b0e609",
-  "recipe_snapshot_sha256": "cec7f9d195f1242546062019fb28f1a7e704556aaa9d311a01bb400572c04174",
+  "recipe_snapshot_sha256": "e7b49679f21250ac22eb520876852f09a14eddd7bfdc62bd544873118c1f22ed",
   "snapshot_ids": [
     "2026-09-04T22:52:34+00:00",
     "2026-09-04T23:38:22+00:00"
   ],
   "city": "Москва",
   "products": 601,
-  "recipes": 844,
+  "recipes": 1209,
   "status_counts": {
-    "matched": 266,
-    "review": 333,
+    "matched": 301,
+    "review": 298,
     "unmatched": 2
   },
-  "matched_unique_recipes": 191,
-  "recipes_with_rating": 493,
-  "recipes_with_reviews": 219,
-  "reviews_collected": 694,
+  "matched_unique_recipes": 213,
+  "recipes_with_rating": 675,
+  "recipes_with_reviews": 285,
+  "reviews_collected": 846,
   "review_completeness": {
-    "not_exposed": 625,
-    "complete": 206,
-    "partial": 13
+    "not_exposed": 924,
+    "complete": 271,
+    "partial": 14
   },
   "collection_errors": 0,
-  "recipes_with_mixed_ingredient_groups": 21,
-  "matched_products_with_excluded_serving": 66
+  "recipes_with_mixed_ingredient_groups": 31,
+  "matched_products_with_excluded_serving": 68,
+  "matched_by_decision": {
+    "automatic": 278,
+    "reviewed_override": 23
+  }
 }

@@ -1,7 +1,8 @@
 """Compare static matching results and evaluate fixed, agent-labelled pairs.
 
 No HTTP requests. Default baseline is the committed v1 result; alternatively
-pass a directory with the original matches.json and summary.json.
+pass a directory with the original matches.json and summary.json. To compare
+an expanded corpus, explicitly allow additions and provide recipes.json too.
 """
 
 from __future__ import annotations
@@ -32,7 +33,9 @@ def metrics(rows: list[dict], prediction: str) -> dict:
             "sample_recall": round(tp / (tp + fn), 4) if tp + fn else None}
 
 
-def evaluate(output: Path, catalog_path: Path, baseline: dict, baseline_summary: dict, cases: dict) -> dict:
+def evaluate(output: Path, catalog_path: Path, baseline: dict, baseline_summary: dict, cases: dict,
+             *, baseline_recipes: list[dict] | None = None, allow_expanded_snapshot: bool = False,
+             baseline_ref: str | None = None) -> dict:
     catalog = json.loads(catalog_path.read_text())["products"]
     recipes = json.loads((output / "recipes.json").read_text())["recipes"]
     matches = json.loads((output / "matches.json").read_text())["matches"]
@@ -43,21 +46,40 @@ def evaluate(output: Path, catalog_path: Path, baseline: dict, baseline_summary:
             raise ValueError("Input changed since build; rebuild before evaluation")
     if summary["catalog_sha256"] != baseline_summary["catalog_sha256"]:
         raise ValueError("Comparisons require the same product catalog")
-    if summary["recipe_snapshot_sha256"] != baseline_summary["recipe_snapshot_sha256"]:
-        raise ValueError("Comparisons require the same recipe snapshot")
+    expanded = summary["recipe_snapshot_sha256"] != baseline_summary["recipe_snapshot_sha256"]
+    if expanded and not allow_expanded_snapshot:
+        raise ValueError("Comparisons require the same recipe snapshot; explicitly allow an expansion")
+    if expanded:
+        if baseline_recipes is None:
+            raise ValueError("An expansion comparison requires the original recipes")
+        current_recipes = {r["recipe_id"]: r for r in recipes}
+        if any(current_recipes.get(r["recipe_id"]) != r for r in baseline_recipes):
+            raise ValueError("Expansion must preserve every original recipe unchanged")
     key = lambda row: f"{row['chain']}:{row['plu']}"
     old = {key(m): m for m in baseline["matches"]}
     products = {key(p): p for p in catalog}
     index = NameIndex(recipes)
     indices = {r["recipe_id"]: i for i, r in enumerate(recipes)}
+    # The frozen labels refer to particular v1 candidates, which need not be
+    # the selected candidate in a later baseline. When rules are unchanged,
+    # replay those fixed pairs on the baseline corpus (including its IDF).
+    replay_baseline = baseline_recipes is not None and summary["matcher_version"] == baseline_summary["matcher_version"]
+    baseline_index = NameIndex(baseline_recipes) if replay_baseline else None
+    baseline_indices = {r["recipe_id"]: i for i, r in enumerate(baseline_recipes or [])}
     audit = []
     for case in cases["pairs"]:
         previous = old[case["product_key"]]
         # Cases were frozen from the top candidate of the baseline snapshot.
-        if previous["candidates"][0]["recipe_id"] != case["recipe_id"]:
+        if not replay_baseline and previous["candidates"][0]["recipe_id"] != case["recipe_id"]:
             raise ValueError("Evaluation cases do not belong to this baseline")
         candidate = assess_candidate(products[case["product_key"]], index, indices[case["recipe_id"]])
-        audit.append({**case, "baseline_accept": previous["status"] == "matched",
+        if replay_baseline:
+            baseline_candidate = assess_candidate(products[case["product_key"]], baseline_index,
+                                                  baseline_indices[case["recipe_id"]])
+            baseline_accept = not baseline_candidate["review_reasons"]
+        else:
+            baseline_accept = previous["status"] == "matched"
+        audit.append({**case, "baseline_accept": baseline_accept,
                       "current_accept": not candidate["review_reasons"],
                       "current_reasons": candidate["review_reasons"],
                       "missing_recipe_ingredients": candidate["missing_recipe_ingredients"]})
@@ -75,9 +97,15 @@ def evaluate(output: Path, catalog_path: Path, baseline: dict, baseline_summary:
                             "new_candidate": match["candidates"][0]["title"] if match["candidates"] else None,
                             "review_reasons": match["candidates"][0]["review_reasons"] if match["candidates"] else []})
     report = {
-        "schema_version": 1, "baseline_version": baseline_summary["matcher_version"],
+        "schema_version": 2, "baseline_version": baseline_summary["matcher_version"],
+        "baseline_commit": baseline_ref,
         "current_version": summary["matcher_version"],
+        "recipe_snapshot_expanded": expanded,
+        "baseline_recipe_snapshot_sha256": baseline_summary["recipe_snapshot_sha256"],
+        "baseline_recipe_count": baseline_summary["recipes"], "current_recipe_count": len(recipes),
+        "added_recipe_ids": sorted(set(indices) - set(baseline_indices)) if baseline_recipes is not None else [],
         "catalog_sha256": summary["catalog_sha256"], "recipe_snapshot_sha256": summary["recipe_snapshot_sha256"],
+        "overrides_sha256": summary.get("overrides_sha256"),
         "matches_sha256": hashlib.sha256((output / "matches.json").read_bytes()).hexdigest(),
         "case_set_sha256": hashlib.sha256(json.dumps(cases, sort_keys=True, ensure_ascii=False).encode()).hexdigest(),
         "label_origin": cases["label_origin"], "independent_human_evaluation": False,
@@ -86,8 +114,13 @@ def evaluate(output: Path, catalog_path: Path, baseline: dict, baseline_summary:
         "baseline_counts": baseline_summary["status_counts"], "current_counts": summary["status_counts"],
         "transitions": dict(sorted(transitions.items())),
         "retained_matches_with_changed_recipe": sum(c["transition"] == "matched->matched" for c in changes),
+        "new_matches_using_added_recipes": sum(c["transition"] != "matched->matched" and c["new_recipe_id"] is not None
+                                               and c["new_recipe_id"] not in baseline_indices for c in changes) if baseline_recipes is not None else None,
         "baseline_pair_metrics": metrics(audit, "baseline_accept"),
+        "baseline_pair_method": "replayed_same_rules_on_baseline_corpus" if replay_baseline else "recorded_baseline_decision",
         "current_pair_metrics": metrics(audit, "current_accept"),
+        "pair_evaluation_scope": "Automatic rules on fixed candidate pairs; does not evaluate curated overrides or all selected products.",
+        "matched_by_decision": summary.get("matched_by_decision"),
         "unlabelled_pairs": sum(row["label"] is None for row in audit),
         "audit_pairs": audit, "changes": changes,
     }
@@ -106,6 +139,8 @@ def main() -> None:
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--baseline", type=Path)
     parser.add_argument("--baseline-ref", default="cf140c7")
+    parser.add_argument("--allow-expanded-snapshot", action="store_true",
+                        help="Allow added recipes only; every baseline recipe must be unchanged")
     args = parser.parse_args()
 
     def load_baseline(name: str) -> dict:
@@ -115,8 +150,10 @@ def main() -> None:
             ["git", "show", f"{args.baseline_ref}:recsys/data/foodru/{name}"], cwd=ROOT))
 
     report = evaluate(args.output, args.catalog, load_baseline("matches.json"), load_baseline("summary.json"),
-                      json.loads((args.output / "evaluation_cases.json").read_text()))
-    print(json.dumps({key: value for key, value in report.items() if key not in {"audit_pairs", "changes"}}, ensure_ascii=False, indent=2))
+                      json.loads((args.output / "evaluation_cases.json").read_text()),
+                      baseline_recipes=load_baseline("recipes.json")["recipes"] if args.allow_expanded_snapshot else None,
+                      allow_expanded_snapshot=args.allow_expanded_snapshot, baseline_ref=args.baseline_ref if not args.baseline else None)
+    print(json.dumps({key: value for key, value in report.items() if key not in {"audit_pairs", "changes", "added_recipe_ids"}}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

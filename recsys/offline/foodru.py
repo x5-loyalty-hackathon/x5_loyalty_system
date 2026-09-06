@@ -195,7 +195,11 @@ def build(args: argparse.Namespace) -> None:
     index = NameIndex(recipes)
     matches = [match_product(product, index) for product in catalog["products"]]
     by_id = {r["recipe_id"]: r for r in recipes}
-    overrides = json.loads(args.overrides.read_text()) if args.overrides else {}
+    overrides_path = args.overrides or args.output / "reviewed_overrides.json"
+    if args.overrides and not overrides_path.is_file():
+        raise ValueError(f"Override file does not exist: {overrides_path}")
+    overrides_bytes = overrides_path.read_bytes() if overrides_path.is_file() else None
+    overrides = json.loads(overrides_bytes) if overrides_bytes is not None else {}
     known_products = {f"{p['chain']}:{p['plu']}" for p in catalog["products"]}
     if set(overrides) - known_products:
         raise ValueError("Override contains products absent from the input catalog")
@@ -208,7 +212,10 @@ def build(args: argparse.Namespace) -> None:
             recipe_id = override.get("recipe_id")
             if recipe_id is not None and recipe_id not in by_id:
                 raise ValueError(f"Unknown override recipe_id: {recipe_id}")
-            match.update(status="matched" if recipe_id else "unmatched", recipe_id=recipe_id,
+            status = "matched" if recipe_id else override.get("status", "unmatched")
+            if recipe_id is None and status not in {"review", "unmatched"}:
+                raise ValueError(f"Rejected override must use review or unmatched: {key}")
+            match.update(status=status, recipe_id=recipe_id,
                          manual_override=override)
     enriched, options = [], []
     for product, match in zip(catalog["products"], matches):
@@ -230,6 +237,7 @@ def build(args: argparse.Namespace) -> None:
                             "recipe_ids": [recipe["recipe_id"]], "price": product["median_price_rub"],
                             "dish_type": product.get("dish_type"), "cuisine": product.get("cuisine")})
     common = {"schema_version": 2, "matcher_version": VERSION,
+              "overrides_sha256": hashlib.sha256(overrides_bytes).hexdigest() if overrides_bytes is not None else None,
               "catalog_sha256": hashlib.sha256(catalog_bytes).hexdigest(),
               "recipe_snapshot_sha256": hashlib.sha256((args.output / "recipes.json").read_bytes()).hexdigest(),
               "snapshot_ids": catalog.get("snapshot_ids", []), "city": catalog.get("city")}
@@ -250,10 +258,14 @@ def build(args: argparse.Namespace) -> None:
                "collection_errors": len(snapshot.get("errors", []))}
     summary["recipes_with_mixed_ingredient_groups"] = sum(bool(split_composition(r)["unresolved_indices"]) for r in recipes)
     summary["matched_products_with_excluded_serving"] = sum(bool(p["excluded_serving_ingredients"]) for p in enriched)
+    summary["matched_by_decision"] = {
+        "automatic": sum(m["status"] == "matched" and "manual_override" not in m for m in matches),
+        "reviewed_override": sum(m["status"] == "matched" and "manual_override" in m for m in matches),
+    }
     write_json(args.output / "summary.json", summary)
     with (args.output / "review.csv").open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.writer(stream, lineterminator="\n")
-        writer.writerow(["chain", "plu", "product_name", "status", "rank", "recipe_id", "recipe_title", "score", "missing_components", "extra_components", "missing_recipe_ingredients", "mixed_ingredient_groups", "review_reasons", "source_url"])
+        writer.writerow(["chain", "plu", "product_name", "status", "rank", "recipe_id", "recipe_title", "score", "missing_components", "extra_components", "missing_recipe_ingredients", "mixed_ingredient_groups", "review_reasons", "source_url", "selected_recipe_id", "decision", "override_reason"])
         for match in matches:
             for rank, candidate in enumerate(match["candidates"], 1):
                 writer.writerow([match["chain"], match["plu"], match["name"], match["status"], rank,
@@ -262,7 +274,9 @@ def build(args: argparse.Namespace) -> None:
                                  ", ".join(candidate["extra_recipe_components"]),
                                  ", ".join(candidate["missing_recipe_ingredients"]),
                                  ", ".join(candidate["composition"]["mixed_groups"]),
-                                 ", ".join(candidate["review_reasons"]), candidate["source_url"]])
+                                 ", ".join(candidate["review_reasons"]), candidate["source_url"],
+                                 match["recipe_id"], "reviewed_override" if "manual_override" in match else "automatic",
+                                 match.get("manual_override", {}).get("reason", "")])
             if not match["candidates"]:
                 writer.writerow([match["chain"], match["plu"], match["name"], match["status"]])
     print(json.dumps(summary, ensure_ascii=False, indent=2), flush=True)

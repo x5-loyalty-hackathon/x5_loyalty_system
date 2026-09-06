@@ -1,0 +1,154 @@
+{
+  "perekrestok:4183545": {
+    "recipe_id": "foodru_1465",
+    "reason": "Хумус на нуте и тахини с лимонным соком и оливковым маслом. Для PoC принят базовый кулинарный аналог; указание Иерусалима в торговом названии не подтверждает отдельную рецептуру.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4355381": {
+    "recipe_id": "foodru_72558",
+    "reason": "Кокосовые тофники: тофу, кокосовая стружка и кокосовое молоко присутствуют, животного молока нет. Развёрнутое название рецепта описывает то же блюдо; прочие ингредиенты остаются допущением PoC.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4364439": {
+    "recipe_id": null,
+    "status": "review",
+    "reason": "Рис входит внутрь оладий из рецепта; отдельный рисовый гарнир с овощами для товарного блюда не подтверждён.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4398580": {
+    "recipe_id": "foodru_30179",
+    "reason": "Паштет из горбуши; вид рыбы подтверждён. Тонкоизмельчённый и стерилизованный описывают промышленную обработку, не другой состав; для PoC используется домашний аналог.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4427786": {
+    "recipe_id": "foodru_47817",
+    "reason": "Шоколадный эклер: заварное тесто, какао и крем. Poppies — торговое название, мини — размер; основной вид выпечки совпадает.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4438505": {
+    "recipe_id": "foodru_210936",
+    "reason": "Сырный салат: сыр, яйца, чеснок и майонез. Выбран простой сырный салат вместо листового салата с бурратой и помидорами.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4442431": {
+    "recipe_id": "foodru_120382",
+    "reason": "Грибной суп с лапшой: в составе одновременно есть шампиньоны и лапша. Кандидат foodru_192340 без лапши в перечне ингредиентов отклонён.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4443011": {
+    "recipe_id": "foodru_210936",
+    "reason": "Пикантный сырный салат: сыр, яйца, чеснок и майонез. Чеснок совместим с описанием пикантный; мясной вариант из старого кандидата отклонён.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4452856": {
+    "recipe_id": null,
+    "status": "review",
+    "reason": "У мини-запеканки с вишней не указана основа. Новый рецепт на кокосовой и овсяной муке с семечками слишком неоднозначен; творожную основу тоже нельзя подтвердить названием SKU.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4457364": {
+    "recipe_id": "foodru_83449",
+    "reason": "Сохранён ранее просмотренный рецепт рисовой каши на кокосовом молоке; новый кандидат добавлял яблоко, гранат и миндаль.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "perekrestok:4463228": {
+    "recipe_id": "foodru_35979",
+    "reason": "Фо Бо с говядиной и рисовой лапшой. Слово вьетнамский уточняет то же блюдо; не является дополнительным ингредиентом.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:3645121": {
+    "recipe_id": "foodru_1563",
+    "reason": "Чиабатта: мука, вода, дрожжи, соль и масло. Рустик принят как обозначение варианта того же хлеба; рецептура производителя не подтверждается.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:3699728": {
+    "recipe_id": "foodru_185999",
+    "reason": "Блинчики с вишней: тесто и вишня присутствуют. Единственное препятствие — торговое название Солнцепек.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4057687": {
+    "recipe_id": "foodru_2588",
+    "reason": "Куриные наггетсы: куриное филе и панировка присутствуют. Вязанка — торговое название, вид мяса совпадает.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4057693": {
+    "recipe_id": "foodru_50260",
+    "reason": "Наггетсы из индейки: индейка, мука для панировки и масло присутствуют. Вязанка — торговое название, вид мяса совпадает.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4300570": {
+    "recipe_id": "foodru_99216",
+    "reason": "Кленовый пекан как выпечка: слоёное тесто, пекан, кленовый сироп. Выбран простой состав без яблочной начинки из другого кандидата.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4391322": {
+    "recipe_id": "foodru_1524",
+    "reason": "Сохранён ранее просмотренный рецепт пиццы с пеперони; у нового кандидата в составе только неспецифицированная копчёная колбаса.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4391323": {
+    "recipe_id": "foodru_141254",
+    "reason": "Пицца четыре сыра: есть тесто и четыре вида сыра. Кандидат foodru_145471 содержит только сыры и не даёт полного состава пиццы.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4436289": {
+    "recipe_id": "foodru_1524",
+    "reason": "Пицца пепперони: тесто, томатная начинка, сыр и именно пеперони в составе. Classic обозначает линейку, не дополнительный компонент.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4439363": {
+    "recipe_id": "foodru_2884",
+    "reason": "В исходном Cуп первая буква латинская. После исправления это суп-пюре из тыквы; тыква присутствует, гренки для украшения исключаются.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4464631": {
+    "recipe_id": "foodru_166313",
+    "reason": "Холодный томатный гаспачо: помидоры и овощи присутствуют. Натуральных описывает помидоры, а не отдельный ингредиент.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:4464632": {
+    "recipe_id": "foodru_166313",
+    "reason": "Холодный томатный гаспачо: помидоры и овощи присутствуют. Натуральных описывает помидоры, а не отдельный ингредиент.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:78030460": {
+    "recipe_id": "foodru_1563",
+    "reason": "Чиабатта: мука, вода, дрожжи, соль и масло. Рустик принят как обозначение варианта того же хлеба; рецептура производителя не подтверждается.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:78032562": {
+    "recipe_id": "foodru_221505",
+    "reason": "Круассаны со сливочным маслом; масло присутствует. С добавлением и со обозначают один названный компонент.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  },
+  "pyaterochka:78038445": {
+    "recipe_id": "foodru_1524",
+    "reason": "Сохранён ранее просмотренный рецепт пиццы с пеперони; у нового кандидата в составе только неспецифицированная копчёная колбаса.",
+    "reviewer": "agent",
+    "manufacturer_verified": false
+  }
+}

@@ -258,6 +258,17 @@ def test_snapshot_separates_serving_without_erasing_cooking_ingredients():
                for i in products["perekrestok:4261613"]["assumed_ingredients"])
 
 
+def test_curated_snapshot_keeps_pizza_base_and_soup_noodles_and_rejects_ambiguous_sides():
+    snapshot = Path(__file__).resolve().parents[1] / "recsys/data/foodru"
+    products = {f"{p['chain']}:{p['plu']}": p for p in
+                json.loads((snapshot / "enriched_catalog.json").read_text())["products"]}
+    pizza = products["pyaterochka:4391323"]["assumed_ingredients"]
+    assert any("тесто" in i["name"].lower() or "мука" in i["name"].lower() for i in pizza)
+    soup = products["perekrestok:4442431"]["assumed_ingredients"]
+    assert any("лапш" in i["name"].lower() for i in soup)
+    assert products["perekrestok:4364439"]["assumed_ingredients"] is None
+
+
 def test_build_preserves_all_products_and_exports_only_accepted_pairs(tmp_path):
     catalog = {"snapshot_ids": ["snapshot"], "city": "Москва", "products": [
         product("Сырники классические"), {**product("Сырники с вишней"), "plu": "43"}]}
@@ -296,12 +307,61 @@ def test_evaluation_binds_results_to_current_files_and_rejects_stale_inputs(tmp_
         evaluate(tmp_path, catalog_path, baseline, summary, cases)
 
 
+def test_expansion_evaluation_preserves_sources_and_replays_fixed_pairs(tmp_path):
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_text(json.dumps({"products": [product("Сырники")]}))
+    original = [recipe("Сырники", ["Творог"]), recipe("Классические сырники", ["Творог"], "foodru_2")]
+    snapshot = tmp_path / "recipes.json"
+    snapshot.write_text(json.dumps({"recipes": original}))
+    args = SimpleNamespace(catalog=catalog_path, output=tmp_path, overrides=None)
+    build(args)
+    baseline = json.loads((tmp_path / "matches.json").read_text())
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    # This fixed candidate is valid even though the baseline selected recipe 1.
+    cases = {"label_origin": "test", "sampling": "test", "pairs": [
+        {"product_key": "perekrestok:42", "recipe_id": "foodru_2", "label": True}]}
+    snapshot.write_text(json.dumps({"recipes": original + [recipe("Омлет", ["Яйцо"], "foodru_3")]}))
+    build(args)
+    with pytest.raises(ValueError, match="explicitly allow an expansion"):
+        evaluate(tmp_path, catalog_path, baseline, summary, cases)
+    report = evaluate(tmp_path, catalog_path, baseline, summary, cases,
+                      baseline_recipes=original, allow_expanded_snapshot=True)
+    assert report["added_recipe_ids"] == ["foodru_3"]
+    assert report["baseline_pair_metrics"]["tp"] == report["current_pair_metrics"]["tp"] == 1
+    assert report["baseline_pair_method"] == "replayed_same_rules_on_baseline_corpus"
+    changed = json.loads(snapshot.read_text())
+    changed["recipes"][0]["ingredients"].append({"name": "Изюм"})
+    snapshot.write_text(json.dumps(changed))
+    build(args)
+    with pytest.raises(ValueError, match="preserve every original recipe unchanged"):
+        evaluate(tmp_path, catalog_path, baseline, summary, cases,
+                 baseline_recipes=original, allow_expanded_snapshot=True)
+
+
 def test_unknown_override_does_not_silently_match_to_missing_recipe(tmp_path):
     (tmp_path / "catalog.json").write_text(json.dumps({"products": [product("Сырники")]}))
     (tmp_path / "recipes.json").write_text(json.dumps({"recipes": [recipe("Сырники", ["Творог"])]}))
     (tmp_path / "overrides.json").write_text(json.dumps({"perekrestok:42": {"recipe_id": "foodru_999", "reason": "review"}}))
     with pytest.raises(ValueError, match="Unknown override"):
         build(SimpleNamespace(catalog=tmp_path / "catalog.json", output=tmp_path, overrides=tmp_path / "overrides.json"))
+
+
+def test_reviewed_overrides_are_reused_and_can_keep_a_rejected_product_in_review(tmp_path):
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_text(json.dumps({"products": [product("Cуп из тыквы"),
+        {**product("Сырники"), "plu": "43"}]}))
+    (tmp_path / "recipes.json").write_text(json.dumps({"recipes": [
+        recipe("Суп из тыквы", ["Тыква"]), recipe("Сырники", ["Творог"], "foodru_2")]}))
+    overrides_path = tmp_path / "reviewed_overrides.json"
+    overrides_path.write_text(json.dumps({"perekrestok:42": {"recipe_id": "foodru_1", "reason": "Latin C in source title"},
+        "perekrestok:43": {"recipe_id": None, "status": "review", "reason": "Requires composition review"}}))
+    build(SimpleNamespace(catalog=catalog_path, output=tmp_path, overrides=None))
+    matches = json.loads((tmp_path / "matches.json").read_text())["matches"]
+    assert matches[0]["status"] == "matched" and matches[0]["recipe_id"] == "foodru_1"
+    assert matches[1]["status"] == "review" and matches[1]["recipe_id"] is None
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert summary["overrides_sha256"] == hashlib.sha256(overrides_path.read_bytes()).hexdigest()
+    assert summary["matched_by_decision"] == {"automatic": 0, "reviewed_override": 1}
 
 
 def test_matching_exact_dishes_does_not_require_a_predefined_family():

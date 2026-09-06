@@ -1,5 +1,8 @@
 # Повторная проверка food.ru-матчинга: v2
 
+Исторический отчёт для коммита `f6f4b20`. Текущий набор расширен до 1 209
+рецептов и 301 соответствия; см. [новый отчёт](foodru-expansion-300-report.md).
+
 Выполнен [план исправлений](foodru-matching-v2-plan.md). Пересобраны статические
 файлы на **тех же 601 товаре и 844 рецептах**, без новых запросов к food.ru.
 Исходная база сравнения — `cf140c7`, версия правил `foodru-name-v1`.
@@ -17,7 +20,7 @@
 Из прежних 244 принятых товаров 236 сохранили статус; у 7 из них выбран другой
 рецепт. Ещё 30 товаров перешли из `review` в `matched`, а 8 прежних соответствий
 отозваны. Это прирост покрытия на 22 товара. Полный список —
-[`changes.csv`](../../../recsys/data/foodru/changes.csv); все 601 товар
+[`changes.csv` этапа v2](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/f6f4b20/recsys/data/foodru/changes.csv); все 601 товар
 по-прежнему присутствуют в обогащённом каталоге.
 
 ## Исправленные ошибки
@@ -90,7 +93,7 @@
   tests/test_recsys_ready_food_pairs.py tests/test_recsys_merge_boundaries.py
 ```
 
-Машинный отчёт — [`quality_report.json`](../../../recsys/data/foodru/quality_report.json).
+Машинный отчёт этапа v2 — [`quality_report.json`](https://github.com/x5-loyalty-hackathon/x5_loyalty_system/blob/f6f4b20/recsys/data/foodru/quality_report.json).
 Он связывает результат с каталогом, исходным снимком рецептов, набором
 контрольных пар и конкретным `matches.json` через SHA-256. После пересборки
 матчинга отчёт следует запускать заново. Каталог X5 и `recipes.json` побайтно

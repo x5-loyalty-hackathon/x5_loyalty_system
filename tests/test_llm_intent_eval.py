@@ -14,9 +14,10 @@ from recsys.llm_intent_eval import (
     IntentCase,
     IntentStudy,
     MockIntentClient,
+    _blend_neighbor_history,
     _cosine_similarity,
     _deranged_partners,
-    _nearest_neighbors,
+    _knn_neighbors,
     _validate_cookable,
     analyse_study,
     build_study,
@@ -148,12 +149,38 @@ def test_cosine_similarity_basics() -> None:
     assert _cosine_similarity({}, {"dairy": 1.0}) == 0.0
 
 
-def test_nearest_neighbor_is_never_the_persona_itself() -> None:
+def test_knn_neighbors_are_never_the_persona_itself() -> None:
     panel = build_panel(PanelSpec(name="llm_intent_similar", n_users=20, seed=42))
-    neighbors = _nearest_neighbors(panel.profiles, panel.profiles)
+    neighbors = _knn_neighbors(panel.profiles, panel.profiles, k=5)
     assert set(neighbors) == {p.user.user_id for p in panel.profiles}
     for profile in panel.profiles:
-        assert neighbors[profile.user.user_id].user.user_id != profile.user.user_id
+        own_id = profile.user.user_id
+        assert len(neighbors[own_id]) == 5
+        assert own_id not in {n.user.user_id for n in neighbors[own_id]}
+        # No duplicate neighbors within one persona's list.
+        assert len({n.user.user_id for n in neighbors[own_id]}) == 5
+
+
+def test_knn_neighbors_defaults_to_a_single_look_alike() -> None:
+    panel = build_panel(PanelSpec(name="llm_intent_similar_k1", n_users=10, seed=42))
+    neighbors = _knn_neighbors(panel.profiles, panel.profiles, k=1)
+    for own_id, picked in neighbors.items():
+        assert len(picked) == 1
+        assert picked[0].user.user_id != own_id
+
+
+def test_blend_neighbor_history_unions_fields_and_is_order_independent() -> None:
+    panel = build_panel(PanelSpec(name="llm_intent_blend", n_users=8, seed=7))
+    neighbors = panel.profiles[:3]
+    forward = _blend_neighbor_history(neighbors)
+    backward = _blend_neighbor_history(list(reversed(neighbors)))
+    assert forward == backward
+    history, categories, brands, saved = forward
+    total_receipts = sum(len(p.purchase_history) for p in neighbors)
+    assert len(history) == total_receipts
+    assert categories == sorted(set(categories))
+    assert brands == sorted(set(brands))
+    assert isinstance(saved, set)
 
 
 @pytest.mark.parametrize("study_fixture", ["production_study", "experimental_study"])

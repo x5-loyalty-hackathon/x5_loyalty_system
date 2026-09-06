@@ -363,6 +363,10 @@ class IntentStudy:
     #: "default" (shipped) or "ingredient_idf" (opt-in hypothesis, production
     #: world only — see recsys.model.ingredient_idf).
     model_variant: str = "default"
+    #: Neighbors blended into the `similar` arm (see _knn_neighbors). 1 was
+    #: the original single-look-alike design; a k-NN blend is the product
+    #: hypothesis proposed after v3.1 (docs/research/recsys/llm-intent-eval.md).
+    similar_k: int = 1
 
     @property
     def persona_ids(self) -> tuple[str, ...]:
@@ -400,32 +404,52 @@ def _cosine_similarity(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
 
-def _nearest_neighbors(
-    targets: list[SyntheticProfile], pool: list[SyntheticProfile]
-) -> dict[str, SyntheticProfile]:
-    """For each of ``targets``, the most similar *other* profile in ``pool`` by
-    cosine similarity over category-purchase-share — a simple "shoppers like
-    you" look-alike, as opposed to ``shuffled``'s uniformly-random partner.
+def _knn_neighbors(
+    targets: list[SyntheticProfile], pool: list[SyntheticProfile], *, k: int
+) -> dict[str, list[SyntheticProfile]]:
+    """For each of ``targets``, the ``k`` most similar *other* profiles in
+    ``pool`` by cosine similarity over category-purchase-share — "shoppers
+    like you", blended, as opposed to ``shuffled``'s single uniformly-random
+    partner or a single 1-nearest-neighbor look-alike (noisy: one neighbor's
+    idiosyncratic history is not obviously more representative than the
+    target's own).
 
     ``pool`` should be the full panel, not just the sampled ``targets``, so a
     small ``--personas`` run still gets a meaningful neighborhood to search.
-    Ties broken by lowest user_id for determinism.
+    Ties broken by (score desc, user_id asc) for determinism.
     """
+    if k < 1:
+        raise ValueError("k must be >= 1")
     vectors = {profile.user.user_id: _category_share_vector(profile) for profile in pool}
     by_id = {profile.user.user_id: profile for profile in pool}
-    neighbors: dict[str, SyntheticProfile] = {}
+    neighbors: dict[str, list[SyntheticProfile]] = {}
     for profile in targets:
         own_id = profile.user.user_id
         own_vector = vectors[own_id]
-        best_id, best_score = None, -2.0
-        for candidate_id, candidate_vector in vectors.items():
-            if candidate_id == own_id:
-                continue
-            score = _cosine_similarity(own_vector, candidate_vector)
-            if score > best_score or (score == best_score and (best_id is None or candidate_id < best_id)):
-                best_id, best_score = candidate_id, score
-        neighbors[own_id] = by_id[best_id]
+        scored = sorted(
+            (
+                (-_cosine_similarity(own_vector, candidate_vector), candidate_id)
+                for candidate_id, candidate_vector in vectors.items()
+                if candidate_id != own_id
+            )
+        )
+        neighbors[own_id] = [by_id[candidate_id] for _, candidate_id in scored[:k]]
     return neighbors
+
+
+def _blend_neighbor_history(neighbors: list[SyntheticProfile]) -> tuple[list, list[str], list[str], set[str]]:
+    """Combine k neighbors' history-derived fields into one pseudo-history:
+    concatenated receipts (so category-share/basket-size/cadence stats
+    reflect the whole neighborhood, not one person), union of history
+    categories, brands and saved recipes. Order is stable (by user_id) so the
+    result is deterministic regardless of neighbor list order.
+    """
+    ordered = sorted(neighbors, key=lambda profile: profile.user.user_id)
+    purchase_history = [receipt for profile in ordered for receipt in profile.purchase_history]
+    history_categories = sorted({c for profile in ordered for c in profile.user.history_categories})
+    preferred_brands = sorted({b for profile in ordered for b in profile.user.preferred_brands})
+    saved_recipe_ids = {rid for profile in ordered for rid in profile.user.saved_recipe_ids}
+    return purchase_history, history_categories, preferred_brands, saved_recipe_ids
 
 
 def _selected_pairs(panel: Panel, max_personas: int | None, *, seed: int):
@@ -471,6 +495,20 @@ def _shuffled_user_experimental(own: ExpUserProfile, partner: ExpUserProfile) ->
         saved_recipe_ids=partner.saved_recipe_ids,
         history_categories=partner.history_categories,
         preferred_brands=partner.preferred_brands,
+    )
+
+
+def _blended_user_experimental(
+    own: ExpUserProfile, *, history_categories: list[str], preferred_brands: list[str], saved_recipe_ids: set[str]
+) -> ExpUserProfile:
+    return ExpUserProfile(
+        user_id=own.user_id,
+        radius_km=own.radius_km,
+        excluded_categories=own.excluded_categories,
+        excluded_ingredient_ids=own.excluded_ingredient_ids,
+        saved_recipe_ids=saved_recipe_ids,
+        history_categories=history_categories,
+        preferred_brands=preferred_brands,
     )
 
 
@@ -552,7 +590,7 @@ def _recommendation_payload_experimental(served: ExpRecipeRecommendation, recipe
 
 
 def _build_experimental_study(
-    panel: Panel, *, top_k: int, seed: int, max_personas: int | None
+    panel: Panel, *, top_k: int, seed: int, max_personas: int | None, similar_k: int = 1
 ) -> IntentStudy:
     catalog = exp_baseline_catalog()
     recipe_lookup = {recipe.recipe_id: recipe for recipe in catalog}
@@ -568,10 +606,12 @@ def _build_experimental_study(
     selected = _selected_pairs(panel, max_personas, seed=seed)
     profiles = [profile for profile, _ in selected]
     partners = _deranged_partners(profiles, seed=seed)
-    neighbors = _nearest_neighbors(profiles, panel.profiles)
+    neighbors = _knn_neighbors(profiles, panel.profiles, k=similar_k)
     cases: list[IntentCase] = []
     for (profile, inventory), partner in zip(selected, partners, strict=True):
-        neighbor = neighbors[profile.user.user_id]
+        neighbor_history, neighbor_categories, neighbor_brands, neighbor_saved = _blend_neighbor_history(
+            neighbors[profile.user.user_id]
+        )
         own = _exp_request(
             profile, user=profile.user, purchase_history=profile.purchase_history,
             catalog=catalog, inventory=inventory, meals=meals, top_k=top_k,
@@ -584,8 +624,11 @@ def _build_experimental_study(
         )
         similar = _exp_request(
             profile,
-            user=_shuffled_user_experimental(profile.user, neighbor.user),
-            purchase_history=neighbor.purchase_history,
+            user=_blended_user_experimental(
+                profile.user, history_categories=neighbor_categories,
+                preferred_brands=neighbor_brands, saved_recipe_ids=neighbor_saved,
+            ),
+            purchase_history=neighbor_history,
             catalog=catalog, inventory=inventory, meals=meals, top_k=top_k,
         )
         shopper = _shopper_payload_experimental(profile, own, recipe_lookup)
@@ -624,6 +667,7 @@ def _build_experimental_study(
         world="experimental",
         top_k=top_k,
         seed=seed,
+        similar_k=similar_k,
     )
 
 
@@ -675,6 +719,20 @@ def _shuffled_user_production(own: ExpUserProfile, partner: ExpUserProfile) -> A
         saved_recipe_ids=set(partner.saved_recipe_ids),
         history_categories=list(partner.history_categories),
         preferred_brands=list(partner.preferred_brands),
+    )
+
+
+def _blended_user_production(
+    own: ExpUserProfile, *, history_categories: list[str], preferred_brands: list[str], saved_recipe_ids: set[str]
+) -> AppUserProfile:
+    return AppUserProfile(
+        user_id=own.user_id,
+        radius_km=own.radius_km,
+        excluded_categories=set(own.excluded_categories),
+        excluded_ingredient_ids=set(own.excluded_ingredient_ids),
+        saved_recipe_ids=set(saved_recipe_ids),
+        history_categories=list(history_categories),
+        preferred_brands=list(preferred_brands),
     )
 
 
@@ -844,7 +902,8 @@ def _recommendation_payload_production(meal, recipe_lookup) -> dict[str, object]
 
 
 def _build_production_study(
-    panel: Panel, *, top_k: int, seed: int, max_personas: int | None, model_variant: str = "default"
+    panel: Panel, *, top_k: int, seed: int, max_personas: int | None,
+    model_variant: str = "default", similar_k: int = 1,
 ) -> IntentStudy:
     # Same split app/main.py's default construction produces: MLRecommendationEngine()
     # with no recipe_catalog argument trains on the frozen 37-recipe baseline
@@ -871,10 +930,12 @@ def _build_production_study(
     selected = _selected_pairs(panel, max_personas, seed=seed)
     profiles = [profile for profile, _ in selected]
     partners = _deranged_partners(profiles, seed=seed)
-    neighbors = _nearest_neighbors(profiles, panel.profiles)
+    neighbors = _knn_neighbors(profiles, panel.profiles, k=similar_k)
     cases: list[IntentCase] = []
     for (profile, inventory), partner in zip(selected, partners, strict=True):
-        neighbor = neighbors[profile.user.user_id]
+        neighbor_history, neighbor_categories, neighbor_brands, neighbor_saved = _blend_neighbor_history(
+            neighbors[profile.user.user_id]
+        )
         bridged_inventory = [_bridge_inventory_product(product) for product in inventory]
         ready_products = _placed_ready_products(
             ready_templates, store_id=profile.current_receipt.store_id
@@ -893,8 +954,11 @@ def _build_production_study(
         )
         similar = _app_request(
             profile,
-            user=_shuffled_user_production(profile.user, neighbor.user),
-            purchase_history=neighbor.purchase_history,
+            user=_blended_user_production(
+                profile.user, history_categories=neighbor_categories,
+                preferred_brands=neighbor_brands, saved_recipe_ids=neighbor_saved,
+            ),
+            purchase_history=neighbor_history,
             catalog=catalog, inventory=full_inventory, top_k=top_k,
         )
         shopper = _shopper_payload_production(profile, own, recipe_lookup)
@@ -934,21 +998,25 @@ def _build_production_study(
         world="production",
         top_k=top_k,
         seed=seed,
+        similar_k=similar_k,
     )
 
 
 def build_study(
     panel: Panel, *, ranking_policy: str, top_k: int = 3, seed: int = 20260906,
-    max_personas: int | None = None, model_variant: str = "default",
+    max_personas: int | None = None, model_variant: str = "default", similar_k: int = 1,
 ) -> IntentStudy:
     world = RANKING_POLICY_WORLD[ranking_policy]
     if world == "production":
         return _build_production_study(
-            panel, top_k=top_k, seed=seed, max_personas=max_personas, model_variant=model_variant
+            panel, top_k=top_k, seed=seed, max_personas=max_personas,
+            model_variant=model_variant, similar_k=similar_k,
         )
     if model_variant != "default":
         raise ValueError("model_variant is only wired up for the production world so far")
-    return _build_experimental_study(panel, top_k=top_k, seed=seed, max_personas=max_personas)
+    return _build_experimental_study(
+        panel, top_k=top_k, seed=seed, max_personas=max_personas, similar_k=similar_k
+    )
 
 
 # --- caching, execution, analysis (world-agnostic) --------------------------
@@ -1172,6 +1240,7 @@ def _metadata(study: IntentStudy, client: IntentClient, *, live: bool, replicate
         "training_catalog_hash": study.training_catalog_hash,
         "ranking_policy": study.ranking_policy,
         "model_variant": study.model_variant,
+        "similar_k": study.similar_k,
         "top_k": study.top_k,
         "seed": study.seed,
         "personas": len(study.persona_ids),
@@ -1201,6 +1270,14 @@ def main(argv: list[str] | None = None) -> int:
         help="ingredient_idf is the untested hypothesis from "
         "docs/research/recsys/llm-intent-eval.md §10; production world only.",
     )
+    parser.add_argument(
+        "--similar-k",
+        type=int,
+        default=1,
+        help="Neighbors blended into the `similar` arm's history (see "
+        "recsys.llm_intent_eval._knn_neighbors). 1 is a single look-alike; "
+        "5-10 smooths over one neighbor's idiosyncratic history.",
+    )
     parser.add_argument("--replicates", type=int, default=1)
     parser.add_argument("--seed", type=int, default=20260906)
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
@@ -1224,7 +1301,7 @@ def main(argv: list[str] | None = None) -> int:
     panel = development_splits()["validation"]
     study = build_study(
         panel, ranking_policy=args.ranking_policy, top_k=args.top_k, seed=args.seed,
-        max_personas=args.personas or None, model_variant=args.model_variant,
+        max_personas=args.personas or None, model_variant=args.model_variant, similar_k=args.similar_k,
     )
     rows, usage = run_study(study, client, IntentCache(args.cache), live=args.live, replicates=args.replicates)
     result = {

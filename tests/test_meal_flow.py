@@ -266,6 +266,79 @@ def test_safe_ready_route_survives_unavailable_cook() -> None:
     ]
 
 
+def test_cookable_explore_recipe_is_not_crowded_out_by_a_ready_only_one() -> None:
+    """A ready-only candidate consumes no raw products, so it always reads as
+    "not a full basket" and used to win the EXPLORE slot outright against any
+    recipe that needs buying more than one item — even when a real,
+    buyable-today recipe existed. "Nothing to cook" must not beat "cook this,
+    confirm the fresh basket"."""
+    payload = deepcopy(EXAMPLE_REQUEST)
+    payload["user"]["saved_recipe_ids"] = []
+    payload["user"]["home_ingredient_ids"] = []
+    payload["current_receipt"]["items"] = [
+        {
+            "sku_id": "bread_01", "name": "Хлеб", "category": "grain",
+            "ingredient_ids": ["bread"], "unit_price": 55,
+        }
+    ]
+    payload["purchase_history"] = []
+    payload["recipe_catalog"] = [
+        {
+            "recipe_id": "ready_only_dish", "title": "Только готовое блюдо",
+            "verified": True, "meal_intent_id": "ready_only_dish",
+            "ingredients": [
+                {"ingredient_id": "rare_cut", "name": "Редкий отруб", "category": "meat", "required": True},
+            ],
+        },
+        {
+            "recipe_id": "two_item_dish", "title": "Блюдо из двух покупок",
+            "verified": True,
+            "ingredients": [
+                {"ingredient_id": "onion", "name": "Лук", "category": "vegetable", "required": True},
+                {"ingredient_id": "carrot", "name": "Морковь", "category": "vegetable", "required": True},
+            ],
+        },
+    ]
+    payload["inventory_snapshot"] = [
+        {
+            "sku_id": "ready_only_dish_01", "name": "Готовое блюдо",
+            "category": "prepared_food", "ingredient_ids": [], "store_id": "store_17",
+            "distance_km": 0.5, "price": 259.9, "is_markdown": False,
+            "is_prepared_food": True, "meal_intent_ids": ["ready_only_dish"],
+            "contained_categories": ["meat"], "safety_eligible": True,
+            "available_quantity": 3, "fulfillment_options": ["delivery", "next_visit"],
+        },
+        {
+            "sku_id": "onion_01", "name": "Лук", "category": "vegetable",
+            "ingredient_ids": ["onion"], "store_id": "store_17", "distance_km": 0.5,
+            "price": 39.9, "safety_eligible": True, "available_quantity": 10,
+            "fulfillment_options": ["delivery", "next_visit"],
+        },
+        {
+            "sku_id": "carrot_01", "name": "Морковь", "category": "vegetable",
+            "ingredient_ids": ["carrot"], "store_id": "store_17", "distance_km": 0.5,
+            "price": 45.9, "safety_eligible": True, "available_quantity": 10,
+            "fulfillment_options": ["delivery", "next_visit"],
+        },
+    ]
+
+    response = client.post("/api/v1/meal-recommendations", json=payload)
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    # Both candidates are EXPLORE-mode (neither overlaps the receipt, neither
+    # is saved), so exactly one wins the single EXPLORE slot. Before the fix
+    # it was ready_only_dish, purely because a ready-only candidate is never
+    # "a full basket" — regardless of whether a real recipe was buyable today.
+    assert len(body["recommendations"]) == 1
+    explore = body["recommendations"][0]
+    assert explore["mode"] == "explore"
+    assert explore["meal_id"] == "two_item_dish"
+    assert explore["cook_variant"] is not None
+    assert explore["cook_variant"]["missing_count"] == 2
+    assert "explore" in body["challenge_selection"]["explicit_choice_required"]
+
+
 def test_explicit_store_choice_applies_to_cook_and_ready_routes() -> None:
     payload = meal_recommendation_payload(prefer_ready=True)
     payload["shopping_context"]["selected_store_id"] = "store_work"

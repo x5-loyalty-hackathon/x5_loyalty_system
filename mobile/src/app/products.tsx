@@ -52,10 +52,15 @@ export default function ProductsScreen() {
       </View> : null}
       {groups.map((group) => <View key={group.id} style={styles.group}>
         <View style={styles.groupHead}>
-          <Text style={styles.groupName}>{group.name}</Text>
+          <Text style={styles.groupName}>
+            {group.id === 'ready' ? 'Можно не готовить' : group.name}
+          </Text>
           <Text style={styles.groupMeta}>{group.options.length
             ? `${group.options.length} ${group.options.length === 1 ? 'вариант' : 'варианта'}` : ''}</Text>
         </View>
+        {group.id === 'ready'
+          ? <Text style={styles.groupNote}>Готовое блюдо вместо продуктов для рецепта. Чек завершает сценарий сразу.</Text>
+          : null}
         {group.options.length === 0
           ? <Text style={ui.text}>Нет подходящего товара при этих настройках.</Text> : null}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.groupRow}>
@@ -156,6 +161,7 @@ const styles = StyleSheet.create({
   groupName: { color: color.ink, fontSize: 17, fontWeight: '700' },
   groupMeta: { color: color.muted, fontSize: 12, fontWeight: '600' },
   groupRow: { gap: 10, paddingBottom: 2 },
+  groupNote: { color: color.muted, fontSize: 12.5, lineHeight: 17, marginBottom: 10 },
   card: {
     width: 148, padding: 8, paddingBottom: 12, borderRadius: 16,
     backgroundColor: color.white, borderWidth: 2, borderColor: 'transparent',

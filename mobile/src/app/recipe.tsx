@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
 import { PhotoStub } from '../components/PhotoStub';
-import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
+import { Choice, ActionNotice, PrimaryAction, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { explain, money, sourceText, warningText } from '../domain/copy';
@@ -83,18 +83,19 @@ export default function RecipeScreen() {
             </View>)}</View>
           </> : <Text style={styles.hint}>Для этого состава проверенная инструкция пока не подключена.</Text>}
         </> : <View style={ui.panel}>
-          <Text style={ui.title}>Готовое блюдо к этому рецепту</Text>
-          {meal.ready_variant?.product_options.map((product) =>
-            <Text key={product.sku_id} style={ui.text}>{product.name} · {money(product.price)} · {product.store_id}</Text>)}
-          <Text style={ui.text}>Выберите конкретный вариант в плане. Замена на произвольную готовую еду не производится.</Text>
+          <Text style={ui.title}>Без готовки</Text>
+          <Text style={ui.text}>Готовое блюдо и его цену выберете в плане — там же, где обычные товары.</Text>
         </View>}
         {[...new Set([...meal.warnings, ...(route === 'cook' ? cook?.warnings ?? [] : meal.ready_variant?.warnings ?? [])])]
           .map((warning) => <Text key={warning} style={ui.text}>{warningText(warning)}</Text>)}
         <ActionNotice />
-        <Choice label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары и способ получения'}
-          disabled={busy} onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
       </View>
     </ScrollView>
+    <View style={styles.ctaBar}>
+      <PrimaryAction label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары и способ получения'}
+        tone={readyToCook ? 'done' : 'go'} disabled={busy}
+        onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
+    </View>
     <BottomNav active="recipes" />
   </View></SafeAreaView>;
 }
@@ -134,6 +135,10 @@ const styles = StyleSheet.create({
   chipWarn: { backgroundColor: '#FFF1E6' },
   lead: { color: color.body, fontSize: 14, lineHeight: 20, marginBottom: 16 },
   rowDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
+  ctaBar: {
+    paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12,
+    backgroundColor: color.white, borderTopWidth: 1, borderTopColor: color.line,
+  },
   ingredients: { gap: 8, marginBottom: 24 },
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 11,

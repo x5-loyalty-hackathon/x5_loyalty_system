@@ -1,5 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { KITCHEN_BASE_LAYERS, kitchenLayerRect } from '../data/kitchenLayers';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
 import type { KitchenProduct } from '../domain/kitchen';
@@ -7,12 +8,6 @@ import { color } from '../theme/tokens';
 
 /** Высота полосы по умолчанию — как в макете экрана «после чека». */
 const BAND_HEIGHT = 286;
-/**
- * Арт комнаты: сетка 117×156 по 4 точки на клетку, сдвиг влево как в макете.
- * Показываем столько, сколько влезает: лишнее обрезается по высоте полосы.
- */
-const ART = { left: -39, top: 0, width: 468, height: 624 };
-
 /**
  * Позы Домового.
  *
@@ -65,7 +60,14 @@ export function KitchenScene({
 
   return (
     <View style={[styles.band, { height }]}>
-      <Image source={require('../../assets/kitchen/kitchen-full.png')} style={styles.art} />
+      {KITCHEN_BASE_LAYERS.map((layer) => (
+        <Image
+          key={layer.id}
+          source={layer.source}
+          style={[styles.layer, kitchenLayerRect(layer)]}
+          resizeMode="stretch"
+        />
+      ))}
 
       {placed.map(({ sprite, slot }) => (
         <Image
@@ -104,7 +106,7 @@ export function KitchenScene({
 
 const styles = StyleSheet.create({
   band: { backgroundColor: color.cream, overflow: 'hidden' },
-  art: { position: 'absolute', ...ART },
+  layer: { position: 'absolute' },
   // Домовой стоит на нарисованном полу; шторка проходит поверх него.
 
   /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */

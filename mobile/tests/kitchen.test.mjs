@@ -81,7 +81,11 @@ test('kitchen handle also works without a drag', () => {
   const handle = harness.render({ onChange: (next) => { expanded = next; } });
   assert.equal(handle.accessibilityRole, 'button');
   assert.equal(handle.accessibilityState.expanded, false);
-  handle.onPress();
+  // Тап приходит тем же обработчиком, что и перетаскивание: на вебе Pressable
+  // и PanResponder на одном элементе отбирают жест друг у друга.
+  handle.onStartShouldSetPanResponder();
+  handle.onPanResponderGrant();
+  handle.onPanResponderRelease({}, { dy: 0, dx: 0, vy: 0 });
   assert.equal(expanded, true);
 });
 

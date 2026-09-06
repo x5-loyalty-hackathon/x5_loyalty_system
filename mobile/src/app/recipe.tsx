@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
 import { PhotoStub } from '../components/PhotoStub';
-import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
+import { Choice, ActionNotice, PrimaryAction, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { explain, money, sourceText, warningText } from '../domain/copy';
@@ -20,7 +20,7 @@ function sourceTone(source: keyof typeof sourceText): string {
 
 export default function RecipeScreen() {
   const router = useRouter();
-  const { selectedMeal: meal, route, chooseRoute, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
+  const { selectedMeal: meal, route, takeReadyMeal, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Выберите блюдо" />
     <Choice label="К предложениям" onPress={() => router.replace('/recipes')} /></SafeAreaView>;
   const cook = meal.cook_variant;
@@ -58,11 +58,8 @@ export default function RecipeScreen() {
         </View>
         <Text style={styles.lead}>{[explain(meal.reason_codes), explain(meal.route_reason_codes)]
           .filter(Boolean).join(' ')}</Text>
-        <View style={ui.choices}>{meal.available_routes.map((option) =>
-          <Choice key={option} label={option === 'cook' ? 'Приготовить' : 'Нет времени — без готовки'}
-            selected={route === option} disabled={!editable} onPress={() => chooseRoute(option)} />)}</View>
         {route === 'cook' && cook ? <>
-          <Text style={styles.hint}>Недавний чек не гарантирует наличие продуктов дома. В этой версии поправка «закончилось» ещё не подключена.</Text>
+          <Text style={styles.hint}>Проверьте, что эти продукты действительно есть дома.</Text>
           <Text style={styles.sectionTitle}>Ингредиенты</Text>
           <View style={styles.ingredients}>{cook.ingredients.map((item) =>
             <View style={[styles.row, item.source === 'unavailable' && styles.rowNeeded]} key={item.ingredient_id}>
@@ -83,18 +80,25 @@ export default function RecipeScreen() {
             </View>)}</View>
           </> : <Text style={styles.hint}>Для этого состава проверенная инструкция пока не подключена.</Text>}
         </> : <View style={ui.panel}>
-          <Text style={ui.title}>Готовое блюдо к этому рецепту</Text>
-          {meal.ready_variant?.product_options.map((product) =>
-            <Text key={product.sku_id} style={ui.text}>{product.name} · {money(product.price)} · {product.store_id}</Text>)}
-          <Text style={ui.text}>Выберите конкретный вариант в плане. Замена на произвольную готовую еду не производится.</Text>
+          <Text style={ui.title}>Без готовки</Text>
+          <Text style={ui.text}>Готовое блюдо и его цену выберете в плане — там же, где обычные товары.</Text>
         </View>}
         {[...new Set([...meal.warnings, ...(route === 'cook' ? cook?.warnings ?? [] : meal.ready_variant?.warnings ?? [])])]
           .map((warning) => <Text key={warning} style={ui.text}>{warningText(warning)}</Text>)}
         <ActionNotice />
-        <Choice label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары и способ получения'}
-          disabled={busy} onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
       </View>
     </ScrollView>
+    <View style={styles.ctaBar}>
+      <View style={styles.ctaMain}>
+        <PrimaryAction label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары'}
+          tone={readyToCook ? 'done' : 'go'} disabled={busy}
+          onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
+      </View>
+      {meal.available_routes.includes('ready') ? <View style={styles.ctaAlt}>
+        <PrimaryAction label="Купить готовое" tone="alt" disabled={busy}
+          onPress={() => { if (takeReadyMeal()) router.push('/products'); }} />
+      </View> : null}
+    </View>
     <BottomNav active="recipes" />
   </View></SafeAreaView>;
 }
@@ -134,6 +138,13 @@ const styles = StyleSheet.create({
   chipWarn: { backgroundColor: '#FFF1E6' },
   lead: { color: color.body, fontSize: 14, lineHeight: 20, marginBottom: 16 },
   rowDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
+  ctaBar: {
+    flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12,
+    backgroundColor: color.white, borderTopWidth: 1, borderTopColor: color.line,
+  },
+  /** Основное действие шире альтернативы: они равнозначны, но не равны. */
+  ctaMain: { flex: 3 },
+  ctaAlt: { flex: 2 },
   ingredients: { gap: 8, marginBottom: 24 },
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 11,

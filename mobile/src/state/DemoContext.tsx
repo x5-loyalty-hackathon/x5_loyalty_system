@@ -34,8 +34,10 @@ function useDemoState() {
   const progressGate = useRef(createRequestGate());
   const [selectedMeal, setSelectedMeal] = useState<MealRecommendation | null>(null);
   const [route, setRoute] = useState<MealRoute>('cook');
-  const [fulfillment, setFulfillment] = useState<FulfillmentOption>('next_visit');
-  const [markdown, setMarkdown] = useState(false);
+  // Демо ведёт один сценарий: доставка и уценка предлагаются всегда. Выбор
+  // способа получения вернётся, когда корзина начнёт уходить в доставку X5.
+  const [fulfillment, setFulfillment] = useState<FulfillmentOption>('delivery');
+  const [markdown, setMarkdown] = useState(true);
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [book, setBook] = useState<string[]>([]);
   const [plan, setPlan] = useState<MealPlan | null>(null);
@@ -209,10 +211,12 @@ function useDemoState() {
     if (busyRef.current || recipesStatus !== 'ready') return;
     const meal = response?.recommendations.find((item) => item.meal_id === mealId);
     if (!meal) return;
-    clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route); setMarkdown(false);
+    // Уценка предлагается всегда: сбрасывать флаг на каждый выбор блюда нельзя,
+    // иначе уценённые товары исчезают из плана.
+    clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route);
     const variant = meal.default_route === 'cook' ? meal.cook_variant : meal.ready_variant;
     if (!variant?.fulfillment_options.includes(fulfillment)) {
-      setFulfillment(variant?.fulfillment_options[0] ?? 'next_visit');
+      setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
     }
   };
   const basket = selectedMeal
@@ -222,7 +226,7 @@ function useDemoState() {
     if (busyRef.current || pendingPlan.current || !selectedMeal?.available_routes.includes(next)) return;
     setRoute(next); setChoices({}); setActionError(null);
     const variant = next === 'cook' ? selectedMeal.cook_variant : selectedMeal.ready_variant;
-    if (!variant?.fulfillment_options.includes(fulfillment)) setFulfillment(variant?.fulfillment_options[0] ?? 'next_visit');
+    if (!variant?.fulfillment_options.includes(fulfillment)) setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
   };
   const chooseFulfillment = (next: FulfillmentOption) => {
     if (busyRef.current || pendingPlan.current) return;
@@ -231,6 +235,18 @@ function useDemoState() {
   const chooseMarkdown = (next: boolean) => {
     if (busyRef.current || pendingPlan.current) return;
     setMarkdown(next); setChoices({}); setActionError(null);
+  };
+  /**
+   * «Купить готовое» одним действием: маршрут, выбранный товар и готовая
+   * корзина. Иначе человек попадал на план, где готовое блюдо ещё нужно
+   * отметить, хотя вариант там всего один.
+   */
+  const takeReadyMeal = () => {
+    const sku = selectedMeal?.ready_variant?.product_options[0]?.sku_id;
+    if (!sku || !selectedMeal?.available_routes.includes('ready')) return false;
+    chooseRoute('ready');
+    chooseProduct('ready', sku);
+    return true;
   };
   const chooseProduct = (group: string, skuId: string) => {
     if (busyRef.current || pendingPlan.current) return;
@@ -260,7 +276,7 @@ function useDemoState() {
     }
     setPlan(result.plan);
     if (result.progress) acceptProgress(result.progress);
-    setNotice(`Задание выбрано. Это не заказ и не бронь. ${rewardText(result.plan)}`);
+    setNotice('План сохранён. Это не заказ и не бронь.');
     return result.plan;
   };
 
@@ -321,7 +337,7 @@ function useDemoState() {
     decoration, decorationStatus, decorationError, decorationBusy, decorationFailedAction,
     loadHomeDecoration, chooseDecorationGoal, applyDecoration, retryHomeDecoration,
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
-    route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
+    route, chooseRoute, takeReadyMeal, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,
     cooking, startCooking, pauseCooking, savePlanAndCook, kitchenItems,
     equipped,

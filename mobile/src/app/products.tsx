@@ -7,14 +7,14 @@ import { PhotoStub } from '../components/PhotoStub';
 import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
-import { money, explain } from '../domain/copy';
-import { canCompleteCook, purchaseGroups, rewardText, taskTitle } from '../domain/mealFlow';
+import { money } from '../domain/copy';
+import { canCompleteCook, purchaseGroups } from '../domain/mealFlow';
 
 export default function ProductsScreen() {
   const router = useRouter();
   const {
-    selectedMeal: meal, route, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
-    choices, chooseProduct, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
+    selectedMeal: meal, route, fulfillment, markdown,
+    choices, chooseProduct, chooseRoute, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
     busy, editable, loadRecipes,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
@@ -24,96 +24,97 @@ export default function ProductsScreen() {
   const groups = purchaseGroups(meal, route, fulfillment, markdown);
   const stores = route === 'cook' ? meal.cook_variant?.store_selection : null;
   const variant = route === 'cook' ? meal.cook_variant : meal.ready_variant;
+  const ready = route === 'cook' ? meal.ready_variant?.product_options[0] : null;
+  const hasPlan = Boolean(plan);
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
     <AppHeader title="Мой план" subtitle={meal.title} />
-    <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
-      <Text style={ui.title}>{taskTitle(meal.mode, route)}</Text>
-      <View style={[styles.assistant, { marginHorizontal: 0 }]}>
-        <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.assistantMascot} />
-        <Text style={styles.assistantText}>Один магазин, только товары выбранного блюда. Цены за целые упаковки, не за долю в рецепте.</Text>
-      </View>
-      <View style={ui.choices}>{(['delivery', 'next_visit'] as const).map((option) =>
-        <Choice key={option} label={option === 'delivery' ? 'Доставка' : 'Следующий визит'}
-          selected={fulfillment === option} disabled={!editable || !variant?.fulfillment_options.includes(option)}
-          onPress={() => chooseFulfillment(option)} />)}</View>
-      <Choice label={markdown ? '✓ Рассматривать уценку' : 'Рассматривать уценку'} selected={markdown}
-        disabled={!editable} onPress={() => chooseMarkdown(!markdown)} />
-      <Text style={ui.text}>Без уценки выбирается обычная цена. Если подходящего товара нет, план нельзя сохранить.</Text>
-      {stores ? <View style={ui.panel}>
-        <Text style={ui.title}>Магазин: {stores.selected_store_id}</Text>
-        <Text style={ui.text}>{explain(stores.reason_codes)}</Text>
-        {stores.options.map((store) => <View key={store.store_id}>
-          <Text style={ui.text}>{store.store_id} · {Math.round(store.distance_km * 1000)} м · есть {store.covered_required_ingredients} из {store.total_required_ingredients}</Text>
-          <Choice label={store.store_id === stores.selected_store_id ? 'Выбран' : 'Подобрать в этом магазине'}
-            selected={store.store_id === stores.selected_store_id}
-            disabled={!editable || !store.complete || store.store_id === stores.selected_store_id}
-            onPress={() => { void loadRecipes({ storeId: store.store_id }); router.replace('/recipes'); }} />
-        </View>)}
-      </View> : null}
-      {groups.map((group) => <View key={group.id} style={styles.group}>
-        <View style={styles.groupHead}>
-          <Text style={styles.groupName}>{group.name}</Text>
-          <Text style={styles.groupMeta}>{group.options.length
-            ? `${group.options.length} ${group.options.length === 1 ? 'вариант' : 'варианта'}` : ''}</Text>
+    <ScrollView contentContainerStyle={styles.scroll}>
+      {ready ? <>
+        <Text style={styles.sectionTitle}>Можно не готовить</Text>
+        <View style={styles.readyCard}>
+          <PhotoStub label="фото" style={styles.readyPhoto} />
+          <View style={styles.readyCopy}>
+            <View style={styles.readyBadge}><Text style={styles.readyBadgeText}>Готовое блюдо</Text></View>
+            <Text style={styles.priceLarge}>{money(ready.price)}</Text>
+            <Text style={styles.readyUnit}>{Math.round(ready.distance_km * 1000)} м · {ready.store_id}</Text>
+            <Text style={styles.readyName} numberOfLines={2}>{ready.name}</Text>
+          </View>
+          <Pressable style={styles.readyAdd} disabled={!editable} onPress={() => chooseRoute('ready')}>
+            <Text style={styles.readyAddText}>Взять</Text>
+          </Pressable>
+        </View>
+      </> : null}
+
+      {route === 'ready' && meal.available_routes.includes('cook') ? <>
+        <Text style={styles.sectionTitle}>Готовое блюдо выбрано</Text>
+        <View style={styles.assistant}>
+          <Image source={require('../../assets/domovoi/mascot-think.png')} resizeMode="contain" style={styles.assistantMascot} />
+          <Text style={styles.assistantText}>Чек завершит сценарий сразу, без готовки.</Text>
+        </View>
+        <View style={{ paddingHorizontal: 16, marginBottom: 18 }}>
+          <Pressable style={styles.cardAdd} disabled={!editable} onPress={() => chooseRoute('cook')}>
+            <Text style={styles.cardAddText}>Вернуться к продуктам для рецепта</Text>
+          </Pressable>
+        </View>
+      </> : null}
+
+      {groups.map((group) => <View key={group.id} style={{ marginBottom: 18 }}>
+        <View style={[styles.sectionRow, { marginHorizontal: 16 }]}>
+          <Text style={[styles.sectionTitle, { marginHorizontal: 0 }]}>{group.name}</Text>
+          <Text style={styles.sectionMeta}>{group.options.length ? `${group.options.length} товара` : ''}</Text>
         </View>
         {group.options.length === 0
-          ? <Text style={ui.text}>Нет подходящего товара при этих настройках.</Text> : null}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.groupRow}>
+          ? <Text style={styles.note}>Нет подходящего товара при этих настройках.</Text> : null}
+        <View style={styles.grid}>
           {group.options.map((product) => {
             const selected = choices[group.id] ? choices[group.id] === product.sku_id : group.options[0]?.sku_id === product.sku_id;
             const cheaper = product.original_price != null && product.original_price > product.price;
-            return <Pressable key={product.sku_id} disabled={!editable}
-              onPress={() => chooseProduct(group.id, product.sku_id)}
-              style={[styles.card, selected && styles.cardSelected]}>
+            return <View key={product.sku_id} style={styles.card}>
               <View>
                 <PhotoStub label="фото" style={styles.cardPhoto} />
-                {product.source === 'markdown' ? <View style={styles.markdownBadge}>
+                {product.source === 'markdown' ? <View style={[styles.markdownBadge, { position: 'absolute', left: 5, top: 5 }]}>
                   <Text style={styles.markdownBadgeText}>↓ уценка</Text></View> : null}
-                {selected ? <View style={styles.tick}><Text style={styles.tickText}>✓</Text></View> : null}
               </View>
               <View style={styles.priceRow}>
                 <Text style={styles.price}>{money(product.price)}</Text>
                 {cheaper ? <Text style={styles.oldPrice}>{money(product.original_price!)}</Text> : null}
               </View>
-              <Text style={styles.cardMeta}>{Math.round(product.distance_km * 1000)} м · {product.store_id}</Text>
+              <Text style={styles.cardUnit}>{Math.round(product.distance_km * 1000)} м</Text>
               <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
-              {product.expires_at ? <Text style={styles.cardMeta}>срок: {product.expires_at}</Text> : null}
-            </Pressable>;
+              <Pressable style={[styles.cardAdd, selected && styles.cardAddDone]} disabled={!editable}
+                onPress={() => chooseProduct(group.id, product.sku_id)}>
+                <Text style={[styles.cardAddText, selected && { color: color.white }]}>
+                  {selected ? 'В корзине' : 'В корзину'}</Text>
+              </Pressable>
+            </View>;
           })}
-        </ScrollView>
+        </View>
       </View>)}
-      {!groups.length && !basket.error ? <View style={ui.panel}>
-        <Text style={ui.title}>Докупки не нужны</Text><Text style={ui.text}>Проверьте продукты дома. Сохраните план и подтвердите готовку без покупки.</Text>
-      </View> : null}
-      <View style={styles.totalCard}>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>Товары</Text>
-          <Text style={styles.totalValue}>{money(basket.total)}</Text>
-        </View>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>Экономия по выбранным ценам</Text>
-          <Text style={[styles.totalValue, styles.totalSaving]}>{money(basket.savings)}</Text>
-        </View>
-        <Text style={styles.totalHint}>{rewardText(plan)} В личную статистику экономия попадёт только после чека.</Text>
-      </View>
-      <Text style={ui.text}>В демо — одна упаковка на выбранный ингредиент. Проверка достаточности граммовок ещё не реализована.</Text>
-      {fulfillment === 'delivery' ? <Text style={ui.text}>Стоимость и доступность реальной доставки не рассчитаны. Это сохранение намерения, не оформление заказа.</Text> : null}
-      <Text style={ui.text}>Уценка и остатки не забронированы. На следующий визит наличие и цены нужно проверять заново. Demo-время: 05.09.2026, 12:00 МСК.</Text>
-      {basket.error ? <Text style={[ui.text, { color: color.red }]}>{basket.error}</Text> : null}
-      <ActionNotice />
-      {!plan ? <Choice label={editable ? 'Выбрать задание и сохранить план' : 'Повторить сохранение того же плана'}
-        disabled={busy || Boolean(basket.error)} onPress={() => void savePlan()} /> : <>
-        <Text style={ui.text}>План: {({ saved: 'сохранён', collected: 'продукты куплены', completed: 'блюдо завершено', cancelled: 'отменён' })[plan.status]}</Text>
-        {canConfirmPurchase ? <Choice
-          label={plan.status === 'saved' ? 'Демо: подтвердить чек выбранных товаров' : 'Демо: повторить тот же чек (без новых XP)'}
-          disabled={busy} onPress={() => void confirmPurchase()} /> : null}
-        {canCompleteCook(plan) ? <Choice label="Начать готовить" disabled={busy}
-          onPress={() => { if (startCooking()) router.push('/'); }} /> : null}
-        {plan.status === 'completed' ? <Choice label="Посмотреть прогресс" disabled={busy} onPress={() => router.push('/profile')} /> : null}
-      </>}
-      <View style={ui.choices}><Choice label="Выбрать другое блюдо" disabled={busy}
-        onPress={() => { void loadRecipes(); router.replace('/recipes'); }} /></View>
+
+      {!groups.length && !basket.error
+        ? <Text style={styles.note}>Докупать нечего. Сохраните план и подтвердите готовку.</Text> : null}
+      {basket.error ? <Text style={styles.error}>{basket.error}</Text> : null}
+      <View style={{ paddingHorizontal: 16, marginTop: 8 }}><ActionNotice /></View>
     </ScrollView>
+
+    <View style={styles.basketBar}>
+      <Text style={styles.basketHint}>
+        {!hasPlan ? 'Оплатить и получить 20 XP'
+          : canConfirmPurchase ? 'Подтвердите покупку · 20 XP'
+          : canCompleteCook(plan) ? 'Куплено — можно готовить'
+          : plan?.reward?.status === 'awarded' ? `Начислено ${plan.reward.xp} XP` : 'План сохранён'}
+      </Text>
+      <Pressable style={[styles.basket, busy && styles.basketOff]} disabled={busy}
+        onPress={() => {
+          if (!hasPlan) { void savePlan(); return; }
+          if (canConfirmPurchase) { void confirmPurchase(); return; }
+          if (canCompleteCook(plan)) { if (startCooking()) router.push('/'); return; }
+          router.push('/profile');
+        }}>
+        <View style={styles.basketIcon} />
+        <Text style={styles.basketText}>{money(basket.total)}</Text>
+      </Pressable>
+    </View>
     <BottomNav active="kitchen" />
   </View></SafeAreaView>;
 }
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
   groupName: { color: color.ink, fontSize: 17, fontWeight: '700' },
   groupMeta: { color: color.muted, fontSize: 12, fontWeight: '600' },
   groupRow: { gap: 10, paddingBottom: 2 },
+  groupNote: { color: color.muted, fontSize: 12.5, lineHeight: 17, marginBottom: 10 },
   card: {
     width: 148, padding: 8, paddingBottom: 12, borderRadius: 16,
     backgroundColor: color.white, borderWidth: 2, borderColor: 'transparent',

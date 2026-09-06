@@ -1,8 +1,9 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
+import { PhotoStub } from '../components/PhotoStub';
 import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
@@ -49,33 +50,52 @@ export default function ProductsScreen() {
             onPress={() => { void loadRecipes({ storeId: store.store_id }); router.replace('/recipes'); }} />
         </View>)}
       </View> : null}
-      {groups.map((group) => <View key={group.id} style={ui.panel}>
-        <Text style={ui.title}>{group.name}</Text>
-        {group.options.length === 0 ? <Text style={ui.text}>Нет подходящего товара при этих настройках.</Text> : null}
-        {group.options.map((product) => {
-          const selected = choices[group.id] ? choices[group.id] === product.sku_id : group.options[0]?.sku_id === product.sku_id;
-          return <View key={product.sku_id}>
-            <Text style={ui.text}>{product.name} · {product.store_id} · {Math.round(product.distance_km * 1000)} м</Text>
-            <View style={styles.priceRow}>
-              <Text style={ui.text}>{money(product.price)} / упаковка</Text>
-              {product.source === 'markdown' ? <>
-                {product.original_price != null && product.original_price > product.price
-                  ? <Text style={styles.oldPrice}>{money(product.original_price)}</Text> : null}
-                <View style={styles.markdownBadge}><Text style={styles.markdownBadgeText}>↓ уценка</Text></View>
-              </> : <Text style={ui.text}>Обычная цена</Text>}
-            </View>
-            {product.expires_at ? <Text style={ui.text}>Срок в demo-остатках: {product.expires_at}</Text> : null}
-            <Choice label={selected ? '✓ Выбрано' : 'Выбрать'} selected={selected} disabled={!editable}
-              onPress={() => chooseProduct(group.id, product.sku_id)} />
-          </View>;
-        })}
+      {groups.map((group) => <View key={group.id} style={styles.group}>
+        <View style={styles.groupHead}>
+          <Text style={styles.groupName}>{group.name}</Text>
+          <Text style={styles.groupMeta}>{group.options.length
+            ? `${group.options.length} ${group.options.length === 1 ? 'вариант' : 'варианта'}` : ''}</Text>
+        </View>
+        {group.options.length === 0
+          ? <Text style={ui.text}>Нет подходящего товара при этих настройках.</Text> : null}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.groupRow}>
+          {group.options.map((product) => {
+            const selected = choices[group.id] ? choices[group.id] === product.sku_id : group.options[0]?.sku_id === product.sku_id;
+            const cheaper = product.original_price != null && product.original_price > product.price;
+            return <Pressable key={product.sku_id} disabled={!editable}
+              onPress={() => chooseProduct(group.id, product.sku_id)}
+              style={[styles.card, selected && styles.cardSelected]}>
+              <View>
+                <PhotoStub label="фото" style={styles.cardPhoto} />
+                {product.source === 'markdown' ? <View style={styles.markdownBadge}>
+                  <Text style={styles.markdownBadgeText}>↓ уценка</Text></View> : null}
+                {selected ? <View style={styles.tick}><Text style={styles.tickText}>✓</Text></View> : null}
+              </View>
+              <View style={styles.priceRow}>
+                <Text style={styles.price}>{money(product.price)}</Text>
+                {cheaper ? <Text style={styles.oldPrice}>{money(product.original_price!)}</Text> : null}
+              </View>
+              <Text style={styles.cardMeta}>{Math.round(product.distance_km * 1000)} м · {product.store_id}</Text>
+              <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
+              {product.expires_at ? <Text style={styles.cardMeta}>срок: {product.expires_at}</Text> : null}
+            </Pressable>;
+          })}
+        </ScrollView>
       </View>)}
       {!groups.length && !basket.error ? <View style={ui.panel}>
         <Text style={ui.title}>Докупки не нужны</Text><Text style={ui.text}>Проверьте продукты дома. Сохраните план и подтвердите готовку без покупки.</Text>
       </View> : null}
-      <Text style={ui.title}>Товары: {money(basket.total)}</Text>
-      <Text style={ui.text}>{rewardText(plan)}</Text>
-      <Text style={ui.text}>Экономия по выбранным ценам: {money(basket.savings)}. В личную статистику попадёт только после чека.</Text>
+      <View style={styles.totalCard}>
+        <View style={styles.totalRow}>
+          <Text style={styles.totalLabel}>Товары</Text>
+          <Text style={styles.totalValue}>{money(basket.total)}</Text>
+        </View>
+        <View style={styles.totalRow}>
+          <Text style={styles.totalLabel}>Экономия по выбранным ценам</Text>
+          <Text style={[styles.totalValue, styles.totalSaving]}>{money(basket.savings)}</Text>
+        </View>
+        <Text style={styles.totalHint}>{rewardText(plan)} В личную статистику экономия попадёт только после чека.</Text>
+      </View>
       <Text style={ui.text}>В демо — одна упаковка на выбранный ингредиент. Проверка достаточности граммовок ещё не реализована.</Text>
       {fulfillment === 'delivery' ? <Text style={ui.text}>Стоимость и доступность реальной доставки не рассчитаны. Это сохранение намерения, не оформление заказа.</Text> : null}
       <Text style={ui.text}>Уценка и остатки не забронированы. На следующий визит наличие и цены нужно проверять заново. Demo-время: 05.09.2026, 12:00 МСК.</Text>
@@ -131,18 +151,41 @@ const styles = StyleSheet.create({
   readyAddText: { color: color.white, fontSize: 13, fontWeight: '700' },
 
   assistant: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, marginBottom: 12 },
+  group: { marginBottom: 18 },
+  groupHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 10 },
+  groupName: { color: color.ink, fontSize: 17, fontWeight: '700' },
+  groupMeta: { color: color.muted, fontSize: 12, fontWeight: '600' },
+  groupRow: { gap: 10, paddingBottom: 2 },
+  card: {
+    width: 148, padding: 8, paddingBottom: 12, borderRadius: 16,
+    backgroundColor: color.white, borderWidth: 2, borderColor: 'transparent',
+  },
+  cardSelected: { borderColor: color.green },
+  cardPhoto: { height: 96, borderRadius: 12, marginBottom: 9 },
+  tick: {
+    position: 'absolute', right: 6, top: 6, width: 22, height: 22, borderRadius: 11,
+    backgroundColor: color.green, alignItems: 'center', justifyContent: 'center',
+  },
+  tickText: { color: color.white, fontSize: 12, fontWeight: '700' },
+  price: { color: color.ink, fontSize: 17, fontWeight: '700' },
+  cardMeta: { color: color.muted, fontSize: 11, marginTop: 3 },
+  cardName: { color: color.ink, fontSize: 12.5, lineHeight: 16, marginTop: 5, minHeight: 32 },
+
+  totalCard: { backgroundColor: color.white, borderRadius: 18, padding: 14, marginTop: 4, marginBottom: 12 },
+  totalRow: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 },
+  totalLabel: { flex: 1, color: color.body, fontSize: 13.5 },
+  totalValue: { color: color.ink, fontSize: 17, fontWeight: '700' },
+  totalSaving: { color: color.green },
+  totalHint: { color: color.muted, fontSize: 12, lineHeight: 17, marginTop: 4 },
+
   assistantMascot: { width: 44, height: 44 },
   assistantText: { flex: 1, color: color.muted, fontSize: 12, lineHeight: 17 },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16 },
-  card: { width: '31%', flexGrow: 1, backgroundColor: color.white, borderRadius: 16, padding: 8, paddingBottom: 10 },
-  cardPhoto: { height: 104, borderRadius: 12, marginBottom: 9 },
-  price: { color: color.ink, fontSize: 17, fontWeight: '700', marginBottom: 5 },
   kopecks: { fontSize: 10, lineHeight: 10 },
   priceLarge: { color: color.ink, fontSize: 22, fontWeight: '700', marginBottom: 5 },
   kopecksLarge: { fontSize: 13, lineHeight: 13 },
   cardUnit: { color: color.muted, fontSize: 10.5, marginBottom: 5 },
-  cardName: { color: color.ink, fontSize: 11.5, lineHeight: 14.5, height: 29, marginBottom: 6 },
   rating: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },
   ratingDot: { width: 9, height: 9, borderRadius: 2, backgroundColor: color.star },
   ratingText: { color: color.body, fontSize: 11, fontWeight: '600' },

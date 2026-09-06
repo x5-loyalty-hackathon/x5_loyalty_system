@@ -70,10 +70,8 @@ export default function RecipeScreen() {
               </View>
             </View>)}</View>
           <Choice label={saved ? '♥ В книге рецептов' : '♡ Сохранить рецепт'} disabled={busy || saved} onPress={() => void saveToBook()} />
-          <Text style={styles.hint}>Книга сохраняется на demo-сервере. Сохранение не даёт XP.</Text>
           <Text style={styles.sectionTitle}>Как приготовить</Text>
           {steps.length ? <>
-            <Text style={styles.hint}>Инструкция из demo-каталога, не результат ML. Точные порции и граммовки ещё не согласованы.</Text>
             <View style={styles.steps}>{steps.map((step, index) => <View style={styles.step} key={step}>
               <View style={styles.stepNum}><Text style={styles.stepNumText}>{index + 1}</Text></View>
               <Text style={styles.stepTitle}>{step}</Text>

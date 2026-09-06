@@ -347,6 +347,12 @@ class IntentStudy:
     cases: tuple[IntentCase, ...]
     panel_name: str
     panel_profiles_checksum: str
+    #: Separate from panel_profiles_checksum on purpose: the inventory
+    #: generator changed (docs/research/recsys/llm-intent-eval.md §11.1) while
+    #: personas did not, so profiles_checksum alone would make two reports
+    #: look identically-sourced when only the shelf each persona faced
+    #: actually differed.
+    panel_inventories_checksum: str
     catalog_hash: str
     ranking_policy: str
     world: str
@@ -662,6 +668,7 @@ def _build_experimental_study(
         cases=tuple(cases),
         panel_name=panel.manifest.spec.name,
         panel_profiles_checksum=panel.manifest.profiles_checksum,
+        panel_inventories_checksum=panel.manifest.inventories_checksum,
         catalog_hash=exp_recipe_content_hash(catalog),
         ranking_policy=MODEL_ORDER.name,
         world="experimental",
@@ -991,6 +998,7 @@ def _build_production_study(
         cases=tuple(cases),
         panel_name=panel.manifest.spec.name,
         panel_profiles_checksum=panel.manifest.profiles_checksum,
+        panel_inventories_checksum=panel.manifest.inventories_checksum,
         catalog_hash=app_recipe_content_hash(catalog),
         training_catalog_hash=model.training_catalog_hash,
         model_variant=model_variant,
@@ -1236,6 +1244,7 @@ def _metadata(study: IntentStudy, client: IntentClient, *, live: bool, replicate
         "world": study.world,
         "panel": study.panel_name,
         "panel_profiles_checksum": study.panel_profiles_checksum,
+        "panel_inventories_checksum": study.panel_inventories_checksum,
         "catalog_hash": study.catalog_hash,
         "training_catalog_hash": study.training_catalog_hash,
         "ranking_policy": study.ranking_policy,

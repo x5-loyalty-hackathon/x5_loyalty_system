@@ -273,7 +273,11 @@ def test_identical_blinded_payload_is_judged_once_and_reused(tmp_path) -> None:
         )
         for arm in ARMS
     )
-    synthetic = IntentStudy(cases, "test", "profiles", "catalog", "effort_first", "production", 3, 1)
+    synthetic = IntentStudy(
+        cases=cases, panel_name="test", panel_profiles_checksum="profiles",
+        panel_inventories_checksum="inventories", catalog_hash="catalog",
+        ranking_policy="effort_first", world="production", top_k=3, seed=1,
+    )
     client = CountingClient()
     rows, usage = run_study(synthetic, client, IntentCache(tmp_path / "cache.json"), live=False)
     assert len(rows) == len(ARMS)
@@ -309,7 +313,11 @@ def test_primary_metric_and_paired_deltas_are_computed_by_persona() -> None:
         for persona in ("p1", "p2")
         for arm in ARMS
     )
-    synthetic = IntentStudy(cases, "test", "profiles", "catalog", "effort_first", "production", 3, 1)
+    synthetic = IntentStudy(
+        cases=cases, panel_name="test", panel_profiles_checksum="profiles",
+        panel_inventories_checksum="inventories", catalog_hash="catalog",
+        ranking_policy="effort_first", world="production", top_k=3, seed=1,
+    )
     rows = [
         _row("p1", ARM_OWN, UserAction.BUY),
         _row("p1", ARM_SHUFFLED, UserAction.IGNORE),

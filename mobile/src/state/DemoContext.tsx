@@ -26,8 +26,10 @@ function useDemoState() {
   const progressGate = useRef(createRequestGate());
   const [selectedMeal, setSelectedMeal] = useState<MealRecommendation | null>(null);
   const [route, setRoute] = useState<MealRoute>('cook');
-  const [fulfillment, setFulfillment] = useState<FulfillmentOption>('next_visit');
-  const [markdown, setMarkdown] = useState(false);
+  // Демо ведёт один сценарий: доставка и уценка предлагаются всегда. Выбор
+  // способа получения вернётся, когда корзина начнёт уходить в доставку X5.
+  const [fulfillment, setFulfillment] = useState<FulfillmentOption>('delivery');
+  const [markdown, setMarkdown] = useState(true);
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [book, setBook] = useState<string[]>([]);
   const [plan, setPlan] = useState<MealPlan | null>(null);
@@ -108,7 +110,7 @@ function useDemoState() {
     clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route); setMarkdown(false);
     const variant = meal.default_route === 'cook' ? meal.cook_variant : meal.ready_variant;
     if (!variant?.fulfillment_options.includes(fulfillment)) {
-      setFulfillment(variant?.fulfillment_options[0] ?? 'next_visit');
+      setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
     }
   };
   const basket = selectedMeal
@@ -118,7 +120,7 @@ function useDemoState() {
     if (busyRef.current || pendingPlan.current || !selectedMeal?.available_routes.includes(next)) return;
     setRoute(next); setChoices({}); setActionError(null);
     const variant = next === 'cook' ? selectedMeal.cook_variant : selectedMeal.ready_variant;
-    if (!variant?.fulfillment_options.includes(fulfillment)) setFulfillment(variant?.fulfillment_options[0] ?? 'next_visit');
+    if (!variant?.fulfillment_options.includes(fulfillment)) setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
   };
   const chooseFulfillment = (next: FulfillmentOption) => {
     if (busyRef.current || pendingPlan.current) return;

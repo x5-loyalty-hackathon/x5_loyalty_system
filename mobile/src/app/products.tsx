@@ -1,4 +1,4 @@
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
@@ -7,13 +7,13 @@ import { PhotoStub } from '../components/PhotoStub';
 import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowControls';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
-import { money, explain } from '../domain/copy';
+import { money } from '../domain/copy';
 import { canCompleteCook, purchaseGroups, rewardText, taskTitle } from '../domain/mealFlow';
 
 export default function ProductsScreen() {
   const router = useRouter();
   const {
-    selectedMeal: meal, route, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
+    selectedMeal: meal, route, fulfillment, markdown,
     choices, chooseProduct, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
     busy, editable, loadRecipes,
   } = useDemo();
@@ -28,20 +28,8 @@ export default function ProductsScreen() {
     <AppHeader title="Мой план" subtitle={meal.title} />
     <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
       <Text style={ui.title}>{taskTitle(meal.mode, route)}</Text>
-      <View style={[styles.assistant, { marginHorizontal: 0 }]}>
-        <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.assistantMascot} />
-        <Text style={styles.assistantText}>Один магазин, только товары выбранного блюда. Цены за целые упаковки, не за долю в рецепте.</Text>
-      </View>
-      <View style={ui.choices}>{(['delivery', 'next_visit'] as const).map((option) =>
-        <Choice key={option} label={option === 'delivery' ? 'Доставка' : 'Следующий визит'}
-          selected={fulfillment === option} disabled={!editable || !variant?.fulfillment_options.includes(option)}
-          onPress={() => chooseFulfillment(option)} />)}</View>
-      <Choice label={markdown ? '✓ Рассматривать уценку' : 'Рассматривать уценку'} selected={markdown}
-        disabled={!editable} onPress={() => chooseMarkdown(!markdown)} />
-      <Text style={ui.text}>Без уценки выбирается обычная цена. Если подходящего товара нет, план нельзя сохранить.</Text>
       {stores ? <View style={ui.panel}>
         <Text style={ui.title}>Магазин: {stores.selected_store_id}</Text>
-        <Text style={ui.text}>{explain(stores.reason_codes)}</Text>
         {stores.options.map((store) => <View key={store.store_id}>
           <Text style={ui.text}>{store.store_id} · {Math.round(store.distance_km * 1000)} м · есть {store.covered_required_ingredients} из {store.total_required_ingredients}</Text>
           <Choice label={store.store_id === stores.selected_store_id ? 'Выбран' : 'Подобрать в этом магазине'}
@@ -101,9 +89,6 @@ export default function ProductsScreen() {
         </View>
         <Text style={styles.totalHint}>{rewardText(plan)} В личную статистику экономия попадёт только после чека.</Text>
       </View>
-      <Text style={ui.text}>В демо — одна упаковка на выбранный ингредиент. Проверка достаточности граммовок ещё не реализована.</Text>
-      {fulfillment === 'delivery' ? <Text style={ui.text}>Стоимость и доступность реальной доставки не рассчитаны. Это сохранение намерения, не оформление заказа.</Text> : null}
-      <Text style={ui.text}>Уценка и остатки не забронированы. На следующий визит наличие и цены нужно проверять заново. Demo-время: 05.09.2026, 12:00 МСК.</Text>
       {basket.error ? <Text style={[ui.text, { color: color.red }]}>{basket.error}</Text> : null}
       <ActionNotice />
       {!plan ? <Choice label={editable ? 'Выбрать задание и сохранить план' : 'Повторить сохранение того же плана'}

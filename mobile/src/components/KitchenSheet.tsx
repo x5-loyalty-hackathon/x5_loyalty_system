@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Animated, PanResponder, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, PanResponder, StyleSheet, View } from 'react-native';
 import { color } from '../theme/tokens';
 
 /**
@@ -33,6 +33,10 @@ export function KitchenSheet({
 
   const pan = useRef(
     PanResponder.create({
+      // Захватываем и касание тоже: иначе на вебе Pressable и PanResponder на
+      // одном элементе отбирают жест друг у друга, и не срабатывает ни тап,
+      // ни перетаскивание. Короткое касание ниже трактуем как тап.
+      onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (_event, gesture) => Math.abs(gesture.dy) > 6,
       onPanResponderGrant: () => {
         latest.current.height.stopAnimation((value: number) => {
@@ -46,8 +50,13 @@ export function KitchenSheet({
         current.height.setValue(Math.min(current.expandedHeight, Math.max(current.collapsedHeight, next)));
       },
       onPanResponderRelease: (_event, gesture) => {
-        const next = start.current - gesture.dy;
         const current = latest.current;
+        // Палец почти не двигался — это нажатие, переключаем положение.
+        if (Math.abs(gesture.dy) < 5 && Math.abs(gesture.dx) < 5) {
+          current.onChange(!current.expanded);
+          return;
+        }
+        const next = start.current - gesture.dy;
         const middle = (current.collapsedHeight + current.expandedHeight) / 2;
         // Быстрый рывок решает за пользователя, медленный — по середине хода.
         const shouldExpand =
@@ -63,11 +72,11 @@ export function KitchenSheet({
 
   return (
     <Animated.View style={[styles.sheet, { height }]}>
-      <Pressable style={styles.handleArea} {...pan.panHandlers} accessibilityRole="button"
+      <View style={styles.handleArea} {...pan.panHandlers} accessibilityRole="button"
         accessibilityLabel={expanded ? 'Свернуть панель кухни' : 'Развернуть панель кухни'}
-        accessibilityState={{ expanded }} onPress={() => onChange(!expanded)}>
+        accessibilityState={{ expanded }}>
         <View style={styles.handle} />
-      </Pressable>
+      </View>
       <View style={styles.body}>{children}</View>
     </Animated.View>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
@@ -17,9 +17,14 @@ export default function KitchenScreen() {
   const router = useRouter();
   const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products, equipped, plan } = useDemo();
   const [stageHeight, setStageHeight] = useState(0);
+  const { height: windowHeight } = useWindowDimensions();
+  // onLayout на вебе иногда отдаёт нулевую высоту при первом монтировании и
+  // больше не срабатывает: размер контейнера с тех пор не меняется. Тогда
+  // панель раскрывалась на один пиксель. Считаем запасное значение от окна.
+  const sceneHeight = stageHeight || Math.max(320, windowHeight - 150);
   const [expanded, setExpanded] = useState(false);
   const sheetHeight = useRef(new Animated.Value(COLLAPSED_HEIGHT)).current;
-  const expandedHeight = Math.max(COLLAPSED_HEIGHT + 1, stageHeight - 160);
+  const expandedHeight = Math.max(COLLAPSED_HEIGHT + 1, sceneHeight - 160);
   const steps = selectedMeal ? matchingSteps(selectedMeal, recipeDetails) : [];
   useEffect(() => { if (cooking) setExpanded(true); }, [cooking]);
   useEffect(() => {
@@ -36,8 +41,8 @@ export default function KitchenScreen() {
     // A network/business error keeps the cooking screen open with its message.
   };
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
-    <View style={styles.stage} onLayout={(event) => setStageHeight(event.nativeEvent.layout.height)}>
-      <KitchenScene products={products} height={stageHeight} equipped={equipped} pose={cooking ? 'cooking' : 'idle'}
+    <View style={styles.stage} onLayout={(event) => { const next = event.nativeEvent.layout.height; if (next > 0) setStageHeight(next); }}>
+      <KitchenScene products={products} height={sceneHeight} equipped={equipped} pose={cooking ? 'cooking' : 'idle'}
         speech={cooking ? '' : 'Что поедим? Подберём блюдо для готовки или без неё.'} />
       <View style={styles.sheetWrap} pointerEvents="box-none">
         <KitchenSheet height={sheetHeight} collapsedHeight={COLLAPSED_HEIGHT} expandedHeight={expandedHeight}

@@ -4,7 +4,7 @@
   "2026-09-04T22:52:34+00:00",
   "2026-09-04T23:38:22+00:00"
  ],
- "category_caveat": "Ready food only — the most localised category in the shop. Staples are very likely stocked far more uniformly, so this is not the value to use for recipe ingredients. It bounds the direction, not the number.",
+ "category_caveat": "Ready food only — a different, highly localised category. This is not a calibration or directional proxy for recipe ingredients; ingredient-level assortment data is required for that.",
  "n_stores": 17,
  "share_present": {
   "min": 0.0825,

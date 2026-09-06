@@ -121,7 +121,9 @@ def _assume(**kwargs) -> InventoryAssumptions:
 
 #: The dials, each with the value we shipped plus a pessimistic and an
 #: optimistic reading. Ranges are wide on purpose: the point is to bracket the
-#: truth, not to guess it.
+#: truth, not to guess it. ``no_product_at_all`` is specifically an ingredient
+#: assumption. Do not calibrate it from ``availability_reference.json``: that
+#: file measures ready food, a separately replenished category.
 DIALS: tuple[Dial, ...] = (
     Dial(
         name="markdown_offered",

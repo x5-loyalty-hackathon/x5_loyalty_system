@@ -98,20 +98,56 @@ class ReadyMeal:
         return self.dish_type is not None or self.cuisine is not None
 
 
-def _load_catalog() -> tuple[tuple[ReadyMeal, ...], tuple[str, ...]]:
-    raw: dict[str, Any] = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-    meals = tuple(
-        ReadyMeal(
-            chain=item["chain"],
-            plu=item["plu"],
-            name=item["name"],
-            median_price_rub=item["median_price_rub"],
-            dish_type=item["dish_type"],
-            cuisine=item["cuisine"],
+def _load_catalog(
+    catalog_path: Path = CATALOG_PATH,
+) -> tuple[tuple[ReadyMeal, ...], tuple[str, ...]]:
+    """Load the derived catalog with an actionable schema error."""
+    try:
+        raw: Any = json.loads(catalog_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"cannot read ready-food catalog {catalog_path}: {error}") from error
+    if not isinstance(raw, dict):
+        raise ValueError("ready-food catalog must be a JSON object")
+
+    snapshot_ids = raw.get("snapshot_ids")
+    products = raw.get("products")
+    if not isinstance(snapshot_ids, list) or not all(
+        isinstance(snapshot_id, str) and snapshot_id for snapshot_id in snapshot_ids
+    ):
+        raise ValueError("ready-food catalog snapshot_ids must be non-empty strings")
+    if not isinstance(products, list):
+        raise ValueError("ready-food catalog products must be a list")
+
+    meals: list[ReadyMeal] = []
+    for index, item in enumerate(products):
+        if not isinstance(item, dict):
+            raise ValueError(f"ready-food catalog products[{index}] must be an object")
+        for field in ("chain", "plu", "name"):
+            if not isinstance(item.get(field), str) or not item[field]:
+                raise ValueError(
+                    f"ready-food catalog products[{index}].{field} must be a non-empty string"
+                )
+        price = item.get("median_price_rub")
+        if price is not None and (not isinstance(price, (int, float)) or price <= 0):
+            raise ValueError(
+                f"ready-food catalog products[{index}].median_price_rub must be positive or null"
+            )
+        facets = {field: item.get(field) for field in ("dish_type", "cuisine")}
+        if any(value is not None and not isinstance(value, str) for value in facets.values()):
+            raise ValueError(
+                f"ready-food catalog products[{index}] facets must be strings or null"
+            )
+        meals.append(
+            ReadyMeal(
+                chain=item["chain"],
+                plu=item["plu"],
+                name=item["name"],
+                median_price_rub=float(price) if price is not None else None,
+                dish_type=facets["dish_type"],
+                cuisine=facets["cuisine"],
+            )
         )
-        for item in raw["products"]
-    )
-    return meals, tuple(raw["snapshot_ids"])
+    return tuple(meals), tuple(snapshot_ids)
 
 
 READY_FOOD_CATALOG, SNAPSHOT_IDS = _load_catalog()

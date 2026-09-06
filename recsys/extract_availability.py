@@ -17,10 +17,11 @@ made in store or delivered daily, and visibly different city to city. Staples
 like flour, milk and eggs are almost certainly stocked far more uniformly, so
 the number here is **not** the right value for recipe ingredients.
 
-What it does establish is direction and order of magnitude: the one real
-assortment figure we have is nowhere near 8%. So the constant should not be
-defended, and the sensitivity sweep must cover a range that contains this
-measurement rather than stopping short of it.
+It does **not** calibrate ``P_NO_PRODUCT_AT_ALL``. That parameter describes
+recipe ingredients, whereas this file measures a different category with a
+different replenishment model. The result is evidence that we need real
+ingredient-level assortment data; until that exists, ingredient sensitivity
+settings remain explicit assumptions and must not be relabelled as observed.
 
 Usage::
 

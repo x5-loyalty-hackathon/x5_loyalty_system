@@ -1,4 +1,7 @@
+import json
 import re
+
+import pytest
 
 from recsys.catalog import (
     BASE_PRICE_RUB,
@@ -16,6 +19,7 @@ from recsys.ready_food_pairs import (
     RECIPES_WITHOUT_READY_FOOD_PAIR,
     SNAPSHOT_IDS,
     _card_contradicts,
+    _load_catalog,
     pair_for_recipe,
     pairs_by_chain,
     pairs_for_plu,
@@ -76,6 +80,17 @@ def test_catalog_products_are_uniquely_identified_by_chain_and_plu() -> None:
     keys = [(meal.chain, meal.plu) for meal in READY_FOOD_CATALOG]
     assert len(keys) == len(set(keys))
     assert len(SNAPSHOT_IDS) == 2
+
+
+def test_catalog_loader_rejects_an_incomplete_derived_artifact(tmp_path) -> None:
+    """A changed extractor must not turn a malformed catalog into a KeyError."""
+    broken = tmp_path / "ready_food_catalog.json"
+    broken.write_text(
+        json.dumps({"snapshot_ids": ["2026-09-04"], "products": [{"plu": "1"}]}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match=r"products\[0\]\.chain"):
+        _load_catalog(broken)
 
 
 def test_pairs_are_ordered_by_how_many_counterparts_they_have() -> None:

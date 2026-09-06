@@ -14,7 +14,7 @@ import { color } from '../theme/tokens';
 const COLLAPSED_HEIGHT = 220;
 export default function KitchenScreen() {
   const router = useRouter();
-  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products, equipped } = useDemo();
+  const { startEntry, busy, cooking, selectedMeal, confirmCooking, pauseCooking, kitchenItems: products, equipped, plan } = useDemo();
   const [stageHeight, setStageHeight] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const sheetHeight = useRef(new Animated.Value(COLLAPSED_HEIGHT)).current;
@@ -59,6 +59,11 @@ export default function KitchenScreen() {
               <View style={ui.choices}>
                 <Choice label="Из недавних покупок →" disabled={busy} onPress={() => enter(false)} />
               </View>
+              {plan ? (
+                <View style={ui.choices}>
+                  <Choice label="Мой план →" disabled={busy} onPress={() => router.push('/products')} />
+                </View>
+              ) : null}
               <Text style={ui.title}>Продукты на кухне</Text>
               <Text style={ui.text}>Начальный demo-чек от 04.09.2026 и покупки этой сессии, принятые сервером.
                 Это не точный остаток дома. Рисунки условные: ниже названия купленных товаров.</Text>

@@ -2,9 +2,9 @@ import React, { createContext, useCallback, useContext, useRef, useState } from 
 import * as api from '../api/endpoints';
 import type {
   Anchor, FulfillmentOption, HealthResponse, MealPlan, MealRecommendation, MealResponse,
-  MealRoute, PlanRequest, ProductOption, ProgressSnapshot, RecommendationMode,
+  MealRoute, PlanRequest, ProductOption, ProgressSnapshot, RecommendationMode, HomeDecorationSnapshot,
 } from '../api/types';
-import { DEMO_NOW, DEMO_USER_ID, recentReceipt } from '../fixtures/recommendationRequest';
+import { DEMO_NOW, DEFAULT_DEMO_PROFILE, DEMO_PROFILES } from '../fixtures/recommendationRequest';
 import { kitchenProducts, mergeKitchenProducts, purchasedKitchenProducts } from '../domain/kitchen';
 import {
   acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, receiptNotice, rewardText,
@@ -13,9 +13,17 @@ import {
 type AsyncStatus = 'idle' | 'loading' | 'ready' | 'error';
 interface Query { mode: RecommendationMode | null; anchor: Anchor; storeId: string | null }
 interface PendingPlan { request: PlanRequest; products: ProductOption[] }
+type DecorationAction = { kind: 'goal'; itemId: string | null } | { kind: 'apply'; itemId: string };
+interface DecorationFailure { action: DecorationAction; message: string }
 const initialQuery: Query = { mode: null, anchor: 'home', storeId: null };
 const emptyBasket = { products: [], total: 0, savings: 0, error: 'Сначала выберите блюдо.' };
 function useDemoState() {
+  const [profile, setProfile] = useState(DEFAULT_DEMO_PROFILE);
+  const profileRef = useRef(DEFAULT_DEMO_PROFILE);
+  // A generation also distinguishes A → B → A: user ID alone cannot reject
+  // a late response from the first visit to A.
+  const session = useRef(0);
+  const renderSession = session.current;
   const [response, setResponse] = useState<MealResponse | null>(null);
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [recipesStatus, setRecipesStatus] = useState<AsyncStatus>('idle');
@@ -34,7 +42,7 @@ function useDemoState() {
   const [book, setBook] = useState<string[]>([]);
   const [plan, setPlan] = useState<MealPlan | null>(null);
   const [cooking, setCooking] = useState(false);
-  const [kitchenItems, setKitchenItems] = useState(kitchenProducts(recentReceipt.items));
+  const [kitchenItems, setKitchenItems] = useState(kitchenProducts(DEFAULT_DEMO_PROFILE.currentReceipt.items));
   const kitchenReceipts = useRef(new Set<string>());
   const pendingPlan = useRef<PendingPlan | null>(null);
   const pendingReceipt = useRef<ReturnType<typeof makeDemoReceipt> | null>(null);
@@ -48,6 +56,16 @@ function useDemoState() {
   const [progress, setProgress] = useState<ProgressSnapshot | null>(null);
   const [progressStatus, setProgressStatus] = useState<AsyncStatus>('idle');
   const [progressError, setProgressError] = useState<string | null>(null);
+  const [decoration, setDecoration] = useState<HomeDecorationSnapshot | null>(null);
+  const [decorationStatus, setDecorationStatus] = useState<AsyncStatus>('idle');
+  const [decorationError, setDecorationError] = useState<string | null>(null);
+  const [decorationBusy, setDecorationBusy] = useState(false);
+  const decorationBusyRef = useRef(false);
+  // One gate for GET and mutations: an older GET cannot undo an applied wall.
+  const decorationGate = useRef(createRequestGate());
+  const decorationRefreshPending = useRef(false);
+  const [decorationFailedAction, setDecorationFailedAction] = useState<DecorationAction | null>(null);
+  const decorationFailure = useRef<DecorationFailure | undefined>(undefined);
 
   const clearSelection = useCallback(() => {
     setSelectedMeal(null); setChoices({}); setPlan(null); pendingPlan.current = null;
@@ -55,15 +73,34 @@ function useDemoState() {
     setCooking(false);
     setActionError(null); setNotice(null);
   }, []);
+  const switchProfile = (profileId: string) => {
+    const next = DEMO_PROFILES.find((item) => item.id === profileId);
+    if (!next || next.id === profileRef.current.id) return;
+    session.current += 1;
+    gate.current.next(); progressGate.current.next(); decorationGate.current.next();
+    profileRef.current = next; setProfile(next);
+    busyRef.current = false; setBusy(false);
+    queryRef.current = initialQuery; setQuery(initialQuery);
+    clearSelection(); setRoute('cook'); setFulfillment('next_visit'); setMarkdown(false);
+    setKitchenItems(kitchenProducts(next.currentReceipt.items)); kitchenReceipts.current = new Set();
+    setEquipped({});
+    setBook([]); setResponse(null); setHealth(null); setRecipesStatus('idle'); setRecipesError(null);
+    setProgress(null); setProgressStatus('idle'); setProgressError(null);
+    setDecoration(null); setDecorationStatus('idle'); setDecorationError(null); setDecorationFailedAction(null);
+    decorationFailure.current = undefined;
+    decorationBusyRef.current = false; setDecorationBusy(false); decorationRefreshPending.current = false;
+  };
   const loadRecipes = useCallback(async (changes: Partial<Query> = {}) => {
     if (busyRef.current) return;
+    const activeProfile = profileRef.current;
     const next = { ...queryRef.current, ...changes };
     queryRef.current = next; setQuery(next);
     const token = gate.current.next();
     clearSelection(); setResponse(null); setRecipesError(null); setRecipesStatus('loading');
     try {
       const [nextHealth, result, saved] = await Promise.all([
-        api.getHealth(), api.getRecommendations(next.mode, next.anchor, next.storeId), api.getRecipeBook(),
+        api.getHealth(), api.getRecommendations(next.mode, next.anchor, next.storeId, activeProfile),
+        api.getRecipeBook(activeProfile.userId),
       ]);
       if (!gate.current.isCurrent(token)) return;
       setResponse(acceptMeals(result)); setHealth(nextHealth); setBook(saved.saved_recipe_ids);
@@ -85,7 +122,7 @@ function useDemoState() {
     const token = progressGate.current.next();
     setProgressStatus('loading'); setProgressError(null);
     try {
-      const result = await api.getProgress();
+      const result = await api.getProgress(profileRef.current.userId);
       if (!progressGate.current.isCurrent(token)) return;
       setProgress(result); setProgressStatus('ready');
     } catch (error) {
@@ -93,15 +130,82 @@ function useDemoState() {
       setProgressError((error as Error).message); setProgressStatus('error');
     }
   }, []);
+  const loadHomeDecoration = useCallback(async (preserveFailure?: DecorationFailure) => {
+    if (decorationBusyRef.current) { decorationRefreshPending.current = true; return; }
+    const token = decorationGate.current.next();
+    const userId = profileRef.current.userId;
+    setDecorationStatus('loading');
+    if (!preserveFailure) {
+      setDecorationError(null); setDecorationFailedAction(null); decorationFailure.current = undefined;
+    }
+    try {
+      const result = await api.getHomeDecoration(userId);
+      if (!decorationGate.current.isCurrent(token)) return;
+      if (result.user_id !== userId) throw new Error('Оформление получено для другого покупателя. Повторите загрузку.');
+      setDecoration(result);
+      const reconciled = !preserveFailure || (preserveFailure.action.kind === 'apply'
+        ? result.applied_item_id === preserveFailure.action.itemId
+        : result.goal_item_id === preserveFailure.action.itemId);
+      setDecorationStatus(reconciled ? 'ready' : 'error');
+      if (reconciled) {
+        setDecorationError(null); setDecorationFailedAction(null); decorationFailure.current = undefined;
+      }
+    } catch (error) {
+      if (!decorationGate.current.isCurrent(token)) return;
+      setDecorationStatus('error'); setDecorationError(preserveFailure?.message ?? (error as Error).message);
+    }
+  }, []);
+  const changeHomeDecoration = async (action: DecorationAction): Promise<boolean> => {
+    if (decorationBusyRef.current || renderSession !== session.current) return false;
+    const token = decorationGate.current.next();
+    const isCurrent = () => renderSession === session.current && decorationGate.current.isCurrent(token);
+    const userId = profileRef.current.userId;
+    let failure: DecorationFailure | undefined;
+    decorationBusyRef.current = true; setDecorationBusy(true);
+    setDecorationError(null); setDecorationFailedAction(null); decorationFailure.current = undefined;
+    try {
+      const result = action.kind === 'goal'
+        ? await api.setHomeDecorationGoal(action.itemId, userId)
+        : await api.applyHomeDecoration(action.itemId, userId);
+      if (!isCurrent()) return false;
+      if (result.user_id !== userId) throw new Error('Оформление получено для другого покупателя. Повторите действие.');
+      setDecoration(result); setDecorationStatus('ready');
+      return true;
+    } catch (error) {
+      if (isCurrent()) {
+        failure = { action, message: (error as { status?: number }).status === 409
+          ? 'Эти обои ещё закрыты. Оформление осталось прежним; обновите доступ после задания.'
+          : (error as Error).message };
+        decorationFailure.current = failure;
+        setDecorationStatus('error'); setDecorationFailedAction(action); setDecorationError(failure.message);
+      }
+      return false;
+    } finally {
+      if (isCurrent()) {
+        decorationBusyRef.current = false; setDecorationBusy(false);
+        if (decorationRefreshPending.current) {
+          decorationRefreshPending.current = false; void loadHomeDecoration(failure);
+        }
+      }
+    }
+  };
+  const chooseDecorationGoal = (itemId: string | null) => changeHomeDecoration({ kind: 'goal', itemId });
+  const applyDecoration = (itemId: string) => changeHomeDecoration({ kind: 'apply', itemId });
+  const retryHomeDecoration = () => decorationFailedAction
+    ? changeHomeDecoration(decorationFailedAction) : loadHomeDecoration();
   const acceptProgress = (value: ProgressSnapshot) => {
     progressGate.current.next(); setProgress(value); setProgressStatus('ready'); setProgressError(null);
+    // Re-read server access after rewards; never derive unlocks from local XP.
+    if (value.avatar_xp > 0) void loadHomeDecoration(decorationFailure.current);
   };
-  const run = async (operation: () => Promise<void>): Promise<boolean> => {
-    if (busyRef.current) return false;
+  const run = async (operation: (isCurrent: () => boolean, userId: string) => Promise<void>): Promise<boolean> => {
+    if (busyRef.current || renderSession !== session.current) return false;
+    const isCurrent = () => renderSession === session.current;
+    const userId = profileRef.current.userId;
     busyRef.current = true; setBusy(true); setActionError(null); setNotice(null);
-    try { await operation(); return true; }
-    catch (error) { setActionError((error as Error).message); return false; }
-    finally { busyRef.current = false; setBusy(false); }
+    try { await operation(isCurrent, userId); return isCurrent(); }
+    catch (error) { if (isCurrent()) setActionError((error as Error).message); return false; }
+    finally { if (isCurrent()) { busyRef.current = false; setBusy(false); } }
   };
   const selectMeal = (mealId: string) => {
     if (busyRef.current || recipesStatus !== 'ready') return;
@@ -136,23 +240,25 @@ function useDemoState() {
     if (busyRef.current || pendingPlan.current) return;
     setChoices((current) => ({ ...current, [group]: skuId })); setActionError(null);
   };
-  const saveToBook = () => run(async () => {
+  const saveToBook = () => run(async (isCurrent, userId) => {
     const recipeId = selectedMeal?.cook_variant?.recipe_id;
     if (!recipeId) throw new Error('Для этого предложения нет рецепта для сохранения.');
-    const result = await api.saveRecipe(recipeId);
+    const result = await api.saveRecipe(recipeId, userId);
+    if (!isCurrent()) return;
     if (!['created', 'duplicate'].includes(result.status)) throw new Error('Не удалось сохранить рецепт.');
     setBook(result.saved_recipe_ids); setNotice('Рецепт в книге. Его можно выбрать через «Повторить».');
   });
-  const persistPlan = async () => {
+  const persistPlan = async (isCurrent: () => boolean, userId: string) => {
     if (!selectedMeal) throw new Error('Сначала выберите блюдо.');
     if (!pendingPlan.current) {
       pendingPlan.current = {
-        request: makePlan(selectedMeal, route, fulfillment, basket, DEMO_USER_ID,
-          `mobile-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`, DEMO_NOW),
+        request: makePlan(selectedMeal, route, fulfillment, basket, userId,
+          `${userId}-mobile-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`, DEMO_NOW),
         products: basket.products,
       };
     }
     const result = await api.saveMealPlan(pendingPlan.current.request);
+    if (!isCurrent()) return;
     if (!['created', 'duplicate'].includes(result.status) || !result.plan) {
       throw new Error('Сервер отклонил план. Выберите блюдо заново.');
     }
@@ -162,21 +268,22 @@ function useDemoState() {
     return result.plan;
   };
 
-  const savePlan = () => run(async () => { await persistPlan(); });
+  const savePlan = () => run(async (isCurrent, userId) => { await persistPlan(isCurrent, userId); });
 
   /**
    * Короткий путь с карточки блюда, когда докупать нечего: задание создаётся и
    * готовка открывается сразу. Решение принимается по свежему ответу сервера,
    * а не по состоянию — оно на этом тике ещё пустое.
    */
-  const savePlanAndCook = () => run(async () => {
-    const saved = await persistPlan();
+  const savePlanAndCook = () => run(async (isCurrent, userId) => {
+    const saved = await persistPlan(isCurrent, userId);
+    if (!saved || !isCurrent()) return;
     if (!canCompleteCook(saved)) throw new Error('Сначала соберите продукты.');
     setCooking(true);
   });
   const canConfirmPurchase = Boolean(plan?.selected_product_ids.length
     && plan.status !== 'cancelled' && (plan.status === 'saved' || pendingReceipt.current));
-  const confirmPurchase = () => run(async () => {
+  const confirmPurchase = () => run(async (isCurrent) => {
     if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала сохраните план.');
     if (!canConfirmPurchase) throw new Error('Покупка уже подтверждена. Нового чека для этого плана не требуется.');
     const pending = pendingPlan.current;
@@ -185,6 +292,7 @@ function useDemoState() {
     const receipt = pendingReceipt.current ?? makeDemoReceipt(pending.request, pending.products, DEMO_NOW);
     pendingReceipt.current = receipt;
     const result = await api.submitReceipt(receipt);
+    if (!isCurrent()) return;
     acceptProgress(result.progress);
     if (result.meal_plan) setPlan(result.meal_plan);
     // Business rejection/review throws before kitchen display is changed.
@@ -197,9 +305,10 @@ function useDemoState() {
     // Keep the locked basket for retries; cooking never deletes whole packs.
     setNotice(`${message} ${rewardText(result.meal_plan)}`);
   });
-  const confirmCooking = () => run(async () => {
+  const confirmCooking = () => run(async (isCurrent, userId) => {
     if (!plan || (!canCompleteCook(plan) && plan.status !== 'completed')) throw new Error('Сначала соберите продукты.');
-    const result = await api.completeCook(plan.plan_id);
+    const result = await api.completeCook(plan.plan_id, userId);
+    if (!isCurrent()) return;
     acceptProgress(result.progress);
     if (result.plan) setPlan(result.plan);
     if (!['completed', 'duplicate'].includes(result.status)) throw new Error('Готовка не подтверждена: проверьте план и покупку.');
@@ -212,6 +321,9 @@ function useDemoState() {
   };
   const pauseCooking = () => { if (!busyRef.current) setCooking(false); };
   return {
+    profile, profiles: DEMO_PROFILES, switchProfile,
+    decoration, decorationStatus, decorationError, decorationBusy, decorationFailedAction,
+    loadHomeDecoration, chooseDecorationGoal, applyDecoration, retryHomeDecoration,
     response, health, recipesStatus, recipesError, query, loadRecipes, startEntry, selectedMeal, selectMeal,
     route, chooseRoute, fulfillment, chooseFulfillment, markdown, chooseMarkdown,
     choices, chooseProduct, basket, book, saveToBook, plan, savePlan, editable, busy,

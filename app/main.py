@@ -1,17 +1,22 @@
 import logging
 import os
+from datetime import date
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.contracts import (
     CookingConfirmationRequest,
     HealthResponse,
+    HomeDecorationApplyRequest,
+    HomeDecorationGoalRequest,
+    HomeDecorationSnapshot,
     MealPlanCompletionResponse,
     MealPlanSaveRequest,
     MealPlanSaveResponse,
     MealRecommendationResponse,
     ProgressSnapshot,
+    RankCohort,
     RecommendationRequest,
     RecommendationResponse,
     ReceiptProgressRequest,
@@ -23,7 +28,9 @@ from app.contracts import (
     SavedRecipeSaveResponse,
 )
 from app.fraud import ReceiptFraudPolicy, ReferralFraudPolicy
+from app.home_decoration import HomeDecorationItemLocked, HomeDecorationItemNotFound
 from app.meal_plan import MealPlanService
+from app.metrics import MetricsDaily, MetricsService, MetricsSummary, metrics_window
 from app.progress import ProgressService
 from app.recipe_book import RecipeBookService
 from app.recommender import DeterministicMockEngine, RecommendationEngine
@@ -84,6 +91,7 @@ recommendation_engine, recommendation_engine_name, model_fallback = (
     _build_recommendation_engine()
 )
 state_repository = InMemoryStateRepository()
+metrics_service = MetricsService(state_repository)
 recommendation_service = RecommendationService(
     engine=recommendation_engine,
     safety_policy=SafetyPolicy(),
@@ -108,6 +116,35 @@ def health() -> HealthResponse:
         recommendation_engine=recommendation_engine_name,
         model_fallback=model_fallback,
     )
+
+
+@app.get("/api/v1/metrics/summary", response_model=MetricsSummary, tags=["demo metrics"])
+def get_metrics_summary(
+    start_date: date,
+    end_date: date,
+    purchase_threshold: int = Query(default=2, ge=1, le=1000),
+    cohort: RankCohort | None = None,
+) -> MetricsSummary:
+    """Synthetic observed-event metrics, not experiment results or UI conversion."""
+    try:
+        window = metrics_window(start_date, end_date, cohort)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return metrics_service.summary(window, purchase_threshold)
+
+
+@app.get("/api/v1/metrics/daily", response_model=MetricsDaily, tags=["demo metrics"])
+def get_metrics_daily(
+    start_date: date,
+    end_date: date,
+    cohort: RankCohort | None = None,
+) -> MetricsDaily:
+    """Daily server-event counters, including zero-activity days."""
+    try:
+        window = metrics_window(start_date, end_date, cohort)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return metrics_service.daily(window)
 
 
 @app.post(
@@ -146,6 +183,46 @@ def save_recipe(request: SavedRecipeSaveRequest) -> SavedRecipeSaveResponse:
 )
 def list_saved_recipes(user_id: str) -> SavedRecipeCollection:
     return recipe_book_service.list(user_id)
+
+
+@app.get(
+    "/api/v1/home-decoration/{user_id}",
+    response_model=HomeDecorationSnapshot,
+)
+def get_home_decoration(user_id: str) -> HomeDecorationSnapshot:
+    return state_repository.home_decoration(user_id)
+
+
+@app.post(
+    "/api/v1/home-decoration/{user_id}/goal",
+    response_model=HomeDecorationSnapshot,
+)
+def set_home_decoration_goal(
+    user_id: str, request: HomeDecorationGoalRequest,
+) -> HomeDecorationSnapshot:
+    try:
+        return state_repository.set_home_decoration_goal(
+            user_id=user_id, item_id=request.item_id,
+        )
+    except HomeDecorationItemNotFound as exc:
+        raise HTTPException(status_code=404, detail="home_decoration_item_not_found") from exc
+
+
+@app.post(
+    "/api/v1/home-decoration/{user_id}/apply",
+    response_model=HomeDecorationSnapshot,
+)
+def apply_home_decoration(
+    user_id: str, request: HomeDecorationApplyRequest,
+) -> HomeDecorationSnapshot:
+    try:
+        return state_repository.apply_home_decoration(
+            user_id=user_id, item_id=request.item_id,
+        )
+    except HomeDecorationItemNotFound as exc:
+        raise HTTPException(status_code=404, detail="home_decoration_item_not_found") from exc
+    except HomeDecorationItemLocked as exc:
+        raise HTTPException(status_code=409, detail="home_decoration_item_locked") from exc
 
 
 @app.post(

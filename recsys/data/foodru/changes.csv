@@ -1,0 +1,39 @@
+﻿product_key,name,transition,old_recipe_id,new_recipe_id,old_candidate,new_candidate,review_reasons
+perekrestok:2157530,"Лазанья мясная Золотой Петушок, 370г",review->matched,,foodru_31337,Лазанья с мясом,Лазанья с фаршем,
+perekrestok:4183545,"Хумус рецепт из Иерусалима Перекрёсток Select, 300г",review->matched,,foodru_1465,Хумус,Хумус,"missing_named_components, low_name_score"
+perekrestok:4355381,"Тофники Fitdelice кокосовые замороженные, 260г",review->matched,,foodru_72558,Нежные тофники на растительном молоке с кокосовой стружкой,Нежные тофники на растительном молоке с кокосовой стружкой,"dish_family_unconfirmed, extra_recipe_components"
+perekrestok:4372373,"Паста с куриным филе и соусом песто Перекрёсток Select, 250 г",review->matched,,foodru_144814,Паста с соусом песто,Паста с соусом песто,
+perekrestok:4396957,"Чебупели Горячая Штучка сочные с мясом, 240г",review->matched,,foodru_95730,Фарш для пельменей,Аппетитные пельмени с мясным фаршем,
+perekrestok:4398580,"Паштет из горбуши Люди Любят тонкоизмельченный стерилизованный, 125г",review->matched,,foodru_30179,Паштет из горбуши,Паштет из горбуши,missing_named_components
+perekrestok:4425835,"Пирог Осетинский с сыром Перекрёсток Select, 200г",review->matched,,foodru_48010,Осетинский пирог с курицей и сыром,Аппетитный осетинский пирог с сыром сулугуни,
+perekrestok:4425836,"Пирог Осетинский с сыром Перекрёсток Select, 400г",review->matched,,foodru_48010,Осетинский пирог с курицей и сыром,Аппетитный осетинский пирог с сыром сулугуни,
+perekrestok:4425837,"Пирог Осетинский с картофелем и сыром Перекрёсток Select, 200г",matched->matched,foodru_121272,foodru_149321,Осетинский пирог с сыром и картофелем,Осетинский пирог с сыром сулугуни и картофелем,
+perekrestok:4427786,"Эклеры Poppies шоколадные мини, 200г",review->matched,,foodru_47817,Шоколадный эклер,Шоколадный эклер,"dish_family_unconfirmed, missing_named_components"
+perekrestok:4436606,"Котлеты из куриной грудки Перекрёсток Select, 160г",review->matched,,foodru_1353,Куриные котлеты,Котлеты из куриной грудки,
+perekrestok:4438505,"Салат сырный Перекрёсток Select, 170г",review->matched,,foodru_210936,ПП салат с сыром,Салат с бурратой,
+perekrestok:4442431,Суп-лапша грибная Перекрёсток Select 250г,review->matched,,foodru_120382,Суп-лапша с грибами,Суп с грибами и лапшой,
+perekrestok:4443011,"Салат пикантный с сыром Перекрёсток Select, 170г",review->matched,,foodru_210936,Пикантный салат с сыром,Пикантный салат с сыром,unexpected_protein_in_ingredients
+perekrestok:4452883,"Мини-запеканка творожная замороженная Перекрёсток Select, 320г",review->matched,,foodru_1345,Запеканка с творогом и малиной,Творожная запеканка,
+perekrestok:4457276,"Шашлык из свинины гриль Перекрёсток Select, 230г",review->matched,,foodru_226842,Шашлык из свинины с молодым картофелем на гриле,Шашлык из свинины на гриле,
+perekrestok:4459528,"Сэндвич Крок-Месье Перекрёсток Select, 230г",review->matched,,foodru_50658,Сэндвичи крок-месье с колбасой и сыром,Сытный классический сэндвич «Крок-месье»,
+perekrestok:4463228,"Суп Фо Бо Перекрёсток Select, 265г",review->matched,,foodru_35979,Вьетнамский суп Фо Бо,Вьетнамский суп Фо Бо,extra_recipe_components
+perekrestok:4464484,"Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",review->matched,,foodru_95730,Фарш для пельменей,Аппетитные пельмени с мясным фаршем,
+pyaterochka:3645121,Чиабатта Рустик замороженная п/ф 300г,review->matched,,foodru_1563,Чиабатта,Чиабатта,missing_named_components
+pyaterochka:3699728,"Блины Солнцепек с вишневой начинкой, 360г",review->matched,,foodru_185999,Блинчики с вишней,Блинчики с вишней,missing_named_components
+pyaterochka:4057687,Наггетсы Вязанка куриные 250г,review->matched,,foodru_2588,Куриные наггетсы,Куриные наггетсы,missing_named_components
+pyaterochka:4057693,Наггетсы Вязанка с индейкой замороженные 250г,review->matched,,foodru_50260,Наггетсы из индейки,Наггетсы из индейки,missing_named_components
+pyaterochka:4300570,Пекан Кленовый замороженный п/ф 85г,review->matched,,foodru_99216,Кленовый пекан к чаю,Кленовый пекан к чаю,"dish_family_unconfirmed, extra_recipe_components"
+pyaterochka:4353542,Кутабы с сыром и зеленью Пятёрочка Кафе 150г,matched->matched,foodru_73328,foodru_31506,Кутабы с зеленью и сыром,Кутабы с зеленью и сулугуни,
+pyaterochka:4391323,Пицца 4 Сыра охлажденная  Graf Ewgraf 300г,review->matched,,foodru_141254,Римская пицца «Четыре сыра»,Домашняя пицца «Четыре сыра»,
+pyaterochka:4405362,Бульмени Горячая штучка хрустящие с мясом жареные замороженные 220г,review->matched,,foodru_95730,Фарш для пельменей,Аппетитные пельмени с мясным фаршем,
+pyaterochka:4409830,Наггетсы Мираторг куриные с сыром замороженные 250г,matched->matched,foodru_43966,foodru_104440,Куриные наггетсы с сыром,Сочные куриные наггетсы с сыром,
+pyaterochka:4426983,Паста с курицей и соусом песто Пятёрочка Кафе 220г,review->matched,,foodru_144814,Паста с соусом песто,Паста с соусом песто,
+pyaterochka:4436289,Пицца Сибирская Коллекция Classic Пепперони замороженная 340г,review->matched,,foodru_1524,Пицца с пеперони,Домашняя пицца «Пеперони»,missing_named_components
+pyaterochka:4439363,"Cуп-пюре Вкус&Польза из тыквы, 250г",review->matched,,foodru_2884,Тыквенное пюре,Тыквенное пюре,"dish_family_unconfirmed, missing_named_components"
+pyaterochka:4456854,"Пирог Осетинский с сыром Пятёрочка Кафе, 200г",review->matched,,foodru_48010,Осетинский пирог с курицей и сыром,Аппетитный осетинский пирог с сыром сулугуни,
+pyaterochka:4459593,"Шаурма с филе грудки куриной Вкус & Польза, 200г",review->matched,,foodru_79937,Шаурма с курицей,Шаурма с куриной грудкой по-домашнему,
+pyaterochka:4464484,"Чебупели сочные с мясом готовые замороженные Горячая штучка, 240г",review->matched,,foodru_95730,Фарш для пельменей,Аппетитные пельмени с мясным фаршем,
+pyaterochka:4464631,"Холодный суп гаспачо Alvalle из натуральных помидоров, 600 мл",review->matched,,foodru_166313,Холодный томатный суп «Гаспачо»,Холодный томатный суп «Гаспачо»,missing_named_components
+pyaterochka:4464632,"Холодный суп гаспачо Alvalle из натуральных помидоров, 250 мл",review->matched,,foodru_166313,Холодный томатный суп «Гаспачо»,Холодный томатный суп «Гаспачо»,missing_named_components
+pyaterochka:78030460,Чиабатта Рустик 290г,review->matched,,foodru_1563,Чиабатта,Чиабатта,missing_named_components
+pyaterochka:78032562,Круассан с добавлением сливочного масла 50г,review->matched,,foodru_221505,Круассаны со сливочным маслом,Круассаны со сливочным маслом,missing_named_components

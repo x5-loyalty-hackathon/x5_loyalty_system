@@ -14,6 +14,7 @@ assortment data is used (see ``docs/research/recsys/synthetic-data-and-segments.
 from __future__ import annotations
 
 import json
+import statistics
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -193,6 +194,12 @@ REFERENCE_MEDIAN_PRICE_RUB: float = PRICE_REFERENCE["percentiles_rub"]["50"]
 #: comparison band inherited from the source experiment, not a measured
 #: inflation estimate or an integration quality gate.
 PRICE_ERA_MULTIPLIER_BAND: tuple[float, float] = (1.8, 3.0)
+
+
+def observed_price_era_multiplier() -> float:
+    """Current catalog/reference median ratio, not an inflation estimate."""
+    return statistics.median(BASE_PRICE_RUB.values()) / REFERENCE_MEDIAN_PRICE_RUB
+
 
 # Per-unit full price (₽) for one ingredient, for a 2026 Moscow basket.
 #

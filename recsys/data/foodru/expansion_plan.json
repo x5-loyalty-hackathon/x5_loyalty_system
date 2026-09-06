@@ -1,0 +1,3350 @@
+{
+  "baseline_commit": "f6f4b20",
+  "sitemap_recipes": 166814,
+  "minimum_score": 0.65,
+  "per_product": 4,
+  "maximum": 360,
+  "recipes": [
+    {
+      "url": "https://food.ru/recipes/31337-lazanja-s-farshem",
+      "source_id": 31337,
+      "title": "lazanja s farshem",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:2157530"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/105199-nezhnyi-tomatnyi-sous",
+      "source_id": 105199,
+      "title": "nezhnyi tomatnyi sous",
+      "discovery_score": 0.7461,
+      "products": [
+        "perekrestok:3630750"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85467-spagetti-s-moreproduktami-v-slivochnom-souse",
+      "source_id": 85467,
+      "title": "spagetti s moreproduktami v slivochnom souse",
+      "discovery_score": 0.957,
+      "products": [
+        "perekrestok:3655792"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/146393-ikra-ovoshchnaia-1660564146",
+      "source_id": 146393,
+      "title": "ikra ovoshchnaia 1660564146",
+      "discovery_score": 0.9215,
+      "products": [
+        "perekrestok:3976385"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/233988-kartofelnye-vafli-s-krasnoi-ryboi-i-sousom-tar-tar-1730914875",
+      "source_id": 233988,
+      "title": "kartofelnye vafli s krasnoi ryboi i sousom tar tar 1730914875",
+      "discovery_score": 0.681,
+      "products": [
+        "perekrestok:4192791"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/52765-neobychnyi-svekolnyi-salat-s-sousom-pesto",
+      "source_id": 52765,
+      "title": "neobychnyi svekolnyi salat s sousom pesto",
+      "discovery_score": 0.824,
+      "products": [
+        "perekrestok:4331972"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/177741-kurinnye-kotlety-s-gribami-1689609524",
+      "source_id": 177741,
+      "title": "kurinnye kotlety s gribami 1689609524",
+      "discovery_score": 0.762,
+      "products": [
+        "perekrestok:4364437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/266775-naggetsy-s-kurinoi-grudkoi-i-kartofelnym-piure-1763281780",
+      "source_id": 266775,
+      "title": "naggetsy s kurinoi grudkoi i kartofelnym piure 1763281780",
+      "discovery_score": 0.9069,
+      "products": [
+        "perekrestok:4368151"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/135271-kimchi-iz-pekinskoi-kapusty-i-perca",
+      "source_id": 135271,
+      "title": "kimchi iz pekinskoi kapusty i perca",
+      "discovery_score": 0.717,
+      "products": [
+        "perekrestok:4377397"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/95730-appetitnye-pelmeni-s-mjasnym-farshem",
+      "source_id": 95730,
+      "title": "appetitnye pelmeni s mjasnym farshem",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4396957",
+        "perekrestok:4464484",
+        "pyaterochka:4405362",
+        "pyaterochka:4464484"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/247619-golubcy-v-smetanno-tomatnom-souse",
+      "source_id": 247619,
+      "title": "golubcy v smetanno tomatnom souse",
+      "discovery_score": 0.8184,
+      "products": [
+        "perekrestok:4410403",
+        "pyaterochka:4299030"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/48010-appetitnyi-osetinskii-pirog-s-syrom-suluguni",
+      "source_id": 48010,
+      "title": "appetitnyi osetinskii pirog s syrom suluguni",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4425835",
+        "perekrestok:4425836",
+        "pyaterochka:4456854"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/184569-kurinoe-file-v-maionezom-souse-1692542900",
+      "source_id": 184569,
+      "title": "kurinoe file v maionezom souse 1692542900",
+      "discovery_score": 0.743,
+      "products": [
+        "perekrestok:4428533"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/132860-nezhnaja-lapsha-udon-s-kuricei-v-souse-terijaki",
+      "source_id": 132860,
+      "title": "nezhnaja lapsha udon s kuricei v souse terijaki",
+      "discovery_score": 0.9628,
+      "products": [
+        "perekrestok:4430711"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/31399-salat-s-burratoi",
+      "source_id": 31399,
+      "title": "salat s burratoi",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4438505"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/192340-sup-s-gribami-i-lapshoi-1696956372",
+      "source_id": 192340,
+      "title": "sup s gribami i lapshoi 1696956372",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4442431"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/68538-pikantnyi-bystryi-salat-s-vetchinoi-i-syrom",
+      "source_id": 68538,
+      "title": "pikantnyi bystryi salat s vetchinoi i syrom",
+      "discovery_score": 0.9333,
+      "products": [
+        "perekrestok:4443011"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/96954-salat-lukoshko-s-korolevskimi-shampinonami-1642741884",
+      "source_id": 96954,
+      "title": "salat lukoshko s korolevskimi shampinonami 1642741884",
+      "discovery_score": 0.9076,
+      "products": [
+        "perekrestok:4444374"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/140803-pshennaia-kasha-na-kokosovom-moloke-s-tykvoi-1652566554",
+      "source_id": 140803,
+      "title": "pshennaia kasha na kokosovom moloke s tykvoi 1652566554",
+      "discovery_score": 0.7085,
+      "products": [
+        "perekrestok:4447598"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/61473-bystraja-ovsjanaja-kasha-na-moloke-s-halvoi-i-malinoi",
+      "source_id": 61473,
+      "title": "bystraja ovsjanaja kasha na moloke s halvoi i malinoi",
+      "discovery_score": 0.9399,
+      "products": [
+        "perekrestok:4450437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/255938-zagotovka-chernoi-smorodiny-s-sakharom-1751001072",
+      "source_id": 255938,
+      "title": "zagotovka chernoi smorodiny s sakharom 1751001072",
+      "discovery_score": 0.6776,
+      "products": [
+        "perekrestok:4450664"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/157236-roll-s-krevetkoi-1674644564",
+      "source_id": 157236,
+      "title": "roll s krevetkoi 1674644564",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4451160"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/73691-piure-iz-jablok-s-koricei-i-saharom",
+      "source_id": 73691,
+      "title": "piure iz jablok s koricei i saharom",
+      "discovery_score": 0.6815,
+      "products": [
+        "perekrestok:4452514"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/237098-zapekanka-s-vishnei-1733679597",
+      "source_id": 237098,
+      "title": "zapekanka s vishnei 1733679597",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4452856"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1345-tvorozhnaja-zapekanka",
+      "source_id": 1345,
+      "title": "tvorozhnaja zapekanka",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4452883"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/73186-nezhnaja-tvorozhnaja-zapekanka-s-kuragoi",
+      "source_id": 73186,
+      "title": "nezhnaja tvorozhnaja zapekanka s kuragoi",
+      "discovery_score": 0.7612,
+      "products": [
+        "perekrestok:4456098"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/102871-pasta-pod-sousom-boloneze-1643577969",
+      "source_id": 102871,
+      "title": "pasta pod sousom boloneze 1643577969",
+      "discovery_score": 0.9167,
+      "products": [
+        "perekrestok:4456424"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/91057-kurinye-tefteli-v-slivochnom-souse-1641239882",
+      "source_id": 91057,
+      "title": "kurinye tefteli v slivochnom souse 1641239882",
+      "discovery_score": 0.7218,
+      "products": [
+        "perekrestok:4456426"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/152410-krylyshki-barbekiu-1668593921",
+      "source_id": 152410,
+      "title": "krylyshki barbekiu 1668593921",
+      "discovery_score": 0.8387,
+      "products": [
+        "perekrestok:4456767"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/226842-shashlyk-na-grile-1724785380",
+      "source_id": 226842,
+      "title": "shashlyk na grile 1724785380",
+      "discovery_score": 0.7938,
+      "products": [
+        "perekrestok:4457276"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/50658-sytnyi-klassicheskii-krok-mese",
+      "source_id": 50658,
+      "title": "sytnyi klassicheskii krok mese",
+      "discovery_score": 0.8565,
+      "products": [
+        "perekrestok:4459528"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/59572-nezhnyi-tykvennyi-sup-piure",
+      "source_id": 59572,
+      "title": "nezhnyi tykvennyi sup piure",
+      "discovery_score": 0.7194,
+      "products": [
+        "perekrestok:4461202"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/67417-sup-fo-bo-govjazhii-bulon-s-prjanostjami",
+      "source_id": 67417,
+      "title": "sup fo bo govjazhii bulon s prjanostjami",
+      "discovery_score": 0.8758,
+      "products": [
+        "perekrestok:4463228"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54690-zharenyi-baget",
+      "source_id": 54690,
+      "title": "zharenyi baget",
+      "discovery_score": 0.8828,
+      "products": [
+        "pyaterochka:3645121",
+        "pyaterochka:78030460",
+        "pyaterochka:78030900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/131725-appetitnye-bliny-s-vishnei",
+      "source_id": 131725,
+      "title": "appetitnye bliny s vishnei",
+      "discovery_score": 0.9332,
+      "products": [
+        "pyaterochka:3699728"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/125235-chesnochnye-sukhariki-iz-rzhanogo-khleba-za-15-minut-1646224809",
+      "source_id": 125235,
+      "title": "chesnochnye sukhariki iz rzhanogo khleba za 15 minut 1646224809",
+      "discovery_score": 0.9025,
+      "products": [
+        "pyaterochka:4117904",
+        "pyaterochka:78030125"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/222067-khrustiashchie-naggetsy-s-syrnym-sousom-1720588588",
+      "source_id": 222067,
+      "title": "khrustiashchie naggetsy s syrnym sousom 1720588588",
+      "discovery_score": 0.6663,
+      "products": [
+        "pyaterochka:4396959",
+        "pyaterochka:4459785"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85147-vkusnaja-samsa-s-kuricei-i-tykvoi",
+      "source_id": 85147,
+      "title": "vkusnaja samsa s kuricei i tykvoi",
+      "discovery_score": 0.9325,
+      "products": [
+        "pyaterochka:4428575",
+        "pyaterochka:78037217"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/130854-picca-3-vida-syra-i-pepperoni",
+      "source_id": 130854,
+      "title": "picca 3 vida syra i pepperoni",
+      "discovery_score": 0.8521,
+      "products": [
+        "pyaterochka:4436289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/97792-oladi-iz-kartofelnogo-piure-1643031054",
+      "source_id": 97792,
+      "title": "oladi iz kartofelnogo piure 1643031054",
+      "discovery_score": 0.708,
+      "products": [
+        "pyaterochka:4447865"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165657-roll-s-krevetkoi-syrom-i-pomidorom-1681307059",
+      "source_id": 165657,
+      "title": "roll s krevetkoi syrom i pomidorom 1681307059",
+      "discovery_score": 0.786,
+      "products": [
+        "pyaterochka:4452201"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/115230-kruassany-s-shokoladom-1644946639",
+      "source_id": 115230,
+      "title": "kruassany s shokoladom 1644946639",
+      "discovery_score": 0.7634,
+      "products": [
+        "pyaterochka:78006137"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/142012-kurochka-po-italianski-1654531747",
+      "source_id": 142012,
+      "title": "kurochka po italianski 1654531747",
+      "discovery_score": 0.9407,
+      "products": [
+        "perekrestok:3421780",
+        "pyaterochka:3421780",
+        "pyaterochka:4464482"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/60471-sytnaja-grechka-s-kilkoi-v-tomatnom-souse",
+      "source_id": 60471,
+      "title": "sytnaja grechka s kilkoi v tomatnom souse",
+      "discovery_score": 0.8637,
+      "products": [
+        "perekrestok:4088784"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/199309-sendvich-roll-s-kotletkoi-1700164715",
+      "source_id": 199309,
+      "title": "sendvich roll s kotletkoi 1700164715",
+      "discovery_score": 0.6918,
+      "products": [
+        "perekrestok:4133313"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/236417-ovsyanka-chetyre-syra-1733147511",
+      "source_id": 236417,
+      "title": "ovsyanka chetyre syra 1733147511",
+      "discovery_score": 0.6991,
+      "products": [
+        "perekrestok:4156187"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/75739-prostoi-recept-humusa-po-domashnemu",
+      "source_id": 75739,
+      "title": "prostoi recept humusa po domashnemu",
+      "discovery_score": 0.9163,
+      "products": [
+        "perekrestok:4183545"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/209903-shashlyk-s-kartoshkoi-v-duhovke",
+      "source_id": 209903,
+      "title": "shashlyk s kartoshkoi v duhovke",
+      "discovery_score": 0.7112,
+      "products": [
+        "perekrestok:4309968"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/230237-azu-iz-goviadiny-s-kartofelem-i-solenymi-ogurtsami-1727409900",
+      "source_id": 230237,
+      "title": "azu iz goviadiny s kartofelem i solenymi ogurtsami 1727409900",
+      "discovery_score": 0.7154,
+      "products": [
+        "perekrestok:4312150"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/207592-shokoladnye-tofniki-1706079289",
+      "source_id": 207592,
+      "title": "shokoladnye tofniki 1706079289",
+      "discovery_score": 0.6705,
+      "products": [
+        "perekrestok:4355381"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/118334-risovaia-kasha-na-kokosovom-moloke-1645460436",
+      "source_id": 118334,
+      "title": "risovaia kasha na kokosovom moloke 1645460436",
+      "discovery_score": 0.712,
+      "products": [
+        "perekrestok:4381670"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/170423-appetitnaia-kartofelnaia-zapekanka-s-farshem-i-gribami-pod-syrnoi-korochkoi-1686303620",
+      "source_id": 170423,
+      "title": "appetitnaia kartofelnaia zapekanka s farshem i gribami pod syrnoi korochkoi 1686303620",
+      "discovery_score": 0.8006,
+      "products": [
+        "perekrestok:4389855"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/153280-vkusnye-bliny-s-kurinym-farshem-i-syrom-1668603227",
+      "source_id": 153280,
+      "title": "vkusnye bliny s kurinym farshem i syrom 1668603227",
+      "discovery_score": 0.8338,
+      "products": [
+        "perekrestok:4408479"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/58057-appetitnyi-salat-s-tuncom",
+      "source_id": 58057,
+      "title": "appetitnyi salat s tuncom",
+      "discovery_score": 0.7542,
+      "products": [
+        "perekrestok:4413901"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/255562-okroshka-na-iogurte-i-gazirovke-s-ovoshchami-i-sosiskami-1750677312",
+      "source_id": 255562,
+      "title": "okroshka na iogurte i gazirovke s ovoshchami i sosiskami 1750677312",
+      "discovery_score": 0.8538,
+      "products": [
+        "perekrestok:4413987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/127323-kartofelnoe-pyure-nezhnoe-k-kotletam-1646498402",
+      "source_id": 127323,
+      "title": "kartofelnoe pyure nezhnoe k kotletam 1646498402",
+      "discovery_score": 0.827,
+      "products": [
+        "perekrestok:4419226",
+        "perekrestok:4455158",
+        "perekrestok:4381904",
+        "perekrestok:4462258"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1470-losos-v-slivochnom-souse",
+      "source_id": 1470,
+      "title": "losos v slivochnom souse",
+      "discovery_score": 0.9513,
+      "products": [
+        "perekrestok:4422046"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/46339-domashnie-eklery-s-shokoladnym-kremom",
+      "source_id": 46339,
+      "title": "domashnie eklery s shokoladnym kremom",
+      "discovery_score": 0.8809,
+      "products": [
+        "perekrestok:4427786"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/25601-riet-iz-lososja",
+      "source_id": 25601,
+      "title": "riet iz lososja",
+      "discovery_score": 0.7137,
+      "products": [
+        "perekrestok:4429146"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54497-zharenye-spring-rolly",
+      "source_id": 54497,
+      "title": "zharenye spring rolly",
+      "discovery_score": 0.7026,
+      "products": [
+        "perekrestok:4431738"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/210822-kurinaia-grudka-s-ovoshchami-gril-1710268274",
+      "source_id": 210822,
+      "title": "kurinaia grudka s ovoshchami gril 1710268274",
+      "discovery_score": 0.8109,
+      "products": [
+        "perekrestok:4435872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/31340-lazanja-klassicheskaja-s-sousom-beshamel",
+      "source_id": 31340,
+      "title": "lazanja klassicheskaja s sousom beshamel",
+      "discovery_score": 0.6653,
+      "products": [
+        "perekrestok:4437060"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/222040-farfalle-s-kotletami-v-souse-1720553468",
+      "source_id": 222040,
+      "title": "farfalle s kotletami v souse 1720553468",
+      "discovery_score": 0.7144,
+      "products": [
+        "perekrestok:4443653",
+        "pyaterochka:4368762"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/96366-smuzi-iz-banana-miusli-i-jabloka-s-koricei-i-medom",
+      "source_id": 96366,
+      "title": "smuzi iz banana miusli i jabloka s koricei i medom",
+      "discovery_score": 0.7249,
+      "products": [
+        "perekrestok:4444926"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/83477-kotleta-po-kievski",
+      "source_id": 83477,
+      "title": "kotleta po kievski",
+      "discovery_score": 0.7036,
+      "products": [
+        "perekrestok:4446269",
+        "pyaterochka:4447872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/144329-pasta-s-krevetkami-i-pomidorami-v-slivochnom-souse",
+      "source_id": 144329,
+      "title": "pasta s krevetkami i pomidorami v slivochnom souse",
+      "discovery_score": 0.9126,
+      "products": [
+        "perekrestok:4446872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/262474-indeika-s-brokkoli-i-morkoviu-na-paru-1758693659",
+      "source_id": 262474,
+      "title": "indeika s brokkoli i morkoviu na paru 1758693659",
+      "discovery_score": 0.9088,
+      "products": [
+        "perekrestok:4446987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/89633-farshirovannyi-perec-v-tomatno-smetannom-souse",
+      "source_id": 89633,
+      "title": "farshirovannyi perec v tomatno smetannom souse",
+      "discovery_score": 0.7847,
+      "products": [
+        "perekrestok:4453155"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/61497-klassicheskaja-pshennaja-kasha-s-tykvoi",
+      "source_id": 61497,
+      "title": "klassicheskaja pshennaja kasha s tykvoi",
+      "discovery_score": 0.7738,
+      "products": [
+        "perekrestok:4453705"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/55826-ris-pod-sousom-terijaki",
+      "source_id": 55826,
+      "title": "ris pod sousom terijaki",
+      "discovery_score": 0.7055,
+      "products": [
+        "perekrestok:4453732"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1632-domashnjaja-kolbasa-iz-kuricy",
+      "source_id": 1632,
+      "title": "domashnjaja kolbasa iz kuricy",
+      "discovery_score": 0.6614,
+      "products": [
+        "perekrestok:4455289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/257396-nezhnaia-tvorozhnaia-zapekanka-s-malinoi-1752505329",
+      "source_id": 257396,
+      "title": "nezhnaia tvorozhnaia zapekanka s malinoi 1752505329",
+      "discovery_score": 0.7589,
+      "products": [
+        "perekrestok:4456096"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/50055-bulgur-s-kuricei-i-gribami-na-skovorode",
+      "source_id": 50055,
+      "title": "bulgur s kuricei i gribami na skovorode",
+      "discovery_score": 0.708,
+      "products": [
+        "perekrestok:4456974"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/211962-khlebnyi-omlet-s-syrom-1711045060",
+      "source_id": 211962,
+      "title": "khlebnyi omlet s syrom 1711045060",
+      "discovery_score": 0.6895,
+      "products": [
+        "perekrestok:4459435"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/225749-kotlety-iz-indeiki-s-garnirom-iz-grechki-1723447141",
+      "source_id": 225749,
+      "title": "kotlety iz indeiki s garnirom iz grechki 1723447141",
+      "discovery_score": 0.6774,
+      "products": [
+        "perekrestok:4461997"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/47894-giros-s-kuricei-i-ovoshchami",
+      "source_id": 47894,
+      "title": "giros s kuricei i ovoshchami",
+      "discovery_score": 0.6883,
+      "products": [
+        "perekrestok:4463800"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/2723-omlet-s-vetchinoi-i-syrom",
+      "source_id": 2723,
+      "title": "omlet s vetchinoi i syrom",
+      "discovery_score": 0.7446,
+      "products": [
+        "perekrestok:4473642"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/122915-lapsha-lagmannaja-na-moloke",
+      "source_id": 122915,
+      "title": "lapsha lagmannaja na moloke",
+      "discovery_score": 0.7672,
+      "products": [
+        "pyaterochka:3608917"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/57949-vkusneishii-pirog-so-smorodinoi",
+      "source_id": 57949,
+      "title": "vkusneishii pirog so smorodinoi",
+      "discovery_score": 0.8021,
+      "products": [
+        "pyaterochka:3658222"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/126360-kurochka-terijaki",
+      "source_id": 126360,
+      "title": "kurochka terijaki",
+      "discovery_score": 0.6792,
+      "products": [
+        "pyaterochka:4372188",
+        "perekrestok:4457463"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/71108-appetitnye-buterbrody-s-krevetkami",
+      "source_id": 71108,
+      "title": "appetitnye buterbrody s krevetkami",
+      "discovery_score": 0.7016,
+      "products": [
+        "pyaterochka:4376857"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/45373-nezhnyi-udon-s-kuricei-i-ovoshchami-v-souse-terijaki",
+      "source_id": 45373,
+      "title": "nezhnyi udon s kuricei i ovoshchami v souse terijaki",
+      "discovery_score": 0.7349,
+      "products": [
+        "pyaterochka:4384743"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/69-sloiki-s-syrom",
+      "source_id": 69,
+      "title": "sloiki s syrom",
+      "discovery_score": 0.7933,
+      "products": [
+        "pyaterochka:4431581",
+        "pyaterochka:78037271"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/172645-zhulen-v-pshenichnoi-bulochke-1686849999",
+      "source_id": 172645,
+      "title": "zhulen v pshenichnoi bulochke 1686849999",
+      "discovery_score": 0.8684,
+      "products": [
+        "pyaterochka:4431755"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/44255-chernosmorodinovyi-zefir",
+      "source_id": 44255,
+      "title": "chernosmorodinovyi zefir",
+      "discovery_score": 0.6611,
+      "products": [
+        "pyaterochka:4436580",
+        "pyaterochka:78037447"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/225459-pomidory-solenye",
+      "source_id": 225459,
+      "title": "pomidory solenye",
+      "discovery_score": 0.6851,
+      "products": [
+        "pyaterochka:4439713"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/74696-bystrye-pomidory-s-bazilikom",
+      "source_id": 74696,
+      "title": "bystrye pomidory s bazilikom",
+      "discovery_score": 0.7067,
+      "products": [
+        "pyaterochka:62766",
+        "pyaterochka:78000004"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/255342-bystroblin-s-vetchinoi-i-syrom-1750441780",
+      "source_id": 255342,
+      "title": "bystroblin s vetchinoi i syrom 1750441780",
+      "discovery_score": 0.9268,
+      "products": [
+        "pyaterochka:78028935",
+        "perekrestok:4454938"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/35985-domashnjaja-solenaja-karamel",
+      "source_id": 35985,
+      "title": "domashnjaja solenaja karamel",
+      "discovery_score": 0.7712,
+      "products": [
+        "pyaterochka:78038161"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/105420-domashniaia-pitstsa-pepperoni-1643877254",
+      "source_id": 105420,
+      "title": "domashniaia pitstsa pepperoni 1643877254",
+      "discovery_score": 0.8466,
+      "products": [
+        "perekrestok:3416332",
+        "pyaterochka:3416332"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/223983-domashnii-riet-iz-skumbrii-1722019423",
+      "source_id": 223983,
+      "title": "domashnii riet iz skumbrii 1722019423",
+      "discovery_score": 0.7441,
+      "products": [
+        "perekrestok:3497737"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/112890-sytnye-ruletiki-s-vetchinoi-1644848255",
+      "source_id": 112890,
+      "title": "sytnye ruletiki s vetchinoi 1644848255",
+      "discovery_score": 0.7044,
+      "products": [
+        "perekrestok:3681730"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/68185-appetitnye-oladi-iz-risa-s-kurinym-file",
+      "source_id": 68185,
+      "title": "appetitnye oladi iz risa s kurinym file",
+      "discovery_score": 0.821,
+      "products": [
+        "perekrestok:4364439"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1734-spagetti-s-domashnim-sousom-pesto",
+      "source_id": 1734,
+      "title": "spagetti s domashnim sousom pesto",
+      "discovery_score": 0.8548,
+      "products": [
+        "perekrestok:4372373",
+        "pyaterochka:4426983"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54753-gorchichnyi-sous",
+      "source_id": 54753,
+      "title": "gorchichnyi sous",
+      "discovery_score": 0.6533,
+      "products": [
+        "perekrestok:4381902"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/234680-kurinye-bliny-s-gribnym-sousom",
+      "source_id": 234680,
+      "title": "kurinye bliny s gribnym sousom",
+      "discovery_score": 0.8201,
+      "products": [
+        "perekrestok:4407902",
+        "perekrestok:4407903"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/206419-svinina-tushennaya-s-sousom-barbekyu-i-lukom-1703448497",
+      "source_id": 206419,
+      "title": "svinina tushennaya s sousom barbekyu i lukom 1703448497",
+      "discovery_score": 0.7374,
+      "products": [
+        "perekrestok:4409321"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/270854-salat-s-tuncom-maslinami-i-rukkoloi",
+      "source_id": 270854,
+      "title": "salat s tuncom maslinami i rukkoloi",
+      "discovery_score": 0.7882,
+      "products": [
+        "perekrestok:4413900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/220142-sous-maioneznyi-s-ukropom-1719394725",
+      "source_id": 220142,
+      "title": "sous maioneznyi s ukropom 1719394725",
+      "discovery_score": 0.7458,
+      "products": [
+        "perekrestok:4417712",
+        "perekrestok:4428533"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/31506-kutaby-s-zeleniu-i-suluguni",
+      "source_id": 31506,
+      "title": "kutaby s zeleniu i suluguni",
+      "discovery_score": 0.7522,
+      "products": [
+        "perekrestok:4429868"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1353-kotlety-iz-kurinoi-grudki",
+      "source_id": 1353,
+      "title": "kotlety iz kurinoi grudki",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4436606"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/50245-salat-iz-seldereja-jabloka-i-kuricy",
+      "source_id": 50245,
+      "title": "salat iz seldereja jabloka i kuricy",
+      "discovery_score": 0.6851,
+      "products": [
+        "perekrestok:4438509"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/75915-kimchi-s-risom-i-farshem",
+      "source_id": 75915,
+      "title": "kimchi s risom i farshem",
+      "discovery_score": 0.7461,
+      "products": [
+        "perekrestok:4444231",
+        "perekrestok:4444310",
+        "perekrestok:4444311"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/60007-bystryi-ris-s-tuncom",
+      "source_id": 60007,
+      "title": "bystryi ris s tuncom",
+      "discovery_score": 0.6988,
+      "products": [
+        "perekrestok:4444232"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/40960-domashnii-krem-chiz",
+      "source_id": 40960,
+      "title": "domashnii krem chiz",
+      "discovery_score": 0.6665,
+      "products": [
+        "perekrestok:4444907"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/113047-salat-s-kurinoi-grudkoi-i-fasoliu-1644868134",
+      "source_id": 113047,
+      "title": "salat s kurinoi grudkoi i fasoliu 1644868134",
+      "discovery_score": 0.6958,
+      "products": [
+        "perekrestok:4448237"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/152071-pechen-govjazhja-po-stroganovski",
+      "source_id": 152071,
+      "title": "pechen govjazhja po stroganovski",
+      "discovery_score": 0.7576,
+      "products": [
+        "perekrestok:4452644",
+        "perekrestok:4415661"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/200013-khrustiashchie-blinchiki-s-malinovoi-nachinkoi-1700206346",
+      "source_id": 200013,
+      "title": "khrustiashchie blinchiki s malinovoi nachinkoi 1700206346",
+      "discovery_score": 0.7326,
+      "products": [
+        "perekrestok:4453804"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/100340-penne-v-slivochno-syrnom-souse-s-syrom-1643216015",
+      "source_id": 100340,
+      "title": "penne v slivochno syrnom souse s syrom 1643216015",
+      "discovery_score": 0.7027,
+      "products": [
+        "perekrestok:4454940"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/146177-otvarnaja-skumbrija",
+      "source_id": 146177,
+      "title": "otvarnaja skumbrija",
+      "discovery_score": 0.7479,
+      "products": [
+        "perekrestok:74103"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/143624-ukrainskii-borshch-1654683451",
+      "source_id": 143624,
+      "title": "ukrainskii borshch 1654683451",
+      "discovery_score": 0.8609,
+      "products": [
+        "pyaterochka:4292797",
+        "pyaterochka:4424927"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85942-appetitnye-persikovye-syrniki",
+      "source_id": 85942,
+      "title": "appetitnye persikovye syrniki",
+      "discovery_score": 0.7392,
+      "products": [
+        "pyaterochka:4362579"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/167721-kurinyi-shashlyk-v-lukovom-marinade-1681328272",
+      "source_id": 167721,
+      "title": "kurinyi shashlyk v lukovom marinade 1681328272",
+      "discovery_score": 0.771,
+      "products": [
+        "pyaterochka:4384739"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/118559-sytnye-mjasnye-ulitki",
+      "source_id": 118559,
+      "title": "sytnye mjasnye ulitki",
+      "discovery_score": 0.762,
+      "products": [
+        "pyaterochka:4407635",
+        "pyaterochka:78036560"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/256328-kabachkovyi-brizol-s-kurinym-farshem-1751294109",
+      "source_id": 256328,
+      "title": "kabachkovyi brizol s kurinym farshem 1751294109",
+      "discovery_score": 0.7033,
+      "products": [
+        "pyaterochka:4429914"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/79937-shaurma-s-kurinoi-grudkoi-po-domashnemu",
+      "source_id": 79937,
+      "title": "shaurma s kurinoi grudkoi po domashnemu",
+      "discovery_score": 1.0,
+      "products": [
+        "pyaterochka:4459593"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85160-bystraja-pasta-v-slivochno-chesnochnom-souse-s-moreproduktami",
+      "source_id": 85160,
+      "title": "bystraja pasta v slivochno chesnochnom souse s moreproduktami",
+      "discovery_score": 0.6817,
+      "products": [
+        "perekrestok:3463949"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/68795-konservy-iz-seldi-v-masle-po-domashnemu",
+      "source_id": 68795,
+      "title": "konservy iz seldi v masle po domashnemu",
+      "discovery_score": 0.6517,
+      "products": [
+        "perekrestok:3468682",
+        "perekrestok:3469704",
+        "perekrestok:3475329"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/32248-bifshteks-s-kartofelem",
+      "source_id": 32248,
+      "title": "bifshteks s kartofelem",
+      "discovery_score": 0.6575,
+      "products": [
+        "perekrestok:4340929"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/35834-teljachi-shchechki",
+      "source_id": 35834,
+      "title": "teljachi shchechki",
+      "discovery_score": 0.7266,
+      "products": [
+        "perekrestok:4405296"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/185921-zrazy-s-gribami-i-zeleniu-1694102453",
+      "source_id": 185921,
+      "title": "zrazy s gribami i zeleniu 1694102453",
+      "discovery_score": 0.6876,
+      "products": [
+        "perekrestok:4440000"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/74400-syrniki-s-mindalnoi-mukoi",
+      "source_id": 74400,
+      "title": "syrniki s mindalnoi mukoi",
+      "discovery_score": 0.7529,
+      "products": [
+        "perekrestok:4449831"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/83952-nezhnaja-zapekanka-iz-tvoroga-i-grush",
+      "source_id": 83952,
+      "title": "nezhnaja zapekanka iz tvoroga i grush",
+      "discovery_score": 0.9409,
+      "products": [
+        "perekrestok:4452842"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/56288-zhele-iz-kaliny-protertoi-v-syrom-vide",
+      "source_id": 56288,
+      "title": "zhele iz kaliny protertoi v syrom vide",
+      "discovery_score": 0.714,
+      "products": [
+        "perekrestok:4453535"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/219726-salat-iz-zharenykh-kabachkov-s-sousom-sladkii-chili-1719094850",
+      "source_id": 219726,
+      "title": "salat iz zharenykh kabachkov s sousom sladkii chili 1719094850",
+      "discovery_score": 0.6541,
+      "products": [
+        "perekrestok:4456297"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/166318-zrazy-kartofelnye-1681313941",
+      "source_id": 166318,
+      "title": "zrazy kartofelnye 1681313941",
+      "discovery_score": 0.7658,
+      "products": [
+        "perekrestok:4459170"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/87665-appetitnye-belgiiskie-vafli",
+      "source_id": 87665,
+      "title": "appetitnye belgiiskie vafli",
+      "discovery_score": 0.8459,
+      "products": [
+        "perekrestok:4459823"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54500-kartofelnoe-piure-s-kuricei",
+      "source_id": 54500,
+      "title": "kartofelnoe piure s kuricei",
+      "discovery_score": 0.695,
+      "products": [
+        "pyaterochka:4306830",
+        "pyaterochka:4377199"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/147682-solenye-ogurtsy-1660588007",
+      "source_id": 147682,
+      "title": "solenye ogurtsy 1660588007",
+      "discovery_score": 0.6949,
+      "products": [
+        "pyaterochka:4410502"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/228909-tosty-so-svekloi-i-sousom-pesto-1726496475",
+      "source_id": 228909,
+      "title": "tosty so svekloi i sousom pesto 1726496475",
+      "discovery_score": 0.7968,
+      "products": [
+        "pyaterochka:4420774"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/218552-gril-salat",
+      "source_id": 218552,
+      "title": "gril salat",
+      "discovery_score": 0.8224,
+      "products": [
+        "pyaterochka:4428840"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/204034-korn-dog",
+      "source_id": 204034,
+      "title": "korn dog",
+      "discovery_score": 0.7407,
+      "products": [
+        "perekrestok:4413419"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/43383-kliukvennyi-sous",
+      "source_id": 43383,
+      "title": "kliukvennyi sous",
+      "discovery_score": 0.806,
+      "products": [
+        "perekrestok:4458430"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/267047-salat-fortuna-1763690895",
+      "source_id": 267047,
+      "title": "salat fortuna 1763690895",
+      "discovery_score": 0.6662,
+      "products": [
+        "perekrestok:72320"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/226552-kartofelnye-shniceli",
+      "source_id": 226552,
+      "title": "kartofelnye shniceli",
+      "discovery_score": 0.6872,
+      "products": [
+        "pyaterochka:4377199"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/149902-kurinye-ulitki-1666267356",
+      "source_id": 149902,
+      "title": "kurinye ulitki 1666267356",
+      "discovery_score": 0.6547,
+      "products": [
+        "pyaterochka:4409884",
+        "pyaterochka:78036657"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/53155-domashnjaja-lazanja-s-farshem",
+      "source_id": 53155,
+      "title": "domashnjaja lazanja s farshem",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:2157530"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/147587-tomatnyi-sous-1660586113",
+      "source_id": 147587,
+      "title": "tomatnyi sous 1660586113",
+      "discovery_score": 0.7461,
+      "products": [
+        "perekrestok:3630750"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/127693-pasta-s-moreproduktami-v-slivochnom-souse-1646591719",
+      "source_id": 127693,
+      "title": "pasta s moreproduktami v slivochnom souse 1646591719",
+      "discovery_score": 0.957,
+      "products": [
+        "perekrestok:3655792"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/148745-ikra-ovoshchnaia-1663646850",
+      "source_id": 148745,
+      "title": "ikra ovoshchnaia 1663646850",
+      "discovery_score": 0.9215,
+      "products": [
+        "perekrestok:3976385"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104374-sous-tar-tar-1643717539",
+      "source_id": 104374,
+      "title": "sous tar tar 1643717539",
+      "discovery_score": 0.6643,
+      "products": [
+        "perekrestok:4192791"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/122528-legkii-salat-s-mocarelloi-i-sousom-pesto",
+      "source_id": 122528,
+      "title": "legkii salat s mocarelloi i sousom pesto",
+      "discovery_score": 0.7533,
+      "products": [
+        "perekrestok:4331972"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/213997-kurinye-kotlety-s-shampinonami",
+      "source_id": 213997,
+      "title": "kurinye kotlety s shampinonami",
+      "discovery_score": 0.762,
+      "products": [
+        "perekrestok:4364437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/181459-bliudo-ani-iz-tomlenogo-kartofelia-i-kurinykh-stripsov-1691353349",
+      "source_id": 181459,
+      "title": "bliudo ani iz tomlenogo kartofelia i kurinykh stripsov 1691353349",
+      "discovery_score": 0.8524,
+      "products": [
+        "perekrestok:4368151"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/65510-kimchi-po-koreiski-iz-pekinskoi-kapusty",
+      "source_id": 65510,
+      "title": "kimchi po koreiski iz pekinskoi kapusty",
+      "discovery_score": 0.7155,
+      "products": [
+        "perekrestok:4377397"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/127906-domashnie-pelmeni-iz-domashnego-farsha-1646674620",
+      "source_id": 127906,
+      "title": "domashnie pelmeni iz domashnego farsha 1646674620",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4396957",
+        "perekrestok:4464484",
+        "pyaterochka:4405362",
+        "pyaterochka:4464484"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/95622-golubcy-v-smetannom-souse-s-tomatnoi-pastoi",
+      "source_id": 95622,
+      "title": "golubcy v smetannom souse s tomatnoi pastoi",
+      "discovery_score": 0.7661,
+      "products": [
+        "perekrestok:4410403",
+        "pyaterochka:4299030"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/48802-sytnyi-osetinskii-pirog-s-syrom",
+      "source_id": 48802,
+      "title": "sytnyi osetinskii pirog s syrom",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4425835",
+        "perekrestok:4425836",
+        "pyaterochka:4456854"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/45522-lapsha-udon-s-kalmarami-i-sousom-terijaki",
+      "source_id": 45522,
+      "title": "lapsha udon s kalmarami i sousom terijaki",
+      "discovery_score": 0.9428,
+      "products": [
+        "perekrestok:4430711"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/76879-salat-nezhnost-s-syrom",
+      "source_id": 76879,
+      "title": "salat nezhnost s syrom",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4438505"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/96419-kurinyi-sup-s-lapshoi-i-gribami",
+      "source_id": 96419,
+      "title": "kurinyi sup s lapshoi i gribami",
+      "discovery_score": 0.9551,
+      "products": [
+        "perekrestok:4442431"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/138011-pikantnyi-salat-s-rukoloi-granatom-i-syrom",
+      "source_id": 138011,
+      "title": "pikantnyi salat s rukoloi granatom i syrom",
+      "discovery_score": 0.8886,
+      "products": [
+        "perekrestok:4443011"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/158856-salat-s-zharenymi-gribami-i-kuricei-s-lukom",
+      "source_id": 158856,
+      "title": "salat s zharenymi gribami i kuricei s lukom",
+      "discovery_score": 0.899,
+      "products": [
+        "perekrestok:4444374"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/271489-tykvennaja-kasha-s-pshenom-na-kokosovom-moloke-",
+      "source_id": 271489,
+      "title": "tykvennaja kasha s pshenom na kokosovom moloke ",
+      "discovery_score": 0.7085,
+      "products": [
+        "perekrestok:4447598"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/237849-ovsianaia-kasha-s-tvorozhkom-i-malinoi-1734193094",
+      "source_id": 237849,
+      "title": "ovsianaia kasha s tvorozhkom i malinoi 1734193094",
+      "discovery_score": 0.784,
+      "products": [
+        "perekrestok:4450437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/188520-piure-iz-chernoi-smorodiny-sakhara-i-mioda-1694774482",
+      "source_id": 188520,
+      "title": "piure iz chernoi smorodiny sakhara i mioda 1694774482",
+      "discovery_score": 0.6587,
+      "products": [
+        "perekrestok:4450664"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/164412-roll-s-krevetkami-1681297828",
+      "source_id": 164412,
+      "title": "roll s krevetkami 1681297828",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4451160"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/236714-tvorozhnaya-zapekanka-s-sakharozamenitelem-1733327911",
+      "source_id": 236714,
+      "title": "tvorozhnaya zapekanka s sakharozamenitelem 1733327911",
+      "discovery_score": 0.6636,
+      "products": [
+        "perekrestok:4452514"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/261459-nezhnaia-zapekanka-s-vishnei-1757280853",
+      "source_id": 261459,
+      "title": "nezhnaia zapekanka s vishnei 1757280853",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4452856"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54981-nezhnaja-tvorozhnaja-zapekanka",
+      "source_id": 54981,
+      "title": "nezhnaja tvorozhnaja zapekanka",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4452883"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/133434-appetitnaja-tvorozhnaja-zapekanka-s-kuragoi",
+      "source_id": 133434,
+      "title": "appetitnaja tvorozhnaja zapekanka s kuragoi",
+      "discovery_score": 0.7612,
+      "products": [
+        "perekrestok:4456098"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/106300-spagetti-s-sousom-a-lia-boloneze-1643926352",
+      "source_id": 106300,
+      "title": "spagetti s sousom a lia boloneze 1643926352",
+      "discovery_score": 0.9167,
+      "products": [
+        "perekrestok:4456424"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/130435-tefteli-iz-kurinogo-file-v-slivochnom-souse-1648024564",
+      "source_id": 130435,
+      "title": "tefteli iz kurinogo file v slivochnom souse 1648024564",
+      "discovery_score": 0.7218,
+      "products": [
+        "perekrestok:4456426"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/262651-krylyshki-barbekiu-1758745271",
+      "source_id": 262651,
+      "title": "krylyshki barbekiu 1758745271",
+      "discovery_score": 0.8387,
+      "products": [
+        "perekrestok:4456767"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/208087-shashlyk-iz-foreli-na-grile-1706389383",
+      "source_id": 208087,
+      "title": "shashlyk iz foreli na grile 1706389383",
+      "discovery_score": 0.7213,
+      "products": [
+        "perekrestok:4457276"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/247729-krok-mese",
+      "source_id": 247729,
+      "title": "krok mese",
+      "discovery_score": 0.8565,
+      "products": [
+        "perekrestok:4459528"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/73272-sup-piure-iz-tykvy",
+      "source_id": 73272,
+      "title": "sup piure iz tykvy",
+      "discovery_score": 0.7194,
+      "products": [
+        "perekrestok:4461202"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/270715-sup-fo-bo-neslozhnyi-retsept-1768407385",
+      "source_id": 270715,
+      "title": "sup fo bo neslozhnyi retsept 1768407385",
+      "discovery_score": 0.8749,
+      "products": [
+        "perekrestok:4463228"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54874-bystryi-recept-bageta",
+      "source_id": 54874,
+      "title": "bystryi recept bageta",
+      "discovery_score": 0.8828,
+      "products": [
+        "pyaterochka:3645121",
+        "pyaterochka:78030460",
+        "pyaterochka:78030900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/135215-appetitnye-nalistniki-s-vishnei",
+      "source_id": 135215,
+      "title": "appetitnye nalistniki s vishnei",
+      "discovery_score": 0.9332,
+      "products": [
+        "pyaterochka:3699728"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/205185-chesnochnye-brusketty-iz-rzhanogo-khleba-s-rukkoloi-1702678784",
+      "source_id": 205185,
+      "title": "chesnochnye brusketty iz rzhanogo khleba s rukkoloi 1702678784",
+      "discovery_score": 0.9023,
+      "products": [
+        "pyaterochka:4117904",
+        "pyaterochka:78030125"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104440-sochnye-kurinye-naggetsy-s-syrom-1643732293",
+      "source_id": 104440,
+      "title": "sochnye kurinye naggetsy s syrom 1643732293",
+      "discovery_score": 0.6548,
+      "products": [
+        "pyaterochka:4396959"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/58095-sloenaja-samsa-s-kuricei",
+      "source_id": 58095,
+      "title": "sloenaja samsa s kuricei",
+      "discovery_score": 0.9045,
+      "products": [
+        "pyaterochka:4428575",
+        "pyaterochka:78037217"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/243223-piccy-ljagushki-s-syrom-i-peperoni",
+      "source_id": 243223,
+      "title": "piccy ljagushki s syrom i peperoni",
+      "discovery_score": 0.8513,
+      "products": [
+        "pyaterochka:4436289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/101658-oladi-iz-kartofelnogo-piure",
+      "source_id": 101658,
+      "title": "oladi iz kartofelnogo piure",
+      "discovery_score": 0.708,
+      "products": [
+        "pyaterochka:4447865"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/192189-rolly-s-tvorozhnym-syrom-1696922493",
+      "source_id": 192189,
+      "title": "rolly s tvorozhnym syrom 1696922493",
+      "discovery_score": 0.7822,
+      "products": [
+        "pyaterochka:4452201"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/119210-kruassan-s-shokoladom-1645614409",
+      "source_id": 119210,
+      "title": "kruassan s shokoladom 1645614409",
+      "discovery_score": 0.7634,
+      "products": [
+        "pyaterochka:78006137"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/266936-kurinye-grudki-po-italjanski",
+      "source_id": 266936,
+      "title": "kurinye grudki po italjanski",
+      "discovery_score": 0.8709,
+      "products": [
+        "perekrestok:3421780",
+        "pyaterochka:3421780",
+        "pyaterochka:4464482"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/228847-zakuska-iz-kilki-v-tomatnom-souse-1726471647",
+      "source_id": 228847,
+      "title": "zakuska iz kilki v tomatnom souse 1726471647",
+      "discovery_score": 0.8609,
+      "products": [
+        "perekrestok:4088784"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/127625-sendvichi-s-indeikoi-1646579374",
+      "source_id": 127625,
+      "title": "sendvichi s indeikoi 1646579374",
+      "discovery_score": 0.6918,
+      "products": [
+        "perekrestok:4133313"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/141254-pitstsa-chetyre-syra-1653406243",
+      "source_id": 141254,
+      "title": "pitstsa chetyre syra 1653406243",
+      "discovery_score": 0.6976,
+      "products": [
+        "perekrestok:4156187"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104898-khumus-1643795687",
+      "source_id": 104898,
+      "title": "khumus 1643795687",
+      "discovery_score": 0.9163,
+      "products": [
+        "perekrestok:4183545"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/267101-shashlyk-iz-lavasha-s-farshem",
+      "source_id": 267101,
+      "title": "shashlyk iz lavasha s farshem",
+      "discovery_score": 0.7092,
+      "products": [
+        "perekrestok:4309968"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/70594-legkii-recept-azu-po-tatarski-iz-govjadiny-s-kartofelem",
+      "source_id": 70594,
+      "title": "legkii recept azu po tatarski iz govjadiny s kartofelem",
+      "discovery_score": 0.7034,
+      "products": [
+        "perekrestok:4312150"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/168251-tofniki-s-bananom-1681348774",
+      "source_id": 168251,
+      "title": "tofniki s bananom 1681348774",
+      "discovery_score": 0.6699,
+      "products": [
+        "perekrestok:4355381"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/132629-risovaja-kasha-s-kokosovym-molokom",
+      "source_id": 132629,
+      "title": "risovaja kasha s kokosovym molokom",
+      "discovery_score": 0.712,
+      "products": [
+        "perekrestok:4381670"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/114714-kurinoe-file-zapechionnoe-s-kartofelem-pod-syrnoi-korochkoi-1644922567",
+      "source_id": 114714,
+      "title": "kurinoe file zapechionnoe s kartofelem pod syrnoi korochkoi 1644922567",
+      "discovery_score": 0.7936,
+      "products": [
+        "perekrestok:4389855"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/95598-blinchiki-s-kuricei-syrom-i-gribami",
+      "source_id": 95598,
+      "title": "blinchiki s kuricei syrom i gribami",
+      "discovery_score": 0.8313,
+      "products": [
+        "perekrestok:4408479"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/59289-sytnyi-salat-s-tuncom",
+      "source_id": 59289,
+      "title": "sytnyi salat s tuncom",
+      "discovery_score": 0.7542,
+      "products": [
+        "perekrestok:4413901"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/253619-letniaia-okroshka-na-kvase-s-kopchenoi-kuritsei-i-ovoshchami-1748787068",
+      "source_id": 253619,
+      "title": "letniaia okroshka na kvase s kopchenoi kuritsei i ovoshchami 1748787068",
+      "discovery_score": 0.8425,
+      "products": [
+        "perekrestok:4413987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/130896-kotlety-iz-kartofelnogo-piure-1648113761",
+      "source_id": 130896,
+      "title": "kotlety iz kartofelnogo piure 1648113761",
+      "discovery_score": 0.827,
+      "products": [
+        "perekrestok:4419226",
+        "perekrestok:4455158",
+        "perekrestok:4381904",
+        "perekrestok:4462258"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/14413-semga-v-slivochnom-souse",
+      "source_id": 14413,
+      "title": "semga v slivochnom souse",
+      "discovery_score": 0.9513,
+      "products": [
+        "perekrestok:4422046"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/270730-eklery-s-shokoladnym-kremom",
+      "source_id": 270730,
+      "title": "eklery s shokoladnym kremom",
+      "discovery_score": 0.8809,
+      "products": [
+        "perekrestok:4427786"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/117066-spring-rolly-1645264465",
+      "source_id": 117066,
+      "title": "spring rolly 1645264465",
+      "discovery_score": 0.7026,
+      "products": [
+        "perekrestok:4431738"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/213547-steiki-iz-kurinogo-file-na-grile-1712831139",
+      "source_id": 213547,
+      "title": "steiki iz kurinogo file na grile 1712831139",
+      "discovery_score": 0.7117,
+      "products": [
+        "perekrestok:4435872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/110917-sous-beshamel-dlia-lazani-1644781019",
+      "source_id": 110917,
+      "title": "sous beshamel dlia lazani 1644781019",
+      "discovery_score": 0.6653,
+      "products": [
+        "perekrestok:4437060"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165493-kotletki-v-tomatnom-souse-1681305663",
+      "source_id": 165493,
+      "title": "kotletki v tomatnom souse 1681305663",
+      "discovery_score": 0.6972,
+      "products": [
+        "perekrestok:4443653",
+        "pyaterochka:4368762"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/68319-sladkie-blinchiki-s-jablokom-i-koricei",
+      "source_id": 68319,
+      "title": "sladkie blinchiki s jablokom i koricei",
+      "discovery_score": 0.7179,
+      "products": [
+        "perekrestok:4444926"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/94227-kotlety-po-kievski-1642316566",
+      "source_id": 94227,
+      "title": "kotlety po kievski 1642316566",
+      "discovery_score": 0.7036,
+      "products": [
+        "perekrestok:4446269",
+        "pyaterochka:4447872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/3179-pasta-s-krevetkami-i-baklazhanami-v-tomatnom-souse",
+      "source_id": 3179,
+      "title": "pasta s krevetkami i baklazhanami v tomatnom souse",
+      "discovery_score": 0.9069,
+      "products": [
+        "perekrestok:4446872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/144137-brokkoli-fasol-i-tykva-na-paru",
+      "source_id": 144137,
+      "title": "brokkoli fasol i tykva na paru",
+      "discovery_score": 0.9049,
+      "products": [
+        "perekrestok:4446987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/90748-farshirovannyi-farshem-perec-v-tomatno-smetannom-souse",
+      "source_id": 90748,
+      "title": "farshirovannyi farshem perec v tomatno smetannom souse",
+      "discovery_score": 0.7847,
+      "products": [
+        "perekrestok:4453155"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85183-vkusnaja-tykvennaja-kasha-s-pshenom",
+      "source_id": 85183,
+      "title": "vkusnaja tykvennaja kasha s pshenom",
+      "discovery_score": 0.7738,
+      "products": [
+        "perekrestok:4453705"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/206372-kurinye-bedryshki-v-souse-teriiaki-s-risom-i-ovoshchami-1703437967",
+      "source_id": 206372,
+      "title": "kurinye bedryshki v souse teriiaki s risom i ovoshchami 1703437967",
+      "discovery_score": 0.684,
+      "products": [
+        "perekrestok:4453732"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/25805-kolbasa-iz-kuricy",
+      "source_id": 25805,
+      "title": "kolbasa iz kuricy",
+      "discovery_score": 0.6614,
+      "products": [
+        "perekrestok:4455289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/249903-zapekanki-iz-tvoroga-smetany-maliny-1745089957",
+      "source_id": 249903,
+      "title": "zapekanki iz tvoroga smetany maliny 1745089957",
+      "discovery_score": 0.7066,
+      "products": [
+        "perekrestok:4456096"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/79728-bulgur-s-kuricei-v-souse-chili",
+      "source_id": 79728,
+      "title": "bulgur s kuricei v souse chili",
+      "discovery_score": 0.6871,
+      "products": [
+        "perekrestok:4456974"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/182020-kotlety-s-farshem-indeiki-grechkoi-i-ukropom-1691569672",
+      "source_id": 182020,
+      "title": "kotlety s farshem indeiki grechkoi i ukropom 1691569672",
+      "discovery_score": 0.6638,
+      "products": [
+        "perekrestok:4461997"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/98396-omlet-s-vetchinoi-i-syrom-1643199276",
+      "source_id": 98396,
+      "title": "omlet s vetchinoi i syrom 1643199276",
+      "discovery_score": 0.7446,
+      "products": [
+        "perekrestok:4473642"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/224845-lagmannaia-lapsha-s-koreiskoi-morkoviu-1722773385",
+      "source_id": 224845,
+      "title": "lagmannaia lapsha s koreiskoi morkoviu 1722773385",
+      "discovery_score": 0.7286,
+      "products": [
+        "pyaterochka:3608917"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/95637-appetitnyi-smorodinovyi-pirog",
+      "source_id": 95637,
+      "title": "appetitnyi smorodinovyi pirog",
+      "discovery_score": 0.8021,
+      "products": [
+        "pyaterochka:3658222"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165407-buterbrod-s-krevetkoi-1681304933",
+      "source_id": 165407,
+      "title": "buterbrod s krevetkoi 1681304933",
+      "discovery_score": 0.7016,
+      "products": [
+        "pyaterochka:4376857"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/131436-lapsha-udon-s-kuricei-i-ovoshchami-v-souse-terijaki",
+      "source_id": 131436,
+      "title": "lapsha udon s kuricei i ovoshchami v souse terijaki",
+      "discovery_score": 0.7349,
+      "products": [
+        "pyaterochka:4384743"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1652-sloika-s-syrom",
+      "source_id": 1652,
+      "title": "sloika s syrom",
+      "discovery_score": 0.7933,
+      "products": [
+        "pyaterochka:4431581",
+        "pyaterochka:78037271"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/255434-pshenichno-rzhanye-bulochki",
+      "source_id": 255434,
+      "title": "pshenichno rzhanye bulochki",
+      "discovery_score": 0.8603,
+      "products": [
+        "pyaterochka:4431755"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/141957-tomaty-s-mocarelloi-i-bazilikom",
+      "source_id": 141957,
+      "title": "tomaty s mocarelloi i bazilikom",
+      "discovery_score": 0.6528,
+      "products": [
+        "pyaterochka:62766",
+        "pyaterochka:78000004"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/77743-salat-nezhnost-s-vetchinoi-i-syrom",
+      "source_id": 77743,
+      "title": "salat nezhnost s vetchinoi i syrom",
+      "discovery_score": 0.871,
+      "products": [
+        "pyaterochka:78028935",
+        "perekrestok:4454938"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/185460-domashniaia-solenaia-karamel-1694024645",
+      "source_id": 185460,
+      "title": "domashniaia solenaia karamel 1694024645",
+      "discovery_score": 0.7712,
+      "products": [
+        "pyaterochka:78038161"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/112927-pitstsa-pepperoni-1644853886",
+      "source_id": 112927,
+      "title": "pitstsa pepperoni 1644853886",
+      "discovery_score": 0.8466,
+      "products": [
+        "perekrestok:3416332",
+        "pyaterochka:3416332"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/225999-nezhnyi-riet-iz-skumbrii-1723639388",
+      "source_id": 225999,
+      "title": "nezhnyi riet iz skumbrii 1723639388",
+      "discovery_score": 0.7441,
+      "products": [
+        "perekrestok:3497737"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165858-ruletiki-s-vetchinoi-1681308949",
+      "source_id": 165858,
+      "title": "ruletiki s vetchinoi 1681308949",
+      "discovery_score": 0.7044,
+      "products": [
+        "perekrestok:3681730"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/98735-sochnaja-kurica-s-ovoshchami-i-risom",
+      "source_id": 98735,
+      "title": "sochnaja kurica s ovoshchami i risom",
+      "discovery_score": 0.7734,
+      "products": [
+        "perekrestok:4364439",
+        "pyaterochka:4384743"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/2348-pasta-s-domashnim-sousom-pesto",
+      "source_id": 2348,
+      "title": "pasta s domashnim sousom pesto",
+      "discovery_score": 0.8548,
+      "products": [
+        "perekrestok:4372373",
+        "pyaterochka:4426983"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165515-gorchichnyi-sous-1681305832",
+      "source_id": 165515,
+      "title": "gorchichnyi sous 1681305832",
+      "discovery_score": 0.6533,
+      "products": [
+        "perekrestok:4381902"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1949-slivochnye-shampinony-s-kuricei",
+      "source_id": 1949,
+      "title": "slivochnye shampinony s kuricei",
+      "discovery_score": 0.6849,
+      "products": [
+        "perekrestok:4407902",
+        "perekrestok:4407903"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/67396-barbekiu-sous",
+      "source_id": 67396,
+      "title": "barbekiu sous",
+      "discovery_score": 0.6649,
+      "products": [
+        "perekrestok:4409321"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/219413-salat-s-tunczom-i-goroshkom-na-olivkovom-masle-1718822566",
+      "source_id": 219413,
+      "title": "salat s tunczom i goroshkom na olivkovom masle 1718822566",
+      "discovery_score": 0.7649,
+      "products": [
+        "perekrestok:4413900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/176104-pikantnyi-maioneznyi-sous-s-ukropchikom-1688646616",
+      "source_id": 176104,
+      "title": "pikantnyi maioneznyi sous s ukropchikom 1688646616",
+      "discovery_score": 0.6767,
+      "products": [
+        "perekrestok:4417712"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/98007-kutaby-s-syrom-i-zeleniu-1643099287",
+      "source_id": 98007,
+      "title": "kutaby s syrom i zeleniu 1643099287",
+      "discovery_score": 0.7522,
+      "products": [
+        "perekrestok:4429868"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/53141-bitochki-s-kurinoi-grudkoi",
+      "source_id": 53141,
+      "title": "bitochki s kurinoi grudkoi",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4436606"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/92057-salat-iz-kurinogo-file-jabloka-i-seldereja",
+      "source_id": 92057,
+      "title": "salat iz kurinogo file jabloka i seldereja",
+      "discovery_score": 0.6851,
+      "products": [
+        "perekrestok:4438509"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/73532-kimchi-s-risom-i-glazunei",
+      "source_id": 73532,
+      "title": "kimchi s risom i glazunei",
+      "discovery_score": 0.7172,
+      "products": [
+        "perekrestok:4444231",
+        "perekrestok:4444310",
+        "perekrestok:4444311"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/53980-baget-s-tuncom-i-domashnim-maionezom",
+      "source_id": 53980,
+      "title": "baget s tuncom i domashnim maionezom",
+      "discovery_score": 0.6965,
+      "products": [
+        "perekrestok:4444232"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/141741-krem-chiz-1653441147",
+      "source_id": 141741,
+      "title": "krem chiz 1653441147",
+      "discovery_score": 0.6665,
+      "products": [
+        "perekrestok:4444907"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/124387-salat-s-fasoliu-i-kurinoi-grudkoi-1646075792",
+      "source_id": 124387,
+      "title": "salat s fasoliu i kurinoi grudkoi 1646075792",
+      "discovery_score": 0.6958,
+      "products": [
+        "perekrestok:4448237"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/103934-appetitnye-bliny-s-klubnikoi",
+      "source_id": 103934,
+      "title": "appetitnye bliny s klubnikoi",
+      "discovery_score": 0.7137,
+      "products": [
+        "perekrestok:4453804"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/88193-otvarnaja-skumbrija-v-bulone",
+      "source_id": 88193,
+      "title": "otvarnaja skumbrija v bulone",
+      "discovery_score": 0.6856,
+      "products": [
+        "perekrestok:74103"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/129097-postnyi-ukrainskii-borshch",
+      "source_id": 129097,
+      "title": "postnyi ukrainskii borshch",
+      "discovery_score": 0.799,
+      "products": [
+        "pyaterochka:4292797",
+        "pyaterochka:4424927"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85943-appetitnye-syrniki-s-persikami",
+      "source_id": 85943,
+      "title": "appetitnye syrniki s persikami",
+      "discovery_score": 0.7392,
+      "products": [
+        "pyaterochka:4362579"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/95358-vkusnyi-kurinyi-shashlyk-s-kartoshkoi-v-duhovke",
+      "source_id": 95358,
+      "title": "vkusnyi kurinyi shashlyk s kartoshkoi v duhovke",
+      "discovery_score": 0.7451,
+      "products": [
+        "pyaterochka:4384739"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/62466-grecheskaja-ulitka-s-syrom-i-shpinatom",
+      "source_id": 62466,
+      "title": "grecheskaja ulitka s syrom i shpinatom",
+      "discovery_score": 0.7211,
+      "products": [
+        "pyaterochka:4407635",
+        "pyaterochka:78036560"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/85455-sochnaja-domashnjaja-shaurma-s-kurinoi-grudkoi",
+      "source_id": 85455,
+      "title": "sochnaja domashnjaja shaurma s kurinoi grudkoi",
+      "discovery_score": 1.0,
+      "products": [
+        "pyaterochka:4459593"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/203078-spagetti-v-slivochno-chesnochnom-souse-s-moreproduktami-1700408132",
+      "source_id": 203078,
+      "title": "spagetti v slivochno chesnochnom souse s moreproduktami 1700408132",
+      "discovery_score": 0.6817,
+      "products": [
+        "perekrestok:3463949"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/90668-vkusnye-kartofelnye-zrazy-s-shampinonami",
+      "source_id": 90668,
+      "title": "vkusnye kartofelnye zrazy s shampinonami",
+      "discovery_score": 0.6644,
+      "products": [
+        "perekrestok:4440000"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/199106-syrniki-s-mindalnoi-mukoi-1700161005",
+      "source_id": 199106,
+      "title": "syrniki s mindalnoi mukoi 1700161005",
+      "discovery_score": 0.7529,
+      "products": [
+        "perekrestok:4449831"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/96907-tvorozhnaia-zapekanka-s-grushei-1642704129",
+      "source_id": 96907,
+      "title": "tvorozhnaia zapekanka s grushei 1642704129",
+      "discovery_score": 0.9409,
+      "products": [
+        "perekrestok:4452842"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/159193-zhele-1676453282",
+      "source_id": 159193,
+      "title": "zhele 1676453282",
+      "discovery_score": 0.6513,
+      "products": [
+        "perekrestok:4453535"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/185926-zrazy-kartofelnye-1694102764",
+      "source_id": 185926,
+      "title": "zrazy kartofelnye 1694102764",
+      "discovery_score": 0.7658,
+      "products": [
+        "perekrestok:4459170"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/156440-belgiiskie-vafli-1672740729",
+      "source_id": 156440,
+      "title": "belgiiskie vafli 1672740729",
+      "discovery_score": 0.8459,
+      "products": [
+        "perekrestok:4459823"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/130329-kartofelnoe-piure-s-kurochkoi-1647980095",
+      "source_id": 130329,
+      "title": "kartofelnoe piure s kurochkoi 1647980095",
+      "discovery_score": 0.695,
+      "products": [
+        "pyaterochka:4306830"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/180489-solenye-ogurtsy-1691044304",
+      "source_id": 180489,
+      "title": "solenye ogurtsy 1691044304",
+      "discovery_score": 0.6949,
+      "products": [
+        "pyaterochka:4410502"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/184901-tost-s-sousom-pesto-i-motsarelloi-1692768895",
+      "source_id": 184901,
+      "title": "tost s sousom pesto i motsarelloi 1692768895",
+      "discovery_score": 0.7924,
+      "products": [
+        "pyaterochka:4420774"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/231765-syr-na-grile",
+      "source_id": 231765,
+      "title": "syr na grile",
+      "discovery_score": 0.8177,
+      "products": [
+        "pyaterochka:4428840"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/216425-korn-dogi-s-sosiskami-i-syrom-1715617798",
+      "source_id": 216425,
+      "title": "korn dogi s sosiskami i syrom 1715617798",
+      "discovery_score": 0.6866,
+      "products": [
+        "perekrestok:4413419"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/239519-domashnii-kliukvennyi-sous",
+      "source_id": 239519,
+      "title": "domashnii kliukvennyi sous",
+      "discovery_score": 0.806,
+      "products": [
+        "perekrestok:4458430"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/70903-mini-shnicel-iz-kuricy",
+      "source_id": 70903,
+      "title": "mini shnicel iz kuricy",
+      "discovery_score": 0.6778,
+      "products": [
+        "pyaterochka:4377199"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/53180-lazanja-s-mjasnym-farshem",
+      "source_id": 53180,
+      "title": "lazanja s mjasnym farshem",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:2157530"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/153386-tomatnyi-sous-1668604550",
+      "source_id": 153386,
+      "title": "tomatnyi sous 1668604550",
+      "discovery_score": 0.7461,
+      "products": [
+        "perekrestok:3630750"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/219902-pasta-s-moreproduktami-v-slivochnom-souse-1719241701",
+      "source_id": 219902,
+      "title": "pasta s moreproduktami v slivochnom souse 1719241701",
+      "discovery_score": 0.957,
+      "products": [
+        "perekrestok:3655792"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/180533-ovoshchnaia-ikra-1691050750",
+      "source_id": 180533,
+      "title": "ovoshchnaia ikra 1691050750",
+      "discovery_score": 0.9215,
+      "products": [
+        "perekrestok:3976385"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/125284-sous-tar-tar-1646231973",
+      "source_id": 125284,
+      "title": "sous tar tar 1646231973",
+      "discovery_score": 0.6643,
+      "products": [
+        "perekrestok:4192791"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/260741-ovoshchnoi-salat-s-syrom-arakhisom-i-sousom-pesto-1756381496",
+      "source_id": 260741,
+      "title": "ovoshchnoi salat s syrom arakhisom i sousom pesto 1756381496",
+      "discovery_score": 0.7274,
+      "products": [
+        "perekrestok:4331972"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/233965-zapechennye-kurinye-kotlety-s-gribami-1730898538",
+      "source_id": 233965,
+      "title": "zapechennye kurinye kotlety s gribami 1730898538",
+      "discovery_score": 0.762,
+      "products": [
+        "perekrestok:4364437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/242847-domashnie-naggetsy-s-kartoshkoj-1738401445",
+      "source_id": 242847,
+      "title": "domashnie naggetsy s kartoshkoj 1738401445",
+      "discovery_score": 0.8074,
+      "products": [
+        "perekrestok:4368151"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/65470-uproshchennyi-kimchi-iz-pekinskoi-kapusty",
+      "source_id": 65470,
+      "title": "uproshchennyi kimchi iz pekinskoi kapusty",
+      "discovery_score": 0.6892,
+      "products": [
+        "perekrestok:4377397"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/153628-pelmeni-s-domashnim-farshem-1668607785",
+      "source_id": 153628,
+      "title": "pelmeni s domashnim farshem 1668607785",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4396957",
+        "perekrestok:4464484",
+        "pyaterochka:4405362",
+        "pyaterochka:4464484"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/90642-zapechennye-v-smetane-lenivye-golubcy",
+      "source_id": 90642,
+      "title": "zapechennye v smetane lenivye golubcy",
+      "discovery_score": 0.763,
+      "products": [
+        "perekrestok:4410403",
+        "pyaterochka:4299030"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/149321-osetinskii-pirog-s-syrom-i-kartofelem-1665561878",
+      "source_id": 149321,
+      "title": "osetinskii pirog s syrom i kartofelem 1665561878",
+      "discovery_score": 0.9586,
+      "products": [
+        "perekrestok:4425835",
+        "perekrestok:4425836",
+        "pyaterochka:4456854"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/212823-seledka-v-maioneze-sous",
+      "source_id": 212823,
+      "title": "seledka v maioneze sous",
+      "discovery_score": 0.7199,
+      "products": [
+        "perekrestok:4428533"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/46131-lapsha-s-kalmarami-v-souse-terijaki",
+      "source_id": 46131,
+      "title": "lapsha s kalmarami v souse terijaki",
+      "discovery_score": 0.9428,
+      "products": [
+        "perekrestok:4430711"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/103760-pp-salat-s-mocarelloi",
+      "source_id": 103760,
+      "title": "pp salat s mocarelloi",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4438505"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/120382-sup-lapsha-s-ovoshchami-i-shampinonami",
+      "source_id": 120382,
+      "title": "sup lapsha s ovoshchami i shampinonami",
+      "discovery_score": 0.9515,
+      "products": [
+        "perekrestok:4442431"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/80283-pikantnyi-salat-s-kuricei-ananasom-syrom-i-chesnokom",
+      "source_id": 80283,
+      "title": "pikantnyi salat s kuricei ananasom syrom i chesnokom",
+      "discovery_score": 0.8866,
+      "products": [
+        "perekrestok:4443011"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/256306-sochnyi-salat-s-kuritsei-gribami-i-marinovannym-lukom-1751285971",
+      "source_id": 256306,
+      "title": "sochnyi salat s kuritsei gribami i marinovannym lukom 1751285971",
+      "discovery_score": 0.8949,
+      "products": [
+        "perekrestok:4444374"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/161153-pshennaia-kasha-na-kokosovom-moloke-dieticheskaia-1676468094",
+      "source_id": 161153,
+      "title": "pshennaia kasha na kokosovom moloke dieticheskaia 1676468094",
+      "discovery_score": 0.6889,
+      "products": [
+        "perekrestok:4447598"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/103420-klassicheskaja-ovsjanaja-kasha-na-moloke",
+      "source_id": 103420,
+      "title": "klassicheskaja ovsjanaja kasha na moloke",
+      "discovery_score": 0.7804,
+      "products": [
+        "perekrestok:4450437"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/206745-rolly-s-krevetkoi-1704298432",
+      "source_id": 206745,
+      "title": "rolly s krevetkoi 1704298432",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4451160"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/168611-tvorozhnaia-zapekanka-s-vishnei-pp-1681369050",
+      "source_id": 168611,
+      "title": "tvorozhnaia zapekanka s vishnei pp 1681369050",
+      "discovery_score": 0.9397,
+      "products": [
+        "perekrestok:4452856"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/59219-nezhnaja-zapekanka-iz-tvoroga",
+      "source_id": 59219,
+      "title": "nezhnaja zapekanka iz tvoroga",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4452883"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/179449-tvorozhnaia-zapekanka-s-kuragoi-1690945626",
+      "source_id": 179449,
+      "title": "tvorozhnaia zapekanka s kuragoi 1690945626",
+      "discovery_score": 0.7612,
+      "products": [
+        "perekrestok:4456098"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/116524-spagetti-s-sousom-boloneze-1645165391",
+      "source_id": 116524,
+      "title": "spagetti s sousom boloneze 1645165391",
+      "discovery_score": 0.9167,
+      "products": [
+        "perekrestok:4456424"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/156091-tefteli-kurinye-v-slivochnom-souse-1670939712",
+      "source_id": 156091,
+      "title": "tefteli kurinye v slivochnom souse 1670939712",
+      "discovery_score": 0.7218,
+      "products": [
+        "perekrestok:4456426"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/116848-barbekiu-kurinye-krylyshki-1645205984",
+      "source_id": 116848,
+      "title": "barbekiu kurinye krylyshki 1645205984",
+      "discovery_score": 0.7966,
+      "products": [
+        "perekrestok:4456767"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104192-svinina-na-grile-1643661292",
+      "source_id": 104192,
+      "title": "svinina na grile 1643661292",
+      "discovery_score": 0.7146,
+      "products": [
+        "perekrestok:4457276"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/239404-krok-mese-s-lososem",
+      "source_id": 239404,
+      "title": "krok mese s lososem",
+      "discovery_score": 0.8087,
+      "products": [
+        "perekrestok:4459528"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/73276-sup-piure-tykvennyi",
+      "source_id": 73276,
+      "title": "sup piure tykvennyi",
+      "discovery_score": 0.7194,
+      "products": [
+        "perekrestok:4461202"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/11235-fo-bo",
+      "source_id": 11235,
+      "title": "fo bo",
+      "discovery_score": 0.7849,
+      "products": [
+        "perekrestok:4463228"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/54876-pp-recept-bageta",
+      "source_id": 54876,
+      "title": "pp recept bageta",
+      "discovery_score": 0.8828,
+      "products": [
+        "pyaterochka:3645121",
+        "pyaterochka:78030460",
+        "pyaterochka:78030900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/244255-bliny-na-moloke-s-vishnevoi-nachinkoi",
+      "source_id": 244255,
+      "title": "bliny na moloke s vishnevoi nachinkoi",
+      "discovery_score": 0.8656,
+      "products": [
+        "pyaterochka:3699728"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/251331-grenki-iz-rzhanogo-khleba-s-chesnokom-syrom-i-ukropom-1746433730",
+      "source_id": 251331,
+      "title": "grenki iz rzhanogo khleba s chesnokom syrom i ukropom 1746433730",
+      "discovery_score": 0.9012,
+      "products": [
+        "pyaterochka:4117904",
+        "pyaterochka:78030125"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/4670-samsa-iz-sloenogo-testa-s-kuricei",
+      "source_id": 4670,
+      "title": "samsa iz sloenogo testa s kuricei",
+      "discovery_score": 0.8892,
+      "products": [
+        "pyaterochka:4428575",
+        "pyaterochka:78037217"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104253-picca-pepperoni-s-dvumja-vidami-syra",
+      "source_id": 104253,
+      "title": "picca pepperoni s dvumja vidami syra",
+      "discovery_score": 0.8343,
+      "products": [
+        "pyaterochka:4436289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/142067-kartofelnye-oladi-is-pure-1654534120",
+      "source_id": 142067,
+      "title": "kartofelnye oladi is pure 1654534120",
+      "discovery_score": 0.708,
+      "products": [
+        "pyaterochka:4447865"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/211250-domashnie-rolly-s-tvorozhnym-syrom-1710610670",
+      "source_id": 211250,
+      "title": "domashnie rolly s tvorozhnym syrom 1710610670",
+      "discovery_score": 0.7822,
+      "products": [
+        "pyaterochka:4452201"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/119303-kruassany-s-shokoladom-1645626136",
+      "source_id": 119303,
+      "title": "kruassany s shokoladom 1645626136",
+      "discovery_score": 0.7634,
+      "products": [
+        "pyaterochka:78006137"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/122401-aromatnoe-kurinoe-file-po-italjanski",
+      "source_id": 122401,
+      "title": "aromatnoe kurinoe file po italjanski",
+      "discovery_score": 0.8655,
+      "products": [
+        "perekrestok:3421780",
+        "pyaterochka:3421780",
+        "pyaterochka:4464482"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/55091-appetitnaja-kilka-v-tomatnom-souse-v-multivarke",
+      "source_id": 55091,
+      "title": "appetitnaja kilka v tomatnom souse v multivarke",
+      "discovery_score": 0.8593,
+      "products": [
+        "perekrestok:4088784"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/143855-sendvichi-s-indeikoi-1655581707",
+      "source_id": 143855,
+      "title": "sendvichi s indeikoi 1655581707",
+      "discovery_score": 0.6918,
+      "products": [
+        "perekrestok:4133313"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/145471-domashniaia-pitstsa-4-syra-1657921444",
+      "source_id": 145471,
+      "title": "domashniaia pitstsa 4 syra 1657921444",
+      "discovery_score": 0.6976,
+      "products": [
+        "perekrestok:4156187"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/108739-vkusnyi-i-prostoi-humus",
+      "source_id": 108739,
+      "title": "vkusnyi i prostoi humus",
+      "discovery_score": 0.9163,
+      "products": [
+        "perekrestok:4183545"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/160446-liulia-kebab-is-farsha-1676461368",
+      "source_id": 160446,
+      "title": "liulia kebab is farsha 1676461368",
+      "discovery_score": 0.6891,
+      "products": [
+        "perekrestok:4309968"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/68631-sytnoe-azu-s-kopcheno-varennoi-govjadinoi-i-kartofelem",
+      "source_id": 68631,
+      "title": "sytnoe azu s kopcheno varennoi govjadinoi i kartofelem",
+      "discovery_score": 0.6981,
+      "products": [
+        "perekrestok:4312150"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/96458-syrniki-tofniki",
+      "source_id": 96458,
+      "title": "syrniki tofniki",
+      "discovery_score": 0.6658,
+      "products": [
+        "perekrestok:4355381"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/170250-risovaia-kasha-s-kokosovym-molokom-1686247480",
+      "source_id": 170250,
+      "title": "risovaia kasha s kokosovym molokom 1686247480",
+      "discovery_score": 0.712,
+      "products": [
+        "perekrestok:4381670"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/58886-kurinye-goleni-s-kartoshkoi-i-pod-hrustjashchei-syrnoi-korochkoi",
+      "source_id": 58886,
+      "title": "kurinye goleni s kartoshkoi i pod hrustjashchei syrnoi korochkoi",
+      "discovery_score": 0.793,
+      "products": [
+        "perekrestok:4389855"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/247790-bliny-s-kuricei-gribami-i-syrom",
+      "source_id": 247790,
+      "title": "bliny s kuricei gribami i syrom",
+      "discovery_score": 0.8313,
+      "products": [
+        "perekrestok:4408479"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/61845-prostoi-salat-iz-tunca",
+      "source_id": 61845,
+      "title": "prostoi salat iz tunca",
+      "discovery_score": 0.7542,
+      "products": [
+        "perekrestok:4413901"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/1479-okroshka-klassicheskaja",
+      "source_id": 1479,
+      "title": "okroshka klassicheskaja",
+      "discovery_score": 0.7119,
+      "products": [
+        "perekrestok:4413987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/140412-kartofelnoe-pyure-k-kotletam-1651172583",
+      "source_id": 140412,
+      "title": "kartofelnoe pyure k kotletam 1651172583",
+      "discovery_score": 0.827,
+      "products": [
+        "perekrestok:4419226",
+        "perekrestok:4455158",
+        "perekrestok:4381904",
+        "perekrestok:4462258"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/61959-nezhnyi-losos-v-slivochnom-souse",
+      "source_id": 61959,
+      "title": "nezhnyi losos v slivochnom souse",
+      "discovery_score": 0.9513,
+      "products": [
+        "perekrestok:4422046"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/48212-shokoladnaja-glazur-dlja-eklerov",
+      "source_id": 48212,
+      "title": "shokoladnaja glazur dlja eklerov",
+      "discovery_score": 0.8693,
+      "products": [
+        "perekrestok:4427786"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/120520-spring-rolly-1645806027",
+      "source_id": 120520,
+      "title": "spring rolly 1645806027",
+      "discovery_score": 0.7026,
+      "products": [
+        "perekrestok:4431738"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/91550-sochnaia-kurinaia-grudka-na-grile-1641661286",
+      "source_id": 91550,
+      "title": "sochnaia kurinaia grudka na grile 1641661286",
+      "discovery_score": 0.6899,
+      "products": [
+        "perekrestok:4435872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/227301-sous-beshamel-dlia-lazani-1725376290",
+      "source_id": 227301,
+      "title": "sous beshamel dlia lazani 1725376290",
+      "discovery_score": 0.6653,
+      "products": [
+        "perekrestok:4437060"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/216581-kotlety-v-tomatnom-souse",
+      "source_id": 216581,
+      "title": "kotlety v tomatnom souse",
+      "discovery_score": 0.6972,
+      "products": [
+        "perekrestok:4443653",
+        "pyaterochka:4368762"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/134512-prjanye-pechenye-jabloki-s-medom-koricei-i-vzbitymi-slivkami",
+      "source_id": 134512,
+      "title": "prjanye pechenye jabloki s medom koricei i vzbitymi slivkami",
+      "discovery_score": 0.7088,
+      "products": [
+        "perekrestok:4444926"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/107114-kotleta-po-kievski-domashniaia-1644094425",
+      "source_id": 107114,
+      "title": "kotleta po kievski domashniaia 1644094425",
+      "discovery_score": 0.7036,
+      "products": [
+        "perekrestok:4446269",
+        "pyaterochka:4447872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/89968-italjanskie-spagetti-s-krevetkami-v-tomatnom-souse",
+      "source_id": 89968,
+      "title": "italjanskie spagetti s krevetkami v tomatnom souse",
+      "discovery_score": 0.8923,
+      "products": [
+        "perekrestok:4446872"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/123196-brokkoli-na-paru-s-sousom-tartar",
+      "source_id": 123196,
+      "title": "brokkoli na paru s sousom tartar",
+      "discovery_score": 0.8958,
+      "products": [
+        "perekrestok:4446987"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/89656-perec-farshirovannyi-chechevicei-i-risom-v-tomatnom-souse",
+      "source_id": 89656,
+      "title": "perec farshirovannyi chechevicei i risom v tomatnom souse",
+      "discovery_score": 0.7431,
+      "products": [
+        "perekrestok:4453155"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/103095-pshenaia-kasha-s-tykvoi-1643637770",
+      "source_id": 103095,
+      "title": "pshenaia kasha s tykvoi 1643637770",
+      "discovery_score": 0.7738,
+      "products": [
+        "perekrestok:4453705"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/43351-kurica-s-sousom-terijaki",
+      "source_id": 43351,
+      "title": "kurica s sousom terijaki",
+      "discovery_score": 0.6732,
+      "products": [
+        "perekrestok:4453732"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/60767-domashnjaja-kolbasa-iz-kurinogo-file",
+      "source_id": 60767,
+      "title": "domashnjaja kolbasa iz kurinogo file",
+      "discovery_score": 0.6614,
+      "products": [
+        "perekrestok:4455289"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/114768-zapekanka-iz-tvoroga-s-malinovym-varenem-1644928685",
+      "source_id": 114768,
+      "title": "zapekanka iz tvoroga s malinovym varenem 1644928685",
+      "discovery_score": 0.6911,
+      "products": [
+        "perekrestok:4456096"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/14370-kurino-gribnoi-sous",
+      "source_id": 14370,
+      "title": "kurino gribnoi sous",
+      "discovery_score": 0.6776,
+      "products": [
+        "perekrestok:4456974"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/102983-nezhnyi-omlet-s-vetchinoi-i-syrom-1643625797",
+      "source_id": 102983,
+      "title": "nezhnyi omlet s vetchinoi i syrom 1643625797",
+      "discovery_score": 0.7446,
+      "products": [
+        "perekrestok:4473642"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/228778-lapsha-lagmannaia-s-tushenkoi-iz-indeiki-1726423270",
+      "source_id": 228778,
+      "title": "lapsha lagmannaia s tushenkoi iz indeiki 1726423270",
+      "discovery_score": 0.7222,
+      "products": [
+        "pyaterochka:3608917"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/97927-bystryi-pirog-so-smorodinoi-1643054005",
+      "source_id": 97927,
+      "title": "bystryi pirog so smorodinoi 1643054005",
+      "discovery_score": 0.8021,
+      "products": [
+        "pyaterochka:3658222"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/190156-sendvich-s-krevetkami-1696076355",
+      "source_id": 190156,
+      "title": "sendvich s krevetkami 1696076355",
+      "discovery_score": 0.7016,
+      "products": [
+        "pyaterochka:4376857"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/87754-nasyshchennyi-salat-s-ovoshchami-i-kurinoi-grudkoi-v-souse-terijaki",
+      "source_id": 87754,
+      "title": "nasyshchennyi salat s ovoshchami i kurinoi grudkoi v souse terijaki",
+      "discovery_score": 0.6924,
+      "products": [
+        "pyaterochka:4384743"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/98829-bystrye-syrnye-sloiki",
+      "source_id": 98829,
+      "title": "bystrye syrnye sloiki",
+      "discovery_score": 0.7933,
+      "products": [
+        "pyaterochka:4431581",
+        "pyaterochka:78037271"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/160648-bulochki-pshenichniye-sdobnye-1676463009",
+      "source_id": 160648,
+      "title": "bulochki pshenichniye sdobnye 1676463009",
+      "discovery_score": 0.8601,
+      "products": [
+        "pyaterochka:4431755"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/170868-salat-iz-vetchiny-s-syrom-1686678938",
+      "source_id": 170868,
+      "title": "salat iz vetchiny s syrom 1686678938",
+      "discovery_score": 0.871,
+      "products": [
+        "pyaterochka:78028935",
+        "perekrestok:4454938"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/187513-solenaia-karamel-na-moloke-1694459905",
+      "source_id": 187513,
+      "title": "solenaia karamel na moloke 1694459905",
+      "discovery_score": 0.7211,
+      "products": [
+        "pyaterochka:78038161"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/118389-pitstsa-pepperoni-1645466112",
+      "source_id": 118389,
+      "title": "pitstsa pepperoni 1645466112",
+      "discovery_score": 0.8466,
+      "products": [
+        "perekrestok:3416332",
+        "pyaterochka:3416332"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/249022-buterbrody-s-rietom-iz-skumbrii-1743996268",
+      "source_id": 249022,
+      "title": "buterbrody s rietom iz skumbrii 1743996268",
+      "discovery_score": 0.6946,
+      "products": [
+        "perekrestok:3497737"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/173534-ruletiki-s-vetchinoi-1687766883",
+      "source_id": 173534,
+      "title": "ruletiki s vetchinoi 1687766883",
+      "discovery_score": 0.7044,
+      "products": [
+        "perekrestok:3681730"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/120756-ris-s-ovoshchami-i-kurochkoi-1645876920",
+      "source_id": 120756,
+      "title": "ris s ovoshchami i kurochkoi 1645876920",
+      "discovery_score": 0.7734,
+      "products": [
+        "perekrestok:4364439"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/144814-pasta-s-sousom-pesto-1657907106",
+      "source_id": 144814,
+      "title": "pasta s sousom pesto 1657907106",
+      "discovery_score": 0.8548,
+      "products": [
+        "perekrestok:4372373",
+        "pyaterochka:4426983"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/70953-slivochnaja-kurica-s-gribami",
+      "source_id": 70953,
+      "title": "slivochnaja kurica s gribami",
+      "discovery_score": 0.6849,
+      "products": [
+        "perekrestok:4407902",
+        "perekrestok:4407903"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/180117-domashnii-sous-barbekiu",
+      "source_id": 180117,
+      "title": "domashnii sous barbekiu",
+      "discovery_score": 0.6649,
+      "products": [
+        "perekrestok:4409321"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/131045-ovoshchnoe-ragu-s-tuncom-v-masle-rublenym",
+      "source_id": 131045,
+      "title": "ovoshchnoe ragu s tuncom v masle rublenym",
+      "discovery_score": 0.7579,
+      "products": [
+        "perekrestok:4413900"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/206111-maioneznyi-sous-tartar-s-zeleniu-1703306901",
+      "source_id": 206111,
+      "title": "maioneznyi sous tartar s zeleniu 1703306901",
+      "discovery_score": 0.6667,
+      "products": [
+        "perekrestok:4417712"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/215275-kutaby-s-syrom-na-skovorode",
+      "source_id": 215275,
+      "title": "kutaby s syrom na skovorode",
+      "discovery_score": 0.7449,
+      "products": [
+        "perekrestok:4429868"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/104429-kotletki-iz-kurinoi-grudki-1643730689",
+      "source_id": 104429,
+      "title": "kotletki iz kurinoi grudki 1643730689",
+      "discovery_score": 1.0,
+      "products": [
+        "perekrestok:4436606"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/106884-salat-iz-kurinogo-file-s-iablokom-i-seldereem-1644060863",
+      "source_id": 106884,
+      "title": "salat iz kurinogo file s iablokom i seldereem 1644060863",
+      "discovery_score": 0.6851,
+      "products": [
+        "perekrestok:4438509"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/89325-aromatnyi-ris-s-kapustoi-kimchi",
+      "source_id": 89325,
+      "title": "aromatnyi ris s kapustoi kimchi",
+      "discovery_score": 0.6998,
+      "products": [
+        "perekrestok:4444231",
+        "perekrestok:4444310",
+        "perekrestok:4444311"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/2626-salat-s-tuncom-i-risom",
+      "source_id": 2626,
+      "title": "salat s tuncom i risom",
+      "discovery_score": 0.6508,
+      "products": [
+        "perekrestok:4444232"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/146283-krem-chiz-1660558961",
+      "source_id": 146283,
+      "title": "krem chiz 1660558961",
+      "discovery_score": 0.6665,
+      "products": [
+        "perekrestok:4444907"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/153755-salat-bystryi-s-kurinoi-grudkoi-i-fasoliu-1668609665",
+      "source_id": 153755,
+      "title": "salat bystryi s kurinoi grudkoi i fasoliu 1668609665",
+      "discovery_score": 0.6958,
+      "products": [
+        "perekrestok:4448237"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/128665-blinchiki-s-klubnichnoi-nachinkoi-1647202197",
+      "source_id": 128665,
+      "title": "blinchiki s klubnichnoi nachinkoi 1647202197",
+      "discovery_score": 0.7137,
+      "products": [
+        "perekrestok:4453804"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/84901-ukrainskii-borshch-s-fasoliu-i-tomatnoi-pastoi",
+      "source_id": 84901,
+      "title": "ukrainskii borshch s fasoliu i tomatnoi pastoi",
+      "discovery_score": 0.7539,
+      "products": [
+        "pyaterochka:4292797"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/72576-syrniki-s-grushevoi-nachinkoi",
+      "source_id": 72576,
+      "title": "syrniki s grushevoi nachinkoi",
+      "discovery_score": 0.7158,
+      "products": [
+        "pyaterochka:4362579"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/217563-kartoshka-s-kuricej-i-lukom-1717013937",
+      "source_id": 217563,
+      "title": "kartoshka s kuricej i lukom 1717013937",
+      "discovery_score": 0.7346,
+      "products": [
+        "pyaterochka:4384739"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/195389-pirog-ulitka-s-farshem-1697552684",
+      "source_id": 195389,
+      "title": "pirog ulitka s farshem 1697552684",
+      "discovery_score": 0.7025,
+      "products": [
+        "pyaterochka:4407635",
+        "pyaterochka:78036560"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/165791-shaverma-s-kurinoi-grudkoi-1681308288",
+      "source_id": 165791,
+      "title": "shaverma s kurinoi grudkoi 1681308288",
+      "discovery_score": 1.0,
+      "products": [
+        "pyaterochka:4459593"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/130723-kartofelnye-zrazy-s-gribami-1648062183",
+      "source_id": 130723,
+      "title": "kartofelnye zrazy s gribami 1648062183",
+      "discovery_score": 0.6644,
+      "products": [
+        "perekrestok:4440000"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/72538-dieticheskie-syrniki-s-mindalnoi-mukoi",
+      "source_id": 72538,
+      "title": "dieticheskie syrniki s mindalnoi mukoi",
+      "discovery_score": 0.688,
+      "products": [
+        "perekrestok:4449831"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/160651-tvorozhnaia-zapekanka-s-grushei-1676463046",
+      "source_id": 160651,
+      "title": "tvorozhnaia zapekanka s grushei 1676463046",
+      "discovery_score": 0.9409,
+      "products": [
+        "perekrestok:4452842"
+      ]
+    },
+    {
+      "url": "https://food.ru/recipes/175056-domashnee-zhele",
+      "source_id": 175056,
+      "title": "domashnee zhele",
+      "discovery_score": 0.6513,
+      "products": [
+        "perekrestok:4453535"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "source_snapshot_sha256": "e7b49679f21250ac22eb520876852f09a14eddd7bfdc62bd544873118c1f22ed",
+  "followup_urls": [
+    "https://food.ru/recipes/107931-syrnyi-salat-1644313951",
+    "https://food.ru/recipes/156278-syrnyi-salat-1671903279",
+    "https://food.ru/recipes/210936-syrnyi-salat-s-chesnokom-1710352276",
+    "https://food.ru/recipes/228644-salat-syrnyi-1726311985",
+    "https://food.ru/recipes/187400-salat-s-syrom-iaitsami-i-chesnokom-1694438467"
+  ],
+  "followup_reason": "Inspect simple cheese salads instead of leaf salads with burrata or salads with meat.",
+  "new_pages_collected": 365,
+  "collection_errors": 0
+}

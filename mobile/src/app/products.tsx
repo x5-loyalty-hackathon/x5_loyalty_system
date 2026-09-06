@@ -19,7 +19,7 @@ export default function ProductsScreen() {
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
     <View style={ui.panel}><Text style={ui.text}>Сначала выберите блюдо. Отдельного каталога случайных товаров здесь нет.</Text>
       <Choice label="Что поесть?" onPress={() => router.replace('/recipes')} /></View>
-    <BottomNav active="catalog" /></SafeAreaView>;
+    <BottomNav active="kitchen" /></SafeAreaView>;
   const groups = purchaseGroups(meal, route, fulfillment, markdown);
   const stores = route === 'cook' ? meal.cook_variant?.store_selection : null;
   const variant = route === 'cook' ? meal.cook_variant : meal.ready_variant;
@@ -94,7 +94,7 @@ export default function ProductsScreen() {
       <View style={ui.choices}><Choice label="Выбрать другое блюдо" disabled={busy}
         onPress={() => { void loadRecipes(); router.replace('/recipes'); }} /></View>
     </ScrollView>
-    <BottomNav active="catalog" />
+    <BottomNav active="kitchen" />
   </View></SafeAreaView>;
 }
 

@@ -1,20 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { KITCHEN_BASE_LAYERS, kitchenLayerRect } from '../data/kitchenLayers';
+import { KITCHEN_UPGRADES } from '../data/kitchenUpgrades';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
+import type { ImageSourcePropType as KitchenLayerSource } from 'react-native';
 import type { KitchenProduct } from '../domain/kitchen';
 import { color } from '../theme/tokens';
-import { KitchenWallpaper } from './KitchenWallpaper';
-import { KITCHEN_ART } from '../domain/homeDecoration';
 
 /** Высота полосы по умолчанию — как в макете экрана «после чека». */
 const BAND_HEIGHT = 286;
-/**
- * Арт комнаты: сетка 117×156 по 4 точки на клетку, сдвиг влево как в макете.
- * Показываем столько, сколько влезает: лишнее обрезается по высоте полосы.
- */
-const ART = KITCHEN_ART;
-
 /**
  * Позы Домового.
  *
@@ -52,8 +47,8 @@ export function KitchenScene({
   speech,
   pose = 'idle',
   height = BAND_HEIGHT,
+  equipped,
   onMenuPress,
-  wallpaperId,
 }: {
   products: readonly KitchenProduct[];
   /** Реплика Домового. Пустая строка — облачко не показывается. */
@@ -62,15 +57,30 @@ export function KitchenScene({
   pose?: keyof typeof MASCOT;
   /** Сколько комнаты показать по высоте. */
   height?: number;
+  /** Поставленная косметика: id предмета -> стоит ли он на кухне. */
+  equipped?: Record<string, boolean>;
   onMenuPress?: () => void;
-  wallpaperId?: string | null;
 }) {
   const { placed } = placeProducts(products);
 
+  // Поставленный предмет подменяет спрайт своего слоя. Габариты совпадают с
+  // базовым, поэтому подмена ничего не двигает. Если на один слой поставлено
+  // несколько вариантов, выигрывает последний в каталоге.
+  const skins = new Map<string, KitchenLayerSource>();
+  for (const upgrade of KITCHEN_UPGRADES) {
+    if (equipped?.[upgrade.id]) skins.set(upgrade.layer, upgrade.source);
+  }
+
   return (
     <View style={[styles.band, { height }]}>
-      <Image source={require('../../assets/kitchen/kitchen-full.png')} style={styles.art} />
-      <KitchenWallpaper itemId={wallpaperId} />
+      {KITCHEN_BASE_LAYERS.map((layer) => (
+        <Image
+          key={layer.id}
+          source={skins.get(layer.id) ?? layer.source}
+          style={[styles.layer, kitchenLayerRect(layer)]}
+          resizeMode="stretch"
+        />
+      ))}
 
       {placed.map(({ sprite, slot }) => (
         <Image
@@ -88,9 +98,8 @@ export function KitchenScene({
           <Text style={styles.speechText}>{speech}</Text>
         </View>
       ) : null}
-      {onMenuPress ? <Pressable accessibilityRole="button" accessibilityLabel="Оформление дома"
-        testID="open-home-decoration" style={styles.menu} onPress={onMenuPress}>
-        <Text style={styles.menuText}>Обои</Text>
+      {onMenuPress ? <Pressable accessibilityLabel="Меню" style={styles.menu} onPress={onMenuPress}>
+        <Text style={styles.menuText}>≡</Text>
       </Pressable> : null}
       <Image
         source={MASCOT[pose].source}
@@ -110,7 +119,7 @@ export function KitchenScene({
 
 const styles = StyleSheet.create({
   band: { backgroundColor: color.cream, overflow: 'hidden' },
-  art: { position: 'absolute', ...ART },
+  layer: { position: 'absolute' },
   // Домовой стоит на нарисованном полу; шторка проходит поверх него.
 
   /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */
@@ -124,10 +133,10 @@ const styles = StyleSheet.create({
   },
   speechText: { color: color.brown, fontSize: 13, lineHeight: 17.5, fontWeight: '600' },
   menu: {
-    position: 'absolute', right: 18, top: 14, width: 65, height: 40, borderRadius: 18, zIndex: 1,
+    position: 'absolute', right: 18, top: 14, width: 36, height: 36, borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.94)', alignItems: 'center', justifyContent: 'center',
   },
-  menuText: { color: color.brown, fontSize: 13, fontWeight: '700' },
+  menuText: { color: color.brown, fontSize: 16, fontWeight: '700' },
   /** Размеры задаются позой: см. MASCOT. */
   mascot: { position: 'absolute', alignSelf: 'center' },
 });

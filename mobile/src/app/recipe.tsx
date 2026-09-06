@@ -13,10 +13,18 @@ import { matchingSteps } from '../domain/mealFlow';
 
 export default function RecipeScreen() {
   const router = useRouter();
-  const { selectedMeal: meal, route, chooseRoute, book, saveToBook, busy, editable } = useDemo();
+  const { selectedMeal: meal, route, chooseRoute, book, saveToBook, busy, editable, savePlanAndCook } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Выберите блюдо" />
     <Choice label="К предложениям" onPress={() => router.replace('/recipes')} /></SafeAreaView>;
   const cook = meal.cook_variant;
+  // Докупать нечего: задание создаётся здесь же, и человек сразу уходит на
+  // кухню к шагам. Раньше между «хочу это блюдо» и готовкой стоял лишний
+  // экран плана. Само задание не пропускается — оно нужно для привязки чека
+  // и награды.
+  const readyToCook = route === 'cook' && cook?.missing_count === 0;
+  const cookNow = async () => {
+    if (await savePlanAndCook()) router.replace('/');
+  };
   const saved = cook ? book.includes(cook.recipe_id) : false;
   const steps = matchingSteps(meal, recipeDetails);
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
@@ -65,8 +73,8 @@ export default function RecipeScreen() {
         {[...new Set([...meal.warnings, ...(route === 'cook' ? cook?.warnings ?? [] : meal.ready_variant?.warnings ?? [])])]
           .map((warning) => <Text key={warning} style={ui.text}>{warningText(warning)}</Text>)}
         <ActionNotice />
-        <Choice label={route === 'cook' && cook?.missing_count === 0 ? 'Всё есть — к плану готовки' : 'Выбрать товары и способ получения'}
-          disabled={busy} onPress={() => router.push('/products')} />
+        <Choice label={readyToCook ? 'Всё есть — начать готовить' : 'Выбрать товары и способ получения'}
+          disabled={busy} onPress={() => void (readyToCook ? cookNow() : router.push('/products'))} />
       </View>
     </ScrollView>
     <BottomNav active="recipes" />

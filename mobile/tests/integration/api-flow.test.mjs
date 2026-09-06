@@ -119,6 +119,38 @@ test('TS → API: all-home meal completes without a receipt or new purchase day'
   assert.equal(result.progress.purchase_days, 0); assert.equal(result.progress.verified_receipts, 0);
 });
 
+test('real provider → API: direct cooking creates a bound plan but no purchase or XP', { timeout: 15000 }, async (t) => {
+  const call = await api(t);
+  const body = async (method, path, payload) => {
+    const result = await call(method, path, payload);
+    assert.equal(result.status, 200, JSON.stringify(result.body));
+    return result.body;
+  };
+  let saves = 0;
+  const render = providerHarness({
+    getHealth: () => body('GET', '/health'),
+    getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+    getRecommendations: (mode, anchor, storeId, profile) => body('POST',
+      '/api/v1/meal-recommendations', buildRecommendationRequest(mode, anchor, storeId, profile)),
+    saveMealPlan: (plan) => { saves++; return body('POST', '/api/v1/meal-plans', plan); },
+    completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`,
+      { user_id: userId, now: DEMO_NOW }),
+    submitReceipt: () => assert.fail('Direct cooking must never simulate purchase evidence'),
+  });
+  await render().loadRecipes(); render().selectMeal('pasta_tomatoes');
+  assert.equal(render().selectedMeal.cook_variant.missing_count, 0);
+  assert.equal(await render().savePlanAndCook(), true, render().actionError);
+  assert.equal(saves, 1); assert.equal(render().cooking, true);
+  assert.equal(render().plan.status, 'collected');
+  assert.equal(render().plan.reward.status, 'no_purchase_evidence');
+  assert.equal(await render().confirmCooking(), true, render().actionError);
+  assert.equal(render().progress.avatar_xp, 0);
+  assert.equal(render().progress.purchase_days, 0);
+  assert.equal(render().progress.verified_receipts, 0);
+  assert.equal(await render().confirmCooking(), true);
+  assert.equal(render().progress.avatar_xp, 0);
+});
+
 test('TS → API: work anchor, explicit store and full-basket explore', { timeout: 15000 }, async (t) => {
   const call = await api(t);
   const response = await recommend(call, 'explore', 'work', 'store_21');

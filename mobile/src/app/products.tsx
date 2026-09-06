@@ -14,7 +14,7 @@ export default function ProductsScreen() {
   const router = useRouter();
   const {
     selectedMeal: meal, route, fulfillment, markdown,
-    choices, chooseProduct, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
+    choices, chooseProduct, chooseRoute, basket, plan, savePlan, canConfirmPurchase, confirmPurchase, startCooking,
     busy, editable, loadRecipes,
   } = useDemo();
   if (!meal) return <SafeAreaView style={styles.safe}><AppHeader title="Мой план" />
@@ -37,6 +37,26 @@ export default function ProductsScreen() {
             disabled={!editable || !store.complete || store.store_id === stores.selected_store_id}
             onPress={() => { void loadRecipes({ storeId: store.store_id }); router.replace('/recipes'); }} />
         </View>)}
+      </View> : null}
+      {route === 'cook' && meal.ready_variant?.product_options.length ? <View style={styles.group}>
+        <View style={styles.groupHead}>
+          <Text style={styles.groupName}>Можно не готовить</Text>
+        </View>
+        <Text style={styles.groupNote}>Готовое блюдо вместо продуктов для рецепта. Чек завершает сценарий сразу.</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.groupRow}>
+          {meal.ready_variant.product_options.map((product) => <View key={product.sku_id} style={styles.card}>
+            <PhotoStub label="фото" style={styles.cardPhoto} />
+            <View style={styles.priceRow}><Text style={styles.price}>{money(product.price)}</Text></View>
+            <Text style={styles.cardMeta}>{Math.round(product.distance_km * 1000)} м · {product.store_id}</Text>
+            <Text style={styles.cardName} numberOfLines={2}>{product.name}</Text>
+          </View>)}
+        </ScrollView>
+        <Choice label="Взять готовое вместо продуктов" disabled={!editable}
+          onPress={() => chooseRoute('ready')} />
+      </View> : null}
+      {route === 'ready' && meal.available_routes.includes('cook') ? <View style={styles.group}>
+        <Choice label="Вернуться к продуктам для рецепта" disabled={!editable}
+          onPress={() => chooseRoute('cook')} />
       </View> : null}
       {groups.map((group) => <View key={group.id} style={styles.group}>
         <View style={styles.groupHead}>

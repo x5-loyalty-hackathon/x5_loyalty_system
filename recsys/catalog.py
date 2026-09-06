@@ -14,6 +14,7 @@ assortment data is used (see ``docs/research/recsys/synthetic-data-and-segments.
 from __future__ import annotations
 
 import json
+import statistics
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -192,11 +193,25 @@ REFERENCE_MEDIAN_PRICE_RUB: float = PRICE_REFERENCE["percentiles_rub"]["50"]
 
 #: How far ``BASE_PRICE_RUB`` sits above the 2018–2019 reference. This is an
 #: *observed* ratio, not an inflation figure we assert: the catalog was written
-#: for 2026 by hand, and the calibration found it landed ~2.4x above the real
-#: 2018–2019 median, which is the right order for seven years of Russian food
-#: inflation. ``tests/test_price_calibration.py`` fails if the catalog drifts
-#: out of the band, so the two cannot silently diverge.
+#: for 2026 by hand, and the calibration found it landed above the real
+#: 2018–2019 median by roughly the order seven years of Russian food inflation
+#: would suggest. ``tests/test_price_calibration.py`` fails if the catalog
+#: drifts out of the band, so the two cannot silently diverge.
+#:
+#: The band is wide on purpose — it is a sanity bound, not a claim of
+#: precision. Read ``observed_price_era_multiplier()`` for the actual number;
+#: quoting a remembered one is how the docs came to say 2.4 while the catalog
+#: had drifted to 2.31.
 PRICE_ERA_MULTIPLIER_BAND: tuple[float, float] = (1.8, 3.0)
+
+
+def observed_price_era_multiplier() -> float:
+    """Ratio of the hand-written 2026 catalog median to the 2018–2019 median.
+
+    Computed, never transcribed: every edit to ``BASE_PRICE_RUB`` moves it, and
+    a number pasted into prose does not move with it.
+    """
+    return statistics.median(BASE_PRICE_RUB.values()) / REFERENCE_MEDIAN_PRICE_RUB
 
 # Per-unit full price (₽) for one ingredient, for a 2026 Moscow basket.
 #

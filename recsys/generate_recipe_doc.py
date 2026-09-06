@@ -16,7 +16,12 @@ import io
 import sys
 from pathlib import Path
 
-from recsys.catalog import BASE_PRICE_RUB, PRICE_REFERENCE, REFERENCE_MEDIAN_PRICE_RUB
+from recsys.catalog import (
+    BASE_PRICE_RUB,
+    PRICE_REFERENCE,
+    REFERENCE_MEDIAN_PRICE_RUB,
+    observed_price_era_multiplier,
+)
 from recsys.ready_food_pairs import (
     PAIRS_BY_RECIPE_ID,
     READY_FOOD_CATALOG,
@@ -130,7 +135,7 @@ def build() -> str:
         f"Цены корзины — **оценка**, помеченная в API как `price_is_estimate`. Они "
         f"откалиброваны по {sample} реальных строк чеков X5 "
         f"({PRICE_REFERENCE['era']}, медиана {REFERENCE_MEDIAN_PRICE_RUB} ₽) с наблюдённым "
-        f"коэффициентом ×2.4 на 2026 год."
+        f"коэффициентом ×{observed_price_era_multiplier():.2f} на 2026 год."
     )
     w("")
     w(

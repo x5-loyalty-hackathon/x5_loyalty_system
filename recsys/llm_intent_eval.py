@@ -101,6 +101,7 @@ from recsys.benchmark import RandomEngine as ExpRandomEngine
 from recsys.experimental.profiles import SyntheticProfile
 from recsys.llm_audit import (
     DEFAULT_DEEPSEEK_MODEL,
+    DEFAULT_OPENCODE_GO_MODEL,
     DEFAULT_OPENROUTER_MODEL,
     PROVIDER_KEY_ENV,
     OpenAICompatibleClient,
@@ -1373,7 +1374,14 @@ def _metadata(study: IntentStudy, client: IntentClient, *, live: bool, replicate
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Blinded LLM-as-user intent eval")
     parser.add_argument("--live", action="store_true", help="Make paid network calls; default is local dry-run.")
-    parser.add_argument("--provider", choices=("deepseek", "openrouter", "openai"), default="deepseek")
+    parser.add_argument(
+        "--provider",
+        choices=("deepseek", "openrouter", "openai", "opencode_go"),
+        default="deepseek",
+        help="opencode_go fronts many open-weight models behind one $10/mo key "
+        "(GLM/Kimi/DeepSeek-V4/LongCat/MiMo/Hy3/Hy4/Omen only — see "
+        "recsys.llm_audit.OPENCODE_GO_ENDPOINT); pick one with --model.",
+    )
     parser.add_argument("--model", default=None)
     parser.add_argument("--endpoint", default=None, help="Override provider endpoint (advanced).")
     parser.add_argument("--personas", type=int, default=0, help="0 means every validation persona.")
@@ -1420,6 +1428,7 @@ def main(argv: list[str] | None = None) -> int:
         "deepseek": DEFAULT_DEEPSEEK_MODEL,
         "openrouter": DEFAULT_OPENROUTER_MODEL,
         "openai": "gpt-4.1-mini",
+        "opencode_go": DEFAULT_OPENCODE_GO_MODEL,
     }[args.provider]
     if args.live:
         key_env = PROVIDER_KEY_ENV[args.provider]

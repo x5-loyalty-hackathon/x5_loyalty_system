@@ -52,16 +52,30 @@ INDEPENDENT_RESPONDERS = (RuleBasedResponder(), ProbabilisticResponder(), Econom
 OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
 DEEPSEEK_ENDPOINT = "https://api.deepseek.com/chat/completions"
+#: OpenCode Go: one $10/mo key, many open-weight models — chat/completions-
+#: shaped ones only (GLM/Kimi/DeepSeek-V4/LongCat/MiMo/Hy3/Hy4/Omen). Grok,
+#: GPT-5.6-Luna and Muse Spark use /v1/responses; MiniMax and Qwen use
+#: /v1/messages (Anthropic-shaped) — neither is this wire format, don't point
+#: --model at one of those through this endpoint.
+OPENCODE_GO_ENDPOINT = "https://opencode.ai/zen/go/v1/chat/completions"
+DEFAULT_OPENCODE_GO_MODEL = "glm-5.2"
 PROVIDER_KEY_ENV = {
     "openai": "OPENAI_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",
     "deepseek": "DEEPSEEK_API_KEY",
+    "opencode_go": "OPENCODE_GO_API_KEY",
 }
 PROVIDER_ENDPOINT = {
     "openai": OPENAI_ENDPOINT,
     "openrouter": OPENROUTER_ENDPOINT,
     "deepseek": DEEPSEEK_ENDPOINT,
+    "opencode_go": OPENCODE_GO_ENDPOINT,
 }
+#: Providers where a plain {"type": "json_object"} is the safe choice —
+#: either the API doesn't support OpenAI's strict json_schema format
+#: (deepseek), or it fronts multiple backends with no single guarantee they
+#: all do (opencode_go). See OpenAICompatibleClient.complete_json.
+_JSON_OBJECT_ONLY_PROVIDERS = frozenset({"deepseek", "opencode_go"})
 
 
 @dataclass(frozen=True)
@@ -239,10 +253,13 @@ class OpenAICompatibleClient:
     ) -> dict[str, object]:
         """Return one parsed JSON object, optionally constrained by schema."""
         response_format: dict[str, object]
-        if response_schema is None or self.provider == "deepseek":
+        if response_schema is None or self.provider in _JSON_OBJECT_ONLY_PROVIDERS:
             # The direct DeepSeek API supports JSON mode, but not OpenAI's
-            # JSON-schema response format. The caller still validates every
-            # field locally, so malformed or semantically invalid answers are
+            # JSON-schema response format. opencode_go fronts many different
+            # open-weight backends behind one endpoint, with no single
+            # guarantee all of them honor strict json_schema the same way an
+            # OpenAI model does. The caller still validates every field
+            # locally, so malformed or semantically invalid answers are
             # retried instead of entering the experiment.
             response_format = {"type": "json_object"}
         else:
@@ -263,7 +280,7 @@ class OpenAICompatibleClient:
                 {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
             ],
         }
-        if seed is not None and self.provider != "deepseek":
+        if seed is not None and self.provider not in _JSON_OBJECT_ONLY_PROVIDERS:
             body["seed"] = seed
         if response_schema is not None and self.provider == "openrouter":
             # OpenRouter may route a model through several providers. Refuse
@@ -471,6 +488,7 @@ def main(argv: list[str] | None = None) -> int:
         "openai": DEFAULT_MODEL,
         "openrouter": DEFAULT_OPENROUTER_MODEL,
         "deepseek": DEFAULT_DEEPSEEK_MODEL,
+        "opencode_go": DEFAULT_OPENCODE_GO_MODEL,
     }[args.provider]
     key_env = PROVIDER_KEY_ENV[args.provider]
     if not args.dry_run and not os.environ.get(key_env):

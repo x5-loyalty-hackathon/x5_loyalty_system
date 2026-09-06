@@ -8,7 +8,7 @@ import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowContro
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { money } from '../domain/copy';
-import { canCompleteCook, purchaseGroups, rewardText } from '../domain/mealFlow';
+import { canCompleteCook, purchaseGroups } from '../domain/mealFlow';
 
 export default function ProductsScreen() {
   const router = useRouter();
@@ -95,12 +95,14 @@ export default function ProductsScreen() {
         ? <Text style={styles.note}>Докупать нечего. Сохраните план и подтвердите готовку.</Text> : null}
       {basket.error ? <Text style={styles.error}>{basket.error}</Text> : null}
       <View style={{ paddingHorizontal: 16, marginTop: 8 }}><ActionNotice /></View>
-      {hasPlan ? <Text style={styles.note}>{rewardText(plan)}</Text> : null}
     </ScrollView>
 
     <View style={styles.basketBar}>
       <Text style={styles.basketHint}>
-        {!hasPlan ? 'Сохраните план' : canConfirmPurchase ? 'Подтвердите покупку' : canCompleteCook(plan) ? 'Можно готовить' : 'План сохранён'}
+        {!hasPlan ? 'Оплатить и получить 20 XP'
+          : canConfirmPurchase ? 'Подтвердите покупку · 20 XP'
+          : canCompleteCook(plan) ? 'Куплено — можно готовить'
+          : plan?.reward?.status === 'awarded' ? `Начислено ${plan.reward.xp} XP` : 'План сохранён'}
       </Text>
       <Pressable style={[styles.basket, busy && styles.basketOff]} disabled={busy}
         onPress={() => {

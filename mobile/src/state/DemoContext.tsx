@@ -107,7 +107,9 @@ function useDemoState() {
     if (busyRef.current || recipesStatus !== 'ready') return;
     const meal = response?.recommendations.find((item) => item.meal_id === mealId);
     if (!meal) return;
-    clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route); setMarkdown(false);
+    // Уценка предлагается всегда: сбрасывать флаг на каждый выбор блюда нельзя,
+    // иначе уценённые товары исчезают из плана.
+    clearSelection(); setSelectedMeal(meal); setRoute(meal.default_route);
     const variant = meal.default_route === 'cook' ? meal.cook_variant : meal.ready_variant;
     if (!variant?.fulfillment_options.includes(fulfillment)) {
       setFulfillment(variant?.fulfillment_options.includes('delivery') ? 'delivery' : variant?.fulfillment_options[0] ?? 'next_visit');
@@ -156,7 +158,7 @@ function useDemoState() {
     }
     setPlan(result.plan);
     if (result.progress) acceptProgress(result.progress);
-    setNotice(`Задание выбрано. Это не заказ и не бронь. ${rewardText(result.plan)}`);
+    setNotice('План сохранён. Это не заказ и не бронь.');
     return result.plan;
   };
 

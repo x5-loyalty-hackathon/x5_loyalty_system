@@ -19,6 +19,7 @@ class MealPlanService:
             status=outcome.status,
             reason_codes=list(outcome.reason_codes),
             plan=outcome.plan,
+            progress=self._repository.snapshot(request.user_id),
         )
 
     def confirm_cooking(

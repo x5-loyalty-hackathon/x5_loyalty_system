@@ -7,7 +7,7 @@ import type {
 import { DEMO_NOW, DEMO_USER_ID, recentReceipt } from '../fixtures/recommendationRequest';
 import { kitchenProducts, mergeKitchenProducts, purchasedKitchenProducts } from '../domain/kitchen';
 import {
-  acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, receiptNotice,
+  acceptMeals, canCompleteCook, createRequestGate, makeBasket, makeDemoReceipt, makePlan, receiptNotice, rewardText,
 } from '../domain/mealFlow';
 
 type AsyncStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -148,7 +148,8 @@ function useDemoState() {
       throw new Error('Сервер отклонил план. Выберите блюдо заново.');
     }
     setPlan(result.plan);
-    setNotice('План сохранён. Это список на доставку или визит, не заказ и не бронь.');
+    if (result.progress) acceptProgress(result.progress);
+    setNotice(`Задание выбрано. Это не заказ и не бронь. ${rewardText(result.plan)}`);
   });
   const confirmPurchase = () => run(async () => {
     if (!plan || !pendingPlan.current || !selectedMeal) throw new Error('Сначала сохраните план.');
@@ -165,7 +166,7 @@ function useDemoState() {
       setKitchenItems((current) => mergeKitchenProducts(current, purchased));
     }
     // Keep the locked basket for retries; cooking never deletes whole packs.
-    setNotice(message);
+    setNotice(`${message} ${rewardText(result.meal_plan)}`);
   });
   const confirmCooking = () => run(async () => {
     if (!plan || (!canCompleteCook(plan) && plan.status !== 'completed')) throw new Error('Сначала соберите продукты.');
@@ -174,7 +175,7 @@ function useDemoState() {
     if (result.plan) setPlan(result.plan);
     if (!['completed', 'duplicate'].includes(result.status)) throw new Error('Готовка не подтверждена: проверьте план и покупку.');
     setCooking(false);
-    setNotice(result.status === 'duplicate' ? 'Блюдо уже учтено; повторных наград нет.' : 'Блюдо приготовлено — прогресс обновлён!');
+    setNotice(`${result.status === 'duplicate' ? 'Блюдо уже учтено; повторной награды нет.' : 'Блюдо добавлено в вашу историю.'} ${rewardText(result.plan)}`);
   });
   const startCooking = () => {
     if (busyRef.current || !canCompleteCook(plan)) return false;

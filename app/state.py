@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime
 from threading import RLock
 from zoneinfo import ZoneInfo
+from uuid import uuid4
 
 from app.contracts import (
     FulfillmentOption,
@@ -13,15 +14,19 @@ from app.contracts import (
     MealPlanSnapshot,
     MealPlanStatus,
     MealRoute,
+    MealReward,
+    MealRewardStatus,
+    MealRecommendationResponse,
     PrivateRank,
     ProgressSnapshot,
     RankCohort,
     Receipt,
+    RecommendationRequest,
     SavedRecipeStatus,
 )
+from app.meal_offer import IssuedMealOffer
 
 
-XP_PER_PURCHASE_DAY = 10
 XP_PER_RECIPE = 20
 XP_PER_REFERRAL_REWARD = 20
 XP_PER_LEVEL = 50
@@ -40,18 +45,20 @@ class UserProgressRecord:
     markdown_savings: float = 0.0
     rescue_items: float = 0.0
     referral_rewards: int = 0
+    meal_rewards: dict[date, str] = field(default_factory=dict)
 
     @property
     def avatar_xp(self) -> int:
         return (
-            len(self.purchase_dates) * XP_PER_PURCHASE_DAY
-            + self.meals_completed * XP_PER_RECIPE
+            len(self.meal_rewards) * XP_PER_RECIPE
             + self.referral_rewards * XP_PER_REFERRAL_REWARD
         )
 
 
 @dataclass
 class MealPlanRecord:
+    request: MealPlanSaveRequest
+    offer: IssuedMealOffer
     plan_id: str
     user_id: str
     meal_id: str
@@ -64,6 +71,9 @@ class MealPlanRecord:
     created_at: datetime
     completed_at: datetime | None = None
     completion_evidence: str | None = None
+    anchor_receipt_id: str | None = None
+    awarded_xp: int = 0
+    collection_receipt_ids: set[str] = field(default_factory=set)
 
 
 @dataclass(frozen=True)
@@ -109,6 +119,8 @@ class InMemoryStateRepository:
         self._users: dict[str, UserProgressRecord] = {}
         self._receipt_owners: dict[str, str] = {}
         self._receipt_plan_ids: dict[str, set[str]] = {}
+        self._verified_receipts: dict[str, Receipt] = {}
+        self._meal_offers: dict[str, IssuedMealOffer] = {}
         self._referral_inviter_by_invitee: dict[str, str] = {}
         self._meal_plans: dict[str, MealPlanRecord] = {}
         self._saved_recipe_ids_by_user: dict[str, set[str]] = {}
@@ -118,6 +130,8 @@ class InMemoryStateRepository:
             self._users.clear()
             self._receipt_owners.clear()
             self._receipt_plan_ids.clear()
+            self._verified_receipts.clear()
+            self._meal_offers.clear()
             self._referral_inviter_by_invitee.clear()
             self._meal_plans.clear()
             self._saved_recipe_ids_by_user.clear()
@@ -141,6 +155,21 @@ class InMemoryStateRepository:
         with self._lock:
             return tuple(sorted(self._saved_recipe_ids_by_user.get(user_id, set())))
 
+    def issue_meal_offers(
+        self, request: RecommendationRequest, response: MealRecommendationResponse,
+    ) -> MealRecommendationResponse:
+        with self._lock:
+            meals = []
+            for meal in response.recommendations:
+                offered = meal.model_copy(update={"offer_id": str(uuid4())}, deep=True)
+                self._meal_offers[offered.offer_id] = IssuedMealOffer(
+                    user_id=request.user.user_id, issued_at=request.now,
+                    meal=offered.model_copy(deep=True),
+                    current_receipt=request.current_receipt.model_copy(deep=True),
+                )
+                meals.append(offered)
+            return response.model_copy(update={"recommendations": meals})
+
     def save_meal_plan(self, request: MealPlanSaveRequest) -> MealPlanSaveOutcome:
         with self._lock:
             existing = self._meal_plans.get(request.plan_id)
@@ -151,13 +180,25 @@ class InMemoryStateRepository:
                         reason_codes=("meal_plan_claimed_by_another_user",),
                         plan=None,
                     )
+                if existing.request != request:
+                    return MealPlanSaveOutcome(
+                        status=MealPlanSaveStatus.REJECTED,
+                        reason_codes=("meal_plan_payload_mismatch",), plan=None,
+                    )
                 return MealPlanSaveOutcome(
                     status=MealPlanSaveStatus.DUPLICATE,
                     reason_codes=("meal_plan_already_saved",),
                     plan=self._meal_plan_snapshot(existing),
                 )
 
+            offer = self._meal_offers.get(request.offer_id)
+            error = offer.selection_error(request) if offer else "meal_offer_not_found"
+            if error:
+                return MealPlanSaveOutcome(
+                    status=MealPlanSaveStatus.REJECTED, reason_codes=(error,), plan=None,
+                )
             plan = MealPlanRecord(
+                request=request.model_copy(deep=True), offer=offer,
                 plan_id=request.plan_id,
                 user_id=request.user_id,
                 meal_id=request.meal_id,
@@ -170,6 +211,15 @@ class InMemoryStateRepository:
                 created_at=request.created_at,
             )
             self._meal_plans[plan.plan_id] = plan
+            if plan.selected_route == MealRoute.COOK and not plan.selected_product_ids:
+                plan.status = MealPlanStatus.COLLECTED
+            # The only pre-plan receipt allowed is the exact verified current
+            # receipt bound to this issued offer. History/IDs alone prove nothing.
+            current = self._verified_receipts.get(offer.current_receipt.receipt_id)
+            if (current == offer.current_receipt
+                    and self._receipt_owners.get(current.receipt_id) == plan.user_id
+                    and current.purchased_at <= offer.issued_at):
+                self._apply_plan_receipt(plan, current)
             return MealPlanSaveOutcome(
                 status=MealPlanSaveStatus.CREATED,
                 reason_codes=("meal_plan_saved",),
@@ -219,6 +269,7 @@ class InMemoryStateRepository:
                 # PoC plumbing so unlike populations are not ranked together.
                 record.rank_cohort = rank_cohort
             self._receipt_owners[receipt.receipt_id] = user_id
+            self._verified_receipts[receipt.receipt_id] = receipt.model_copy(deep=True)
             record.verified_receipts += 1
             purchase_date = receipt.purchased_at.astimezone(BUSINESS_TIMEZONE).date()
             is_new_purchase_day = purchase_date not in record.purchase_dates
@@ -233,47 +284,35 @@ class InMemoryStateRepository:
                 plan = None
             elif plan is not None and plan.status == MealPlanStatus.COMPLETED:
                 meal_plan_reason_codes.append("meal_plan_already_completed")
-            elif plan is not None and receipt.purchased_at < plan.created_at:
+            elif (plan is not None and receipt.purchased_at < plan.created_at
+                  and not self._is_bound_current_receipt(plan, receipt)):
                 # The receipt remains a legitimate purchase event, but cannot
                 # provide evidence for a plan that did not exist yet.
                 meal_plan_reason_codes.append("receipt_predates_meal_plan")
                 plan_snapshot = self._meal_plan_snapshot(plan)
                 plan = None
             if plan is not None and plan.status != MealPlanStatus.COMPLETED:
-                self._receipt_plan_ids.setdefault(receipt.receipt_id, set()).add(plan.plan_id)
-                receipt_product_ids = {item.sku_id for item in receipt.items}
-                plan.collected_product_ids.update(
-                    plan.selected_product_ids & receipt_product_ids
-                )
+                self._apply_plan_receipt(plan, receipt)
                 if plan.selected_route == MealRoute.READY:
                     if recipe_completed:
                         meal_plan_reason_codes.append(
                             "ready_plan_cannot_be_manually_completed"
                         )
-                    if plan.collected_product_ids:
-                        plan.status = MealPlanStatus.COMPLETED
-                        plan.completed_at = receipt.purchased_at
-                        plan.completion_evidence = (
-                            f"verified_receipt:{receipt.receipt_id}"
-                        )
-                        record.meals_completed += 1
-                        record.ready_meals_completed += 1
+                    if plan.status == MealPlanStatus.COMPLETED:
                         meal_plan_reason_codes.append("ready_meal_plan_completed")
                     else:
                         meal_plan_reason_codes.append("ready_meal_not_matched")
                 else:
-                    if plan.selected_product_ids.issubset(
-                        plan.collected_product_ids
-                    ):
-                        plan.status = MealPlanStatus.COLLECTED
+                    if plan.status == MealPlanStatus.COLLECTED:
                         meal_plan_reason_codes.append("cook_ingredients_collected")
                     if recipe_completed:
                         meal_plan_reason_codes.append(
                             "cook_completion_requires_confirmation_endpoint"
                         )
             elif meal_plan_id is None and recipe_completed:
-                record.meals_completed += 1
-                record.recipes_completed += 1
+                # Kept as a readable legacy input, never as a reward/completion
+                # authority. An explicitly selected issued meal plan is required.
+                meal_plan_reason_codes.append("legacy_completion_ignored")
 
             for item in receipt.items:
                 if not item.is_markdown:
@@ -350,11 +389,83 @@ class InMemoryStateRepository:
             record = self._get_or_create(user_id)
             record.meals_completed += 1
             record.recipes_completed += 1
+            self._award_meal(plan)
             return MealPlanCompletionOutcome(
                 status=MealPlanCompletionStatus.COMPLETED,
                 reason_codes=("cook_meal_plan_completed",),
                 plan=self._meal_plan_snapshot(plan),
             )
+
+    @staticmethod
+    def _is_bound_current_receipt(plan: MealPlanRecord, receipt: Receipt) -> bool:
+        return (receipt == plan.offer.current_receipt
+                and receipt.purchased_at <= plan.offer.issued_at)
+
+    def _apply_plan_receipt(self, plan: MealPlanRecord, receipt: Receipt) -> None:
+        """Called only with owned verified evidence, under the repository lock."""
+        self._receipt_plan_ids.setdefault(receipt.receipt_id, set()).add(plan.plan_id)
+        selected = plan.offer.selected_products(plan.request)
+        is_ready = plan.selected_route == MealRoute.READY
+        matched = {
+            item.sku_id for item in receipt.items
+            if item.sku_id in selected
+            and item.is_prepared_food == is_ready
+            and selected[item.sku_id].store_id == receipt.store_id
+        }
+        newly_collected = matched - plan.collected_product_ids
+        plan.collected_product_ids.update(matched)
+        if newly_collected:
+            plan.collection_receipt_ids.add(receipt.receipt_id)
+        current_evidence = (
+            not is_ready and self._is_bound_current_receipt(plan, receipt)
+            and any(not item.is_prepared_food and
+                    bool(item.ingredient_ids & plan.offer.required_ingredient_ids())
+                    for item in receipt.items)
+        )
+        collected = plan.selected_product_ids <= plan.collected_product_ids
+        if collected and (newly_collected or (not plan.selected_product_ids and current_evidence)):
+            if plan.anchor_receipt_id is None:
+                evidence_ids = plan.collection_receipt_ids or {receipt.receipt_id}
+                # Receipt arrival order is not purchase order: use the latest
+                # contributing purchase, then freeze the anchor once collected.
+                plan.anchor_receipt_id = max(evidence_ids, key=lambda receipt_id: (
+                    self._verified_receipts[receipt_id].purchased_at, receipt_id,
+                ))
+        if is_ready and collected:
+            plan.status = MealPlanStatus.COMPLETED
+            plan.completed_at = max(plan.created_at, receipt.purchased_at)
+            plan.completion_evidence = f"verified_receipt:{receipt.receipt_id}"
+            record = self._get_or_create(plan.user_id)
+            record.meals_completed += 1
+            record.ready_meals_completed += 1
+            self._award_meal(plan)
+        elif not is_ready and collected:
+            plan.status = MealPlanStatus.COLLECTED
+
+    def _meal_reward(self, plan: MealPlanRecord) -> MealReward:
+        receipt = self._verified_receipts.get(plan.anchor_receipt_id)
+        purchase_day = (receipt.purchased_at.astimezone(BUSINESS_TIMEZONE).date()
+                        if receipt is not None else None)
+        if plan.awarded_xp:
+            return MealReward(status=MealRewardStatus.AWARDED, xp=plan.awarded_xp,
+                              purchase_day=purchase_day)
+        if purchase_day is None:
+            waiting = bool(plan.selected_product_ids - plan.collected_product_ids)
+            return MealReward(status=(MealRewardStatus.AWAITING_PURCHASE if waiting
+                                      else MealRewardStatus.NO_PURCHASE_EVIDENCE), xp=0)
+        used = purchase_day in self._get_or_create(plan.user_id).meal_rewards
+        return MealReward(
+            status=(MealRewardStatus.PURCHASE_DAY_REWARD_USED if used else MealRewardStatus.AVAILABLE),
+            xp=0 if used else XP_PER_RECIPE, purchase_day=purchase_day,
+        )
+
+    def _award_meal(self, plan: MealPlanRecord) -> None:
+        if plan.status != MealPlanStatus.COMPLETED:
+            return
+        reward = self._meal_reward(plan)
+        if reward.status == MealRewardStatus.AVAILABLE:
+            self._get_or_create(plan.user_id).meal_rewards[reward.purchase_day] = plan.plan_id
+            plan.awarded_xp = XP_PER_RECIPE
 
     def get_referral_inviter(self, invitee_user_id: str) -> str | None:
         with self._lock:
@@ -423,6 +534,7 @@ class InMemoryStateRepository:
                 markdown_savings=round(record.markdown_savings, 2),
                 rescue_items=round(record.rescue_items, 3),
                 referral_rewards=record.referral_rewards,
+                rewarded_meals=len(record.meal_rewards),
                 avatar_xp=record.avatar_xp,
                 avatar_level=level,
                 xp_to_next_level=xp_to_next_level,
@@ -437,9 +549,9 @@ class InMemoryStateRepository:
     def _get_or_create(self, user_id: str) -> UserProgressRecord:
         return self._users.setdefault(user_id, UserProgressRecord(user_id=user_id))
 
-    @staticmethod
-    def _meal_plan_snapshot(plan: MealPlanRecord) -> MealPlanSnapshot:
+    def _meal_plan_snapshot(self, plan: MealPlanRecord) -> MealPlanSnapshot:
         return MealPlanSnapshot(
+            offer_id=plan.request.offer_id,
             plan_id=plan.plan_id,
             user_id=plan.user_id,
             meal_id=plan.meal_id,
@@ -452,4 +564,5 @@ class InMemoryStateRepository:
             created_at=plan.created_at,
             completed_at=plan.completed_at,
             completion_evidence=plan.completion_evidence,
+            reward=self._meal_reward(plan),
         )

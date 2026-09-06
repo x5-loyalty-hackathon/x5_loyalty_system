@@ -68,9 +68,33 @@ def save_plan(
     selected_recipe_id: str | None = None,
     user_id: str = "user_demo_001",
 ) -> dict:
+    payload = meal_recommendation_payload()
+    payload["user"]["user_id"] = user_id
+    payload["now"] = "2026-09-04T12:00:00+03:00"
+    payload["recipe_catalog"] = [{
+        "recipe_id": "vegetable_omelette", "title": "Омлет", "meal_intent_id": "omelette",
+        "ingredients": [{"ingredient_id": "egg", "name": "Яйцо", "category": "egg"}],
+    }]
+    payload["current_receipt"]["items"] = [{
+        "sku_id": "milk", "name": "Молоко", "category": "dairy",
+        "ingredient_ids": ["milk"], "unit_price": 90,
+    }]
+    payload["user"]["home_ingredient_ids"] = ["egg"] if not selected_product_ids else []
+    payload["inventory_snapshot"] = [{
+        "sku_id": sku, "name": "Товар", "category": "egg" if route == "cook" else "prepared_food",
+        "ingredient_ids": ["egg"], "store_id": "store_17", "distance_km": 0.5,
+        "price": 100, "is_prepared_food": route == "ready",
+        "meal_intent_ids": ["omelette"] if route == "ready" else [],
+        "contained_categories": ["egg"] if route == "ready" else [],
+    } for sku in selected_product_ids]
+    payload["requested_mode"] = "explore"
+    offers = client.post("/api/v1/meal-recommendations", json=payload)
+    assert offers.status_code == 200, offers.text
+    offer = recommendation_by_id(offers.json(), "vegetable_omelette")
     response = client.post(
         "/api/v1/meal-plans",
         json={
+            "offer_id": offer["offer_id"],
             "plan_id": plan_id,
             "user_id": user_id,
             "meal_id": "vegetable_omelette",
@@ -372,7 +396,7 @@ def test_ready_plan_completes_only_with_matching_verified_receipt() -> None:
     assert body["progress"]["meals_completed"] == 1
     assert body["progress"]["ready_meals_completed"] == 1
     assert body["progress"]["recipes_completed"] == 0
-    assert body["progress"]["avatar_xp"] == 30
+    assert body["progress"]["avatar_xp"] == 20
 
     repeated_purchase = client.post(
         "/api/v1/events/receipts",
@@ -578,9 +602,11 @@ def test_published_ready_examples_form_one_end_to_end_flow() -> None:
     assert meal["default_route"] == "ready"
     assert meal["ready_variant"]["product_options"][0]["sku_id"] == "ready_omelette_01"
 
+    plan_payload = load_example("meal_plan_request.json")
+    plan_payload["offer_id"] = meal["offer_id"]
     plan = client.post(
         "/api/v1/meal-plans",
-        json=load_example("meal_plan_request.json"),
+        json=plan_payload,
     )
     assert plan.status_code == 200, plan.text
     assert plan.json()["status"] == "created"

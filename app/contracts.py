@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
+from datetime import date
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
@@ -13,7 +14,7 @@ from app.explanations import (
 )
 
 
-CONTRACT_VERSION = "1.2"
+CONTRACT_VERSION = "1.3"
 
 
 class ApiModel(BaseModel):
@@ -452,6 +453,9 @@ class ReadyVariant(ApiModel):
 
 
 class MealRecommendation(ApiModel):
+    # HTTP serving fills this opaque token after safety/selection. Offline
+    # evaluation may construct recommendations without issuing reward offers.
+    offer_id: str | None = None
     meal_id: str = Field(min_length=1)
     title: str = Field(min_length=1)
     mode: RecommendationMode
@@ -570,6 +574,7 @@ class ProgressSnapshot(ApiModel):
     markdown_savings: float = Field(ge=0)
     rescue_items: float = Field(ge=0)
     referral_rewards: int = Field(ge=0)
+    rewarded_meals: int = Field(default=0, ge=0)
     avatar_xp: int = Field(ge=0)
     avatar_level: int = Field(ge=1)
     xp_to_next_level: int = Field(ge=1)
@@ -577,6 +582,7 @@ class ProgressSnapshot(ApiModel):
 
 
 class MealPlanSaveRequest(ApiModel):
+    offer_id: str = Field(min_length=1)
     plan_id: str = Field(min_length=1)
     user_id: str = Field(min_length=1)
     meal_id: str = Field(min_length=1)
@@ -595,7 +601,22 @@ class MealPlanSaveRequest(ApiModel):
         return self
 
 
+class MealRewardStatus(StrEnum):
+    AWAITING_PURCHASE = "awaiting_purchase"
+    NO_PURCHASE_EVIDENCE = "no_purchase_evidence"
+    AVAILABLE = "available"
+    AWARDED = "awarded"
+    PURCHASE_DAY_REWARD_USED = "purchase_day_reward_used"
+
+
+class MealReward(ApiModel):
+    status: MealRewardStatus
+    xp: int = Field(ge=0)
+    purchase_day: date | None = None
+
+
 class MealPlanSnapshot(ApiModel):
+    offer_id: str
     plan_id: str
     user_id: str
     meal_id: str
@@ -608,6 +629,7 @@ class MealPlanSnapshot(ApiModel):
     created_at: AwareDatetime
     completed_at: AwareDatetime | None = None
     completion_evidence: str | None = None
+    reward: MealReward
 
 
 class MealPlanSaveResponse(ApiModel):
@@ -615,6 +637,7 @@ class MealPlanSaveResponse(ApiModel):
     status: MealPlanSaveStatus
     reason_codes: list[str]
     plan: MealPlanSnapshot | None = None
+    progress: ProgressSnapshot
 
 
 class CookingConfirmationRequest(ApiModel):

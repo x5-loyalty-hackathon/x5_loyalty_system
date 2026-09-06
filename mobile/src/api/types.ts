@@ -1,4 +1,4 @@
-/** Client-facing API 1.2 types; app/contracts.py remains authoritative. */
+/** Client-facing API 1.3 types; app/contracts.py remains authoritative. */
 export type IngredientSource = 'receipt' | 'home' | 'markdown' | 'full_price' | 'unavailable';
 export type RecommendationMode = 'current' | 'repeat' | 'explore';
 export type FulfillmentOption = 'delivery' | 'next_visit';
@@ -23,6 +23,7 @@ export interface StoreSelection {
   }>;
 }
 export interface MealRecommendation {
+  offer_id: string;
   meal_id: string; title: string; mode: RecommendationMode; model_score: number;
   default_route: MealRoute; available_routes: MealRoute[];
   reason_codes: string[]; route_reason_codes: string[];
@@ -55,6 +56,7 @@ export interface RecipeBook {
   contract_version: string; user_id: string; saved_recipe_ids: string[];
 }
 export interface ProgressSnapshot {
+  rewarded_meals: number;
   user_id: string; verified_receipts: number; purchase_days: number;
   meals_completed: number; recipes_completed: number; ready_meals_completed: number;
   markdown_savings: number; rescue_items: number; referral_rewards: number;
@@ -64,15 +66,18 @@ export interface ProgressSnapshot {
   };
 }
 export interface PlanRequest {
+  offer_id: string;
   plan_id: string; user_id: string; meal_id: string; selected_route: MealRoute;
   selected_recipe_id: string | null; selected_product_ids: string[];
   fulfillment: FulfillmentOption; created_at: string;
 }
 export interface MealPlan extends PlanRequest {
+  reward: { status: 'awaiting_purchase' | 'no_purchase_evidence' | 'available' | 'awarded' | 'purchase_day_reward_used'; xp: number; purchase_day: string | null };
   status: 'saved' | 'collected' | 'completed' | 'cancelled';
   collected_product_ids: string[]; completed_at: string | null; completion_evidence: string | null;
 }
 export interface PlanResponse {
+  progress: ProgressSnapshot;
   contract_version: string; status: 'created' | 'duplicate' | 'rejected';
   reason_codes: string[]; plan: MealPlan | null;
 }

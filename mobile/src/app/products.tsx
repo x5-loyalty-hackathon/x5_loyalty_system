@@ -7,7 +7,7 @@ import { Choice, ActionNotice, flowStyles as ui } from '../components/FlowContro
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { money, explain } from '../domain/copy';
-import { canCompleteCook, purchaseGroups } from '../domain/mealFlow';
+import { canCompleteCook, purchaseGroups, rewardText, taskTitle } from '../domain/mealFlow';
 
 export default function ProductsScreen() {
   const router = useRouter();
@@ -26,6 +26,7 @@ export default function ProductsScreen() {
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}><View style={styles.shell}>
     <AppHeader title="Мой план" subtitle={meal.title} />
     <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
+      <Text style={ui.title}>{taskTitle(meal.mode, route)}</Text>
       <View style={[styles.assistant, { marginHorizontal: 0 }]}>
         <Image source={require('../../assets/domovoi/mascot-bag.png')} resizeMode="contain" style={styles.assistantMascot} />
         <Text style={styles.assistantText}>Один магазин, только товары выбранного блюда. Цены за целые упаковки, не за долю в рецепте.</Text>
@@ -73,13 +74,14 @@ export default function ProductsScreen() {
         <Text style={ui.title}>Докупки не нужны</Text><Text style={ui.text}>Проверьте продукты дома. Сохраните план и подтвердите готовку без покупки.</Text>
       </View> : null}
       <Text style={ui.title}>Товары: {money(basket.total)}</Text>
+      <Text style={ui.text}>{rewardText(plan)}</Text>
       <Text style={ui.text}>Экономия по выбранным ценам: {money(basket.savings)}. В личную статистику попадёт только после чека.</Text>
       <Text style={ui.text}>В демо — одна упаковка на выбранный ингредиент. Проверка достаточности граммовок ещё не реализована.</Text>
       {fulfillment === 'delivery' ? <Text style={ui.text}>Стоимость и доступность реальной доставки не рассчитаны. Это сохранение намерения, не оформление заказа.</Text> : null}
       <Text style={ui.text}>Уценка и остатки не забронированы. На следующий визит наличие и цены нужно проверять заново. Demo-время: 05.09.2026, 12:00 МСК.</Text>
       {basket.error ? <Text style={[ui.text, { color: color.red }]}>{basket.error}</Text> : null}
       <ActionNotice />
-      {!plan ? <Choice label={editable ? 'Сохранить план' : 'Повторить сохранение того же плана'}
+      {!plan ? <Choice label={editable ? 'Выбрать задание и сохранить план' : 'Повторить сохранение того же плана'}
         disabled={busy || Boolean(basket.error)} onPress={() => void savePlan()} /> : <>
         <Text style={ui.text}>План: {({ saved: 'сохранён', collected: 'продукты куплены', completed: 'блюдо завершено', cancelled: 'отменён' })[plan.status]}</Text>
         {plan.selected_product_ids.length > 0 ? <Choice

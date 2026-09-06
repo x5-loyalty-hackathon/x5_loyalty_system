@@ -1,6 +1,6 @@
 # Technical design: meal-first X5 Domovoi PoC
 
-- **Статус:** API contract `1.2`, selector, книга, single-store и `cook/ready`
+- **Статус:** API contract `1.3`, selector, книга, single-store и `cook/ready`
   meal-flow реализованы. UI и актуальный ML scorer интегрированы, локальные
   автопроверки пройдены; ручной прогон на телефоне и финальный eval открыты,
   2026-09-06. [Карта интеграции и адаптаций](integration-handoff.md).
@@ -15,6 +15,13 @@
 - **Product source:** [current concept](research/persona_vxofi/rescue-domovoi-concept.md).
 - **Scope:** backend/integration/safety contract; frontend и ML могут
   разрабатываться параллельно.
+
+**Реализованная адаптация наград:**
+[ADR-005 — задания и XP](decisions/005-game-tasks-and-xp.md). Отменяет
+автоматические 10 XP за покупочный день; награждает явно выбранное выполненное
+задание с подтверждённой покупкой, максимум один бонус на покупочный день.
+API 1.3 добавляет обязательный `offer_id` при сохранении и отдельный `plan.reward`;
+карта полей и статусов — §8 ADR-005. Клиенты 1.2 нужно обновлять вместе с сервером.
 
 ## 1. Цель backend-контура
 
@@ -293,6 +300,14 @@ receipt id или завершённый `plan_id` не меняет progress; �
 московский календарный день дают только один purchase-day increment независимо
 от исходного UTC offset. Все входные timestamps обязаны содержать timezone;
 naive datetime отклоняется схемой с HTTP 422.
+
+**API 1.3 / ADR-005:** `avatar_xp = rewarded_meals × 20 + referral_rewards × 20`.
+Сервер хранит награды отдельно от завершений и покупочных дней, связывает задание
+с выданным оффером и подходящими чеками. Passive purchase XP и legacy-начисление
+по `recipe_completed` убраны. Завершение без XP допустимо. Для входа после кассы
+проверяется точное совпадение текущего чека оффера с собственным подтверждённым
+чеком; история из recommendation-запроса сама по себе не даёт права на XP.
+Полная семантика, карта полей и проверки — §8–9 ADR-005.
 
 Progress response содержит только собственную позицию, размер synthetic cohort
 и percentile. Cooking households и ready-heavy пользователи сравниваются в

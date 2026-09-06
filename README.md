@@ -16,6 +16,12 @@ recommender предлагает персональный приём пищи с
 [ADR-004](docs/decisions/004-recipe-book-and-shopping-context.md); актуальная схема API
 описана в [design doc](docs/technical-design.md).
 
+**Реализованный контракт наград, API 1.3:**
+[игровые задания и XP — ADR-005](docs/decisions/005-game-tasks-and-xp.md).
+Награда требует выбранного задания и подходящей покупки; автоматические XP за
+обычный чек отменены. Предел — один бонус 20 XP на покупочный день. Декор и
+новые сцены не объявлены реализованными; [остаток до PoC](docs/poc-readiness.md).
+
 ## Что должно войти в PoC
 
 - кликабельный прототип из 3–4 связанных экранов;
@@ -56,6 +62,8 @@ recommender предлагает персональный приём пищи с
   default `current/repeat/explore`, объяснимые альтернативы и full-basket opt-in;
 - [Книга рецептов и точка сбора](docs/decisions/004-recipe-book-and-shopping-context.md)
   — `save → repeat`, home/work/current/custom и одна cook-точка;
+- [Игровые задания и XP](docs/decisions/005-game-tasks-and-xp.md) — три цели на
+  основе current/repeat/explore, условия покупки/награды, предел и тесты API 1.3;
 - [Одностраничный план пилота](docs/pilot-plan.md) — test/control, покупочные
   дни, маржинальный guardrail и правила остановки;
 - [Current idea brief](docs/research/persona_vxofi/x5-domovoi-team-brief.md) —
@@ -102,7 +110,11 @@ curl -sS \
   http://127.0.0.1:8000/api/v1/recommendations
 ```
 
-Рабочий flow с альтернативой готового блюда:
+Flow с альтернативой готового блюда. **Перед сохранением плана подставьте в
+`examples/meal_plan_request.json` актуальный `offer_id` выбранного блюда из
+первого ответа** (или отправьте изменённый JSON через Swagger UI). Статический
+`REPLACE_WITH_ISSUED_OFFER_ID` намеренно не принимается как выданная рекомендация.
+После перезапуска сервера нужно получить новый оффер.
 
 ```bash
 curl -sS \
@@ -153,7 +165,7 @@ RECOMMENDATION_ENGINE=model uvicorn app.main:app --reload
 
 ## Быстрый старт ML/Recsys
 
-После объединения 06.09 рабочий scorer использует API 1.2 и 37 замороженных
+После объединения и исправлений 06.09 рабочий scorer использует API 1.3 и 37 замороженных
 обучающих рецептов (общий каталог — 47). Исследовательские политики и типы ML-ветки
 сохранены отдельно: [границы, импорты и команды](recsys/experimental/README.md).
 `recsys.benchmark`, `panels`, `human_eval` и `experiment1/2/3_*` проверяют этот

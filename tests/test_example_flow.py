@@ -29,11 +29,11 @@ def test_published_examples_form_one_end_to_end_demo() -> None:
     )
     assert receipt.status_code == 200, receipt.text
     assert receipt.json()["status"] == "verified"
-    assert receipt.json()["progress"]["avatar_xp"] == 30
+    assert receipt.json()["progress"]["avatar_xp"] == 0
 
     progress = client.get("/api/v1/progress/user_demo_001")
     assert progress.status_code == 200, progress.text
-    assert progress.json()["recipes_completed"] == 1
+    assert progress.json()["recipes_completed"] == 0
     assert progress.json()["markdown_savings"] == 100.0
 
     referral = client.post(
@@ -43,7 +43,7 @@ def test_published_examples_form_one_end_to_end_demo() -> None:
     assert referral.status_code == 200, referral.text
     assert referral.json()["status"] == "approved"
     assert referral.json()["reward"]["monetary_value"] == 0
-    assert referral.json()["invitee_progress"]["avatar_xp"] == 50
+    assert referral.json()["invitee_progress"]["avatar_xp"] == 20
 
 
 def test_published_save_example_closes_the_repeat_loop() -> None:

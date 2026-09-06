@@ -127,7 +127,9 @@ def create_recommendations(
 def create_meal_recommendations(
     request: RecommendationRequest,
 ) -> MealRecommendationResponse:
-    return recommendation_service.recommend_meals(request)
+    return state_repository.issue_meal_offers(
+        request, recommendation_service.recommend_meals(request)
+    )
 
 
 @app.post(

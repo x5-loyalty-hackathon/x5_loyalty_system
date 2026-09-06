@@ -1,13 +1,14 @@
 import type {
   FulfillmentOption, MealPlan, MealRecommendation, MealResponse, MealRoute,
   PlanRequest, ProductOption, ProgressSnapshot, ReceiptProgressResponse,
+  RecommendationMode,
 } from '../api/types.ts';
 
 export interface ProductGroup { id: string; name: string; options: ProductOption[] }
 export interface Basket { products: ProductOption[]; error: string | null; total: number; savings: number }
 
 export function assertVersion(value: { contract_version: string }): void {
-  if (value.contract_version !== '1.2') throw new Error('Нужен backend с контрактом API 1.2.');
+  if (value.contract_version !== '1.3') throw new Error('Нужен backend с контрактом API 1.3.');
 }
 
 export function acceptMeals(response: MealResponse): MealResponse {
@@ -20,6 +21,7 @@ export function acceptMeals(response: MealResponse): MealResponse {
     selection.explicit_choice_required.includes(selection.default_mode)
   )) throw new Error('Некорректный основной вариант в ответе сервера.');
   for (const meal of response.recommendations) {
+    if (!meal.offer_id) throw new Error('Сервер не выдал основание игрового задания. Обновите рекомендации.');
     if (!meal.available_routes.includes(meal.default_route) ||
       (meal.available_routes.includes('cook') !== Boolean(meal.cook_variant)) ||
       (meal.available_routes.includes('ready') !== Boolean(meal.ready_variant))) {
@@ -82,10 +84,12 @@ export function makePlan(
   basket: Basket, userId: string, planId: string, now: string,
 ): PlanRequest {
   if (basket.error) throw new Error(basket.error);
+  if (!meal.offer_id) throw new Error('Обновите рекомендации перед выбором задания.');
   if (!meal.available_routes.includes(route) || (route === 'ready' && basket.products.length !== 1)) {
     throw new Error('Нельзя сохранить недоступный способ получения.');
   }
   return {
+    offer_id: meal.offer_id,
     plan_id: planId, user_id: userId, meal_id: meal.meal_id,
     selected_route: route, selected_recipe_id: route === 'cook' ? meal.cook_variant!.recipe_id : null,
     selected_product_ids: basket.products.map((p) => p.sku_id), fulfillment, created_at: now,
@@ -127,6 +131,22 @@ export function canCompleteCook(plan: MealPlan | null): boolean {
   return Boolean(plan && plan.selected_route === 'cook' && (
     plan.status === 'collected' || (plan.status === 'saved' && !plan.selected_product_ids.length)
   ));
+}
+
+export function rewardText(plan: MealPlan | null): string {
+  if (!plan) return '20 XP за выбранное выполненное задание с подтверждённой покупкой. Не более одного бонуса на покупочный день.';
+  switch (plan.reward?.status) {
+    case 'awarded': return `За это задание начислено ${plan.reward.xp} XP.`;
+    case 'available': return 'Покупка подтверждена. После выполнения задания — 20 XP.';
+    case 'purchase_day_reward_used': return 'За этот покупочный день бонус уже получен. Можно готовить дальше без дополнительных XP.';
+    case 'no_purchase_evidence': return 'Можно готовить и сохранить результат. Без подходящей подтверждённой покупки XP не начисляются.';
+    default: return 'Ожидаем покупку продуктов задания. Бонус — 20 XP, не более одного на покупочный день.';
+  }
+}
+
+export function taskTitle(mode: RecommendationMode, route: MealRoute): string {
+  if (route === 'ready') return 'Ужин без готовки';
+  return { current: 'Ужин из моих покупок', repeat: 'Наш любимый ужин', explore: 'Новое для нашей кухни' }[mode];
 }
 
 export function levelShare(progress: ProgressSnapshot): number {

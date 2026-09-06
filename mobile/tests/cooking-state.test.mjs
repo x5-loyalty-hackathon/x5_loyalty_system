@@ -8,6 +8,7 @@ import * as fixtures from '../src/fixtures/recommendationRequest.ts';
 import * as kitchen from '../src/domain/kitchen.ts';
 
 const meal = {
+  offer_id: 'offered-home-meal',
   meal_id: 'home_meal', title: 'Блюдо дома', mode: 'current', default_route: 'cook',
   available_routes: ['cook'], ready_variant: null, cook_variant: {
     recipe_id: 'home_meal', missing_count: 0, store_selection: null,
@@ -17,7 +18,7 @@ const meal = {
   },
 };
 const response = {
-  contract_version: '1.2', recommendations: [meal],
+  contract_version: '1.3', recommendations: [meal],
   challenge_selection: { default_mode: 'current', available_modes: ['current'], explicit_choice_required: [] },
 };
 
@@ -45,10 +46,11 @@ function providerHarness(recommendations = response) {
   };
   const jsx = (type, props) => ({ type, props });
   const api = {
-    getHealth: async () => ({ contract_version: '1.2' }),
+    getHealth: async () => ({ contract_version: '1.3' }),
     getRecommendations: async () => recommendations,
     getRecipeBook: async () => ({ saved_recipe_ids: [] }),
-    saveMealPlan: async (request) => ({ status: 'created', plan: { ...request, status: 'saved' } }),
+    saveMealPlan: async (request) => ({ status: 'created', plan: { ...request,
+      status: request.selected_product_ids.length ? 'saved' : 'collected' } }),
     completeCook: async () => { completionCalls++; return completeResult(); },
     submitReceipt: async (receipt) => { receipts.push(receipt); return purchaseResult(receipt); },
   };
@@ -90,10 +92,11 @@ test('failed completion stays in cooking; successful retry updates progress with
   assert.equal(harness.render().actionError, 'connection lost');
   assert.equal(harness.render().progress, null);
   harness.completion(async () => ({ status: 'completed',
-    plan: { ...harness.render().plan, status: 'completed' }, progress: { avatar_xp: 20 } }));
+    plan: { ...harness.render().plan, status: 'completed', reward: { status: 'no_purchase_evidence', xp: 0 } },
+    progress: { avatar_xp: 0 } }));
   assert.equal(await harness.render().confirmCooking(), true);
   assert.equal(harness.render().cooking, false);
-  assert.equal(harness.render().progress.avatar_xp, 20);
+  assert.equal(harness.render().progress.avatar_xp, 0);
   assert.equal(harness.render().actionError, null);
   assert.equal(harness.render().busy, false);
 });
@@ -144,7 +147,7 @@ async function purchaseHarness() {
 }
 
 function purchaseResponse(harness, status = 'verified') {
-  return { status, progress: { avatar_xp: 10 },
+  return { status, progress: { avatar_xp: 0 },
     meal_plan: { ...harness.render().plan, status: 'collected' } };
 }
 
@@ -167,7 +170,7 @@ test('kitchen changes after accepted purchase, not during request; retries and c
   assert.equal(harness.render().basket.products.length, 1, 'retry keeps the locked basket');
   assert.equal(harness.render().startCooking(), true);
   harness.completion(async () => ({ status: 'completed',
-    plan: { ...harness.render().plan, status: 'completed' }, progress: { avatar_xp: 30 } }));
+    plan: { ...harness.render().plan, status: 'completed' }, progress: { avatar_xp: 20 } }));
   await harness.render().confirmCooking();
   assert.equal(harness.render().kitchenItems.length, initial.length + 1, 'no whole-pack deletion');
 });

@@ -11,6 +11,7 @@ const product = (sku_id = 'onion', extra = {}) => ({
   source: 'full_price', expires_at: null, fulfillment_options: ['delivery', 'next_visit'], ...extra,
 });
 const meal = (allHome = false) => ({
+  offer_id: 'offered-bolognese',
   meal_id: 'bolognese', title: 'Болоньезе', mode: 'current', model_score: 1,
   default_route: 'cook', available_routes: ['cook'], reason_codes: [], route_reason_codes: [],
   ready_variant: null, warnings: [], safety_status: 'approved',
@@ -29,7 +30,7 @@ const meal = (allHome = false) => ({
   },
 });
 const response = (recommendations = []) => ({
-  contract_version: '1.2', recommendations,
+  contract_version: '1.3', recommendations,
   challenge_selection: { default_mode: recommendations[0]?.mode ?? null,
     available_modes: recommendations.length ? ['current'] : [], explicit_choice_required: [], mode_reason_codes: {} },
 });
@@ -40,7 +41,7 @@ test('empty response remains empty; server order is preserved without filler', (
   assert.equal(acceptMeals(original), original);
 });
 test('reject incompatible version, duplicate meals and illegal auto opt-in', () => {
-  assert.throws(() => assertVersion({ contract_version: '1.0' }), /API 1.2/);
+  assert.throws(() => assertVersion({ contract_version: '1.0' }), /API 1.3/);
   assert.throws(() => acceptMeals(response([meal(), meal()])), /повторяющиеся/);
   const invalid = response([meal()]);
   invalid.challenge_selection.explicit_choice_required = ['current'];

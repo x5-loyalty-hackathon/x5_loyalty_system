@@ -21,7 +21,7 @@ def test_mobile_fixture_matches_contract_and_has_no_fabricated_pantry_expiry():
     assert all("expires_at" not in item for item in fixture["current_receipt"]["items"])
     response = TestClient(app).post("/api/v1/meal-recommendations", json=fixture)
     assert response.status_code == 200
-    assert response.json()["contract_version"] == "1.2"
+    assert response.json()["contract_version"] == "1.3"
 
 
 @pytest.mark.parametrize("origin,expected", [

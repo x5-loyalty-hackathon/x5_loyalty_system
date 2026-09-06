@@ -8,6 +8,7 @@ import test from 'node:test';
 import { buildRecommendationRequest, DEMO_NOW, DEMO_USER_ID } from '../../src/fixtures/recommendationRequest.ts';
 import { acceptMeals, makeBasket, makePlan, makeDemoReceipt } from '../../src/domain/mealFlow.ts';
 import { reasonText } from '../../src/domain/copy.ts';
+import { providerHarness } from '../helpers/providerHarness.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const python = process.env.X5_TEST_PYTHON ?? (existsSync(`${root}.venv/bin/python`) ? `${root}.venv/bin/python` : 'python3');
@@ -45,7 +46,7 @@ async function api(t) {
   };
   const health = await call('GET', '/health');
   assert.equal(health.status, 200);
-  assert.equal(health.body.contract_version, '1.2');
+  assert.equal(health.body.contract_version, '1.3');
   assert.equal(health.body.recommendation_engine, engine);
   assert.equal(health.body.model_fallback, false, 'model tests must not silently use mock');
   return call;
@@ -82,12 +83,12 @@ test('TS → API: selected markdown pack → collected → cooked; retries award
   const receipt = makeDemoReceipt(plan, basket.products, DEMO_NOW);
   const bought = (await call('POST', '/api/v1/events/receipts', receipt)).body;
   assert.equal(bought.status, 'verified'); assert.equal(bought.meal_plan.status, 'collected');
-  assert.equal(bought.progress.recipes_completed, 0); assert.equal(bought.progress.avatar_xp, 10);
+  assert.equal(bought.progress.recipes_completed, 0); assert.equal(bought.progress.avatar_xp, 0);
   assert.equal(bought.progress.markdown_savings, 20);
   const duplicate = (await call('POST', '/api/v1/events/receipts', receipt)).body;
   assert.equal(duplicate.status, 'duplicate'); assert.deepEqual(duplicate.progress, bought.progress);
   const cooked = (await call('POST', completePath, confirmation)).body;
-  assert.equal(cooked.status, 'completed'); assert.equal(cooked.progress.avatar_xp, 30);
+  assert.equal(cooked.status, 'completed'); assert.equal(cooked.progress.avatar_xp, 20);
   const repeated = (await call('POST', completePath, confirmation)).body;
   assert.equal(repeated.status, 'duplicate'); assert.deepEqual(repeated.progress, cooked.progress);
 });
@@ -101,7 +102,7 @@ test('TS → API: verified ready meal completes with receipt, never a fixed milk
   const result = (await call('POST', '/api/v1/events/receipts', makeDemoReceipt(plan, basket.products, DEMO_NOW))).body;
   assert.equal(result.status, 'verified'); assert.equal(result.meal_plan.status, 'completed');
   assert.equal(result.progress.ready_meals_completed, 1); assert.equal(result.progress.recipes_completed, 0);
-  assert.equal(result.progress.avatar_xp, 30);
+  assert.equal(result.progress.avatar_xp, 20);
 });
 
 test('TS → API: all-home meal completes without a receipt or new purchase day', { timeout: 15000 }, async (t) => {
@@ -112,7 +113,7 @@ test('TS → API: all-home meal completes without a receipt or new purchase day'
   const plan = makePlan(meal, 'cook', 'next_visit', basket, DEMO_USER_ID, 'mobile-integration-home', DEMO_NOW);
   await call('POST', '/api/v1/meal-plans', plan);
   const result = (await call('POST', `/api/v1/meal-plans/${plan.plan_id}/complete-cook`, { user_id: DEMO_USER_ID, now: DEMO_NOW })).body;
-  assert.equal(result.status, 'completed'); assert.equal(result.progress.avatar_xp, 20);
+  assert.equal(result.status, 'completed'); assert.equal(result.progress.avatar_xp, 0);
   assert.equal(result.progress.purchase_days, 0); assert.equal(result.progress.verified_receipts, 0);
 });
 
@@ -134,4 +135,62 @@ test('public explanations match the authoritative backend registry', () => {
   const source = execFileSync(python, ['-c',
     'import json; from app.explanations import CHALLENGE_REASON_TEXT, RECIPE_REASON_TEXT, ROUTE_REASON_TEXT, STORE_REASON_TEXT; print(json.dumps(CHALLENGE_REASON_TEXT | RECIPE_REASON_TEXT | ROUTE_REASON_TEXT | STORE_REASON_TEXT))'], { cwd: root, encoding: 'utf8' });
   assert.deepEqual(reasonText, JSON.parse(source));
+});
+
+test('real provider → API: lost receipt response recovers plan and cooking on duplicate', { timeout: 15000 }, async (t) => {
+  const call = await api(t);
+  const body = async (method, path, payload) => {
+    const response = await call(method, path, payload);
+    assert.equal(response.status, 200, JSON.stringify(response.body));
+    return response.body;
+  };
+  let loseFirstResponse = true;
+  const render = providerHarness({
+    getHealth: () => body('GET', '/health'),
+    getRecipeBook: () => body('GET', `/api/v1/saved-recipes/${DEMO_USER_ID}`),
+    getRecommendations: (mode, anchor, storeId) => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest(mode, anchor, storeId)),
+    saveMealPlan: (plan) => body('POST', '/api/v1/meal-plans', plan),
+    completeCook: (id) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: DEMO_USER_ID, now: DEMO_NOW }),
+    submitReceipt: async (receipt) => {
+      const result = await body('POST', '/api/v1/events/receipts', receipt);
+      if (loseFirstResponse) { loseFirstResponse = false; throw new Error('Response lost after server commit'); }
+      assert.equal(result.status, 'duplicate');
+      assert.equal(result.meal_plan.status, 'collected');
+      return result;
+    },
+  });
+  await render().loadRecipes();
+  assert.equal(render().recipesStatus, 'ready', render().recipesError);
+  render().selectMeal('spaghetti_bolognese');
+  render().chooseRoute('cook');
+  render().chooseMarkdown(true);
+  assert.equal(await render().savePlan(), true, render().actionError);
+  assert.equal(await render().confirmPurchase(), false);
+  assert.equal(render().plan.status, 'saved');
+  assert.equal(await render().confirmPurchase(), true, render().actionError);
+  assert.equal(render().plan.status, 'collected');
+  assert.equal(render().progress.avatar_xp, 0);
+  assert.equal(render().startCooking(), true);
+  assert.equal(await render().confirmCooking(), true, render().actionError);
+  assert.equal(render().progress.avatar_xp, 20);
+  assert.equal(render().plan.reward.status, 'awarded');
+  assert.equal(await render().confirmCooking(), true);
+  assert.equal(render().progress.avatar_xp, 20);
+});
+
+test('post-checkout: verified current receipt enables one task, never passive XP', { timeout: 15000 }, async (t) => {
+  const call = await api(t);
+  const request = buildRecommendationRequest();
+  const proof = await call('POST', '/api/v1/events/receipts', { user_id: DEMO_USER_ID, receipt: request.current_receipt, now: DEMO_NOW });
+  assert.equal(proof.body.progress.avatar_xp, 0);
+  const meal = (await recommend(call)).recommendations.find((m) => m.meal_id === 'pasta_tomatoes');
+  const basket = makeBasket(meal, 'cook', 'next_visit', false);
+  for (let index = 0; index < 2; index++) {
+    const plan = makePlan(meal, 'cook', 'next_visit', basket, DEMO_USER_ID, `post-checkout-${index}`, DEMO_NOW);
+    const saved = (await call('POST', '/api/v1/meal-plans', plan)).body;
+    assert.equal(saved.plan.reward.status, index ? 'purchase_day_reward_used' : 'available');
+    const result = (await call('POST', `/api/v1/meal-plans/${plan.plan_id}/complete-cook`, { user_id: DEMO_USER_ID, now: DEMO_NOW })).body;
+    assert.equal(result.progress.avatar_xp, 20);
+    assert.equal(result.progress.purchase_days, 1);
+  }
 });

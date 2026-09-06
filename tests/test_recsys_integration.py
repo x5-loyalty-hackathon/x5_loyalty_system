@@ -74,7 +74,7 @@ def test_full_pipeline_via_recommendation_service_directly(ml_engine) -> None:
     response = service.recommend(request)
 
     assert isinstance(response, RecommendationResponse)
-    assert response.contract_version == "1.2"
+    assert response.contract_version == "1.3"
     assert len(response.recommendations) <= 3
     for rec in response.recommendations:
         assert rec.missing_count >= 0

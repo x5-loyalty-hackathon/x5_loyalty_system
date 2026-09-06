@@ -47,7 +47,7 @@ def test_health_exposes_contract_version() -> None:
     assert response.status_code == 200
     assert response.json() == {
         "status": "ok",
-        "contract_version": "1.2",
+        "contract_version": "1.3",
         "recommendation_engine": "mock",
         "model_fallback": False,
     }
@@ -56,7 +56,7 @@ def test_health_exposes_contract_version() -> None:
 def test_example_returns_current_repeat_and_explore_modes() -> None:
     body = post_recommendation(deepcopy(EXAMPLE_REQUEST))
 
-    assert body["contract_version"] == "1.2"
+    assert body["contract_version"] == "1.3"
     assert [item["missing_count"] for item in body["recommendations"]] == [1, 1, 2]
     assert {item["mode"] for item in body["recommendations"]} == {
         "current",

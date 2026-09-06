@@ -1,4 +1,4 @@
-"""Merge #8 must preserve API 1.2 and the provenance of offline experiments."""
+"""Merge #8 must preserve API 1.3 and the provenance of offline experiments."""
 
 import json
 import os
@@ -52,7 +52,7 @@ def test_runtime_training_population_has_no_future_purchases():
 
 
 def test_research_fields_are_not_silently_added_to_http_contract():
-    assert CONTRACT_VERSION == "1.2"
+    assert CONTRACT_VERSION == "1.3"
     payload = request().model_dump(mode="json")
     payload["ready_meal_options"] = []
     with pytest.raises(ValidationError, match="extra_forbidden"):

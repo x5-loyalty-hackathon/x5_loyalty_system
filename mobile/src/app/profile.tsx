@@ -69,7 +69,8 @@ export default function ProfileScreen() {
               </View>
 
               <View style={styles.grid}>
-                <Stat value={String(progress.recipes_completed)} label="рецептов приготовлено" />
+                <Stat value={String(progress.rewarded_meals)} label="заданий с наградой" />
+                <Stat value={String(progress.recipes_completed)} label="отметок «приготовлено»" />
                 <Stat value={String(progress.rescue_items)} label="уценённых единиц куплено" />
                 <Stat value={String(progress.ready_meals_completed)} label="готовых блюд куплено" />
                 <Stat value={money(progress.markdown_savings)} label="сэкономлено по чекам" />
@@ -78,6 +79,7 @@ export default function ProfileScreen() {
               </View>
 
               <Text style={styles.footnote}>
+                20 XP за выполненное задание с подтверждённой покупкой, не более одного бонуса на покупочный день. Обычная покупка XP не даёт.
                 Личная demo-статистика. Публичного рейтинга и денежных наград нет.
                 Синтетические покупки не доказывают рост частоты покупок в реальности.
               </Text>

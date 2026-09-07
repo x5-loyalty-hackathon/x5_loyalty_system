@@ -426,11 +426,19 @@ def _responder_actions(card: AuditCard, samples: int = 20) -> tuple[dict[str, Us
 
 
 def _with_retries(decide: Callable[[], LLMDecision], *, retries: int = 3) -> LLMDecision:
-    """Retry transport/model failures, never substitute an invented action."""
+    """Retry transport/model failures, never substitute an invented action.
+
+    ``OSError`` (not just ``TimeoutError``, one of its subclasses) is the one
+    to catch here: a live run against opencode_go crashed on
+    ``http.client.RemoteDisconnected`` — a plain server-closed-the-connection
+    reset, not a timeout, not wrapped in ``urllib.error.URLError`` by this
+    Python version's ``http.client`` — with zero retries attempted, because
+    neither superclass in the old, narrower tuple covered it.
+    """
     for attempt in range(retries):
         try:
             return decide()
-        except (urllib.error.URLError, TimeoutError, ValueError):
+        except (urllib.error.URLError, OSError, ValueError):
             if attempt == retries - 1:
                 raise
             time.sleep(0.25 * (2**attempt))

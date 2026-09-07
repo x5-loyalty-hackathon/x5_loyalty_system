@@ -5,12 +5,111 @@ import { existsSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { buildRecommendationRequest, DEMO_NOW, DEMO_USER_ID } from '../../src/fixtures/recommendationRequest.ts';
+import { buildRecommendationRequest, DEMO_NOW, DEMO_USER_ID, DEMO_PROFILES } from '../../src/fixtures/recommendationRequest.ts';
 import { acceptMeals, makeBasket, makePlan, makeDemoReceipt } from '../../src/domain/mealFlow.ts';
 import { reasonText } from '../../src/domain/copy.ts';
 import { providerHarness } from '../helpers/providerHarness.mjs';
+import { endpointHarness } from '../helpers/endpointHarness.mjs';
+import { kitchenProducts } from '../../src/domain/kitchen.ts';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
+
+for (const route of ['cook', 'ready']) {
+  test(`default standalone demo → real API: ${route} works without host setup and recovers lost receipt response`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    const receipts = []; let loseFirst = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        receipts.push(receipt);
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseFirst) { loseFirst = false; throw new Error('response lost after commit'); }
+        return result;
+      },
+    });
+    assert.equal(render().isDemoCheckout, true);
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(receipts.length, 0);
+    assert.equal(await render().checkout(), false);
+    assert.equal(render().kitchenItems.length, beforeKitchen);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.deepEqual(receipts[0], receipts[1]);
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen);
+    assert.match(render().notice, /Демо-покупка подтверждена/);
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(receipts.length, 2);
+  });
+}
+
+for (const route of ['cook', 'ready']) {
+  test(`host checkout → real API: ${route}, cancellation and lost response do not duplicate purchases/XP`, { timeout: 15000 }, async (t) => {
+    const call = await api(t);
+    const body = async (method, path, payload) => {
+      const result = await call(method, path, payload);
+      assert.equal(result.status, 200, JSON.stringify(result.body)); return result.body;
+    };
+    let cancel = true, opened = 0, loseReceipt = true;
+    const render = providerHarness({
+      getHealth: () => body('GET', '/health'),
+      getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+      getRecommendations: () => body('POST', '/api/v1/meal-recommendations', buildRecommendationRequest()),
+      saveMealPlan: (request) => body('POST', '/api/v1/meal-plans', request),
+      getHomeDecoration: (id) => body('GET', `/api/v1/home-decoration/${id}`),
+      completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`, { user_id: userId, now: DEMO_NOW }),
+      submitReceipt: async (receipt) => {
+        const result = await body('POST', '/api/v1/events/receipts', receipt);
+        if (loseReceipt) { loseReceipt = false; throw new Error('response lost'); }
+        return result;
+      },
+    }, { openCheckout: async ({ plan, products }) => {
+      opened++;
+      return cancel ? { status: 'cancelled' } : { status: 'purchased', receipt: makeDemoReceipt(plan, products, DEMO_NOW) };
+    } });
+    await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+    if (route === 'ready') assert.equal(render().takeReadyMeal(), true);
+    const beforeKitchen = render().kitchenItems.length;
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(render().editable, true);
+    const before = await body('GET', `/api/v1/progress/${DEMO_USER_ID}`);
+    assert.equal(before.verified_receipts, 0); assert.equal(before.avatar_xp, 0);
+    cancel = false;
+    assert.equal(await render().checkout(), false);
+    assert.equal(await render().checkout(), true, render().actionError);
+    assert.equal(opened, 2, 'retrying accepted receipt never reopens commerce checkout');
+    assert.equal(render().progress.verified_receipts, 1);
+    assert.ok(render().kitchenItems.length > beforeKitchen, 'lost response retry restores kitchen too');
+    assert.equal(render().cooking, false);
+    if (route === 'cook') {
+      assert.equal(render().progress.avatar_xp, 0);
+      assert.equal(render().startCooking(), true);
+      assert.equal(await render().confirmCooking(), true, render().actionError);
+      assert.equal(await render().confirmCooking(), true);
+    } else assert.equal(render().startCooking(), false);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(await render().checkout(), false);
+    assert.equal(opened, 2);
+  });
+}
 const python = process.env.X5_TEST_PYTHON ?? (existsSync(`${root}.venv/bin/python`) ? `${root}.venv/bin/python` : 'python3');
 const engine = process.env.X5_TEST_ENGINE ?? 'mock';
 assert.ok(['mock', 'model'].includes(engine), 'X5_TEST_ENGINE must be mock or model');
@@ -117,6 +216,38 @@ test('TS → API: all-home meal completes without a receipt or new purchase day'
   assert.equal(result.progress.purchase_days, 0); assert.equal(result.progress.verified_receipts, 0);
 });
 
+test('real provider → API: direct cooking creates a bound plan but no purchase or XP', { timeout: 15000 }, async (t) => {
+  const call = await api(t);
+  const body = async (method, path, payload) => {
+    const result = await call(method, path, payload);
+    assert.equal(result.status, 200, JSON.stringify(result.body));
+    return result.body;
+  };
+  let saves = 0;
+  const render = providerHarness({
+    getHealth: () => body('GET', '/health'),
+    getRecipeBook: (id) => body('GET', `/api/v1/saved-recipes/${id}`),
+    getRecommendations: (mode, anchor, storeId, profile) => body('POST',
+      '/api/v1/meal-recommendations', buildRecommendationRequest(mode, anchor, storeId, profile)),
+    saveMealPlan: (plan) => { saves++; return body('POST', '/api/v1/meal-plans', plan); },
+    completeCook: (id, userId) => body('POST', `/api/v1/meal-plans/${id}/complete-cook`,
+      { user_id: userId, now: DEMO_NOW }),
+    submitReceipt: () => assert.fail('Direct cooking must never simulate purchase evidence'),
+  });
+  await render().loadRecipes(); render().selectMeal('pasta_tomatoes');
+  assert.equal(render().selectedMeal.cook_variant.missing_count, 0);
+  assert.equal(await render().savePlanAndCook(), true, render().actionError);
+  assert.equal(saves, 1); assert.equal(render().cooking, true);
+  assert.equal(render().plan.status, 'collected');
+  assert.equal(render().plan.reward.status, 'no_purchase_evidence');
+  assert.equal(await render().confirmCooking(), true, render().actionError);
+  assert.equal(render().progress.avatar_xp, 0);
+  assert.equal(render().progress.purchase_days, 0);
+  assert.equal(render().progress.verified_receipts, 0);
+  assert.equal(await render().confirmCooking(), true);
+  assert.equal(render().progress.avatar_xp, 0);
+});
+
 test('TS → API: work anchor, explicit store and full-basket explore', { timeout: 15000 }, async (t) => {
   const call = await api(t);
   const response = await recommend(call, 'explore', 'work', 'store_21');
@@ -207,7 +338,10 @@ test('real provider → API: ready completed on save cannot fabricate a retry pu
     getHealth: () => body('GET', '/health'),
     getRecipeBook: () => body('GET', `/api/v1/saved-recipes/${DEMO_USER_ID}`),
     getRecommendations: async () => {
-      const request = buildRecommendationRequest();
+      // Complete stock now makes other cook recipes eligible too. Explicit
+      // explore exposes all three, so this tests post-checkout ready completion
+      // without depending on which full-basket recipe the selector represents.
+      const request = buildRecommendationRequest('explore');
       const ready = request.inventory_snapshot.find((p) => p.sku_id === 'ready_bolognese');
       assert.ok(ready);
       request.current_receipt.items = [{
@@ -243,4 +377,223 @@ test('real provider → API: ready completed on save cannot fabricate a retry pu
   assert.equal(receiptCalls, 0);
   assert.equal(await render().savePlan(), true, 'save retry must preserve the result');
   assert.deepEqual(await body('GET', `/api/v1/progress/${DEMO_USER_ID}`), before);
+});
+
+function realEndpoints(call, afterResponse = async () => {}) {
+  return endpointHarness(async (path, options = {}) => {
+    const method = options.method ?? 'GET';
+    const payload = options.body ? JSON.parse(options.body) : undefined;
+    const result = await call(method, path, payload);
+    assert.equal(result.status, 200, JSON.stringify(result.body));
+    await afterResponse({ method, path, payload, result: result.body });
+    return result.body;
+  });
+}
+
+test('real profiles → API: cooking examples have different recommendations and history reaches the model', { timeout: 20000 }, async (t) => {
+  const call = await api(t);
+  const endpoints = realEndpoints(call);
+  const results = [];
+  for (const profile of DEMO_PROFILES) {
+    const result = await endpoints.getRecommendations(null, 'home', null, profile);
+    assert.equal(result.user_id, profile.userId);
+    assert.equal(result.receipt_id, profile.currentReceipt.receipt_id);
+    assert.ok(result.recommendations.length > 0);
+    const progress = await endpoints.getProgress(profile.userId);
+    assert.equal(progress.avatar_xp, 0);
+    assert.equal(progress.verified_receipts, 1, 'history is context; only the explicit current event is verified');
+    assert.equal(progress.private_rank.cohort, 'cooking_households');
+    results.push(result);
+    t.diagnostic(`${engine} ${profile.id}: ${JSON.stringify(result.recommendations.map((meal) => ({
+      id: meal.meal_id, mode: meal.mode, missing: meal.cook_variant?.missing_count, score: meal.model_score,
+    })))}`);
+  }
+  assert.ok(results[0].recommendations.some((meal) => meal.meal_id === 'spaghetti_bolognese'));
+  assert.deepEqual(results[1].recommendations.map((meal) => meal.meal_id), ['pasta_tomatoes']);
+  assert.equal(results[2].recommendations[0].meal_id, 'chicken_soup');
+  if (engine === 'model') {
+    // Controlled sensitivity check: keep the same user/current receipt/catalog
+    // and change only purchase_history. Not an expert quality score or uplift.
+    const request = buildRecommendationRequest();
+    request.purchase_history = buildRecommendationRequest(null, 'home', null, DEMO_PROFILES[2]).purchase_history;
+    const swapped = (await call('POST', '/api/v1/meal-recommendations', request)).body;
+    const originalScores = new Map(results[0].recommendations.map((meal) => [meal.meal_id, meal.model_score]));
+    assert.ok(swapped.recommendations.some((meal) => originalScores.has(meal.meal_id)
+      && originalScores.get(meal.meal_id) !== meal.model_score), 'history must affect actual model scores');
+    t.diagnostic(`model family with soup history only: ${JSON.stringify(swapped.recommendations.map((meal) => ({
+      id: meal.meal_id, score: meal.model_score,
+    })))}`);
+  }
+});
+
+test('real provider + endpoints → API: profiles isolate book, plan, receipts, cooking, kitchen and XP', { timeout: 20000 }, async (t) => {
+  const call = await api(t);
+  const events = [];
+  const render = providerHarness(realEndpoints(call, async (event) => { events.push(event); }));
+  const recipes = { family: 'spaghetti_bolognese', vegetable: 'pasta_tomatoes',
+    soup: 'chicken_soup', veteran: 'spaghetti_bolognese' };
+  const planIds = new Set(), receiptIds = new Set();
+  for (const [i, profile] of DEMO_PROFILES.entries()) {
+    render().switchProfile(profile.id);
+    assert.equal(render().selectedMeal, null); assert.equal(render().plan, null);
+    assert.equal(render().cooking, false); assert.equal(render().progress, null);
+    assert.equal(render().busy, false); assert.equal(render().editable, true);
+    assert.equal(render().canConfirmPurchase, false);
+    assert.deepEqual(Array.from(render().book), []);
+    assert.deepEqual(render().kitchenItems, kitchenProducts(profile.currentReceipt.items));
+    await render().loadRecipes();
+    assert.equal(render().recipesStatus, 'ready', render().recipesError);
+    assert.equal(render().response.user_id, profile.userId);
+    await render().loadProgress();
+    assert.equal(render().progress.user_id, profile.userId);
+    assert.equal(render().progress.avatar_xp, 0);
+    assert.ok(recipes[profile.id], `Missing test recipe for ${profile.id}`);
+    render().selectMeal(recipes[profile.id]);
+    assert.ok(render().selectedMeal);
+    render().chooseRoute('cook');
+    assert.equal(await render().saveToBook(), true, render().actionError);
+    assert.equal(await render().savePlan(), true, render().actionError);
+    assert.equal(render().plan.user_id, profile.userId);
+    assert.equal(planIds.has(render().plan.plan_id), false); planIds.add(render().plan.plan_id);
+    if (render().canConfirmPurchase) {
+      assert.equal(await render().confirmPurchase(), true, render().actionError);
+      assert.ok(render().kitchenItems.some((item) => item.id === 'onion'));
+    }
+    assert.equal(render().startCooking(), true);
+    assert.equal(await render().confirmCooking(), true, render().actionError);
+    assert.equal(render().progress.user_id, profile.userId);
+    assert.equal(render().progress.avatar_xp, 20);
+    assert.equal(render().progress.rewarded_meals, 1);
+  }
+  for (const event of events.filter((item) => item.path === '/api/v1/events/receipts')) {
+    assert.equal(receiptIds.has(event.payload.receipt.receipt_id), false);
+    receiptIds.add(event.payload.receipt.receipt_id);
+    assert.equal(event.result.progress.user_id, event.payload.user_id);
+    if (event.payload.meal_plan_id) assert.ok(planIds.has(event.payload.meal_plan_id));
+  }
+  // Switching back restores server-owned data, while local cooking/plan/kitchen reset.
+  render().switchProfile(DEMO_PROFILES[0].id);
+  await render().loadRecipes(); await render().loadProgress();
+  assert.deepEqual(Array.from(render().book), [recipes[DEMO_PROFILES[0].id]]);
+  assert.equal(render().progress.avatar_xp, 20);
+  assert.equal(render().plan, null); assert.equal(render().cooking, false);
+  assert.deepEqual(render().kitchenItems, kitchenProducts(DEMO_PROFILES[0].currentReceipt.items));
+  for (const [i, profile] of DEMO_PROFILES.entries()) {
+    const book = (await call('GET', `/api/v1/saved-recipes/${profile.userId}`)).body;
+    assert.deepEqual(book.saved_recipe_ids, [recipes[profile.id]]);
+    const progress = (await call('GET', `/api/v1/progress/${profile.userId}`)).body;
+    assert.equal(progress.avatar_xp, 20);
+    assert.equal(progress.recipes_completed, 1);
+  }
+});
+
+test('real provider + endpoints → API: late receipt response cannot enter a new profile or survive switching back', { timeout: 20000 }, async (t) => {
+  const call = await api(t);
+  let release, committed;
+  const held = new Promise((resolve) => { release = resolve; });
+  const hasCommitted = new Promise((resolve) => { committed = resolve; });
+  const render = providerHarness(realEndpoints(call, async ({ path, payload }) => {
+    if (path === '/api/v1/events/receipts' && payload.meal_plan_id) { committed(); await held; }
+  }));
+  await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+  assert.equal(await render().savePlan(), true, render().actionError);
+  const oldPlan = render().plan;
+  const oldReceipt = render().confirmPurchase(); await hasCommitted;
+  assert.equal(render().busy, true);
+  render().switchProfile(DEMO_PROFILES[2].id);
+  await render().loadRecipes(); await render().loadProgress();
+  const snapshot = { response: render().response, kitchen: render().kitchenItems, progress: render().progress };
+  release();
+  assert.equal(await oldReceipt, false);
+  assert.equal(render().plan, null); assert.equal(render().canConfirmPurchase, false);
+  assert.equal(render().notice, null); assert.equal(render().actionError, null);
+  assert.equal(render().response, snapshot.response);
+  assert.equal(render().kitchenItems, snapshot.kitchen);
+  assert.equal(render().progress, snapshot.progress);
+  // B needs its own purchase too: a retained pendingReceipt from A must never
+  // be reused when B saves a different basket.
+  render().selectMeal('pasta_tomatoes');
+  assert.equal(await render().savePlan(), true, render().actionError);
+  assert.notEqual(render().plan.plan_id, oldPlan.plan_id);
+  assert.equal(render().plan.user_id, DEMO_PROFILES[2].userId);
+  assert.equal(render().canConfirmPurchase, true);
+  assert.equal(await render().confirmPurchase(), true, render().actionError);
+  assert.equal(render().plan.user_id, DEMO_PROFILES[2].userId);
+  assert.equal(render().progress.user_id, DEMO_PROFILES[2].userId);
+  assert.equal(render().startCooking(), true);
+  assert.equal(await render().confirmCooking(), true, render().actionError);
+  render().switchProfile(DEMO_PROFILES[0].id);
+  assert.equal(render().plan, null); assert.equal(render().canConfirmPurchase, false);
+  await render().loadRecipes(); await render().loadProgress();
+  assert.equal(render().progress.avatar_xp, 0, 'old receipt was accepted for A but did not confirm cooking');
+  assert.equal(render().progress.verified_receipts, 2);
+  assert.deepEqual(render().kitchenItems, kitchenProducts(DEMO_PROFILES[0].currentReceipt.items));
+});
+
+test('real decoration endpoints + provider: purchase-backed unlock, free apply, lost response retry and profile restore', { timeout: 25000 }, async (t) => {
+  const call = await api(t);
+  let loseApply = false;
+  const endpoints = endpointHarness(async (path, options = {}) => {
+    const result = await call(options.method ?? 'GET', path, options.body ? JSON.parse(options.body) : undefined);
+    if (result.status !== 200) throw Object.assign(new Error(`HTTP ${result.status}`), { status: result.status });
+    if (loseApply && path.endsWith('/apply')) { loseApply = false; throw new Error('Response lost after decoration commit'); }
+    return result.body;
+  });
+  const render = providerHarness(endpoints);
+  await render().loadHomeDecoration();
+  assert.equal(render().decoration.avatar_xp, 0);
+  assert.equal(render().decoration.items.length, 6);
+  assert.equal(await render().chooseDecorationGoal('wallpaper_mint'), true);
+  assert.equal(await render().applyDecoration('wallpaper_mint'), false);
+  assert.match(render().decorationError, /ещё закрыты/);
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_default');
+  const family = DEMO_PROFILES[0];
+  // Two different verified purchase days, using actual endpoint adapters and TS
+  // meal/plan builders. Neither history nor direct XP seeding opens the paper.
+  for (const [index, profile] of [
+    { ...family, currentReceipt: { ...family.currentReceipt, receipt_id: 'decor-earlier-current', purchased_at: '2026-09-03T10:00:00+03:00' } },
+    family,
+  ].entries()) {
+    const response = await endpoints.getRecommendations(null, 'home', null, profile);
+    const meal = response.recommendations.find((item) => item.meal_id === 'pasta_tomatoes');
+    const basket = makeBasket(meal, 'cook', 'next_visit', false);
+    assert.equal(basket.products.length, 0);
+    const plan = makePlan(meal, 'cook', 'next_visit', basket, family.userId, `decor-verified-day-${index}`, DEMO_NOW);
+    await endpoints.saveMealPlan(plan);
+    const result = await endpoints.completeCook(plan.plan_id, family.userId);
+    assert.equal(result.progress.avatar_xp, (index + 1) * 20);
+  }
+  await render().loadRecipes(); render().selectMeal('spaghetti_bolognese');
+  assert.equal(await render().savePlan(), true, render().actionError);
+  assert.equal(await render().confirmPurchase(), true, render().actionError);
+  assert.equal(await render().confirmCooking(), true, render().actionError);
+  // The reward triggers a GET in the provider; settle its real transport.
+  for (let attempt = 0; attempt < 100 && render().decorationStatus === 'loading'; attempt++) {
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.equal(render().decoration.avatar_xp, 60, render().decorationError);
+  assert.deepEqual(render().decoration.items.filter((item) => item.unlocked).map((item) => item.item_id),
+    ['wallpaper_default', 'wallpaper_mint', 'wallpaper_sunset', 'wallpaper_sky']);
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_default');
+  const progressBefore = await endpoints.getProgress(family.userId);
+  loseApply = true;
+  assert.equal(await render().applyDecoration('wallpaper_mint'), false);
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_default', 'lost response is not optimistic apply');
+  assert.equal(await render().retryHomeDecoration(), true);
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_mint');
+  assert.equal(render().decoration.goal_item_id, 'wallpaper_mint');
+  assert.equal(await render().applyDecoration('wallpaper_sunset'), true);
+  assert.equal(await render().applyDecoration('wallpaper_mint'), true);
+  assert.deepEqual(await endpoints.getProgress(family.userId), progressBefore, 'free changes never spend or award XP');
+  render().switchProfile(DEMO_PROFILES[1].id);
+  assert.equal(render().decoration, null); await render().loadHomeDecoration();
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_default');
+  assert.equal(render().decoration.goal_item_id, null); assert.equal(render().decoration.avatar_xp, 0);
+  render().switchProfile(family.id); await render().loadHomeDecoration();
+  assert.equal(render().decoration.applied_item_id, 'wallpaper_mint');
+  assert.equal(render().decoration.goal_item_id, 'wallpaper_mint');
+  const restarted = providerHarness(endpoints); await restarted().loadHomeDecoration();
+  assert.equal(restarted().decoration.applied_item_id, 'wallpaper_mint', 'new client restores server selection');
+  assert.equal(await restarted().chooseDecorationGoal(null), true);
+  assert.equal(restarted().decoration.goal_item_id, null);
 });

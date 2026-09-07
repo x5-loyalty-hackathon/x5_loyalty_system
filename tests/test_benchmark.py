@@ -18,6 +18,8 @@ from recsys.benchmark import (
     verdict,
 )
 from recsys.regimes import REGIMES
+from recsys.experimental.catalog_freeze import baseline_catalog, recipe_content_hash
+from recsys.experimental.recipes import RECIPES
 from recsys.response_models import (
     EconomicResponder,
     RuleBasedResponder,
@@ -26,6 +28,21 @@ from recsys.response_models import (
 
 SMALL_REGIMES = REGIMES[:3]
 RESPONDERS = (RuleBasedResponder(), EconomicResponder())
+
+
+@pytest.mark.parametrize("recipes", [None, baseline_catalog()[:5]])
+def test_benchmark_records_the_actual_catalog_without_changing_default(recipes) -> None:
+    result = run_benchmark(
+        (Arm(name="mock", engine=DeterministicMockEngine()),),
+        regimes=SMALL_REGIMES[:1],
+        responders=RESPONDERS[:1],
+        users_per_regime=2,
+        recipes=recipes,
+    )
+    expected = list(RECIPES) if recipes is None else recipes
+    assert result.recipe_catalog_hash == recipe_content_hash(expected)
+    if recipes is None:
+        assert result.recipe_catalog_hash != recipe_content_hash(baseline_catalog())
 
 
 def _run(arms, **kwargs):

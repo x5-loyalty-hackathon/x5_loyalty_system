@@ -1,18 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { KITCHEN_BASE_LAYERS, kitchenLayerRect } from '../data/kitchenLayers';
+import { KITCHEN_UPGRADES } from '../data/kitchenUpgrades';
 import { placeProducts } from '../data/kitchenPlacement';
 import { slotRect } from '../data/kitchenSlots';
+import type { ImageSourcePropType as KitchenLayerSource } from 'react-native';
 import type { KitchenProduct } from '../domain/kitchen';
 import { color } from '../theme/tokens';
 
 /** Высота полосы по умолчанию — как в макете экрана «после чека». */
 const BAND_HEIGHT = 286;
-/**
- * Арт комнаты: сетка 117×156 по 4 точки на клетку, сдвиг влево как в макете.
- * Показываем столько, сколько влезает: лишнее обрезается по высоте полосы.
- */
-const ART = { left: -39, top: 0, width: 468, height: 624 };
-
 /**
  * Позы Домового.
  *
@@ -50,6 +47,7 @@ export function KitchenScene({
   speech,
   pose = 'idle',
   height = BAND_HEIGHT,
+  equipped,
   onMenuPress,
 }: {
   products: readonly KitchenProduct[];
@@ -59,13 +57,30 @@ export function KitchenScene({
   pose?: keyof typeof MASCOT;
   /** Сколько комнаты показать по высоте. */
   height?: number;
+  /** Поставленная косметика: id предмета -> стоит ли он на кухне. */
+  equipped?: Record<string, boolean>;
   onMenuPress?: () => void;
 }) {
   const { placed } = placeProducts(products);
 
+  // Поставленный предмет подменяет спрайт своего слоя. Габариты совпадают с
+  // базовым, поэтому подмена ничего не двигает. Если на один слой поставлено
+  // несколько вариантов, выигрывает последний в каталоге.
+  const skins = new Map<string, KitchenLayerSource>();
+  for (const upgrade of KITCHEN_UPGRADES) {
+    if (equipped?.[upgrade.id]) skins.set(upgrade.layer, upgrade.source);
+  }
+
   return (
     <View style={[styles.band, { height }]}>
-      <Image source={require('../../assets/kitchen/kitchen-full.png')} style={styles.art} />
+      {KITCHEN_BASE_LAYERS.map((layer) => (
+        <Image
+          key={layer.id}
+          source={skins.get(layer.id) ?? layer.source}
+          style={[styles.layer, kitchenLayerRect(layer)]}
+          resizeMode="stretch"
+        />
+      ))}
 
       {placed.map(({ sprite, slot }) => (
         <Image
@@ -104,7 +119,7 @@ export function KitchenScene({
 
 const styles = StyleSheet.create({
   band: { backgroundColor: color.cream, overflow: 'hidden' },
-  art: { position: 'absolute', ...ART },
+  layer: { position: 'absolute' },
   // Домовой стоит на нарисованном полу; шторка проходит поверх него.
 
   /** Спрайт занимает слот клетка в клетку: габариты арта равны размеру слота. */

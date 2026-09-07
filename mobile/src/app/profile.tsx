@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
+import { DemoProfileSelector } from '../components/DemoProfileSelector';
 import { useDemo } from '../state/DemoContext';
 import { color } from '../theme/tokens';
 import { levelShare } from '../domain/mealFlow';
 import { money } from '../domain/copy';
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { progress, progressStatus, progressError, loadProgress } = useDemo();
 
   useEffect(() => {
@@ -78,13 +81,25 @@ export default function ProfileScreen() {
                 <Stat value={String(progress.verified_receipts)} label="подтверждённых чеков" />
               </View>
 
+              <Pressable style={styles.styleLink} onPress={() => router.push('/kitchen-style')}>
+                <View style={styles.styleLinkCopy}>
+                  <Text style={styles.styleLinkTitle}>Убранство кухни</Text>
+                  <Text style={styles.styleLinkHint}>
+                    Предметы открываются с уровнем — выберите, что поставить
+                  </Text>
+                </View>
+                <Text style={styles.styleLinkArrow}>›</Text>
+              </Pressable>
+
               <Text style={styles.footnote}>
-                20 XP за выполненное задание с подтверждённой покупкой, не более одного бонуса на покупочный день. Обычная покупка XP не даёт.
+                До 20 XP за выбранное задание: готовку с подтверждённой покупкой или покупку готового блюда.
+                Не больше одного бонуса за блюдо на покупочный день.
                 Личная demo-статистика. Публичного рейтинга и денежных наград нет.
                 Синтетические покупки не доказывают рост частоты покупок в реальности.
               </Text>
             </>
           )}
+          <DemoProfileSelector />
         </ScrollView>
         <BottomNav active="profile" />
       </View>
@@ -124,6 +139,14 @@ const styles = StyleSheet.create({
   statValue: { color: color.ink, fontSize: 22, fontWeight: '700', marginBottom: 4 },
   statLabel: { color: color.muted, fontSize: 11.5, lineHeight: 15 },
 
+  styleLink: {
+    flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 12,
+    padding: 14, backgroundColor: color.white, borderRadius: 18,
+  },
+  styleLinkCopy: { flex: 1 },
+  styleLinkTitle: { color: color.ink, fontSize: 15, fontWeight: '700', marginBottom: 3 },
+  styleLinkHint: { color: color.muted, fontSize: 12.5, lineHeight: 17 },
+  styleLinkArrow: { color: color.muted, fontSize: 20, fontWeight: '700' },
   footnote: { marginTop: 16, color: color.muted, fontSize: 12, lineHeight: 17 },
 
   center: { alignItems: 'center', justifyContent: 'center', paddingVertical: 80, gap: 10 },

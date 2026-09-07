@@ -438,8 +438,11 @@ def compute_features(
 #: this quantity, so a model that also encodes it is duplicating the pipeline's
 #: own work — measured at r = -0.71 between ``model_score`` and missing count
 #: (see ``docs/benchmark-report.md``).
+#: Membership follows the feature's inputs: missing_vs_basket divides missing
+#: count by basket size, so preference-only variants must suppress it too
+#: (source fix 364ca21). The serving default keeps effort features enabled.
 EFFORT_FEATURE_NAMES: frozenset[str] = frozenset(
-    {"missing_ratio", "missing_cost_norm"}
+    {"missing_ratio", "missing_cost_norm", "missing_vs_basket"}
 )
 
 #: Features describing *the shop*, not the shopper or the dish.

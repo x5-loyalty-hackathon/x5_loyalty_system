@@ -8,6 +8,8 @@ from uuid import uuid4
 
 from app.contracts import (
     FulfillmentOption,
+    HomeDecorationItem,
+    HomeDecorationSnapshot,
     MealPlanCompletionStatus,
     MealPlanSaveRequest,
     MealPlanSaveStatus,
@@ -23,6 +25,13 @@ from app.contracts import (
     Receipt,
     RecommendationRequest,
     SavedRecipeStatus,
+)
+from app.home_decoration import (
+    HomeDecorationItemLocked,
+    HomeDecorationItemNotFound,
+    HomeDecorationRecord,
+    WALLPAPER_CATALOG,
+    WALLPAPERS_BY_ID,
 )
 from app.meal_offer import IssuedMealOffer
 
@@ -111,6 +120,25 @@ class SavedRecipeOutcome:
     saved_recipe_ids: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class MetricsPlanRecord:
+    user_id: str
+    route: MealRoute
+    created_at: datetime
+    completed_at: datetime | None
+    awarded_xp: int
+
+
+@dataclass(frozen=True)
+class MetricsStateSnapshot:
+    """Detached analytical inputs; never calls progress/plan snapshot writers."""
+
+    receipts: tuple[tuple[str, Receipt], ...]
+    offers: tuple[tuple[str, datetime], ...]
+    plans: tuple[MetricsPlanRecord, ...]
+    receipt_cohorts: dict[str, RankCohort]
+
+
 class InMemoryStateRepository:
     """Demo-only state. Replace with a persistent adapter without changing APIs."""
 
@@ -124,6 +152,7 @@ class InMemoryStateRepository:
         self._referral_inviter_by_invitee: dict[str, str] = {}
         self._meal_plans: dict[str, MealPlanRecord] = {}
         self._saved_recipe_ids_by_user: dict[str, set[str]] = {}
+        self._home_decoration_by_user: dict[str, HomeDecorationRecord] = {}
 
     def reset(self) -> None:
         with self._lock:
@@ -135,6 +164,92 @@ class InMemoryStateRepository:
             self._referral_inviter_by_invitee.clear()
             self._meal_plans.clear()
             self._saved_recipe_ids_by_user.clear()
+            self._home_decoration_by_user.clear()
+
+    def metrics_snapshot(self) -> MetricsStateSnapshot:
+        """One consistent copy under the ledger lock, without registering users."""
+        with self._lock:
+            return MetricsStateSnapshot(
+                receipts=tuple(
+                    (self._receipt_owners[receipt_id], receipt.model_copy(deep=True))
+                    for receipt_id, receipt in self._verified_receipts.items()
+                ),
+                offers=tuple(
+                    (offer.user_id, offer.issued_at)
+                    for offer in self._meal_offers.values()
+                ),
+                plans=tuple(
+                    MetricsPlanRecord(
+                        user_id=plan.user_id, route=plan.selected_route,
+                        created_at=plan.created_at, completed_at=plan.completed_at,
+                        awarded_xp=plan.awarded_xp,
+                    )
+                    for plan in self._meal_plans.values()
+                ),
+                receipt_cohorts={
+                    user_id: user.rank_cohort for user_id, user in self._users.items()
+                    if user.verified_receipts > 0
+                },
+            )
+
+    def home_decoration(self, user_id: str) -> HomeDecorationSnapshot:
+        with self._lock:
+            return self._home_decoration_snapshot(user_id)
+
+    def set_home_decoration_goal(
+        self, *, user_id: str, item_id: str | None,
+    ) -> HomeDecorationSnapshot:
+        with self._lock:
+            if item_id is not None and item_id not in WALLPAPERS_BY_ID:
+                raise HomeDecorationItemNotFound(item_id)
+            decoration = self._home_decoration_by_user.setdefault(
+                user_id, HomeDecorationRecord(),
+            )
+            decoration.goal_item_id = item_id
+            return self._home_decoration_snapshot(user_id)
+
+    def apply_home_decoration(
+        self, *, user_id: str, item_id: str,
+    ) -> HomeDecorationSnapshot:
+        with self._lock:
+            item = WALLPAPERS_BY_ID.get(item_id)
+            if item is None:
+                raise HomeDecorationItemNotFound(item_id)
+            # Check the authoritative ledger and update decoration atomically,
+            # without creating a progress record for a decor-only visitor.
+            snapshot = self._home_decoration_snapshot(user_id)
+            if snapshot.avatar_level < item.unlock_level:
+                raise HomeDecorationItemLocked(item_id)
+            decoration = self._home_decoration_by_user.setdefault(
+                user_id, HomeDecorationRecord(),
+            )
+            decoration.applied_item_id = item_id
+            return snapshot.model_copy(update={"applied_item_id": item_id})
+
+    def _home_decoration_snapshot(self, user_id: str) -> HomeDecorationSnapshot:
+        """Read only; caller holds the shared reward/decoration repository lock."""
+        progress = self._users.get(user_id)
+        xp = progress.avatar_xp if progress is not None else 0
+        level = 1 + xp // XP_PER_LEVEL
+        decoration = self._home_decoration_by_user.get(user_id, HomeDecorationRecord())
+        return HomeDecorationSnapshot(
+            user_id=user_id,
+            avatar_xp=xp,
+            avatar_level=level,
+            goal_item_id=decoration.goal_item_id,
+            applied_item_id=decoration.applied_item_id,
+            items=[
+                HomeDecorationItem(
+                    item_id=item.item_id,
+                    title=item.title,
+                    description=item.description,
+                    unlock_level=item.unlock_level,
+                    required_xp=(item.unlock_level - 1) * XP_PER_LEVEL,
+                    unlocked=level >= item.unlock_level,
+                )
+                for item in WALLPAPER_CATALOG
+            ],
+        )
 
     def save_recipe(self, *, user_id: str, recipe_id: str) -> SavedRecipeOutcome:
         """Idempotently add a recipe to the demo recipe book; awards no XP."""

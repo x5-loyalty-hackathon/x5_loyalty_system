@@ -557,6 +557,33 @@ class SavedRecipeSaveResponse(SavedRecipeCollection):
     status: SavedRecipeStatus
 
 
+class HomeDecorationItem(ApiModel):
+    item_id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    description: str
+    unlock_level: int = Field(ge=1)
+    required_xp: int = Field(ge=0)
+    unlocked: bool
+
+
+class HomeDecorationSnapshot(ApiModel):
+    user_id: str
+    avatar_xp: int = Field(ge=0)
+    avatar_level: int = Field(ge=1)
+    goal_item_id: str | None
+    applied_item_id: str = Field(min_length=1)
+    items: list[HomeDecorationItem] = Field(min_length=1)
+
+
+class HomeDecorationGoalRequest(ApiModel):
+    # Explicit null clears the goal; an omitted item_id is an invalid request.
+    item_id: str | None = Field(min_length=1)
+
+
+class HomeDecorationApplyRequest(ApiModel):
+    item_id: str = Field(min_length=1)
+
+
 class PrivateRank(ApiModel):
     cohort: RankCohort
     position: int = Field(ge=1)

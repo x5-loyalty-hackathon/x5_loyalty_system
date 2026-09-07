@@ -282,6 +282,37 @@
       ],
       "is_prepared_food": true,
       "expires_at": "2026-09-05T23:00:00+03:00"
+    },
+    {
+      "sku_id": "ready_tomato_pasta",
+      "name": "Паста с томатами готовая, 300 г",
+      "category": "prepared_food",
+      "ingredient_ids": [
+        "pasta",
+        "tomato",
+        "cheese"
+      ],
+      "store_id": "store_17",
+      "distance_km": 0.4,
+      "price": 199.9,
+      "original_price": 199.9,
+      "is_markdown": false,
+      "safety_eligible": true,
+      "available_quantity": 4,
+      "fulfillment_options": [
+        "delivery",
+        "next_visit"
+      ],
+      "meal_intent_ids": [
+        "tomato_pasta"
+      ],
+      "contained_categories": [
+        "pantry",
+        "vegetable",
+        "dairy"
+      ],
+      "is_prepared_food": true,
+      "expires_at": "2026-09-05T23:00:00+03:00"
     }
   ],
   "requested_mode": null,

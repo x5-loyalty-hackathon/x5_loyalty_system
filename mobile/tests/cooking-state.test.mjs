@@ -6,6 +6,7 @@ import ts from 'typescript';
 import * as mealFlow from '../src/domain/mealFlow.ts';
 import * as fixtures from '../src/fixtures/recommendationRequest.ts';
 import * as kitchen from '../src/domain/kitchen.ts';
+import * as commerce from '../src/domain/commerce.ts';
 
 const meal = {
   offer_id: 'offered-home-meal',
@@ -57,6 +58,7 @@ function providerHarness(recommendations = response) {
   const modules = {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx }, '../api/endpoints': api,
     '../fixtures/recommendationRequest': fixtures, '../domain/mealFlow': mealFlow, '../domain/kitchen': kitchen,
+    '../domain/commerce': commerce,
   };
   const source = readFileSync(new URL('../src/state/DemoContext.tsx', import.meta.url), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: {
@@ -117,13 +119,13 @@ test('HTTP-success business rejection is not cooking success; overlapping calls 
   assert.equal(harness.render().busy, false);
 });
 
-test('new recommendation query clears the previous cooking session and plan', async () => {
+test('browsing recommendations pauses cooking but preserves the selected task', async () => {
   const harness = providerHarness();
   await begin(harness);
   await harness.render().loadRecipes({ anchor: 'work' });
   assert.equal(harness.render().cooking, false);
-  assert.equal(harness.render().selectedMeal, null);
-  assert.equal(harness.render().plan, null);
+  assert.equal(harness.render().selectedMeal.meal_id, 'home_meal');
+  assert.equal(harness.render().plan.meal_id, 'home_meal');
 });
 
 async function purchaseHarness() {
@@ -164,8 +166,8 @@ test('kitchen changes after accepted purchase, not during request; retries and c
   assert.equal(await pending, true);
   assert.deepEqual(harness.render().kitchenItems, [...initial, { id: 'onion', name: 'Лук, 500 г' }]);
   harness.purchase(async () => purchaseResponse(harness, 'duplicate'));
-  assert.equal(await harness.render().confirmPurchase(), true);
-  assert.deepEqual(harness.receipts[0], harness.receipts[1]);
+  assert.equal(await harness.render().confirmPurchase(), false, 'accepted purchase must not keep offering confirmation');
+  assert.equal(harness.receipts.length, 1);
   assert.equal(harness.render().kitchenItems.length, initial.length + 1);
   assert.equal(harness.render().basket.products.length, 1, 'retry keeps the locked basket');
   assert.equal(harness.render().startCooking(), true);

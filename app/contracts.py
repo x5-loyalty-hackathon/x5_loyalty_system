@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 from datetime import date
+from typing import Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
@@ -143,6 +144,7 @@ class ReceiptItem(ApiModel):
     name: str = Field(min_length=1)
     category: str = Field(min_length=1)
     ingredient_ids: set[str] = Field(default_factory=set)
+    contained_categories: set[str] = Field(default_factory=set)
     brand: str | None = None
     quantity: float = Field(default=1, gt=0)
     unit_price: float = Field(ge=0)
@@ -201,6 +203,12 @@ class InventoryProduct(ApiModel):
     is_prepared_food: bool = False
     meal_intent_ids: set[str] = Field(default_factory=set)
     contained_categories: set[str] = Field(default_factory=set)
+    # Completeness refers to this SKU's mapped composition, not a similar recipe.
+    # Synthetic fixtures are trusted only inside the synthetic PoC boundary.
+    composition_complete: bool = False
+    composition_source: Literal[
+        "unknown", "synthetic_fixture", "manufacturer", "recipe_proxy"
+    ] = "unknown"
     safety_eligible: bool = True
     expires_at: AwareDatetime | None = None
     available_quantity: int = Field(default=1, ge=0)

@@ -554,6 +554,19 @@ class RecommendationService:
                 if not valid_products:
                     return None, f"no_safe_product:{ingredient.ingredient_id}"
 
+        # PoC plans select SKU IDs, not quantities or pack allocations. A SKU
+        # present in two required groups cannot be selected unambiguously by
+        # the host/client or accepted by IssuedMealOffer.selection_error.
+        # Keep single-group alternatives; do not silently assign a shared pack.
+        required_ids = {ingredient.ingredient_id for ingredient in required_missing}
+        for ingredient_id in required_ids:
+            product_options_by_ingredient[ingredient_id] = [
+                product for product in product_options_by_ingredient[ingredient_id]
+                if len(product.ingredient_ids & required_ids) == 1
+            ]
+            if not product_options_by_ingredient[ingredient_id]:
+                return None, f"no_unambiguous_product:{ingredient_id}"
+
         store_selection = self._select_basket_store(
             request=request,
             required_missing=required_missing,
@@ -786,11 +799,16 @@ class RecommendationService:
 
     @staticmethod
     def _receipt_ingredient_ids(request: RecommendationRequest) -> set[str]:
-        """Raw ingredients bought now; prepared dishes are not decomposed."""
+        """Raw ingredients from allowed packs; excluded packs are not decomposed.
+
+        This checks known composition only, not freshness/remaining home stock.
+        A rejected pack may be replaced with an allowed inventory product.
+        """
         return {
             ingredient_id
             for item in request.current_receipt.items
             if not item.is_prepared_food
+            and SafetyPolicy.composition_exclusion_reason(item, request.user) is None
             for ingredient_id in item.ingredient_ids
         }
 

@@ -85,6 +85,8 @@
       "ingredient_ids": ["egg", "milk", "tomato"],
       "meal_intent_ids": ["omelette"],
       "contained_categories": ["dairy", "egg", "vegetable"],
+      "composition_complete": true,
+      "composition_source": "synthetic_fixture",
       "is_prepared_food": true,
       "store_id": "store_17",
       "distance_km": 0.7,

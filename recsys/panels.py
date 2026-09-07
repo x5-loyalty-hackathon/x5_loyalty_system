@@ -698,8 +698,13 @@ def development_splits(root: Path = PANEL_ROOT) -> dict[str, Panel]:
 #: ``recsys.sensitivity``'s dials. Held here so three experiments cannot drift
 #: into three slightly different definitions of "high deficit".
 DEFICIT_LEVELS: dict[str, InventoryAssumptions] = {
+    # no_product_at_all's shipped default moved 0.08 -> 0.02 (see
+    # recsys/experimental/inventory.py; docs/research/recsys/llm-intent-eval.md
+    # §11.1). "низкий" used to read 0.02 against that 0.08 default; left as-is
+    # it would now be byte-identical to "база" instead of a distinct low
+    # bracket, so it moves down with it.
     "низкий": replace(
-        DEFAULT_INVENTORY_ASSUMPTIONS, no_product_at_all=0.02, out_of_stock=0.02
+        DEFAULT_INVENTORY_ASSUMPTIONS, no_product_at_all=0.005, out_of_stock=0.02
     ),
     "база": DEFAULT_INVENTORY_ASSUMPTIONS,
     "высокий": replace(

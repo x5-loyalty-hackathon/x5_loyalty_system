@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import http.client
 import subprocess
 import sys
+import urllib.error
 
 import pytest
 
 from recsys.llm_audit import (
     AuditCard,
     JsonCache,
+    LLMDecision,
     MockLLMClient,
     PROMPT_VERSION,
     cache_key,
@@ -17,6 +20,7 @@ from recsys.llm_audit import (
     population_weights,
     run_audit,
     stratified_sample,
+    _with_retries,
 )
 from recsys.response_models import UserAction
 
@@ -56,6 +60,52 @@ def test_invalid_llm_response_raises() -> None:
     from recsys.llm_audit import parse_decision
     with pytest.raises(ValueError):
         parse_decision({"action": "later", "confidence": 0.5, "reason_code": "x"})
+
+
+def test_with_retries_retries_a_server_closed_connection() -> None:
+    # A live run crashed on exactly this: http.client.RemoteDisconnected (a
+    # plain server-closed-the-connection reset, not a timeout) propagated
+    # with zero retries because it isn't a urllib.error.URLError or
+    # TimeoutError — the two exception types the old, narrower tuple caught.
+    attempts = []
+
+    def flaky() -> LLMDecision:
+        attempts.append(1)
+        if len(attempts) < 3:
+            raise http.client.RemoteDisconnected("Remote end closed connection without response")
+        return LLMDecision(UserAction.BUY, 0.9, "taste_match")
+
+    decision = _with_retries(flaky, retries=3)
+    assert decision.action == UserAction.BUY
+    assert len(attempts) == 3
+
+
+def test_with_retries_still_gives_up_after_exhausting_attempts() -> None:
+    def always_disconnects() -> LLMDecision:
+        raise http.client.RemoteDisconnected("Remote end closed connection without response")
+
+    with pytest.raises(ConnectionError):
+        _with_retries(always_disconnects, retries=2)
+
+
+def test_with_retries_still_catches_url_error_and_value_error() -> None:
+    calls = {"url_error": 0, "value_error": 0}
+
+    def flaky_url_error() -> LLMDecision:
+        calls["url_error"] += 1
+        if calls["url_error"] < 2:
+            raise urllib.error.URLError("connection refused")
+        return LLMDecision(UserAction.IGNORE, 0.5, "insufficient_information")
+
+    assert _with_retries(flaky_url_error, retries=3).action == UserAction.IGNORE
+
+    def flaky_value_error() -> LLMDecision:
+        calls["value_error"] += 1
+        if calls["value_error"] < 2:
+            raise ValueError("malformed JSON response")
+        return LLMDecision(UserAction.SAVE, 0.5, "new_recipe_interest")
+
+    assert _with_retries(flaky_value_error, retries=3).action == UserAction.SAVE
 
 
 def test_cohen_kappa_known_cases() -> None:

@@ -83,17 +83,20 @@ def test_empty_results_remain_in_review_sheet_and_previous_labels_are_not_overwr
     assert (output / "review.csv").read_bytes() == original
     with (output / "review.csv").open(encoding="utf-8-sig", newline="") as handle:
         assert len(list(csv.DictReader(handle))) == 1
-    assert json.loads((output / "responses.json").read_text())["cases"][0]["case_id"] == case_id
-    inputs = [json.loads(line) for line in (output / "llm_inputs.jsonl").read_text().splitlines()]
+    assert json.loads((output / "responses.json").read_text(encoding="utf-8"))["cases"][0]["case_id"] == case_id
+    inputs = [
+        json.loads(line)
+        for line in (output / "llm_inputs.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
     assert len(inputs) == 1 and inputs[0]["recommendations"] == []
-    manifest = json.loads((output / "manifest.json").read_text())
+    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["llm_inputs_sha256"] == content_hash(inputs)
     assert manifest["full_archive_included"] is True
     compact = tmp_path / "compact"
     write_pack(pack, compact, full_archive=False)
     assert not (compact / "responses.json").exists()
     assert (compact / "llm_inputs.jsonl").read_bytes() == (output / "llm_inputs.jsonl").read_bytes()
-    assert json.loads((compact / "manifest.json").read_text())["full_archive_included"] is False
+    assert json.loads((compact / "manifest.json").read_text(encoding="utf-8"))["full_archive_included"] is False
 
 
 @pytest.mark.parametrize("count", [0, 51])

@@ -351,17 +351,32 @@ class RecommendationService:
             if not candidates:
                 continue
             if mode == RecommendationMode.EXPLORE:
+                # Preference order: a cookable recipe you already have something
+                # for > a cookable recipe needing a whole fresh basket > a
+                # ready-only offer. Previously "not full basket" alone decided
+                # this, and a ready-only candidate is *always* "not full
+                # basket" (it consumes no raw products at all) — so it beat
+                # every fresh-basket recipe automatically, even when a real
+                # recipe existed for this person. That silently turned
+                # "recommend a meal" into "nothing to cook" for the sole
+                # purpose of avoiding a confirmation prompt (ADR-003) that a
+                # fresh-basket recipe would have carried anyway.
+                cookable = [
+                    candidate
+                    for candidate in candidates
+                    if "safe_ready_option_available" not in candidate.reason_codes
+                ]
                 partial = next(
-                    (
-                        candidate
-                        for candidate in candidates
-                        if not self._is_full_basket(candidate)
-                    ),
+                    (candidate for candidate in cookable if not self._is_full_basket(candidate)),
                     None,
                 )
-                representatives[mode] = partial or candidates[0]
-                if partial is None:
+                if partial is not None:
+                    representatives[mode] = partial
+                elif cookable:
+                    representatives[mode] = cookable[0]
                     explicit_choice_required.add(mode)
+                else:
+                    representatives[mode] = candidates[0]
             else:
                 representatives[mode] = candidates[0]
 
@@ -374,8 +389,9 @@ class RecommendationService:
             min(
                 default_candidates,
                 key=lambda mode: (
-                    default_candidates[mode].missing_count,
-                    -default_candidates[mode].model_score,
+                    RecommendationService._recommendation_sort_key(
+                        default_candidates[mode]
+                    )[:3],
                     MODE_ORDER.index(mode),
                 ),
             )
@@ -477,8 +493,18 @@ class RecommendationService:
     @staticmethod
     def _recommendation_sort_key(
         recommendation: RecipeRecommendation,
-    ) -> tuple[int, float, str]:
+    ) -> tuple[int, int, float, str]:
+        # A ready-only candidate (no safe cook path at all) is pinned to
+        # missing_count=1 by _ready_selection_candidate so it can compete for
+        # a slot at all. Sorting on missing_count alone then lets it outrank a
+        # genuinely cookable recipe that needs 2+ items, even when a cookable
+        # one exists in this same mode's pool — silently turning "recommend a
+        # meal" into "nothing to cook" for users who had a real recipe
+        # available. Ready-only now sorts strictly after every cook-capable
+        # candidate; only when none exists does it compete on its own terms.
+        is_ready_only = "safe_ready_option_available" in recommendation.reason_codes
         return (
+            int(is_ready_only),
             recommendation.missing_count,
             -recommendation.model_score,
             recommendation.recipe_id,

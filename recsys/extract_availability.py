@@ -1,26 +1,42 @@
 """Rebuild ``recsys/data/availability_reference.json`` from a collected snapshot.
 
-``recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL = 0.08`` — "8% of the time the shop does
-not carry the item at all" — was invented. Nobody measured it, and it turned
-out to matter more than anything else in the pipeline: it sits underneath a
-multiplicative veto, so a recipe with six required ingredients survives with
-probability ``p**6``.
+``recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL`` — "the shop does not
+carry the item at all" — was invented, not measured. It turned out to matter
+more than anything else in the pipeline: it sits underneath a multiplicative
+veto, so a recipe with six required ingredients survives with probability
+``p**6`` (this is what motivated lowering it from 0.08 to 0.02 — see
+``recsys/experimental/inventory.py`` and
+``docs/research/recsys/llm-intent-eval.md`` §11.1 — but that revision is
+*also* a guess, reasoned from "a regular store usually carries a staple in
+some form", not from this or any other measurement).
 
-We do have one real assortment measurement, from our own collection: which of a
-chain's products are actually present in a given store. This script extracts
-it so the constant can at least be argued with instead of asserted.
+We do have one real assortment measurement, from our own collection: which of
+a chain's products are actually present in a given store. This script
+extracts it so the constant can at least be argued with instead of asserted.
+``invented_constant`` below reads the live module constant rather than a
+copied-in literal specifically so this file cannot go stale the way it did
+once already: written when the shipped value was 0.08, left unchanged when
+it moved to 0.02, so the printed comparison quietly argued against a number
+nothing shipped any more.
 
 What this can and cannot say
 ---------------------------
 It measures **ready food**, which is the most localised category there is —
 made in store or delivered daily, and visibly different city to city. Staples
 like flour, milk and eggs are almost certainly stocked far more uniformly, so
-the number here is **not** the right value for recipe ingredients.
+the number here is **not** the right value for recipe ingredients — and
+notably it points in the *opposite* direction from the 0.08->0.02 revision:
+the measured "not carried" share for ready food is ~79%, an order of
+magnitude past even the original 0.08. That doesn't argue recipe-ingredient
+availability is anywhere near 79% either — ready food and bulk staples are
+different economics — but it is a reason not to treat 0.02 as more than a
+guess: the one real number we have, even heavily caveated, moved the wrong
+way for that story.
 
 What it does establish is direction and order of magnitude: the one real
-assortment figure we have is nowhere near 8%. So the constant should not be
-defended, and the sensitivity sweep must cover a range that contains this
-measurement rather than stopping short of it.
+assortment figure we have is nowhere near either invented constant. So
+neither should be defended, and the sensitivity sweep must cover a range
+that contains this measurement rather than stopping short of it.
 
 Usage::
 
@@ -35,6 +51,8 @@ import statistics
 import sys
 from pathlib import Path
 from typing import Any
+
+from recsys.experimental.inventory import P_NO_PRODUCT_AT_ALL
 
 SNAPSHOT_IDS: tuple[str, ...] = (
     "2026-09-04T22:52:34+00:00",
@@ -114,7 +132,7 @@ def extract(db_path: Path) -> dict[str, Any]:
         },
         #: The quantity ``recsys.experimental.inventory.P_NO_PRODUCT_AT_ALL`` claims to be.
         "observed_not_carried_median": round(1 - statistics.median(shares), 4),
-        "invented_constant": 0.08,
+        "invented_constant": P_NO_PRODUCT_AT_ALL,
         "stores": stores,
     }
 

@@ -131,10 +131,16 @@ DIALS: tuple[Dial, ...] = (
     Dial(
         name="no_product_at_all",
         question="Как часто нужного ингредиента нет в магазине вообще?",
+        # Shipped default moved 0.08 -> 0.02 (recsys/experimental/inventory.py,
+        # docs/research/recsys/llm-intent-eval.md §11.1): 0.08 independent-per-
+        # ingredient absence, with no retry, was zeroing out large slices of
+        # the catalog for unlucky personas. The bracket shifts down with it —
+        # 0.08 stays in range as the pessimistic reading instead of colliding
+        # with the new baseline.
         settings=(
-            Setting("0.02 (ассортимент полный)", _assume(no_product_at_all=0.02)),
-            Setting("0.08 (наше допущение)"),
-            Setting("0.35 (частые дыры)", _assume(no_product_at_all=0.35)),
+            Setting("0.005 (ассортимент почти полный)", _assume(no_product_at_all=0.005)),
+            Setting("0.02 (наше допущение)"),
+            Setting("0.08 (частые дыры)", _assume(no_product_at_all=0.08)),
         ),
     ),
     Dial(

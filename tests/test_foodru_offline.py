@@ -244,9 +244,9 @@ def test_quality_metrics_count_errors_and_exclude_uncertain_labels():
 
 def test_snapshot_separates_serving_without_erasing_cooking_ingredients():
     snapshot = Path(__file__).resolve().parents[1] / "recsys/data/foodru"
-    recipes = {r["recipe_id"]: r for r in json.loads((snapshot / "recipes.json").read_text())["recipes"]}
+    recipes = {r["recipe_id"]: r for r in json.loads((snapshot / "recipes.json").read_text(encoding="utf-8"))["recipes"]}
     products = {f"{p['chain']}:{p['plu']}": p for p in
-                json.loads((snapshot / "enriched_catalog.json").read_text())["products"]}
+                json.loads((snapshot / "enriched_catalog.json").read_text(encoding="utf-8"))["products"]}
     for key, serving in [("perekrestok:4310836", "Кофе"), ("perekrestok:4372008", "Мороженое")]:
         enriched = products[key]
         assert serving not in {i["name"] for i in enriched["assumed_ingredients"]}
@@ -261,7 +261,7 @@ def test_snapshot_separates_serving_without_erasing_cooking_ingredients():
 def test_curated_snapshot_keeps_pizza_base_and_soup_noodles_and_rejects_ambiguous_sides():
     snapshot = Path(__file__).resolve().parents[1] / "recsys/data/foodru"
     products = {f"{p['chain']}:{p['plu']}": p for p in
-                json.loads((snapshot / "enriched_catalog.json").read_text())["products"]}
+                json.loads((snapshot / "enriched_catalog.json").read_text(encoding="utf-8"))["products"]}
     pizza = products["pyaterochka:4391323"]["assumed_ingredients"]
     assert any("тесто" in i["name"].lower() or "мука" in i["name"].lower() for i in pizza)
     soup = products["perekrestok:4442431"]["assumed_ingredients"]
@@ -393,12 +393,12 @@ def test_committed_snapshot_has_no_dangling_pairs_and_preserves_original_product
     from recsys.experimental.contracts import ReadyMealOption
 
     root = Path(__file__).resolve().parents[1] / "recsys/data"
-    catalog = json.loads((root / "ready_food_catalog.json").read_text())
+    catalog = json.loads((root / "ready_food_catalog.json").read_text(encoding="utf-8"))
     snapshot = root / "foodru"
-    recipes = json.loads((snapshot / "recipes.json").read_text())["recipes"]
-    matches = json.loads((snapshot / "matches.json").read_text())["matches"]
-    enriched = json.loads((snapshot / "enriched_catalog.json").read_text())["products"]
-    options = [ReadyMealOption.model_validate(x) for x in json.loads((snapshot / "ready_meal_options.json").read_text())]
+    recipes = json.loads((snapshot / "recipes.json").read_text(encoding="utf-8"))["recipes"]
+    matches = json.loads((snapshot / "matches.json").read_text(encoding="utf-8"))["matches"]
+    enriched = json.loads((snapshot / "enriched_catalog.json").read_text(encoding="utf-8"))["products"]
+    options = [ReadyMealOption.model_validate(x) for x in json.loads((snapshot / "ready_meal_options.json").read_text(encoding="utf-8"))]
     recipes_by_id = {r["recipe_id"]: r for r in recipes}
     assert len(recipes_by_id) == len(recipes)
     assert len(enriched) == len(matches) == len(catalog["products"])

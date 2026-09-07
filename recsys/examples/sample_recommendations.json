@@ -27,12 +27,16 @@
         "default_mode": "current",
         "available_modes": [
           "current",
+          "repeat",
           "explore"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
+          ],
+          "repeat": [
+            "saved_recipe_strategy"
           ],
           "explore": [
             "novel_recipe_strategy",
@@ -45,34 +49,74 @@
       },
       "recommendations": [
         {
-          "recipe_id": "carrot_fritters",
-          "title": "Морковные оладьи",
+          "recipe_id": "syrniki",
+          "title": "Сырники",
           "mode": "current",
-          "model_score": 0.8301,
-          "missing_count": 2,
+          "model_score": 0.7249,
+          "missing_count": 3,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
-            "quick_recipe",
-            "low_missing_count"
+            "quick_recipe"
           ],
           "ingredients": [
             {
-              "ingredient_id": "carrot",
-              "name": "Морковь",
-              "category": "vegetable",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "carrot_fp_19",
-                  "name": "Морковь",
-                  "category": "vegetable",
-                  "store_id": "store_hub_1",
-                  "distance_km": 2.09,
-                  "price": 44.85,
-                  "original_price": 44.85,
-                  "brand": "Зелёная линия",
+                  "sku_id": "cottage_cheese_fp_66",
+                  "name": "Творог",
+                  "category": "dairy",
+                  "store_id": "store_13",
+                  "distance_km": 1.63,
+                  "price": 128.74,
+                  "original_price": 128.74,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sugar",
+              "name": "Сахар",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "sugar_fp_192",
+                  "name": "Сахар",
+                  "category": "pantry",
+                  "store_id": "store_13",
+                  "distance_km": 0.93,
+                  "price": 67.39,
+                  "original_price": 67.39,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "sugar_fp_191",
+                  "name": "Сахар",
+                  "category": "pantry",
+                  "store_id": "store_13",
+                  "distance_km": 1.52,
+                  "price": 73.11,
+                  "original_price": 73.11,
+                  "brand": "Первым делом",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -98,14 +142,215 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "flour_fp_44",
+                  "sku_id": "flour_fp_94",
                   "name": "Мука",
                   "category": "pantry",
-                  "store_id": "store_hub_1",
-                  "distance_km": 1.54,
-                  "price": 76.48,
-                  "original_price": 76.48,
+                  "store_id": "store_13",
+                  "distance_km": 2.24,
+                  "price": 73.7,
+                  "original_price": 73.7,
                   "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "flour_fp_95",
+                  "name": "Мука",
+                  "category": "pantry",
+                  "store_id": "store_13",
+                  "distance_km": 2.79,
+                  "price": 62.27,
+                  "original_price": 62.27,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "vanilla_sugar",
+              "name": "Сахар ванильный",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "receipt",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.6,
+            "selected_store_id": "store_13",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_13",
+                "distance_km": 2.79,
+                "covered_required_ingredients": 3,
+                "total_required_ingredients": 3,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_13_annex",
+                "distance_km": 0.42,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 3,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "rice_milk_porridge",
+          "title": "Рисовая каша на молоке",
+          "mode": "repeat",
+          "model_score": 0.5513,
+          "missing_count": 3,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "rice",
+              "name": "Рис",
+              "category": "grain",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "rice_fp_175",
+                  "name": "Рис",
+                  "category": "grain",
+                  "store_id": "store_13",
+                  "distance_km": 1.4,
+                  "price": 114.71,
+                  "original_price": 114.71,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "rice_fp_174",
+                  "name": "Рис",
+                  "category": "grain",
+                  "store_id": "store_13",
+                  "distance_km": 2.62,
+                  "price": 115.23,
+                  "original_price": 115.23,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "milk",
+              "name": "Молоко",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "milk_fp_123",
+                  "name": "Молоко",
+                  "category": "dairy",
+                  "store_id": "store_13",
+                  "distance_km": 0.64,
+                  "price": 96.75,
+                  "original_price": 96.75,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "milk_fp_122",
+                  "name": "Молоко",
+                  "category": "dairy",
+                  "store_id": "store_13",
+                  "distance_km": 3.35,
+                  "price": 92.48,
+                  "original_price": 92.48,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sugar",
+              "name": "Сахар",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "sugar_fp_192",
+                  "name": "Сахар",
+                  "category": "pantry",
+                  "store_id": "store_13",
+                  "distance_km": 0.93,
+                  "price": 67.39,
+                  "original_price": 67.39,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "sugar_fp_191",
+                  "name": "Сахар",
+                  "category": "pantry",
+                  "store_id": "store_13",
+                  "distance_km": 1.52,
+                  "price": 73.11,
+                  "original_price": 73.11,
+                  "brand": "Первым делом",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -128,16 +373,16 @@
             "anchor_type": "current_location",
             "anchor_id": null,
             "radius_km": 3.6,
-            "selected_store_id": "store_hub_1",
+            "selected_store_id": "store_13",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_hub_1",
-                "distance_km": 2.09,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
+                "store_id": "store_13",
+                "distance_km": 3.35,
+                "covered_required_ingredients": 3,
+                "total_required_ingredients": 3,
                 "complete": true,
                 "preferred_for_anchor": false
               }
@@ -154,13 +399,12 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "explore",
-          "model_score": 0.8846,
+          "model_score": 0.8854,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
             "quick_recipe",
-            "low_missing_count",
-            "safe_markdown_option_available"
+            "low_missing_count"
           ],
           "ingredients": [
             {
@@ -171,13 +415,13 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "cottage_cheese_fp_28",
+                  "sku_id": "cottage_cheese_fp_66",
                   "name": "Творог",
                   "category": "dairy",
-                  "store_id": "store_13_annex",
-                  "distance_km": 0.92,
-                  "price": 132.61,
-                  "original_price": 132.61,
+                  "store_id": "store_13",
+                  "distance_km": 1.63,
+                  "price": 128.74,
+                  "original_price": 128.74,
                   "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
@@ -193,19 +437,19 @@
               "name": "Сметана",
               "category": "dairy",
               "required": true,
-              "source": "markdown",
+              "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "sour_cream_md_97",
+                  "sku_id": "sour_cream_fp_188",
                   "name": "Сметана",
                   "category": "dairy",
-                  "store_id": "store_13_annex",
-                  "distance_km": 1.89,
-                  "price": 71.66,
-                  "original_price": 118.53,
+                  "store_id": "store_13",
+                  "distance_km": 1.86,
+                  "price": 115.84,
+                  "original_price": 115.84,
                   "brand": "Хороший выбор",
-                  "source": "markdown",
-                  "expires_at": "2026-09-06T08:05:32.160838+03:00",
+                  "source": "full_price",
+                  "expires_at": null,
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -218,17 +462,33 @@
             "anchor_type": "current_location",
             "anchor_id": null,
             "radius_km": 3.6,
-            "selected_store_id": "store_13_annex",
+            "selected_store_id": "store_13",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_13_annex",
-                "distance_km": 1.89,
+                "store_id": "store_13",
+                "distance_km": 1.86,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_13_annex",
+                "distance_km": 0.42,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_hub_1",
+                "distance_km": 2.86,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
                 "preferred_for_anchor": false
               }
             ]
@@ -237,13 +497,11 @@
             "delivery",
             "next_visit"
           ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
+          "safety_status": "approved",
+          "warnings": []
         }
       ],
-      "filtered_candidates": 43,
+      "filtered_candidates": 26,
       "warnings": []
     }
   },
@@ -273,12 +531,16 @@
         "default_mode": "current",
         "available_modes": [
           "current",
+          "repeat",
           "explore"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
+          ],
+          "repeat": [
+            "saved_recipe_strategy"
           ],
           "explore": [
             "novel_recipe_strategy",
@@ -291,42 +553,109 @@
       },
       "recommendations": [
         {
-          "recipe_id": "pork_chops",
-          "title": "Свиные отбивные",
+          "recipe_id": "cheese_tomato_toast",
+          "title": "Тосты с сыром и помидором",
           "mode": "current",
-          "model_score": 0.5994,
-          "missing_count": 1,
+          "model_score": 0.5015,
+          "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count"
+            "low_missing_count",
+            "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "pork",
-              "name": "Свинина",
-              "category": "meat",
+              "ingredient_id": "bread",
+              "name": "Хлеб",
+              "category": "grain",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "bread_fp_34",
+                  "name": "Хлеб",
+                  "category": "grain",
+                  "store_id": "store_18",
+                  "distance_km": 2.13,
+                  "price": 64.09,
+                  "original_price": 64.09,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "cheese",
+              "name": "Сыр",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "cheese_fp_49",
+                  "name": "Сыр",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 0.39,
+                  "price": 332.49,
+                  "original_price": 332.49,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "cheese_fp_48",
+                  "name": "Сыр",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 2.12,
+                  "price": 390.43,
+                  "original_price": 390.43,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "tomato",
+              "name": "Томаты",
+              "category": "vegetable",
               "required": true,
               "source": "receipt",
               "product_options": []
             },
             {
-              "ingredient_id": "vegetable_oil",
-              "name": "Растительное масло",
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
               "category": "pantry",
-              "required": true,
+              "required": false,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "vegetable_oil_fp_102",
-                  "name": "Растительное масло",
+                  "sku_id": "black_pepper_fp_27",
+                  "name": "Перец чёрный молотый",
                   "category": "pantry",
                   "store_id": "store_18",
-                  "distance_km": 1.23,
-                  "price": 137.72,
-                  "original_price": 137.72,
-                  "brand": null,
+                  "distance_km": 0.34,
+                  "price": 86.82,
+                  "original_price": 86.82,
+                  "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -335,30 +664,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "ingredient_id": "paprika",
-              "name": "Паприка",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "salt",
-              "name": "Соль",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "black_pepper",
-              "name": "Перец чёрный молотый",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
             }
           ],
           "store_selection": {
@@ -372,112 +677,7 @@
             "options": [
               {
                 "store_id": "store_18",
-                "distance_km": 1.23,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              }
-            ]
-          },
-          "fulfillment_options": [
-            "delivery",
-            "next_visit"
-          ],
-          "safety_status": "approved",
-          "warnings": []
-        },
-        {
-          "recipe_id": "fried_chicken_breast",
-          "title": "Жареная куриная грудка",
-          "mode": "explore",
-          "model_score": 0.5848,
-          "missing_count": 2,
-          "reason_codes": [
-            "category_history_match",
-            "quick_recipe",
-            "low_missing_count"
-          ],
-          "ingredients": [
-            {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
-              "category": "meat",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "chicken_fp_28",
-                  "name": "Куриное филе",
-                  "category": "meat",
-                  "store_id": "store_18",
-                  "distance_km": 0.9,
-                  "price": 314.5,
-                  "original_price": 314.5,
-                  "brand": null,
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "vegetable_oil",
-              "name": "Растительное масло",
-              "category": "pantry",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "vegetable_oil_fp_102",
-                  "name": "Растительное масло",
-                  "category": "pantry",
-                  "store_id": "store_18",
-                  "distance_km": 1.23,
-                  "price": 137.72,
-                  "original_price": 137.72,
-                  "brand": null,
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "salt",
-              "name": "Соль",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "black_pepper",
-              "name": "Перец чёрный молотый",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
-            }
-          ],
-          "store_selection": {
-            "anchor_type": "current_location",
-            "anchor_id": null,
-            "radius_km": 2.5,
-            "selected_store_id": "store_18",
-            "reason_codes": [
-              "maximum_ingredient_coverage"
-            ],
-            "options": [
-              {
-                "store_id": "store_18",
-                "distance_km": 1.23,
+                "distance_km": 2.13,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
@@ -491,9 +691,281 @@
           ],
           "safety_status": "approved",
           "warnings": []
+        },
+        {
+          "recipe_id": "oatmeal_with_banana",
+          "title": "Овсяная каша с бананом",
+          "mode": "repeat",
+          "model_score": 0.8053,
+          "missing_count": 3,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "oats",
+              "name": "Овсяные хлопья",
+              "category": "grain",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "oats_fp_131",
+                  "name": "Овсяные хлопья",
+                  "category": "grain",
+                  "store_id": "store_18",
+                  "distance_km": 2.21,
+                  "price": 99.38,
+                  "original_price": 99.38,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "milk",
+              "name": "Молоко",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "milk_fp_118",
+                  "name": "Молоко",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 1.99,
+                  "price": 91.29,
+                  "original_price": 91.29,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "banana",
+              "name": "Бананы",
+              "category": "fruit",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "banana_fp_9",
+                  "name": "Бананы",
+                  "category": "fruit",
+                  "store_id": "store_18",
+                  "distance_km": 1.09,
+                  "price": 103.76,
+                  "original_price": 103.76,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_178",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_18",
+                  "distance_km": 0.55,
+                  "price": 42.13,
+                  "original_price": 42.13,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 2.5,
+            "selected_store_id": "store_18",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_18",
+                "distance_km": 2.21,
+                "covered_required_ingredients": 3,
+                "total_required_ingredients": 3,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_hub_1",
+                "distance_km": 2.09,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 3,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
+          "mode": "explore",
+          "model_score": 0.8984,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "safe_markdown_option_available",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
+              "required": true,
+              "source": "markdown",
+              "product_options": [
+                {
+                  "sku_id": "cottage_cheese_md_66",
+                  "name": "Творог",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 0.78,
+                  "price": 80.69,
+                  "original_price": 143.07,
+                  "brand": null,
+                  "source": "markdown",
+                  "expires_at": "2026-09-05T13:02:33.288859+03:00",
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "cottage_cheese_fp_65",
+                  "name": "Творог",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 0.65,
+                  "price": 128.05,
+                  "original_price": 128.05,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "sour_cream_fp_188",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 0.75,
+                  "price": 101.76,
+                  "original_price": 101.76,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "sour_cream_fp_189",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_18",
+                  "distance_km": 1.73,
+                  "price": 97.18,
+                  "original_price": 97.18,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 2.5,
+            "selected_store_id": "store_18",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_18",
+                "distance_km": 1.73,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "adjusted",
+          "warnings": [
+            "Markdown availability is best-effort: the item is not reserved."
+          ]
         }
       ],
-      "filtered_candidates": 44,
+      "filtered_candidates": 43,
       "warnings": []
     }
   },
@@ -518,28 +990,31 @@
       "user_id": "synthetic_routine_0011",
       "receipt_id": "synthetic_routine_0011_current",
       "challenge_selection": {
-        "default_mode": null,
+        "default_mode": "current",
         "available_modes": [
+          "current",
           "explore"
         ],
         "mode_reason_codes": {
+          "current": [
+            "current_basket_strategy",
+            "selected_by_effort_then_relevance"
+          ],
           "explore": [
-            "novel_recipe_strategy",
-            "full_basket_requires_explicit_choice"
+            "novel_recipe_strategy"
           ]
         },
-        "explicit_choice_required": [
-          "explore"
-        ]
+        "explicit_choice_required": []
       },
       "recommendations": [
         {
-          "recipe_id": "chicken_and_vegetables",
-          "title": "Курица с овощами",
-          "mode": "explore",
-          "model_score": 0.8733,
-          "missing_count": 2,
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
+          "mode": "current",
+          "model_score": 0.939,
+          "missing_count": 1,
           "reason_codes": [
+            "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
@@ -547,20 +1022,20 @@
           ],
           "ingredients": [
             {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
-              "category": "meat",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "chicken_fp_30",
-                  "name": "Куриное филе",
-                  "category": "meat",
+                  "sku_id": "cottage_cheese_fp_66",
+                  "name": "Творог",
+                  "category": "dairy",
                   "store_id": "store_21",
-                  "distance_km": 1.91,
-                  "price": 318.34,
-                  "original_price": 318.34,
+                  "distance_km": 1.69,
+                  "price": 129.75,
+                  "original_price": 129.75,
                   "brand": "Фермерский дворик",
                   "source": "full_price",
                   "expires_at": null,
@@ -572,20 +1047,142 @@
               ]
             },
             {
-              "ingredient_id": "zucchini",
-              "name": "Кабачок",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.3,
+            "selected_store_id": "store_21",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_21",
+                "distance_km": 1.69,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "chicken_cucumber_salad",
+          "title": "Салат с курицей и огурцом",
+          "mode": "explore",
+          "model_score": 0.9023,
+          "missing_count": 2,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "chicken_fp_55",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_21",
+                  "distance_km": 2.83,
+                  "price": 318.21,
+                  "original_price": 318.21,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "cucumber",
+              "name": "Огурцы",
               "category": "vegetable",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "zucchini_fp_116",
-                  "name": "Кабачок",
+                  "sku_id": "cucumber_fp_74",
+                  "name": "Огурцы",
                   "category": "vegetable",
                   "store_id": "store_21",
-                  "distance_km": 0.89,
-                  "price": 97.49,
-                  "original_price": 97.49,
+                  "distance_km": 1.82,
+                  "price": 134.0,
+                  "original_price": 134.0,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "cucumber_fp_73",
+                  "name": "Огурцы",
+                  "category": "vegetable",
+                  "store_id": "store_21",
+                  "distance_km": 2.82,
+                  "price": 147.19,
+                  "original_price": 147.19,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_177",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_21",
+                  "distance_km": 1.77,
+                  "price": 42.08,
+                  "original_price": 42.08,
                   "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
@@ -597,20 +1194,45 @@
               ]
             },
             {
-              "ingredient_id": "salt",
-              "name": "Соль",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
-            },
-            {
               "ingredient_id": "black_pepper",
               "name": "Перец чёрный молотый",
               "category": "pantry",
               "required": false,
-              "source": "unavailable",
-              "product_options": []
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "black_pepper_fp_29",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_21",
+                  "distance_km": 2.23,
+                  "price": 102.34,
+                  "original_price": 102.34,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "black_pepper_fp_28",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_21",
+                  "distance_km": 2.39,
+                  "price": 89.64,
+                  "original_price": 89.64,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
             }
           ],
           "store_selection": {
@@ -619,21 +1241,12 @@
             "radius_km": 3.3,
             "selected_store_id": "store_21",
             "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
+              "maximum_ingredient_coverage"
             ],
             "options": [
               {
                 "store_id": "store_21",
-                "distance_km": 1.91,
-                "covered_required_ingredients": 2,
-                "total_required_ingredients": 2,
-                "complete": true,
-                "preferred_for_anchor": false
-              },
-              {
-                "store_id": "store_21_annex",
-                "distance_km": 2.69,
+                "distance_km": 2.83,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
@@ -649,7 +1262,7 @@
           "warnings": []
         }
       ],
-      "filtered_candidates": 46,
+      "filtered_candidates": 29,
       "warnings": []
     }
   },
@@ -699,15 +1312,13 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9433,
+          "model_score": 0.9326,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
-            "low_missing_count",
-            "safe_markdown_option_available",
-            "preferred_brand_option_available"
+            "low_missing_count"
           ],
           "ingredients": [
             {
@@ -723,19 +1334,19 @@
               "name": "Сметана",
               "category": "dairy",
               "required": true,
-              "source": "markdown",
+              "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "sour_cream_md_98",
+                  "sku_id": "sour_cream_fp_194",
                   "name": "Сметана",
                   "category": "dairy",
                   "store_id": "store_11",
-                  "distance_km": 1.35,
-                  "price": 61.53,
-                  "original_price": 110.13,
-                  "brand": "Хороший выбор",
-                  "source": "markdown",
-                  "expires_at": "2026-09-04T23:40:05.686613+03:00",
+                  "distance_km": 2.83,
+                  "price": 95.12,
+                  "original_price": 95.12,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -750,21 +1361,12 @@
             "radius_km": 3.4,
             "selected_store_id": "store_11",
             "reason_codes": [
-              "maximum_ingredient_coverage",
-              "nearest_store_tiebreak"
+              "maximum_ingredient_coverage"
             ],
             "options": [
               {
                 "store_id": "store_11",
-                "distance_km": 1.35,
-                "covered_required_ingredients": 1,
-                "total_required_ingredients": 1,
-                "complete": true,
-                "preferred_for_anchor": false
-              },
-              {
-                "store_id": "store_11_annex",
-                "distance_km": 2.45,
+                "distance_km": 2.83,
                 "covered_required_ingredients": 1,
                 "total_required_ingredients": 1,
                 "complete": true,
@@ -776,64 +1378,64 @@
             "delivery",
             "next_visit"
           ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
+          "safety_status": "approved",
+          "warnings": []
         },
         {
-          "recipe_id": "chicken_and_vegetables",
-          "title": "Курица с овощами",
+          "recipe_id": "pork_chops",
+          "title": "Свиные отбивные",
           "mode": "explore",
-          "model_score": 0.4372,
+          "model_score": 0.6256,
           "missing_count": 2,
           "reason_codes": [
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
+            "safe_markdown_option_available",
             "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
+              "ingredient_id": "pork",
+              "name": "Свинина",
               "category": "meat",
               "required": true,
-              "source": "full_price",
+              "source": "markdown",
               "product_options": [
                 {
-                  "sku_id": "chicken_fp_27",
-                  "name": "Куриное филе",
+                  "sku_id": "pork_md_171",
+                  "name": "Свинина",
                   "category": "meat",
-                  "store_id": "store_11_annex",
-                  "distance_km": 2.17,
-                  "price": 276.41,
-                  "original_price": 276.41,
-                  "brand": "Хороший выбор",
-                  "source": "full_price",
-                  "expires_at": null,
+                  "store_id": "store_hub_1",
+                  "distance_km": 2.63,
+                  "price": 299.24,
+                  "original_price": 452.53,
+                  "brand": "Зелёная линия",
+                  "source": "markdown",
+                  "expires_at": "2026-09-05T21:34:43.265939+03:00",
                   "fulfillment_options": [
+                    "delivery",
                     "next_visit"
                   ]
                 }
               ]
             },
             {
-              "ingredient_id": "zucchini",
-              "name": "Кабачок",
-              "category": "vegetable",
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "zucchini_fp_109",
-                  "name": "Кабачок",
-                  "category": "vegetable",
-                  "store_id": "store_11_annex",
-                  "distance_km": 0.64,
-                  "price": 102.85,
-                  "original_price": 102.85,
-                  "brand": null,
+                  "sku_id": "vegetable_oil_fp_212",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_hub_1",
+                  "distance_km": 0.98,
+                  "price": 130.81,
+                  "original_price": 130.81,
+                  "brand": "Фермерский дворик",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -844,12 +1446,37 @@
               ]
             },
             {
-              "ingredient_id": "salt",
-              "name": "Соль",
+              "ingredient_id": "paprika",
+              "name": "Паприка",
               "category": "pantry",
               "required": false,
               "source": "unavailable",
               "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_184",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_hub_1",
+                  "distance_km": 0.28,
+                  "price": 41.53,
+                  "original_price": 41.53,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
             },
             {
               "ingredient_id": "black_pepper",
@@ -864,14 +1491,14 @@
             "anchor_type": "current_location",
             "anchor_id": null,
             "radius_km": 3.4,
-            "selected_store_id": "store_11_annex",
+            "selected_store_id": "store_hub_1",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_11_annex",
-                "distance_km": 2.17,
+                "store_id": "store_hub_1",
+                "distance_km": 2.63,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
@@ -879,7 +1506,15 @@
               },
               {
                 "store_id": "store_11",
-                "distance_km": 0.6,
+                "distance_km": 1.16,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_11_annex",
+                "distance_km": 2.69,
                 "covered_required_ingredients": 1,
                 "total_required_ingredients": 2,
                 "complete": false,
@@ -888,13 +1523,16 @@
             ]
           },
           "fulfillment_options": [
+            "delivery",
             "next_visit"
           ],
-          "safety_status": "approved",
-          "warnings": []
+          "safety_status": "adjusted",
+          "warnings": [
+            "Markdown availability is best-effort: the item is not reserved."
+          ]
         }
       ],
-      "filtered_candidates": 45,
+      "filtered_candidates": 42,
       "warnings": []
     }
   },
@@ -921,11 +1559,16 @@
       "user_id": "synthetic_value_0016",
       "receipt_id": "synthetic_value_0016_current",
       "challenge_selection": {
-        "default_mode": null,
+        "default_mode": "current",
         "available_modes": [
+          "current",
           "explore"
         ],
         "mode_reason_codes": {
+          "current": [
+            "current_basket_strategy",
+            "selected_by_effort_then_relevance"
+          ],
           "explore": [
             "novel_recipe_strategy",
             "full_basket_requires_explicit_choice"
@@ -937,32 +1580,139 @@
       },
       "recommendations": [
         {
-          "recipe_id": "chicken_cucumber_salad",
-          "title": "Салат с курицей и огурцом",
-          "mode": "explore",
-          "model_score": 0.7854,
-          "missing_count": 3,
+          "recipe_id": "hummus",
+          "title": "Хумус",
+          "mode": "current",
+          "model_score": 0.4823,
+          "missing_count": 4,
           "reason_codes": [
+            "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "preferred_brand_option_available"
           ],
           "ingredients": [
             {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
-              "category": "meat",
+              "ingredient_id": "chickpeas",
+              "name": "Нут",
+              "category": "pantry",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "chicken_fp_27",
-                  "name": "Куриное филе",
-                  "category": "meat",
+                  "sku_id": "chickpeas_fp_57",
+                  "name": "Нут",
+                  "category": "pantry",
                   "store_id": "store_14",
-                  "distance_km": 1.3,
-                  "price": 298.22,
-                  "original_price": 298.22,
+                  "distance_km": 2.95,
+                  "price": 169.08,
+                  "original_price": 169.08,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "tahini",
+              "name": "Паста кунжутная тахини",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "tahini_fp_197",
+                  "name": "Паста кунжутная тахини",
+                  "category": "pantry",
+                  "store_id": "store_14",
+                  "distance_km": 2.7,
+                  "price": 366.18,
+                  "original_price": 366.18,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "lemon",
+              "name": "Лимон",
+              "category": "fruit",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "lemon_fp_117",
+                  "name": "Лимон",
+                  "category": "fruit",
+                  "store_id": "store_14",
+                  "distance_km": 1.34,
+                  "price": 113.5,
+                  "original_price": 113.5,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "garlic",
+              "name": "Чеснок",
+              "category": "vegetable",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "olive_oil",
+              "name": "Оливковое масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "olive_oil_fp_135",
+                  "name": "Оливковое масло",
+                  "category": "pantry",
+                  "store_id": "store_14",
+                  "distance_km": 0.85,
+                  "price": 480.21,
+                  "original_price": 480.21,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "cumin",
+              "name": "Зира",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "cumin_fp_74",
+                  "name": "Зира",
+                  "category": "pantry",
+                  "store_id": "store_14",
+                  "distance_km": 1.65,
+                  "price": 86.83,
+                  "original_price": 86.83,
                   "brand": "Зелёная линия",
                   "source": "full_price",
                   "expires_at": null,
@@ -974,66 +1724,16 @@
               ]
             },
             {
-              "ingredient_id": "cucumber",
-              "name": "Огурцы",
-              "category": "vegetable",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "cucumber_fp_35",
-                  "name": "Огурцы",
-                  "category": "vegetable",
-                  "store_id": "store_14",
-                  "distance_km": 1.52,
-                  "price": 147.28,
-                  "original_price": 147.28,
-                  "brand": null,
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "sour_cream",
-              "name": "Сметана",
-              "category": "dairy",
-              "required": true,
-              "source": "full_price",
-              "product_options": [
-                {
-                  "sku_id": "sour_cream_fp_92",
-                  "name": "Сметана",
-                  "category": "dairy",
-                  "store_id": "store_14",
-                  "distance_km": 1.44,
-                  "price": 95.57,
-                  "original_price": 95.57,
-                  "brand": "Хороший выбор",
-                  "source": "full_price",
-                  "expires_at": null,
-                  "fulfillment_options": [
-                    "delivery",
-                    "next_visit"
-                  ]
-                }
-              ]
-            },
-            {
-              "ingredient_id": "salt",
-              "name": "Соль",
+              "ingredient_id": "paprika",
+              "name": "Паприка",
               "category": "pantry",
               "required": false,
               "source": "unavailable",
               "product_options": []
             },
             {
-              "ingredient_id": "black_pepper",
-              "name": "Перец чёрный молотый",
+              "ingredient_id": "salt",
+              "name": "Соль",
               "category": "pantry",
               "required": false,
               "source": "unavailable",
@@ -1051,17 +1751,106 @@
             "options": [
               {
                 "store_id": "store_14",
-                "distance_km": 1.52,
-                "covered_required_ingredients": 3,
-                "total_required_ingredients": 3,
+                "distance_km": 2.95,
+                "covered_required_ingredients": 4,
+                "total_required_ingredients": 4,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
+          "mode": "explore",
+          "model_score": 0.8756,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "cottage_cheese_fp_63",
+                  "name": "Творог",
+                  "category": "dairy",
+                  "store_id": "store_14",
+                  "distance_km": 1.56,
+                  "price": 125.77,
+                  "original_price": 125.77,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "sour_cream_fp_191",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_14",
+                  "distance_km": 2.15,
+                  "price": 114.24,
+                  "original_price": 114.24,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.2,
+            "selected_store_id": "store_14",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_14",
+                "distance_km": 2.15,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
                 "complete": true,
                 "preferred_for_anchor": false
               },
               {
-                "store_id": "store_hub_1",
-                "distance_km": 1.2,
+                "store_id": "store_14_annex",
+                "distance_km": 0.97,
                 "covered_required_ingredients": 1,
-                "total_required_ingredients": 3,
+                "total_required_ingredients": 2,
                 "complete": false,
                 "preferred_for_anchor": false
               }
@@ -1075,7 +1864,7 @@
           "warnings": []
         }
       ],
-      "filtered_candidates": 46,
+      "filtered_candidates": 31,
       "warnings": []
     }
   },
@@ -1105,12 +1894,16 @@
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
-          "current"
+          "current",
+          "explore"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
+          ],
+          "explore": [
+            "novel_recipe_strategy"
           ]
         },
         "explicit_choice_required": []
@@ -1120,14 +1913,14 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9486,
+          "model_score": 0.937,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
-            "safe_markdown_option_available"
+            "preferred_brand_option_available"
           ],
           "ingredients": [
             {
@@ -1143,19 +1936,19 @@
               "name": "Сметана",
               "category": "dairy",
               "required": true,
-              "source": "markdown",
+              "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "sour_cream_md_98",
+                  "sku_id": "sour_cream_fp_183",
                   "name": "Сметана",
                   "category": "dairy",
                   "store_id": "store_16",
-                  "distance_km": 4.52,
-                  "price": 70.43,
-                  "original_price": 109.64,
-                  "brand": "Первым делом",
-                  "source": "markdown",
-                  "expires_at": "2026-09-05T04:12:02.691682+03:00",
+                  "distance_km": 3.01,
+                  "price": 104.56,
+                  "original_price": 104.56,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -1175,7 +1968,7 @@
             "options": [
               {
                 "store_id": "store_16",
-                "distance_km": 4.52,
+                "distance_km": 3.01,
                 "covered_required_ingredients": 1,
                 "total_required_ingredients": 1,
                 "complete": true,
@@ -1187,13 +1980,118 @@
             "delivery",
             "next_visit"
           ],
-          "safety_status": "adjusted",
-          "warnings": [
-            "Markdown availability is best-effort: the item is not reserved."
-          ]
+          "safety_status": "approved",
+          "warnings": []
+        },
+        {
+          "recipe_id": "carrot_fritters",
+          "title": "Морковные оладьи",
+          "mode": "explore",
+          "model_score": 0.6549,
+          "missing_count": 1,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "home_ingredient_reuse"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "carrot",
+              "name": "Морковь",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "carrot_fp_47",
+                  "name": "Морковь",
+                  "category": "vegetable",
+                  "store_id": "store_16",
+                  "distance_km": 2.73,
+                  "price": 52.85,
+                  "original_price": 52.85,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "egg",
+              "name": "Яйца",
+              "category": "egg",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "flour",
+              "name": "Мука",
+              "category": "pantry",
+              "required": true,
+              "source": "home",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_172",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_16",
+                  "distance_km": 3.49,
+                  "price": 46.63,
+                  "original_price": 46.63,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 5.9,
+            "selected_store_id": "store_16",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_16",
+                "distance_km": 2.73,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
         }
       ],
-      "filtered_candidates": 46,
+      "filtered_candidates": 26,
       "warnings": []
     }
   },
@@ -1220,12 +2118,16 @@
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
-          "current"
+          "current",
+          "explore"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
+          ],
+          "explore": [
+            "novel_recipe_strategy"
           ]
         },
         "explicit_choice_required": []
@@ -1235,7 +2137,7 @@
           "recipe_id": "pan_fried_semi_finished_cutlets",
           "title": "Котлеты жареные из полуфабриката",
           "mode": "current",
-          "model_score": 0.3645,
+          "model_score": 0.3738,
           "missing_count": 1,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1260,13 +2162,13 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "vegetable_oil_fp_116",
+                  "sku_id": "vegetable_oil_fp_203",
                   "name": "Растительное масло",
                   "category": "pantry",
                   "store_id": "store_hub_1",
-                  "distance_km": 2.14,
-                  "price": 139.94,
-                  "original_price": 139.94,
+                  "distance_km": 0.26,
+                  "price": 131.09,
+                  "original_price": 131.09,
                   "brand": null,
                   "source": "full_price",
                   "expires_at": null,
@@ -1292,12 +2194,21 @@
             "radius_km": 3.2,
             "selected_store_id": "store_hub_1",
             "reason_codes": [
-              "maximum_ingredient_coverage"
+              "maximum_ingredient_coverage",
+              "nearest_store_tiebreak"
             ],
             "options": [
               {
                 "store_id": "store_hub_1",
-                "distance_km": 2.14,
+                "distance_km": 0.26,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 1,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_19",
+                "distance_km": 1.58,
                 "covered_required_ingredients": 1,
                 "total_required_ingredients": 1,
                 "complete": true,
@@ -1311,9 +2222,154 @@
           ],
           "safety_status": "approved",
           "warnings": []
+        },
+        {
+          "recipe_id": "carrot_fritters",
+          "title": "Морковные оладьи",
+          "mode": "explore",
+          "model_score": 0.6894,
+          "missing_count": 2,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "carrot",
+              "name": "Морковь",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "carrot_fp_47",
+                  "name": "Морковь",
+                  "category": "vegetable",
+                  "store_id": "store_19",
+                  "distance_km": 1.26,
+                  "price": 46.53,
+                  "original_price": 46.53,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "egg",
+              "name": "Яйца",
+              "category": "egg",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "flour",
+              "name": "Мука",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "flour_fp_94",
+                  "name": "Мука",
+                  "category": "pantry",
+                  "store_id": "store_19",
+                  "distance_km": 2.22,
+                  "price": 63.12,
+                  "original_price": 63.12,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "flour_fp_93",
+                  "name": "Мука",
+                  "category": "pantry",
+                  "store_id": "store_19",
+                  "distance_km": 2.29,
+                  "price": 71.62,
+                  "original_price": 71.62,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_177",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_19",
+                  "distance_km": 1.54,
+                  "price": 41.06,
+                  "original_price": 41.06,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.2,
+            "selected_store_id": "store_19",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_19",
+                "distance_km": 2.29,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_19_annex",
+                "distance_km": 2.52,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
         }
       ],
-      "filtered_candidates": 46,
+      "filtered_candidates": 35,
       "warnings": []
     }
   },
@@ -1341,16 +2397,533 @@
       "user_id": "synthetic_explorer_0026",
       "receipt_id": "synthetic_explorer_0026_current",
       "challenge_selection": {
-        "default_mode": null,
-        "available_modes": [],
-        "mode_reason_codes": {},
-        "explicit_choice_required": []
+        "default_mode": "current",
+        "available_modes": [
+          "current",
+          "explore"
+        ],
+        "mode_reason_codes": {
+          "current": [
+            "current_basket_strategy",
+            "selected_by_effort_then_relevance"
+          ],
+          "explore": [
+            "novel_recipe_strategy",
+            "full_basket_requires_explicit_choice"
+          ]
+        },
+        "explicit_choice_required": [
+          "explore"
+        ]
       },
-      "recommendations": [],
-      "filtered_candidates": 47,
-      "warnings": [
-        "No safe recommendations are currently available."
-      ]
+      "recommendations": [
+        {
+          "recipe_id": "pea_soup_with_smoked_meats",
+          "title": "Гороховый суп с копчёностями",
+          "mode": "current",
+          "model_score": 0.4358,
+          "missing_count": 5,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "safe_markdown_option_available",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "dried_peas",
+              "name": "Горох сухой",
+              "category": "grain",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "dried_peas_fp_91",
+                  "name": "Горох сухой",
+                  "category": "grain",
+                  "store_id": "store_12",
+                  "distance_km": 1.41,
+                  "price": 87.74,
+                  "original_price": 87.74,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "dried_peas_fp_92",
+                  "name": "Горох сухой",
+                  "category": "grain",
+                  "store_id": "store_12",
+                  "distance_km": 2.07,
+                  "price": 91.35,
+                  "original_price": 91.35,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "smoked_meats",
+              "name": "Копчёности мясные",
+              "category": "meat",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "potato",
+              "name": "Картофель",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "potato_fp_167",
+                  "name": "Картофель",
+                  "category": "vegetable",
+                  "store_id": "store_12",
+                  "distance_km": 2.5,
+                  "price": 53.17,
+                  "original_price": 53.17,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "carrot",
+              "name": "Морковь",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "carrot_fp_48",
+                  "name": "Морковь",
+                  "category": "vegetable",
+                  "store_id": "store_12",
+                  "distance_km": 2.48,
+                  "price": 50.75,
+                  "original_price": 50.75,
+                  "brand": "Первым делом",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "onion",
+              "name": "Лук",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "onion_fp_138",
+                  "name": "Лук",
+                  "category": "vegetable",
+                  "store_id": "store_12",
+                  "distance_km": 1.49,
+                  "price": 45.69,
+                  "original_price": 45.69,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "onion_fp_139",
+                  "name": "Лук",
+                  "category": "vegetable",
+                  "store_id": "store_12",
+                  "distance_km": 3.04,
+                  "price": 44.87,
+                  "original_price": 44.87,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "vegetable_oil_fp_215",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 1.14,
+                  "price": 131.74,
+                  "original_price": 131.74,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "bay_leaf",
+              "name": "Лавровый лист",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "bay_leaf_fp_16",
+                  "name": "Лавровый лист",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 2.71,
+                  "price": 61.86,
+                  "original_price": 61.86,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "dill",
+              "name": "Укроп",
+              "category": "vegetable",
+              "required": false,
+              "source": "markdown",
+              "product_options": [
+                {
+                  "sku_id": "dill_md_86",
+                  "name": "Укроп",
+                  "category": "vegetable",
+                  "store_id": "store_12",
+                  "distance_km": 1.69,
+                  "price": 38.35,
+                  "original_price": 61.4,
+                  "brand": "Зелёная линия",
+                  "source": "markdown",
+                  "expires_at": "2026-09-06T13:10:33.008385+03:00",
+                  "fulfillment_options": [
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_182",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 2.02,
+                  "price": 38.83,
+                  "original_price": 38.83,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "black_pepper_fp_30",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 0.65,
+                  "price": 100.64,
+                  "original_price": 100.64,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "black_pepper_fp_29",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 2.5,
+                  "price": 88.68,
+                  "original_price": 88.68,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.3,
+            "selected_store_id": "store_12",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_12",
+                "distance_km": 3.04,
+                "covered_required_ingredients": 5,
+                "total_required_ingredients": 5,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_12_annex",
+                "distance_km": 1.07,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 5,
+                "complete": false,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_hub_1",
+                "distance_km": 0.67,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 5,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "adjusted",
+          "warnings": [
+            "Markdown availability is best-effort: the item is not reserved."
+          ]
+        },
+        {
+          "recipe_id": "fried_chicken_breast",
+          "title": "Жареная куриная грудка",
+          "mode": "explore",
+          "model_score": 0.6399,
+          "missing_count": 2,
+          "reason_codes": [
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count",
+            "safe_markdown_option_available",
+            "preferred_brand_option_available"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
+              "required": true,
+              "source": "markdown",
+              "product_options": [
+                {
+                  "sku_id": "chicken_md_58",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_12",
+                  "distance_km": 0.13,
+                  "price": 195.6,
+                  "original_price": 333.04,
+                  "brand": null,
+                  "source": "markdown",
+                  "expires_at": "2026-09-06T11:11:39.346182+03:00",
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "vegetable_oil",
+              "name": "Растительное масло",
+              "category": "pantry",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "vegetable_oil_fp_215",
+                  "name": "Растительное масло",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 1.14,
+                  "price": 131.74,
+                  "original_price": 131.74,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "salt_fp_182",
+                  "name": "Соль",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 2.02,
+                  "price": 38.83,
+                  "original_price": 38.83,
+                  "brand": "Зелёная линия",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "black_pepper_fp_30",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 0.65,
+                  "price": 100.64,
+                  "original_price": 100.64,
+                  "brand": "Хороший выбор",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "black_pepper_fp_29",
+                  "name": "Перец чёрный молотый",
+                  "category": "pantry",
+                  "store_id": "store_12",
+                  "distance_km": 2.5,
+                  "price": 88.68,
+                  "original_price": 88.68,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 3.3,
+            "selected_store_id": "store_12",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_12",
+                "distance_km": 1.14,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_12_annex",
+                "distance_km": 1.07,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "adjusted",
+          "warnings": [
+            "Markdown availability is best-effort: the item is not reserved."
+          ]
+        }
+      ],
+      "filtered_candidates": 34,
+      "warnings": []
     }
   },
   {
@@ -1378,12 +2951,16 @@
       "challenge_selection": {
         "default_mode": "current",
         "available_modes": [
-          "current"
+          "current",
+          "explore"
         ],
         "mode_reason_codes": {
           "current": [
             "current_basket_strategy",
             "selected_by_effort_then_relevance"
+          ],
+          "explore": [
+            "novel_recipe_strategy"
           ]
         },
         "explicit_choice_required": []
@@ -1393,7 +2970,7 @@
           "recipe_id": "cottage_cheese_with_sour_cream",
           "title": "Творог со сметаной",
           "mode": "current",
-          "model_score": 0.9688,
+          "model_score": 0.9659,
           "missing_count": 0,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1425,9 +3002,131 @@
           ],
           "safety_status": "approved",
           "warnings": []
+        },
+        {
+          "recipe_id": "chicken_cucumber_salad",
+          "title": "Салат с курицей и огурцом",
+          "mode": "explore",
+          "model_score": 0.6279,
+          "missing_count": 2,
+          "reason_codes": [
+            "current_receipt_overlap",
+            "category_history_match",
+            "quick_recipe",
+            "low_missing_count"
+          ],
+          "ingredients": [
+            {
+              "ingredient_id": "chicken",
+              "name": "Куриное филе",
+              "category": "meat",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "chicken_fp_57",
+                  "name": "Куриное филе",
+                  "category": "meat",
+                  "store_id": "store_hub_1",
+                  "distance_km": 0.97,
+                  "price": 282.97,
+                  "original_price": 282.97,
+                  "brand": null,
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "cucumber",
+              "name": "Огурцы",
+              "category": "vegetable",
+              "required": true,
+              "source": "full_price",
+              "product_options": [
+                {
+                  "sku_id": "cucumber_fp_72",
+                  "name": "Огурцы",
+                  "category": "vegetable",
+                  "store_id": "store_hub_1",
+                  "distance_km": 0.74,
+                  "price": 143.67,
+                  "original_price": 143.67,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
+                    "next_visit"
+                  ]
+                }
+              ]
+            },
+            {
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
+              "required": true,
+              "source": "receipt",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "salt",
+              "name": "Соль",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            },
+            {
+              "ingredient_id": "black_pepper",
+              "name": "Перец чёрный молотый",
+              "category": "pantry",
+              "required": false,
+              "source": "unavailable",
+              "product_options": []
+            }
+          ],
+          "store_selection": {
+            "anchor_type": "current_location",
+            "anchor_id": null,
+            "radius_km": 1.2,
+            "selected_store_id": "store_hub_1",
+            "reason_codes": [
+              "maximum_ingredient_coverage"
+            ],
+            "options": [
+              {
+                "store_id": "store_hub_1",
+                "distance_km": 0.97,
+                "covered_required_ingredients": 2,
+                "total_required_ingredients": 2,
+                "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_14",
+                "distance_km": 0.37,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
+                "preferred_for_anchor": false
+              }
+            ]
+          },
+          "fulfillment_options": [
+            "delivery",
+            "next_visit"
+          ],
+          "safety_status": "approved",
+          "warnings": []
         }
       ],
-      "filtered_candidates": 46,
+      "filtered_candidates": 38,
       "warnings": []
     }
   },
@@ -1478,7 +3177,7 @@
           "recipe_id": "oatmeal_with_banana",
           "title": "Овсяная каша с бананом",
           "mode": "current",
-          "model_score": 0.7029,
+          "model_score": 0.6798,
           "missing_count": 2,
           "reason_codes": [
             "current_receipt_overlap",
@@ -1496,14 +3195,14 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "oats_fp_66",
+                  "sku_id": "oats_fp_135",
                   "name": "Овсяные хлопья",
                   "category": "grain",
-                  "store_id": "store_19_annex",
-                  "distance_km": 1.07,
-                  "price": 93.47,
-                  "original_price": 93.47,
-                  "brand": "Первым делом",
+                  "store_id": "store_19",
+                  "distance_km": 0.69,
+                  "price": 92.51,
+                  "original_price": 92.51,
+                  "brand": null,
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -1529,17 +3228,33 @@
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "banana_fp_5",
+                  "sku_id": "banana_fp_12",
                   "name": "Бананы",
                   "category": "fruit",
-                  "store_id": "store_19_annex",
-                  "distance_km": 0.94,
-                  "price": 103.87,
-                  "original_price": 103.87,
-                  "brand": "Зелёная линия",
+                  "store_id": "store_19",
+                  "distance_km": 0.53,
+                  "price": 88.26,
+                  "original_price": 88.26,
+                  "brand": "Первым делом",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
+                    "next_visit"
+                  ]
+                },
+                {
+                  "sku_id": "banana_fp_11",
+                  "name": "Бананы",
+                  "category": "fruit",
+                  "store_id": "store_19",
+                  "distance_km": 1.07,
+                  "price": 103.74,
+                  "original_price": 103.74,
+                  "brand": "Фермерский дворик",
+                  "source": "full_price",
+                  "expires_at": null,
+                  "fulfillment_options": [
+                    "delivery",
                     "next_visit"
                   ]
                 }
@@ -1558,13 +3273,13 @@
             "anchor_type": "current_location",
             "anchor_id": null,
             "radius_km": 1.3,
-            "selected_store_id": "store_19_annex",
+            "selected_store_id": "store_19",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_19_annex",
+                "store_id": "store_19",
                 "distance_km": 1.07,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
@@ -1574,19 +3289,19 @@
             ]
           },
           "fulfillment_options": [
+            "delivery",
             "next_visit"
           ],
           "safety_status": "approved",
           "warnings": []
         },
         {
-          "recipe_id": "fried_chicken_breast",
-          "title": "Жареная куриная грудка",
+          "recipe_id": "cottage_cheese_with_sour_cream",
+          "title": "Творог со сметаной",
           "mode": "explore",
-          "model_score": 0.2473,
+          "model_score": 0.8747,
           "missing_count": 2,
           "reason_codes": [
-            "current_receipt_overlap",
             "category_history_match",
             "quick_recipe",
             "low_missing_count",
@@ -1594,23 +3309,23 @@
           ],
           "ingredients": [
             {
-              "ingredient_id": "chicken",
-              "name": "Куриное филе",
-              "category": "meat",
+              "ingredient_id": "cottage_cheese",
+              "name": "Творог",
+              "category": "dairy",
               "required": true,
               "source": "markdown",
               "product_options": [
                 {
-                  "sku_id": "chicken_md_28",
-                  "name": "Куриное филе",
-                  "category": "meat",
-                  "store_id": "store_19_annex",
-                  "distance_km": 0.83,
-                  "price": 157.8,
-                  "original_price": 290.99,
+                  "sku_id": "cottage_cheese_md_69",
+                  "name": "Творог",
+                  "category": "dairy",
+                  "store_id": "store_19",
+                  "distance_km": 0.15,
+                  "price": 90.23,
+                  "original_price": 129.7,
                   "brand": null,
                   "source": "markdown",
-                  "expires_at": "2026-09-04T09:40:17.693030+03:00",
+                  "expires_at": "2026-09-04T21:01:23.252209+03:00",
                   "fulfillment_options": [
                     "delivery",
                     "next_visit"
@@ -1619,21 +3334,21 @@
               ]
             },
             {
-              "ingredient_id": "vegetable_oil",
-              "name": "Растительное масло",
-              "category": "pantry",
+              "ingredient_id": "sour_cream",
+              "name": "Сметана",
+              "category": "dairy",
               "required": true,
               "source": "full_price",
               "product_options": [
                 {
-                  "sku_id": "vegetable_oil_fp_106",
-                  "name": "Растительное масло",
-                  "category": "pantry",
-                  "store_id": "store_19_annex",
-                  "distance_km": 0.62,
-                  "price": 141.83,
-                  "original_price": 141.83,
-                  "brand": null,
+                  "sku_id": "sour_cream_fp_191",
+                  "name": "Сметана",
+                  "category": "dairy",
+                  "store_id": "store_19",
+                  "distance_km": 0.13,
+                  "price": 112.57,
+                  "original_price": 112.57,
+                  "brand": "Хороший выбор",
                   "source": "full_price",
                   "expires_at": null,
                   "fulfillment_options": [
@@ -1641,39 +3356,31 @@
                   ]
                 }
               ]
-            },
-            {
-              "ingredient_id": "salt",
-              "name": "Соль",
-              "category": "pantry",
-              "required": false,
-              "source": "receipt",
-              "product_options": []
-            },
-            {
-              "ingredient_id": "black_pepper",
-              "name": "Перец чёрный молотый",
-              "category": "pantry",
-              "required": false,
-              "source": "unavailable",
-              "product_options": []
             }
           ],
           "store_selection": {
             "anchor_type": "current_location",
             "anchor_id": null,
             "radius_km": 1.3,
-            "selected_store_id": "store_19_annex",
+            "selected_store_id": "store_19",
             "reason_codes": [
               "maximum_ingredient_coverage"
             ],
             "options": [
               {
-                "store_id": "store_19_annex",
-                "distance_km": 0.83,
+                "store_id": "store_19",
+                "distance_km": 0.15,
                 "covered_required_ingredients": 2,
                 "total_required_ingredients": 2,
                 "complete": true,
+                "preferred_for_anchor": false
+              },
+              {
+                "store_id": "store_hub_1",
+                "distance_km": 0.55,
+                "covered_required_ingredients": 1,
+                "total_required_ingredients": 2,
+                "complete": false,
                 "preferred_for_anchor": false
               }
             ]
@@ -1687,7 +3394,7 @@
           ]
         }
       ],
-      "filtered_candidates": 43,
+      "filtered_candidates": 40,
       "warnings": []
     }
   }

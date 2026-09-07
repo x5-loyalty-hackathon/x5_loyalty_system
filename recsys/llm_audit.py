@@ -17,6 +17,7 @@ import random
 import time
 import urllib.error
 import urllib.request
+import uuid
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -233,6 +234,20 @@ class OpenAICompatibleClient:
                 headers["HTTP-Referer"] = referer
             if title := os.environ.get("OPENROUTER_APP_TITLE"):
                 headers["X-OpenRouter-Title"] = title
+        elif provider == "opencode_go":
+            # OpenCode Go's abuse filter explicitly requires a real User-Agent
+            # (urllib's default "Python-urllib/x.y" is exactly the generic
+            # value it flags) and an x-opencode-session header for prompt-
+            # cache routing; requests without both were observed failing with
+            # HTTP 403. One session id per client instance, stable across
+            # every call a live run makes — not per-request, since these
+            # calls share one system prompt and are the closest thing this
+            # script has to one logical session.
+            headers["User-Agent"] = (
+                "x5-loyalty-recsys-llm-intent-eval/1.0 "
+                "(+https://github.com/x5-loyalty-hackathon/x5_loyalty_system)"
+            )
+            headers["x-opencode-session"] = f"llm-intent-eval-{uuid.uuid4()}"
         return cls(
             model,
             api_key,

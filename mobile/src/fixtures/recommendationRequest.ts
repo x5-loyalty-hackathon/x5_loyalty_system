@@ -41,6 +41,12 @@ const copyReceipt = (receipt: Receipt): Receipt => ({
   ...receipt, items: receipt.items.map((item) => ({ ...item, ingredient_ids: [...item.ingredient_ids] })),
 });
 
+// Опыт этого покупателя набивается скриптом scripts/seed_demo_progress.py:
+// он проходит цикл план → чек → награда по одному разу на каждый прошедший
+// день. Начислить XP из клиента нельзя — сервер выводит его из наград, и без
+// прогона скрипта профиль откроется с нулевым уровнем.
+const VETERAN_USER_ID = 'user_mobile_veteran';
+
 // Synthetic examples within cooking households, not business segments or
 // measured preferences. History is ML context, not verified purchase evidence.
 export const DEMO_PROFILES: DemoProfile[] = [
@@ -72,6 +78,17 @@ export const DEMO_PROFILES: DemoProfile[] = [
     purchaseHistory: history('user_mobile_soup', [
       [chicken, carrot, potato, onion], [chicken, cabbage, carrot],
       [potato, carrot, onion], [chicken, carrot, onion, cabbage],
+    ]),
+    excludedCategories: [],
+  },
+  {
+    id: 'veteran', userId: VETERAN_USER_ID, label: 'Опытный игрок',
+    description: 'Покупает по плану почти каждый день, вся косметика кухни открыта.',
+    currentReceipt: { ...recentReceipt, receipt_id: `${VETERAN_USER_ID}-current-2026-09-04`,
+      items: [pasta, mince, tomato, cheese] },
+    purchaseHistory: history(VETERAN_USER_ID, [
+      [pasta, mince, tomato, cheese], [pasta, tomato, cheese],
+      [mince, pasta, onion], [pasta, mince, tomato, cheese, onion],
     ]),
     excludedCategories: [],
   },

@@ -269,7 +269,7 @@ function useDemoState(commerceHost?: CommerceHost) {
     const result = await api.saveRecipe(recipeId, userId);
     if (!isCurrent()) return;
     if (!['created', 'duplicate'].includes(result.status)) throw new Error('Не удалось сохранить рецепт.');
-    setBook(result.saved_recipe_ids); setNotice('Рецепт в книге. Его можно выбрать через «Повторить».');
+    setBook(result.saved_recipe_ids); setNotice('Рецепт в книге. Его можно выбрать через «Избранное».');
   });
   const persistPlan = async (isCurrent: () => boolean, userId: string) => {
     if (!selectedMeal) throw new Error('Сначала выберите блюдо.');
@@ -288,7 +288,6 @@ function useDemoState(commerceHost?: CommerceHost) {
     }
     setPlan(result.plan);
     if (result.progress) acceptProgress(result.progress);
-    setNotice('План сохранён. Это не заказ и не бронь.');
     return result.plan;
   };
 

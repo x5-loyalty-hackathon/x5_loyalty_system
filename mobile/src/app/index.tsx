@@ -41,9 +41,7 @@ export default function KitchenScreen() {
       useNativeDriver: false, bounciness: 4,
     }).start();
   }, [expanded, expandedHeight, sheetHeight]);
-  const enter = (delivery: boolean) => {
-    startEntry(delivery ? 'delivery' : 'next_visit'); router.push('/recipes');
-  };
+  const enter = () => { startEntry('delivery'); router.push('/recipes'); };
   const finish = async () => {
     if (await confirmCooking()) { setExpanded(false); router.push('/profile'); }
     // A network/business error keeps the cooking screen open with its message.
@@ -59,9 +57,13 @@ export default function KitchenScreen() {
             {cooking && selectedMeal ? <>
               <Text style={ui.title}>Готовим: {selectedMeal.title}</Text>
               <Text style={ui.text}>Ингредиенты подтверждены планом. Готовку отмечаем отдельно от покупки.</Text>
-              {steps.length ? steps.map((step, index) => <Text key={step} style={ui.text}>{index + 1}. {step}</Text>)
-                : <Text style={ui.text}>Для этого состава инструкция ещё не подключена.</Text>}
-              <Text style={ui.text}>Demo-инструкция. Окончание готовки не означает, что вся упаковка продукта закончилась.</Text>
+              {steps.length ? <View style={styles.steps}>
+                {steps.map((step, index) => <View key={step}
+                  style={[styles.step, index === steps.length - 1 && styles.stepLast]}>
+                  <View style={styles.stepNum}><Text style={styles.stepNumText}>{index + 1}</Text></View>
+                  <Text style={styles.stepTitle}>{step}</Text>
+                </View>)}
+              </View> : <Text style={ui.text}>Для этого состава инструкция ещё не подключена.</Text>}
               <ActionNotice />
               <View style={ui.choices}><Choice label="Вернуться к плану" disabled={busy}
                 onPress={() => { pauseCooking(); router.push('/products'); }} /></View>
@@ -72,10 +74,7 @@ export default function KitchenScreen() {
               <Text style={ui.title}>Что поесть?</Text>
               <Text style={ui.text}>Начните с блюда перед сборкой заказа.</Text>
               <View style={styles.cta}>
-                <PrimaryAction label="Подобрать блюдо" disabled={busy} onPress={() => enter(true)} />
-              </View>
-              <View style={ui.choices}>
-                <Choice label="Из недавних покупок →" disabled={busy} onPress={() => enter(false)} />
+                <PrimaryAction label="Подобрать блюдо" disabled={busy} onPress={() => enter()} />
               </View>
               {selectedMeal ? (
                 <View style={ui.choices}>
@@ -109,6 +108,18 @@ const styles = StyleSheet.create({
   sheetWrap: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   content: { paddingHorizontal: 16, paddingBottom: 24 },
   cta: { marginTop: 4, marginBottom: 10 },
+  steps: { backgroundColor: color.white, borderRadius: 18, paddingHorizontal: 12, marginTop: 6, marginBottom: 12 },
+  step: {
+    flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 4,
+    borderBottomWidth: 1, borderBottomColor: color.bg,
+  },
+  stepLast: { borderBottomWidth: 0 },
+  stepNum: {
+    width: 26, height: 26, borderRadius: 13, backgroundColor: color.bg,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  stepNumText: { color: color.ink, fontSize: 12.5, fontWeight: '700' },
+  stepTitle: { flex: 1, color: color.ink, fontSize: 14, fontWeight: '500', lineHeight: 19 },
   pantryHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
   pantryCount: { color: color.muted, fontSize: 12.5, fontWeight: '600' },
   pantryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 10 },

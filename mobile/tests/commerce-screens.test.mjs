@@ -79,6 +79,49 @@ test('actual basket button is disabled for invalid/empty carts and purchased/com
   ]) assert.equal(screen('products', { ...state, ...patch }).button('К оформлению').disabled, true);
 });
 
+test('single ready card shows the actual basket SKU, respecting fulfillment, markdown and explicit selection', () => {
+  const product = (id, price, fulfillment, source = 'full_price') => ({
+    sku_id: id, name: id, price, store_id: 'store_17', distance_km: 0.4,
+    fulfillment_options: fulfillment, source,
+  });
+  const readyMeal = { ...meal, available_routes: ['cook', 'ready'], ready_variant: {
+    fulfillment_options: ['delivery', 'next_visit'], product_options: [
+      product('Visit only', 100, ['next_visit']), product('Discount only', 150, ['delivery'], 'markdown'),
+      product('Delivery first', 200, ['delivery']), product('Delivery chosen', 250, ['delivery']),
+    ],
+  } };
+  for (const choices of [{}, { ready: 'Delivery chosen' }, { ready: 'Visit only' }]) {
+    const basket = mealFlow.makeBasket(readyMeal, 'ready', 'delivery', false, choices);
+    const tree = screen('products', { ...state, selectedMeal: readyMeal, route: 'ready', markdown: false,
+      choices, basket, readyProduct: readyMeal.ready_variant.product_options[2] });
+    const texts = tree.nodes.filter((node) => node.type === 'Text').map((node) => node.props.children);
+    assert.equal(texts.includes('Visit only'), false);
+    assert.equal(texts.includes('Discount only'), false);
+    if (basket.error) {
+      assert.equal(texts.includes('В корзине'), false, 'An invalid selection must not pretend a fallback was selected');
+      assert.equal(tree.button('К оформлению').disabled, true);
+    } else {
+      const picked = basket.products[0];
+      assert.equal(texts.includes(picked.name), true);
+      assert.ok(texts.includes(copy.money(picked.price)));
+      assert.equal(texts.filter((text) => text === 'В корзине').length, 1);
+    }
+  }
+});
+
+test('ready preview and take action use the same compatible product without adding controls', () => {
+  let taken = 0;
+  const readyProduct = { sku_id: 'delivery', name: 'Compatible meal', price: 200, distance_km: 0.4, store_id: 'store_17' };
+  const tree = screen('products', { ...state, readyProduct, takeReadyMeal: () => { taken++; },
+    chooseRoute: () => assert.fail('Use the atomic ready selection handler') });
+  assert.ok(tree.nodes.some((node) => node.type === 'Text' && node.props.children === readyProduct.name));
+  const add = tree.nodes.find((node) => node.type === 'Pressable' && node.props.children?.props?.children === 'Взять');
+  assert.equal(add.props.disabled, false);
+  add.props.onPress(); assert.equal(taken, 1);
+  const unavailable = screen('products', { ...state, readyProduct: null });
+  assert.equal(unavailable.nodes.some((node) => node.type === 'Text' && node.props.children === 'Взять'), false);
+});
+
 test('Kitchen resumes cooking using existing task action; ready task opens progress, not cooking', () => {
   let starts = 0;
   const cooked = screen('index', { ...state, plan: { selected_route: 'cook', status: 'collected' },

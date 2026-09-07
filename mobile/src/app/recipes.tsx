@@ -14,9 +14,13 @@ import type { RecommendationMode } from '../api/types';
 // Выбор точки убран с экрана: пока корзина не уходит в доставку X5, он ничего
 // не решает для пользователя. `anchor_type` по-прежнему уходит в запросе —
 // поле контракта, от него зависят расстояния до магазинов.
+// Режим current из чипсов убран: «Для меня» уже отдаёт блюда из покупок, а
+// отдельный фильтр дублировал выдачу. В карточках подпись режима осталась.
+const PICKABLE_MODES: RecommendationMode[] = ['repeat', 'explore'];
+
 export default function RecipesScreen() {
   const router = useRouter();
-  const { response, health, recipesStatus, recipesError, query, loadRecipes, selectMeal, busy } = useDemo();
+  const { response, recipesStatus, recipesError, query, loadRecipes, selectMeal, busy } = useDemo();
   useEffect(() => { if (recipesStatus === 'idle') void loadRecipes(); }, [loadRecipes, recipesStatus]);
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
     <View style={styles.shell}>
@@ -24,7 +28,7 @@ export default function RecipesScreen() {
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
         <View style={ui.choices}>
           <Choice label="Для меня" selected={query.mode === null} disabled={busy} onPress={() => void loadRecipes({ mode: null })} />
-          {(Object.keys(modeText) as RecommendationMode[]).map((mode) =>
+          {PICKABLE_MODES.map((mode) =>
             <Choice key={mode} label={modeText[mode]} selected={query.mode === mode} disabled={busy}
               onPress={() => void loadRecipes({ mode })} />)}
         </View>
@@ -39,8 +43,6 @@ export default function RecipesScreen() {
         {recipesError ? <Text style={[ui.text, { color: color.red }]}>{recipesError}</Text> : null}
         {recipesStatus === 'error' ? <Choice label="Повторить подключение" onPress={() => void loadRecipes()} /> : null}
         {recipesStatus === 'ready' && response ? <>
-          <Text style={ui.text}>API {response.contract_version} · движок {health?.recommendation_engine}
-            {health?.model_fallback ? ' · резервный mock' : ''} · demo-данные</Text>
           {query.mode === 'explore' ? <Text style={ui.text}>Вы выбрали новые блюда: среди них может быть полная корзина покупок.</Text> : null}
           {response.warnings.map((warning) => <Text key={warning} style={ui.text}>{warningText(warning)}</Text>)}
           {!response.recommendations.length ? <View style={ui.panel}>

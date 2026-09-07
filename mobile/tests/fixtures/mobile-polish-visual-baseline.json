@@ -1,26 +1,26 @@
 {
-  "source_commit": "30005a6e31f127f7abb6e9e1e815438263b19893",
+  "source_commit": "d39576299632eb81bb6c2423104ab451aabaff3f",
   "policy": "Visual/layout/navigation changes require vxofi approval. Do not refresh hashes just to make a test pass.",
   "approved_overrides": {
     "src/app/index.tsx": {
-      "git_blob_sha1": "fccfc9e1950d6ebf986bc4e174eda72a2b924cda",
+      "git_blob_sha1": "f4dfbb82086edc0e30ad51e3d2610acbd00d371a",
       "approved_on": "2026-09-07",
-      "reason": "Approved 07.09: existing task action opens cooking on Kitchen or ready progress; unsaved draft remains reachable. No layout/style changes."
+      "reason": "PR10 approval 07.09: preserve ShmelJUJ d395762 layout, controls and copy; retain accepted main checkout/cooking/ready guards and explicit demo disclosure. No style changes."
     },
     "src/app/products.tsx": {
-      "git_blob_sha1": "9a7b5d37c38c9369a2db7e31a7df43ebeb49918d",
+      "git_blob_sha1": "4b73134a4ac2a7d43c4fbe3d33ff1f21f0e8178a",
       "approved_on": "2026-09-07",
-      "reason": "Approved 07.09: existing CTA hands off checkout, matching ready SKU, truthful captions. Follow-up approval: default PoC simulates external purchase with explicit pre-tap demo text in existing basketHint. No new controls, styles or assets."
+      "reason": "PR10 approval 07.09: preserve ShmelJUJ d395762 layout, controls and copy; retain accepted main checkout/cooking/ready guards and explicit demo disclosure. Single ready card reads the actual basket SKU; no style changes."
     },
     "src/app/recipe.tsx": {
-      "git_blob_sha1": "0b900ae671ac7293861678134c121500bb62c44a",
+      "git_blob_sha1": "55ec8b763520165058e6c9b393655ab935e610b8",
       "approved_on": "2026-09-07",
-      "reason": "Approved 07.09: keep colleague ready button; disable when locked or no compatible SKU. No layout/style changes."
+      "reason": "PR10 approval 07.09: preserve ShmelJUJ d395762 layout, controls and copy; retain accepted main checkout/cooking/ready guards and explicit demo disclosure. No style changes."
     },
     "src/app/profile.tsx": {
       "git_blob_sha1": "4e50b05223b242414a19c948e08b1fc09d7fcce7",
       "approved_on": "2026-09-07",
-      "reason": "Approved 07.09: truthful cook/ready XP and purchase-day cap caption. Demo selector and layout preserved."
+      "reason": "PR10 approval 07.09: preserve ShmelJUJ d395762 layout, controls and copy; retain accepted main checkout/cooking/ready guards and explicit demo disclosure. No style changes."
     }
   },
   "git_blob_sha1": {
@@ -76,12 +76,12 @@
     "assets/products/veg-basket.png": "04e04a26650c82d4d1d887df7517e2a92e7f6656",
     "assets/splash-icon.png": "03d6f6b6c6727954aec1d8206222769afd178d8d",
     "src/app/_layout.tsx": "1a987a2bf4c0f2b2abb34287b58b1dddfaf4fc85",
-    "src/app/index.tsx": "8029ded4c864e9228c114585d4e90ea0a5172195",
+    "src/app/index.tsx": "70dd38b2f654c1fbfdcb8881ef54c023663696b1",
     "src/app/kitchen-style.tsx": "42663a3d59d4ee2ec3ea7553d4da70f98616e030",
-    "src/app/products.tsx": "50e0e750f2b4b8a77fecf19c8ba18c67141c9e3b",
+    "src/app/products.tsx": "26675a7736e221f320f3b9e08a00f930264cbc39",
     "src/app/profile.tsx": "703a50438772098f4e714bee0da7d51960bda5f6",
-    "src/app/recipe.tsx": "87f2917d205737908494bfb9a3f61376d12e7fe2",
-    "src/app/recipes.tsx": "c12da27f261095f4aa12cdb242f2350aac7c707c",
+    "src/app/recipe.tsx": "78f96a9863bfe2b5b261c4b95fc62731649aaecb",
+    "src/app/recipes.tsx": "6ab96c1a409681d55f5a5e5b73f12132dd0719ac",
     "src/components/AppHeader.tsx": "535d105ae0612361e98ce217a3dca5d479a7a5eb",
     "src/components/BottomNav.tsx": "b7cf54fb3448976d10c15f757f6987ef88aab2f3",
     "src/components/FlowControls.tsx": "6fecf1d8401e573aa8d40020506bcdaaf7470bcd",
@@ -96,5 +96,11 @@
     "src/data/productSprites.ts": "bb346b8536c8539d9f36cc426ad48736a3bf394e",
     "src/theme/tokens.ts": "f18c90a1d0e3448bb70f75e921ab34df70c38fa9",
     "src/components/DemoProfileSelector.tsx": "2b0807233d97e33e93429c77a296621aa73be54e"
+  },
+  "style_sha256": {
+    "src/app/index.tsx": "7c25cb9b2a77b386f21111d32950c29d30beb7b54030afb3344cb62fa475e459",
+    "src/app/products.tsx": "4fcc64ab00a94a1779da9964a6b2a3670ea5b390e1968fe40151b7aafe66607b",
+    "src/app/recipe.tsx": "b2e4c7b3dfbe1bf18d9fb365cea4a99c26c062c36cd32c67a8d8b030acfab8a8",
+    "src/app/profile.tsx": "c572cc0fdb557816014e8d0f6b6b712c6b44e81da43a1f6c0991a779eb1aafaf"
   }
 }

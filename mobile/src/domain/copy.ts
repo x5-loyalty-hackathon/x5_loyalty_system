@@ -29,7 +29,7 @@ export const reasonText: Record<string, string> = {
   "preferred_store_for_anchor": "При равном покрытии выбрана привычная точка для этого места.",
   "nearest_store_tiebreak": "При равном покрытии выбрана ближайшая точка."
 };
-export const modeText = { current: 'Из покупок', repeat: 'Повторить', explore: 'Новое' };
+export const modeText = { current: 'Из покупок', repeat: 'Избранное', explore: 'Новое' };
 export const sourceText = {
   receipt: 'Есть в недавнем чеке — проверьте дома', home: 'Отмечено как имеющееся дома',
   markdown: 'Есть уценка', full_price: 'Обычная цена', unavailable: 'Нет доступного товара',

@@ -430,7 +430,8 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
   const call = await api(t);
   const events = [];
   const render = providerHarness(realEndpoints(call, async (event) => { events.push(event); }));
-  const recipes = ['spaghetti_bolognese', 'pasta_tomatoes', 'chicken_soup'];
+  const recipes = { family: 'spaghetti_bolognese', vegetable: 'pasta_tomatoes',
+    soup: 'chicken_soup', veteran: 'spaghetti_bolognese' };
   const planIds = new Set(), receiptIds = new Set();
   for (const [i, profile] of DEMO_PROFILES.entries()) {
     render().switchProfile(profile.id);
@@ -446,7 +447,8 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
     await render().loadProgress();
     assert.equal(render().progress.user_id, profile.userId);
     assert.equal(render().progress.avatar_xp, 0);
-    render().selectMeal(recipes[i]);
+    assert.ok(recipes[profile.id], `Missing test recipe for ${profile.id}`);
+    render().selectMeal(recipes[profile.id]);
     assert.ok(render().selectedMeal);
     render().chooseRoute('cook');
     assert.equal(await render().saveToBook(), true, render().actionError);
@@ -472,13 +474,13 @@ test('real provider + endpoints → API: profiles isolate book, plan, receipts, 
   // Switching back restores server-owned data, while local cooking/plan/kitchen reset.
   render().switchProfile(DEMO_PROFILES[0].id);
   await render().loadRecipes(); await render().loadProgress();
-  assert.deepEqual(Array.from(render().book), [recipes[0]]);
+  assert.deepEqual(Array.from(render().book), [recipes[DEMO_PROFILES[0].id]]);
   assert.equal(render().progress.avatar_xp, 20);
   assert.equal(render().plan, null); assert.equal(render().cooking, false);
   assert.deepEqual(render().kitchenItems, kitchenProducts(DEMO_PROFILES[0].currentReceipt.items));
   for (const [i, profile] of DEMO_PROFILES.entries()) {
     const book = (await call('GET', `/api/v1/saved-recipes/${profile.userId}`)).body;
-    assert.deepEqual(book.saved_recipe_ids, [recipes[i]]);
+    assert.deepEqual(book.saved_recipe_ids, [recipes[profile.id]]);
     const progress = (await call('GET', `/api/v1/progress/${profile.userId}`)).body;
     assert.equal(progress.avatar_xp, 20);
     assert.equal(progress.recipes_completed, 1);

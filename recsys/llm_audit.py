@@ -425,7 +425,7 @@ def _responder_actions(card: AuditCard, samples: int = 20) -> tuple[dict[str, Us
     return actions, probabilistic_self_agreement
 
 
-def _with_retries(decide: Callable[[], LLMDecision], *, retries: int = 3) -> LLMDecision:
+def _with_retries(decide: Callable[[], LLMDecision], *, retries: int = 5) -> LLMDecision:
     """Retry transport/model failures, never substitute an invented action.
 
     ``OSError`` (not just ``TimeoutError``, one of its subclasses) is the one
@@ -434,6 +434,14 @@ def _with_retries(decide: Callable[[], LLMDecision], *, retries: int = 3) -> LLM
     reset, not a timeout, not wrapped in ``urllib.error.URLError`` by this
     Python version's ``http.client`` — with zero retries attempted, because
     neither superclass in the old, narrower tuple covered it.
+
+    ``retries`` was 3 (0.25s/0.5s backoff, ~0.75s total) — too thin for a
+    genuinely flaky path to opencode.ai: a live run hit 3 consecutive
+    ``TimeoutError: ... The handshake operation timed out`` at the TLS layer,
+    a real transient-connectivity failure the old, narrower exception tuple
+    would not even have caught. 5 attempts (0.25/0.5/1/2/4s, ~7.75s total)
+    gives an unstable path more time to recover before this run's cache
+    write-through (see ``run_study``) discards the in-flight call.
     """
     for attempt in range(retries):
         try:

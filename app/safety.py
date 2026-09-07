@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from app.contracts import InventoryProduct, RecipeIngredient, UserProfile
+from app.contracts import InventoryProduct, ReceiptItem, RecipeIngredient, UserProfile
 
 
 RESCUE_CATEGORIES = frozenset({"fruit", "vegetable", "dairy", "meat"})
@@ -62,13 +62,27 @@ class SafetyPolicy:
             return ProductSafetyDecision(False, "not_prepared_food")
         if meal_intent_id not in product.meal_intent_ids:
             return ProductSafetyDecision(False, "meal_intent_mismatch")
-        if product.contained_categories & user.excluded_categories:
-            return ProductSafetyDecision(False, "category_excluded_by_user")
-        if product.ingredient_ids & user.excluded_ingredient_ids:
-            return ProductSafetyDecision(False, "ingredient_excluded_by_user")
+        if (user.excluded_ingredient_ids or user.excluded_categories) and not (
+            product.composition_complete
+            and product.composition_source in {"synthetic_fixture", "manufacturer"}
+            and product.ingredient_ids
+            and product.contained_categories
+        ):
+            return ProductSafetyDecision(False, "ready_composition_unconfirmed")
         if product.is_markdown and product.category not in RESCUE_CATEGORIES:
             return ProductSafetyDecision(False, "markdown_category_not_allowed")
         return ProductSafetyDecision(True)
+
+    @staticmethod
+    def composition_exclusion_reason(
+        product: InventoryProduct | ReceiptItem, user: UserProfile,
+    ) -> str | None:
+        """Never split a known excluded pack into apparently allowed ingredients."""
+        if ({product.category} | product.contained_categories) & user.excluded_categories:
+            return "category_excluded_by_user"
+        if product.ingredient_ids & user.excluded_ingredient_ids:
+            return "ingredient_excluded_by_user"
+        return None
 
     @staticmethod
     def _evaluate_common_product(
@@ -77,8 +91,9 @@ class SafetyPolicy:
         user: UserProfile,
         now: datetime,
     ) -> ProductSafetyDecision:
-        if product.category in user.excluded_categories:
-            return ProductSafetyDecision(False, "category_excluded_by_user")
+        exclusion = SafetyPolicy.composition_exclusion_reason(product, user)
+        if exclusion:
+            return ProductSafetyDecision(False, exclusion)
         if product.available_quantity <= 0:
             return ProductSafetyDecision(False, "out_of_stock")
         if product.distance_km > user.radius_km:
@@ -96,6 +111,5 @@ class SafetyPolicy:
         product: InventoryProduct,
         ingredient: RecipeIngredient,
     ) -> bool:
-        if product.ingredient_ids:
-            return ingredient.ingredient_id in product.ingredient_ids
-        return ingredient.category == product.category
+        # A category (e.g. vegetables) cannot establish ingredient identity.
+        return ingredient.ingredient_id in product.ingredient_ids

@@ -251,6 +251,8 @@
     },
     {
       "sku_id": "ready_bolognese",
+      "composition_complete": true,
+      "composition_source": "synthetic_fixture",
       "name": "Спагетти болоньезе готовые, 300 г",
       "category": "prepared_food",
       "ingredient_ids": [
@@ -285,6 +287,8 @@
     },
     {
       "sku_id": "ready_tomato_pasta",
+      "composition_complete": true,
+      "composition_source": "synthetic_fixture",
       "name": "Паста с томатами готовая, 300 г",
       "category": "prepared_food",
       "ingredient_ids": [

@@ -206,12 +206,19 @@ class OpenAICompatibleClient:
         *,
         provider: str = "openai",
         extra_headers: dict[str, str] | None = None,
+        timeout: float = 120.0,
     ) -> None:
         self.model = model
         self.api_key = api_key
         self.endpoint = endpoint
         self.provider = provider
         self.extra_headers = dict(extra_headers or {})
+        #: Read timeout for one call. Was a hardcoded 45s — too short for some
+        #: opencode_go backends (GLM-5.2 answered a trivial one-word prompt
+        #: with 830 completion tokens in manual testing); _with_retries still
+        #: retries 3x, so a genuinely dead connection fails in ~3x this, not
+        #: hangs forever.
+        self.timeout = timeout
 
     @property
     def cache_identity(self) -> str:
@@ -309,7 +316,7 @@ class OpenAICompatibleClient:
         request = urllib.request.Request(
             self.endpoint, data=json.dumps(body).encode(), headers=headers
         )
-        with urllib.request.urlopen(request, timeout=45) as response:  # nosec B310: explicit user opt-in
+        with urllib.request.urlopen(request, timeout=self.timeout) as response:  # nosec B310: explicit user opt-in
             data = json.loads(response.read())
         content = data["choices"][0]["message"]["content"]
         parsed = json.loads(content) if isinstance(content, str) else content

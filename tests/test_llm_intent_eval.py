@@ -10,6 +10,7 @@ from recsys.llm_intent_eval import (
     ARM_RANDOM,
     ARM_SHUFFLED,
     ARM_SIMILAR,
+    SKLEARN_AVAILABLE,
     IntentCache,
     IntentCase,
     IntentStudy,
@@ -28,6 +29,14 @@ from recsys.llm_intent_eval import (
     run_study,
 )
 from recsys.panels import PanelSpec, build_panel
+
+#: --similar-method cf needs the optional `ml` extra (numpy + scikit-learn),
+#: which a plain `.[dev]` install (what CI does) doesn't have — same
+#: skip-not-fail convention as recsys.catboost_model's GRADIENT_BOOSTER_AVAILABLE
+#: (see tests/test_experiment1_rankers.py).
+needs_sklearn = pytest.mark.skipif(
+    not SKLEARN_AVAILABLE, reason="numpy/scikit-learn not installed (pip install -e '.[ml]')"
+)
 from recsys.response_models import UserAction
 
 
@@ -86,6 +95,7 @@ def test_judge_never_sees_arm_identity_or_internal_scores(study_fixture, request
             assert not (_all_keys(case.payload) & FORBIDDEN_PAYLOAD_KEYS)
 
 
+@needs_sklearn
 @pytest.mark.parametrize("ranking_policy", ["effort_first", "model_order"])
 def test_cf_similar_method_builds_a_study_and_is_recorded_in_metadata(ranking_policy) -> None:
     panel = build_panel(PanelSpec(name=f"llm_intent_cf_study_{ranking_policy}", n_users=8, seed=707))
@@ -212,6 +222,7 @@ def test_ingredient_count_vector_sums_quantities_across_receipts() -> None:
     assert vector == expected
 
 
+@needs_sklearn
 def test_cf_user_vectors_are_l2_bounded_and_cover_the_whole_pool() -> None:
     panel = build_panel(PanelSpec(name="llm_intent_cf_vectors", n_users=15, seed=11))
     vectors = _cf_user_vectors(panel.profiles, n_factors=4, seed=0)
@@ -220,6 +231,7 @@ def test_cf_user_vectors_are_l2_bounded_and_cover_the_whole_pool() -> None:
     assert all(value >= 0.0 for vector in vectors.values() for value in vector.values())
 
 
+@needs_sklearn
 def test_cf_knn_neighbors_are_never_the_persona_itself() -> None:
     panel = build_panel(PanelSpec(name="llm_intent_cf_knn", n_users=15, seed=11))
     neighbors = _cf_knn_neighbors(panel.profiles, panel.profiles, k=3, seed=0)

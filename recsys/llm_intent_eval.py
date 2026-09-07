@@ -111,6 +111,23 @@ from recsys.panels import Panel, development_splits
 from recsys.ready_food_pairs import ready_meal_options
 from recsys.response_models import UserAction
 
+# --similar-method cf's NMF embeddings need the optional `ml` extra
+# (numpy + scikit-learn). Import once, at module load, so both the engine
+# code and its tests can branch on one flag instead of each catching
+# ImportError separately — same pattern as recsys.catboost_model's
+# GRADIENT_BOOSTER_AVAILABLE. Never installed by CI's `pip install -e
+# '.[dev]'`, so --similar-method cf (and its tests) are exercised locally,
+# not in CI, exactly like recsys.catboost_model's sklearn fallback already is.
+try:
+    import numpy as _np
+    from sklearn.decomposition import NMF as _NMF
+
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    _np = None
+    _NMF = None
+    SKLEARN_AVAILABLE = False
+
 
 PROMPT_VERSION = "intent-v3"
 DEFAULT_CACHE = Path(".cache/llm_intent_eval.json")
@@ -488,24 +505,27 @@ def _cf_user_vectors(
     read off one user's marginal frequencies.
 
     Requires the optional ``ml`` extra (numpy + scikit-learn; see
-    pyproject.toml's ``[project.optional-dependencies]``) — imported lazily so
-    the default ("category") method stays dependency-free.
+    pyproject.toml's ``[project.optional-dependencies]``) — the default
+    ("category") method stays dependency-free.
     """
-    import numpy as np
-    from sklearn.decomposition import NMF
+    if not SKLEARN_AVAILABLE:
+        raise RuntimeError(
+            "--similar-method cf needs numpy + scikit-learn: "
+            "pip install -e '.[ml]'"
+        )
 
     ingredient_counts = [_ingredient_count_vector(profile) for profile in pool]
     ingredient_ids = sorted({ingredient_id for counts in ingredient_counts for ingredient_id in counts})
     if not ingredient_ids:
         return {profile.user.user_id: {} for profile in pool}
     index = {ingredient_id: position for position, ingredient_id in enumerate(ingredient_ids)}
-    matrix = np.zeros((len(pool), len(ingredient_ids)))
+    matrix = _np.zeros((len(pool), len(ingredient_ids)))
     for row, counts in enumerate(ingredient_counts):
         for ingredient_id, count in counts.items():
             matrix[row, index[ingredient_id]] = count
 
     n_components = max(1, min(n_factors, len(pool) - 1, len(ingredient_ids)))
-    model = NMF(n_components=n_components, init="nndsvda", random_state=seed, max_iter=500)
+    model = _NMF(n_components=n_components, init="nndsvda", random_state=seed, max_iter=500)
     user_factors = model.fit_transform(matrix)
     return {
         profile.user.user_id: {f"f{i}": float(value) for i, value in enumerate(user_factors[row])}
@@ -1208,6 +1228,12 @@ def run_study(
                     decision = _with_retries(lambda: client.decide(case.payload, seed=call_seed))
                     if live:
                         cache.put(key, decision)
+                        # Flushed after every live call, not once at the end: a
+                        # crash partway through a long run (a slow model
+                        # blowing the read timeout, a network blip _with_retries
+                        # gave up on) must not discard every already-paid-for
+                        # response made before it.
+                        cache.save()
                 local[key] = decision
             selected_recipe_id = (
                 None if decision.selected_recipe_index is None else case.recipe_ids[decision.selected_recipe_index]
